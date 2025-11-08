@@ -253,6 +253,199 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'vision_text':
+        return (
+          <>
+            <div>
+              <Label>نص الرؤية</Label>
+              <Textarea 
+                value={formData.vision_text || ''} 
+                onChange={(e) => setFormData({...formData, vision_text: e.target.value})} 
+                required 
+                rows={8}
+                className="text-right"
+              />
+            </div>
+            <div>
+              <Label>النص المميز</Label>
+              <Textarea 
+                value={formData.vision_highlight || ''} 
+                onChange={(e) => setFormData({...formData, vision_highlight: e.target.value})} 
+                required 
+                rows={3}
+                className="text-right"
+              />
+            </div>
+          </>
+        );
+
+      case 'principle':
+        return (
+          <>
+            <div>
+              <Label>الأيقونة (إيموجي)</Label>
+              <Input 
+                value={formData.icon || ''} 
+                onChange={(e) => setFormData({...formData, icon: e.target.value})} 
+                placeholder="🌱"
+                required 
+                className="text-3xl text-center"
+                maxLength={2}
+              />
+              <p className="text-xs text-gray-500 mt-1">اكتب إيموجي مباشرة أو انسخه والصقه</p>
+            </div>
+            <div>
+              <Label>العنوان</Label>
+              <Input 
+                value={formData.title || ''} 
+                onChange={(e) => setFormData({...formData, title: e.target.value})} 
+                required 
+                className="text-right"
+              />
+            </div>
+            <div>
+              <Label>الوصف</Label>
+              <Textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                required 
+                rows={4}
+                className="text-right"
+              />
+            </div>
+          </>
+        );
+
+      case 'testimonial':
+        return (
+          <>
+            <div>
+              <Label>الاسم</Label>
+              <Input 
+                value={formData.name || ''} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                required 
+                className="text-right"
+              />
+            </div>
+            <div>
+              <Label>الدور/المنصب</Label>
+              <Input 
+                value={formData.role || ''} 
+                onChange={(e) => setFormData({...formData, role: e.target.value})} 
+                required 
+                className="text-right"
+              />
+            </div>
+            <div>
+              <Label>الحرف الأول (Avatar)</Label>
+              <Input 
+                value={formData.avatar || ''} 
+                onChange={(e) => setFormData({...formData, avatar: e.target.value})} 
+                placeholder="م"
+                required 
+                className="text-2xl text-center"
+                maxLength={1}
+              />
+            </div>
+            <div>
+              <Label>نص الشهادة</Label>
+              <Textarea 
+                value={formData.text || ''} 
+                onChange={(e) => setFormData({...formData, text: e.target.value})} 
+                required 
+                rows={5}
+                className="text-right"
+              />
+            </div>
+          </>
+        );
+
+      case 'models':
+        return (
+          <>
+            <div>
+              <Label className="block mb-2">نقاط النموذج التقليدي</Label>
+              {(formData.old_model || []).map((item, idx) => (
+                <div key={idx} className="flex gap-2 mb-2">
+                  <Input 
+                    value={item} 
+                    onChange={(e) => {
+                      const newArray = [...(formData.old_model || [])];
+                      newArray[idx] = e.target.value;
+                      setFormData({...formData, old_model: newArray});
+                    }} 
+                    className="text-right flex-1"
+                  />
+                  <Button 
+                    type="button"
+                    variant="destructive" 
+                    size="sm"
+                    onClick={() => {
+                      const newArray = (formData.old_model || []).filter((_, i) => i !== idx);
+                      setFormData({...formData, old_model: newArray});
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button 
+                type="button"
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setFormData({...formData, old_model: [...(formData.old_model || []), '']});
+                }}
+                className="mt-2"
+              >
+                <Plus className="w-4 h-4 ml-2" />
+                إضافة نقطة
+              </Button>
+            </div>
+            
+            <div className="mt-4">
+              <Label className="block mb-2">نقاط النموذج التحويلي</Label>
+              {(formData.new_model || []).map((item, idx) => (
+                <div key={idx} className="flex gap-2 mb-2">
+                  <Input 
+                    value={item} 
+                    onChange={(e) => {
+                      const newArray = [...(formData.new_model || [])];
+                      newArray[idx] = e.target.value;
+                      setFormData({...formData, new_model: newArray});
+                    }} 
+                    className="text-right flex-1"
+                  />
+                  <Button 
+                    type="button"
+                    variant="destructive" 
+                    size="sm"
+                    onClick={() => {
+                      const newArray = (formData.new_model || []).filter((_, i) => i !== idx);
+                      setFormData({...formData, new_model: newArray});
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button 
+                type="button"
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setFormData({...formData, new_model: [...(formData.new_model || []), '']});
+                }}
+                className="mt-2"
+              >
+                <Plus className="w-4 h-4 ml-2" />
+                إضافة نقطة
+              </Button>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
