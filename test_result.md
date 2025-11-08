@@ -101,3 +101,99 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "تحديث Hero Section و Video Section في HomePage ليكون قابل للإدارة الكاملة (إضافة/تعديل/حذف) من AdminDashboard"
+
+backend:
+  - task: "Hero Content API - GET /api/hero-content"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "تم تحديث Hero Content Model ليشمل كل الحقول المطلوبة: title, subtitle, cta_text, cta_link, background_image, quotes, video_url, video_title, video_description, video_subtitle. GET API يعمل بنجاح ويرجع البيانات الافتراضية."
+
+  - task: "Hero Content API - PUT /api/hero-content"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "تم تحديث PUT API لدعم كل الحقول الجديدة. يحتاج اختبار."
+
+  - task: "Image Upload API - POST /api/upload-image"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "API موجود من قبل ويعمل بشكل صحيح. يقوم برفع الصور وتحويلها إلى Base64."
+
+frontend:
+  - task: "Hero Section في HomePage - Dynamic Content"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/HomePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "تم تحديث HomePage ليقرأ البيانات من API ويعرضها ديناميكياً. تم تحديث Hero Section لعرض: العنوان، الوصف، الاقتباسات، زر CTA، صورة الخلفية."
+
+  - task: "Video Section في HomePage - Dynamic Content"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/HomePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "تم تحديث Video Section ليعرض البيانات ديناميكياً من API: video_url, video_title, video_description, video_subtitle."
+
+  - task: "AdminDashboard - Hero Section Tab"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "تم إضافة تبويب 'القسم الأول' في AdminDashboard مع واجهة كاملة لإدارة Hero Section و Video Section. يتضمن: تعديل العنوان والوصف، إدارة الاقتباسات (إضافة/تعديل/حذف)، رفع صورة الخلفية، تعديل محتوى Video Section، زر حفظ التغييرات."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Hero Content API - PUT /api/hero-content"
+    - "AdminDashboard - Hero Section Tab"
+    - "Hero Section في HomePage - Dynamic Content"
+    - "Video Section في HomePage - Dynamic Content"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "تم الانتهاء من تطوير Hero Section Management. Backend APIs جاهزة، AdminDashboard Tab مكتمل، HomePage محدث. يحتاج اختبار شامل للـ Backend و Frontend للتأكد من أن كل شيء يعمل بشكل صحيح. الاختبار يتضمن: تسجيل دخول Admin، الذهاب لـ Hero Section Tab، تعديل المحتوى، رفع صورة، إضافة/حذف اقتباسات، حفظ التغييرات، التحقق من ظهور التغييرات في HomePage."
