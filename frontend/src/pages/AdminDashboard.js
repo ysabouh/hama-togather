@@ -877,6 +877,18 @@ const AdminDashboard = () => {
                             onChange={(e) => setHeroContent({...heroContent, video_url: e.target.value})}
                             placeholder="https://www.youtube.com/embed/VIDEO_ID"
                           />
+                          
+                          {/* معلومات إرشادية للفيديو */}
+                          <div className="mt-2 p-3 bg-purple-50 border border-purple-200 rounded-md text-sm">
+                            <p className="font-semibold text-purple-900 mb-1">🎥 كيفية الحصول على رابط الفيديو الصحيح:</p>
+                            <ul className="text-purple-800 space-y-1 mr-4">
+                              <li>1. اذهب إلى فيديو YouTube المطلوب</li>
+                              <li>2. انقر على زر "مشاركة" أسفل الفيديو</li>
+                              <li>3. انقر على "تضمين" (Embed)</li>
+                              <li>4. انسخ الرابط من داخل <code className="bg-purple-100 px-1 rounded">src="..."</code></li>
+                              <li>• <strong>مثال:</strong> https://www.youtube.com/embed/XmYV-ZVZj04</li>
+                            </ul>
+                          </div>
                         </div>
                         
                         <div>
