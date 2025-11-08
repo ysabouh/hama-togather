@@ -48,14 +48,7 @@ const HomePage = () => {
       <Navbar />
 
       {/* قسم البطل */}
-      <section 
-        className="hero" 
-        style={heroContent?.background_image ? {
-          backgroundImage: `url(${heroContent.background_image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        } : {}}
-      >
+      <section className="hero">
         <div className="container">
           <h1>{heroContent?.title || 'معاً نَبني مجتمعاً متكافلاً في مدينة حماة'}</h1>
           <p>{heroContent?.subtitle || 'منصة إلكترونية تمكن لجان الأحياء من تنظيم العمل التطوعي والتكافلي بين أفراد المجتمع والمغتربين ورواد المجتمع لمساعدة المحتاجين'}</p>
