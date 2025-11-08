@@ -42,7 +42,7 @@ const OurMissionPage = () => {
       <section 
         className="hero" 
         style={{
-          background: 'linear-gradient(rgba(4, 51, 43, 0.9), rgba(4, 51, 43, 0.8)), url(https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200)',
+          background: 'linear-gradient(rgba(4, 51, 43, 0.9), rgba(4, 51, 43, 0.8)), url(https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           padding: '120px 0',
