@@ -350,53 +350,87 @@ const AdminDashboard = () => {
                 placeholder="https://example.com/image.jpg"
                 className="text-right mb-4"
               />
-              <p className="text-sm text-gray-500 mb-4">أو ارفع صورة من جهازك:</p>
-              
+            </div>
+            
+            <div className="my-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-1 border-t border-gray-300"></div>
+                <span className="text-sm text-gray-500">أو</span>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
+            </div>
+            
+            <div>
+              <Label className="block mb-2">رفع صورة من جهازك</Label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={async (e) => {
                   const file = e.target.files[0];
                   if (file) {
-                    // Show loading
+                    // Validate file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast.error('حجم الصورة كبير جداً (الحد الأقصى 5MB)');
+                      e.target.value = '';
+                      return;
+                    }
+                    
                     toast.info('جاري رفع الصورة...');
                     
-                    // Convert to base64
-                    const reader = new FileReader();
-                    reader.onloadend = async () => {
-                      try {
-                        // Upload image
-                        const formDataUpload = new FormData();
-                        formDataUpload.append('file', file);
-                        
-                        const response = await axios.post(`${API_URL}/upload-image`, formDataUpload, {
-                          headers: { 'Content-Type': 'multipart/form-data' }
-                        });
-                        
+                    try {
+                      // Upload via API
+                      const formDataUpload = new FormData();
+                      formDataUpload.append('file', file);
+                      
+                      const response = await axios.post(`${API_URL}/upload-image`, formDataUpload, {
+                        headers: { 
+                          'Content-Type': 'multipart/form-data'
+                        }
+                      });
+                      
+                      if (response.data && response.data.image_url) {
                         setFormData({...formData, vision_image: response.data.image_url});
                         toast.success('تم رفع الصورة بنجاح');
-                      } catch (error) {
-                        toast.error('فشل رفع الصورة');
+                      } else {
+                        throw new Error('Invalid response');
                       }
-                    };
-                    reader.readAsDataURL(file);
+                    } catch (error) {
+                      console.error('Upload error:', error);
+                      toast.error('فشل رفع الصورة: ' + (error.response?.data?.detail || error.message));
+                      e.target.value = '';
+                    }
                   }
                 }}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
+                data-testid="image-upload-input"
               />
+              <p className="text-xs text-gray-500 mt-2">صيغ مدعومة: JPG, PNG, GIF (الحد الأقصى 5MB)</p>
             </div>
             
             {formData.vision_image && (
               <div className="mt-4">
                 <Label>معاينة الصورة:</Label>
-                <img 
-                  src={formData.vision_image} 
-                  alt="معاينة" 
-                  className="w-full h-48 object-cover rounded-lg border mt-2"
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/800x400?text=Invalid+Image';
-                  }}
-                />
+                <div className="relative mt-2">
+                  <img 
+                    src={formData.vision_image} 
+                    alt="معاينة" 
+                    className="w-full h-64 object-cover rounded-lg border"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/800x400?text=فشل+تحميل+الصورة';
+                      toast.error('رابط الصورة غير صالح');
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setFormData({...formData, vision_image: ''})}
+                    className="absolute top-2 left-2"
+                  >
+                    <Trash2 className="w-4 h-4 ml-1" />
+                    إزالة
+                  </Button>
+                </div>
               </div>
             )}
           </>
