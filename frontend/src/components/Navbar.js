@@ -32,9 +32,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center py-4">
           <Link to="/" className="flex items-center gap-3" data-testid="logo-link">
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-              مع
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="معاً نَبني" 
+              className="h-16 w-auto"
+              style={{objectFit: 'contain'}}
+            />
             <span className="text-2xl font-bold text-emerald-900">معاً نَبني</span>
           </Link>
 
