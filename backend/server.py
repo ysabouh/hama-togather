@@ -649,6 +649,9 @@ async def get_mission_content():
         # Return default content if not exists
         return {
             "id": "mission_content",
+            "hero_title": "رؤيتنا ورسالتنا",
+            "hero_subtitle": "من حماة... نُعيد للإنسان قيمته، وللمجتمع وحدته.. نحو تنمية مستدامة وكرامة إنسانية",
+            "hero_background_image": None,
             "vision_text": "نحن نؤمن بأن شعبنا العظيم يستحق قيادة عظيمة تمكنه من النمو والتطور...",
             "vision_highlight": "شعبنا العظيم يحتاج إلى قيادة عظيمة تساعده على التطور والنمو...",
             "principles": [],
