@@ -11,6 +11,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import InitiativesPage from './pages/InitiativesPage';
 import AdminDashboard from './pages/AdminDashboard';
 import MyDonationsPage from './pages/MyDonationsPage';
+import OurMissionPage from './pages/OurMissionPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
