@@ -518,6 +518,65 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* Mission Content Tab */}
+            <TabsContent value="mission">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">إدارة محتوى صفحة رؤيتنا ورسالتنا</h2>
+                <div className="space-y-6">
+                  {missionContent && (
+                    <>
+                      <div className="border rounded-lg p-4">
+                        <h3 className="font-bold text-lg mb-2">نص الرؤية</h3>
+                        <p className="text-gray-700 whitespace-pre-line">{missionContent.vision_text}</p>
+                      </div>
+                      
+                      <div className="border rounded-lg p-4 bg-emerald-50">
+                        <h3 className="font-bold text-lg mb-2">النص المميز</h3>
+                        <p className="text-emerald-900 font-semibold">{missionContent.vision_highlight}</p>
+                      </div>
+
+                      <div className="border rounded-lg p-4">
+                        <h3 className="font-bold text-lg mb-4">المبادئ ({missionContent.principles?.length || 0})</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {missionContent.principles?.map((principle, idx) => (
+                            <div key={idx} className="bg-gray-50 p-4 rounded">
+                              <div className="text-3xl mb-2">{principle.icon}</div>
+                              <h4 className="font-bold mb-1">{principle.title}</h4>
+                              <p className="text-sm text-gray-600">{principle.description}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="border rounded-lg p-4">
+                        <h3 className="font-bold text-lg mb-4">الشهادات ({missionContent.testimonials?.length || 0})</h3>
+                        <div className="space-y-3">
+                          {missionContent.testimonials?.map((testimonial, idx) => (
+                            <div key={idx} className="bg-gray-50 p-4 rounded flex items-start gap-3">
+                              <div className="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                                {testimonial.avatar}
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-bold">{testimonial.name}</h4>
+                                <p className="text-sm text-gray-500">{testimonial.role}</p>
+                                <p className="text-sm text-gray-700 mt-2 italic">"{testimonial.text}"</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <p className="text-blue-800">
+                          ℹ️ لتعديل محتوى هذه الصفحة، يمكنك إضافة نموذج تعديل أو استخدام API مباشرة.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
             {/* Donations Tab */}
             <TabsContent value="donations">
               <div className="bg-white rounded-xl shadow-lg p-6">
