@@ -224,7 +224,12 @@ class HeroContent(BaseModel):
     subtitle: str
     cta_text: str
     cta_link: str
+    background_image: Optional[str] = None  # Base64 image or URL
     quotes: List[dict]  # [{text, ref, author}]
+    video_url: Optional[str] = None
+    video_title: Optional[str] = None
+    video_description: Optional[str] = None
+    video_subtitle: Optional[str] = None
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class HeroContentUpdate(BaseModel):
@@ -232,7 +237,12 @@ class HeroContentUpdate(BaseModel):
     subtitle: Optional[str] = None
     cta_text: Optional[str] = None
     cta_link: Optional[str] = None
+    background_image: Optional[str] = None
     quotes: Optional[List[dict]] = None
+    video_url: Optional[str] = None
+    video_title: Optional[str] = None
+    video_description: Optional[str] = None
+    video_subtitle: Optional[str] = None
 
 # ============= Helper Functions =============
 
