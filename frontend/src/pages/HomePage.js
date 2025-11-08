@@ -1,54 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
+const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
 const HomePage = () => {
   const [currentQuote, setCurrentQuote] = useState(0);
-
-  const quotes = [
-    {
-      text: '" وَيُؤْثِرُونَ عَلَى أَنفُسِهِمْ وَلَوْ كَانَ بِهِمْ خَصَاصَةٌ "',
-      ref: '- الحشر 9',
-      author: 'العطاء الحقيقي هو أن تُقدّم وأنت محتاج، لا وأنت مستغنٍ.'
-    },
-    {
-      text: 'قال ﷺ: «أفضل الناس أنفعهم للناس»',
-      author: 'كن نافعًا، فالعطاء هو المعنى الحقيقي للإنسانية.'
-    },
-    {
-      text: 'قال ﷺ: «لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه»',
-      author: 'الإيمان ليس صلاة وصيامًا فقط… بل حبٌّ للآخرين وعطاء.'
-    },
-    {
-      text: '"التكافل ليس عطاءً من الغني للفقير، بل هو استثمار في بناء مجتمع قوي"',
-      author: '- مثل اجتماعي'
-    },
-    {
-      text: '"لن يكتمل أمننا حتى يأمن جائع بيننا."',
-      author: '- حكمة عربية'
-    },
-    {
-      text: '"في كل بيت محتاج، فرصة لرحمة جديدة"',
-      author: '-رحمة'
-    },
-    {
-      text: '"لَنْ تَنَالُوا الْبِرَّ حَتَّى تُنْفِقُوا مِمَّا تُحِبُّونَ "',
-      ref: '-(آل عمران: 92)',
-      author: 'قدّم مما تحب، فذلك هو البرّ الحقيقي.'
-    },
-    {
-      text: '"قال ﷺ: «ارحموا من في الأرض يرحمكم من في السماء»"',
-      author: 'الرحمة لغة السماء، فلننشرها على الأرض.'
-    }
-  ];
+  const [heroContent, setHeroContent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentQuote((prev) => (prev + 1) % quotes.length);
-    }, 7000);
-    return () => clearInterval(timer);
-  }, [quotes.length]);
+    const fetchHeroContent = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/hero-content`);
+        setHeroContent(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch hero content:', error);
+        setLoading(false);
+      }
+    };
+    
+    fetchHeroContent();
+  }, []);
+
+  useEffect(() => {
+    if (heroContent && heroContent.quotes && heroContent.quotes.length > 0) {
+      const timer = setInterval(() => {
+        setCurrentQuote((prev) => (prev + 1) % heroContent.quotes.length);
+      }, 7000);
+      return () => clearInterval(timer);
+    }
+  }, [heroContent]);
 
   return (
     <div className="min-h-screen">
