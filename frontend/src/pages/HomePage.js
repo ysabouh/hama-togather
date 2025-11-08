@@ -48,7 +48,14 @@ const HomePage = () => {
       <Navbar />
 
       {/* قسم البطل */}
-      <section className="hero">
+      <section 
+        className="hero"
+        style={heroContent?.background_image ? {
+          background: `linear-gradient(rgba(4, 51, 43, 0.9), rgba(4, 51, 43, 0.8)), url(${heroContent.background_image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        } : {}}
+      >
         <div className="container">
           <h1>{heroContent?.title || 'معاً نَبني مجتمعاً متكافلاً في مدينة حماة'}</h1>
           <p>{heroContent?.subtitle || 'منصة إلكترونية تمكن لجان الأحياء من تنظيم العمل التطوعي والتكافلي بين أفراد المجتمع والمغتربين ورواد المجتمع لمساعدة المحتاجين'}</p>
