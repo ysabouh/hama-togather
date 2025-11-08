@@ -1027,7 +1027,13 @@ const AdminDashboard = () => {
         <DialogContent className="sm:max-w-2xl" data-testid="admin-dialog">
           <DialogHeader>
             <DialogTitle className="text-right text-2xl">
-              {dialogMode === 'create' ? 'إضافة' : 'تعديل'} {dialogType}
+              {dialogMode === 'create' ? 'إضافة' : 'تعديل'} {
+                dialogType === 'vision_text' ? 'نصوص الرؤية' :
+                dialogType === 'principle' ? 'مبدأ' :
+                dialogType === 'testimonial' ? 'شهادة' :
+                dialogType === 'models' ? 'النماذج' :
+                dialogType
+              }
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
