@@ -365,46 +365,54 @@ const AdminDashboard = () => {
               <input
                 type="file"
                 accept="image/*"
+                id="image-upload-input"
                 onChange={async (e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    // Validate file size (max 5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                      toast.error('حجم الصورة كبير جداً (الحد الأقصى 5MB)');
-                      e.target.value = '';
-                      return;
-                    }
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  
+                  // Validate file size (max 5MB)
+                  if (file.size > 5 * 1024 * 1024) {
+                    toast.error('حجم الصورة كبير جداً (الحد الأقصى 5MB)');
+                    e.target.value = '';
+                    return;
+                  }
+                  
+                  const toastId = toast.loading('جاري رفع الصورة...');
+                  
+                  try {
+                    // Create FormData
+                    const formDataUpload = new FormData();
+                    formDataUpload.append('file', file);
                     
-                    toast.info('جاري رفع الصورة...');
+                    console.log('Uploading file:', file.name, file.size, file.type);
                     
-                    try {
-                      // Upload via API
-                      const formDataUpload = new FormData();
-                      formDataUpload.append('file', file);
-                      
-                      const response = await axios.post(`${API_URL}/upload-image`, formDataUpload, {
-                        headers: { 
-                          'Content-Type': 'multipart/form-data'
-                        }
-                      });
-                      
-                      if (response.data && response.data.image_url) {
-                        setFormData({...formData, vision_image: response.data.image_url});
-                        toast.success('تم رفع الصورة بنجاح');
-                      } else {
-                        throw new Error('Invalid response');
-                      }
-                    } catch (error) {
-                      console.error('Upload error:', error);
-                      toast.error('فشل رفع الصورة: ' + (error.response?.data?.detail || error.message));
-                      e.target.value = '';
+                    // Upload via API
+                    const response = await axios.post(`${API_URL}/upload-image`, formDataUpload, {
+                      headers: { 
+                        'Content-Type': 'multipart/form-data'
+                      },
+                      timeout: 30000 // 30 seconds timeout
+                    });
+                    
+                    console.log('Upload response:', response.data);
+                    
+                    if (response.data?.image_url) {
+                      setFormData(prev => ({...prev, vision_image: response.data.image_url}));
+                      toast.success('تم رفع الصورة بنجاح', { id: toastId });
+                    } else {
+                      throw new Error('لم يتم استلام رابط الصورة');
                     }
+                  } catch (error) {
+                    console.error('Upload error:', error);
+                    const errorMsg = error.response?.data?.detail || error.message || 'حدث خطأ غير متوقع';
+                    toast.error(`فشل رفع الصورة: ${errorMsg}`, { id: toastId });
+                    e.target.value = '';
                   }
                 }}
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
                 data-testid="image-upload-input"
               />
-              <p className="text-xs text-gray-500 mt-2">صيغ مدعومة: JPG, PNG, GIF (الحد الأقصى 5MB)</p>
+              <p className="text-xs text-gray-500 mt-2">✓ صيغ مدعومة: JPG, PNG, GIF, WebP<br/>✓ الحد الأقصى: 5MB</p>
             </div>
             
             {formData.vision_image && (
