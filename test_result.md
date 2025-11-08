@@ -116,6 +116,9 @@ backend:
       - working: true
         agent: "main"
         comment: "تم تحديث Hero Content Model ليشمل كل الحقول المطلوبة: title, subtitle, cta_text, cta_link, background_image, quotes, video_url, video_title, video_description, video_subtitle. GET API يعمل بنجاح ويرجع البيانات الافتراضية."
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار GET API بنجاح. يعمل بدون authentication، يرجع جميع الحقول المطلوبة، يدعم البيانات العربية، البيانات الافتراضية والمحدثة تُسترجع بشكل صحيح. تم التحقق من وجود جميع الحقول: title, subtitle, cta_text, cta_link, background_image, quotes, video_url, video_title, video_description, video_subtitle."
 
   - task: "Hero Content API - PUT /api/hero-content"
     implemented: true
