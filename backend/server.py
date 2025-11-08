@@ -198,6 +198,9 @@ class SuccessStoryCreate(BaseModel):
 class MissionContent(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = "mission_content"  # Single document ID
+    hero_title: Optional[str] = None
+    hero_subtitle: Optional[str] = None
+    hero_background_image: Optional[str] = None
     vision_text: str
     vision_highlight: str
     vision_image: Optional[str] = None  # Base64 image or URL
@@ -208,6 +211,9 @@ class MissionContent(BaseModel):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class MissionContentUpdate(BaseModel):
+    hero_title: Optional[str] = None
+    hero_subtitle: Optional[str] = None
+    hero_background_image: Optional[str] = None
     vision_text: Optional[str] = None
     vision_highlight: Optional[str] = None
     vision_image: Optional[str] = None
