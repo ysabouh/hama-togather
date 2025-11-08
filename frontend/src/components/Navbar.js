@@ -30,24 +30,24 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        <nav className="flex justify-between items-center py-4">
-          <Link to="/" className="flex items-center gap-3" data-testid="logo-link">
+        <nav className="flex justify-between items-center py-3">
+          <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
             <img 
               src="/logo.png" 
               alt="معاً نَبني" 
-              className="h-16 w-auto"
+              className="h-12 w-auto"
               style={{objectFit: 'contain'}}
             />
-            <span className="text-2xl font-bold text-emerald-900">معاً نَبني</span>
+            <span className="text-xl font-bold text-emerald-900 hidden lg:inline">معاً نَبني</span>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-6 nav-links">
+          <ul className="hidden lg:flex items-center gap-4 nav-links text-sm">
             <li><Link to="/" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-home">الرئيسية</Link></li>
-            <li><Link to="/our-mission" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-mission">رؤيتنا ورسالتنا</Link></li>
+            <li><Link to="/our-mission" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-mission">رؤيتنا</Link></li>
             <li><a href="/#services" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-services">خدماتنا</a></li>
-            <li><a href="/#family" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-family">التوعية الأسرية</a></li>
-            <li><a href="/#education" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-education">التعليم والتدريب</a></li>
-            <li><a href="/#community" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-community">التكافل المجتمعي</a></li>
+            <li><a href="/#family" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-family">التوعية</a></li>
+            <li><a href="/#education" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-education">التعليم</a></li>
+            <li><a href="/#community" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-community">التكافل</a></li>
             <li><a href="/#stories" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-stories">قصص النجاح</a></li>
           </ul>
 
