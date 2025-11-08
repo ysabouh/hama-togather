@@ -41,7 +41,14 @@ const OurMissionPage = () => {
       {/* قسم البطل */}
       <section 
         className="hero" 
-        style={{
+        style={content?.hero_background_image ? {
+          background: `linear-gradient(rgba(4, 51, 43, 0.9), rgba(4, 51, 43, 0.8)), url(${content.hero_background_image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          padding: '120px 0',
+          textAlign: 'center',
+          borderBottom: '5px solid #b8a57b'
+        } : {
           background: 'linear-gradient(rgba(4, 51, 43, 0.9), rgba(4, 51, 43, 0.8)), url(https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -52,10 +59,10 @@ const OurMissionPage = () => {
       >
         <div className="container">
           <h1 style={{fontSize: '3.5rem', marginBottom: '30px', textShadow: '2px 2px 4px rgba(0,0,0,0.5)', color: 'white'}}>
-            رؤيتنا ورسالتنا
+            {content?.hero_title || 'رؤيتنا ورسالتنا'}
           </h1>
           <p style={{fontSize: '1.5rem', maxWidth: '800px', margin: '0 auto', textShadow: '1px 1px 2px rgba(0,0,0,0.5)', color: '#f0f5f4'}}>
-            من حماة... نُعيد للإنسان قيمته، وللمجتمع وحدته.. نحو تنمية مستدامة وكرامة إنسانية
+            {content?.hero_subtitle || 'من حماة... نُعيد للإنسان قيمته، وللمجتمع وحدته.. نحو تنمية مستدامة وكرامة إنسانية'}
           </p>
         </div>
       </section>
