@@ -335,6 +335,69 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'vision_image':
+        return (
+          <>
+            <div>
+              <Label>رابط الصورة (URL)</Label>
+              <Input 
+                value={formData.vision_image || ''} 
+                onChange={(e) => setFormData({...formData, vision_image: e.target.value})} 
+                placeholder="https://example.com/image.jpg"
+                className="text-right mb-4"
+              />
+              <p className="text-sm text-gray-500 mb-4">أو ارفع صورة من جهازك:</p>
+              
+              <input
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    // Show loading
+                    toast.info('جاري رفع الصورة...');
+                    
+                    // Convert to base64
+                    const reader = new FileReader();
+                    reader.onloadend = async () => {
+                      try {
+                        // Upload image
+                        const formDataUpload = new FormData();
+                        formDataUpload.append('file', file);
+                        
+                        const response = await axios.post(`${API_URL}/upload-image`, formDataUpload, {
+                          headers: { 'Content-Type': 'multipart/form-data' }
+                        });
+                        
+                        setFormData({...formData, vision_image: response.data.image_url});
+                        toast.success('تم رفع الصورة بنجاح');
+                      } catch (error) {
+                        toast.error('فشل رفع الصورة');
+                      }
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+              />
+            </div>
+            
+            {formData.vision_image && (
+              <div className="mt-4">
+                <Label>معاينة الصورة:</Label>
+                <img 
+                  src={formData.vision_image} 
+                  alt="معاينة" 
+                  className="w-full h-48 object-cover rounded-lg border mt-2"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/800x400?text=Invalid+Image';
+                  }}
+                />
+              </div>
+            )}
+          </>
+        );
+
       case 'principle':
         return (
           <>
