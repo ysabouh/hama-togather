@@ -82,13 +82,69 @@ const AdminDashboard = () => {
     e.preventDefault();
     
     try {
-      if (dialogMode === 'create') {
-        await axios.post(`${API_URL}/${dialogType}`, formData);
-        toast.success('تم الإضافة بنجاح');
+      // Handle mission content updates
+      if (['vision_text', 'principle', 'testimonial', 'models'].includes(dialogType)) {
+        let updateData = {};
+        
+        if (dialogType === 'vision_text') {
+          updateData = {
+            vision_text: formData.vision_text,
+            vision_highlight: formData.vision_highlight
+          };
+        } else if (dialogType === 'principle') {
+          const principles = [...(missionContent.principles || [])];
+          if (dialogMode === 'create') {
+            principles.push({
+              icon: formData.icon,
+              title: formData.title,
+              description: formData.description
+            });
+          } else {
+            principles[formData.index] = {
+              icon: formData.icon,
+              title: formData.title,
+              description: formData.description
+            };
+          }
+          updateData = { principles };
+        } else if (dialogType === 'testimonial') {
+          const testimonials = [...(missionContent.testimonials || [])];
+          if (dialogMode === 'create') {
+            testimonials.push({
+              name: formData.name,
+              role: formData.role,
+              text: formData.text,
+              avatar: formData.avatar
+            });
+          } else {
+            testimonials[formData.index] = {
+              name: formData.name,
+              role: formData.role,
+              text: formData.text,
+              avatar: formData.avatar
+            };
+          }
+          updateData = { testimonials };
+        } else if (dialogType === 'models') {
+          updateData = {
+            old_model: formData.old_model,
+            new_model: formData.new_model
+          };
+        }
+        
+        await axios.put(`${API_URL}/mission-content`, updateData);
+        toast.success(dialogMode === 'create' ? 'تم الإضافة بنجاح' : 'تم التحديث بنجاح');
       } else {
-        await axios.put(`${API_URL}/${dialogType}/${currentItem.id}`, formData);
-        toast.success('تم التحديث بنجاح');
+        // Handle regular CRUD operations
+        if (dialogMode === 'create') {
+          await axios.post(`${API_URL}/${dialogType}`, formData);
+          toast.success('تم الإضافة بنجاح');
+        } else {
+          await axios.put(`${API_URL}/${dialogType}/${currentItem.id}`, formData);
+          toast.success('تم التحديث بنجاح');
+        }
       }
+      
       setShowDialog(false);
       fetchAllData();
     } catch (error) {
