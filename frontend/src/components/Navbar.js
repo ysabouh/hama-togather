@@ -43,6 +43,7 @@ const Navbar = () => {
 
           <ul className="hidden md:flex items-center gap-6 nav-links">
             <li><Link to="/" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-home">الرئيسية</Link></li>
+            <li><Link to="/our-mission" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-mission">رؤيتنا ورسالتنا</Link></li>
             <li><a href="/#services" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-services">خدماتنا</a></li>
             <li><a href="/#family" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-family">التوعية الأسرية</a></li>
             <li><a href="/#education" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-education">التعليم والتدريب</a></li>
