@@ -38,13 +38,13 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-emerald-900">معاً نَبني</span>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-6">
+          <ul className="hidden md:flex items-center gap-6 nav-links">
             <li><Link to="/" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-home">الرئيسية</Link></li>
-            <li><Link to="/families" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-families">كفالة العائلات</Link></li>
-            <li><Link to="/health-cases" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-health">الرعاية الصحية</Link></li>
-            <li><Link to="/courses" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-courses">الدورات</Link></li>
-            <li><Link to="/projects" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-projects">المشاريع</Link></li>
-            <li><Link to="/initiatives" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-initiatives">المبادرات</Link></li>
+            <li><a href="/#services" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-services">خدماتنا</a></li>
+            <li><a href="/#family" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-family">التوعية الأسرية</a></li>
+            <li><a href="/#education" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-education">التعليم والتدريب</a></li>
+            <li><a href="/#community" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-community">التكافل المجتمعي</a></li>
+            <li><a href="/#stories" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-stories">قصص النجاح</a></li>
           </ul>
 
           <div className="flex items-center gap-3">
