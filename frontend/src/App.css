@@ -130,23 +130,13 @@ nav {
 
 /* قسم البطل */
 .hero {
-    background: linear-gradient(rgba(4, 51, 43, 0.85), rgba(4, 51, 43, 0.9)), url('https://images.unsplash.com/photo-1582213782119-d0417e658ee0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+    background: linear-gradient(rgba(4, 51, 43, 0.9), rgba(4, 51, 43, 0.8)), url('https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
     background-size: cover;
     background-position: center;
     color: var(--white);
     padding: 120px 0;
     text-align: center;
     position: relative;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
 }
 
 .hero .container {
