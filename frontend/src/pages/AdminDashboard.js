@@ -774,36 +774,93 @@ const AdminDashboard = () => {
                 <div className="space-y-8">
                   {missionContent && (
                     <>
-                      {/* قسم نصوص الرؤية */}
+                      {/* قسم نصوص وصورة الرؤية */}
                       <div className="border rounded-lg p-6">
                         <div className="flex justify-between items-center mb-4">
-                          <h3 className="font-bold text-xl">نصوص الرؤية</h3>
-                          <Button 
-                            onClick={() => {
-                              setDialogType('vision_text');
-                              setDialogMode('edit');
-                              setFormData({
-                                vision_text: missionContent.vision_text,
-                                vision_highlight: missionContent.vision_highlight
-                              });
-                              setShowDialog(true);
-                            }}
-                            size="sm"
-                            className="bg-blue-700"
-                            data-testid="edit-vision-btn"
-                          >
-                            <Edit className="w-4 h-4 ml-2" />
-                            تعديل النصوص
-                          </Button>
-                        </div>
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="font-semibold mb-2 text-gray-700">نص الرؤية:</h4>
-                            <p className="text-gray-600 whitespace-pre-line bg-gray-50 p-4 rounded">{missionContent.vision_text}</p>
+                          <h3 className="font-bold text-xl">نصوص وصورة الرؤية</h3>
+                          <div className="flex gap-2">
+                            <Button 
+                              onClick={() => {
+                                setDialogType('vision_image');
+                                setDialogMode('edit');
+                                setFormData({ vision_image: missionContent.vision_image || '' });
+                                setShowDialog(true);
+                              }}
+                              size="sm"
+                              className="bg-purple-700"
+                              data-testid="edit-image-btn"
+                            >
+                              <Edit className="w-4 h-4 ml-2" />
+                              تعديل الصورة
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                setDialogType('vision_text');
+                                setDialogMode('edit');
+                                setFormData({
+                                  vision_text: missionContent.vision_text,
+                                  vision_highlight: missionContent.vision_highlight
+                                });
+                                setShowDialog(true);
+                              }}
+                              size="sm"
+                              className="bg-blue-700"
+                              data-testid="edit-vision-btn"
+                            >
+                              <Edit className="w-4 h-4 ml-2" />
+                              تعديل النصوص
+                            </Button>
                           </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-semibold mb-2 text-gray-700">نص الرؤية:</h4>
+                              <p className="text-gray-600 whitespace-pre-line bg-gray-50 p-4 rounded text-sm">{missionContent.vision_text}</p>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold mb-2 text-gray-700">النص المميز:</h4>
+                              <p className="text-emerald-900 font-semibold bg-emerald-50 p-4 rounded">{missionContent.vision_highlight}</p>
+                            </div>
+                          </div>
+                          
                           <div>
-                            <h4 className="font-semibold mb-2 text-gray-700">النص المميز:</h4>
-                            <p className="text-emerald-900 font-semibold bg-emerald-50 p-4 rounded">{missionContent.vision_highlight}</p>
+                            <h4 className="font-semibold mb-2 text-gray-700">صورة الرؤية:</h4>
+                            {missionContent.vision_image ? (
+                              <div className="relative group">
+                                <img 
+                                  src={missionContent.vision_image} 
+                                  alt="صورة الرؤية" 
+                                  className="w-full h-64 object-cover rounded-lg border-2 border-gray-300"
+                                />
+                                <div className="absolute top-2 left-2">
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={async () => {
+                                      if (window.confirm('هل أنت متأكد من حذف الصورة؟')) {
+                                        try {
+                                          await axios.put(`${API_URL}/mission-content`, { vision_image: null });
+                                          toast.success('تم حذف الصورة');
+                                          fetchAllData();
+                                        } catch (error) {
+                                          toast.error('فشل حذف الصورة');
+                                        }
+                                      }
+                                    }}
+                                    data-testid="delete-image-btn"
+                                  >
+                                    <Trash2 className="w-4 h-4 ml-1" />
+                                    حذف
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                                <p className="text-gray-500">لا توجد صورة</p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
