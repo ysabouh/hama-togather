@@ -776,6 +776,19 @@ const AdminDashboard = () => {
                               </Button>
                             )}
                           </div>
+                          
+                          {/* معلومات إرشادية للصورة */}
+                          <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm">
+                            <p className="font-semibold text-blue-900 mb-1">📌 معلومات مهمة عن الصورة:</p>
+                            <ul className="text-blue-800 space-y-1 mr-4">
+                              <li>• <strong>نوع الصورة:</strong> JPG, PNG, WebP</li>
+                              <li>• <strong>الأبعاد المثالية:</strong> 1920×1080 بكسل أو أكبر</li>
+                              <li>• <strong>الحجم الأقصى:</strong> 5 ميجابايت</li>
+                              <li>• <strong>نصيحة:</strong> استخدم صور ذات جودة عالية وألوان متناسقة مع التصميم</li>
+                              <li>• <strong>ملاحظة:</strong> إذا لم تقم برفع صورة، سيتم استخدام الصورة الافتراضية</li>
+                            </ul>
+                          </div>
+                          
                           {heroContent.background_image && (
                             <img src={heroContent.background_image} alt="background" className="mt-2 h-32 rounded" />
                           )}
