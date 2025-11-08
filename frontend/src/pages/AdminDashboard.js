@@ -681,6 +681,7 @@ const AdminDashboard = () => {
           {/* Tabs */}
           <Tabs defaultValue="families" className="w-full">
             <TabsList className="mb-6 bg-white p-2 rounded-lg shadow">
+              <TabsTrigger value="hero" data-testid="tab-hero">القسم الأول</TabsTrigger>
               <TabsTrigger value="families" data-testid="tab-families">العائلات</TabsTrigger>
               <TabsTrigger value="health" data-testid="tab-health">الحالات الصحية</TabsTrigger>
               <TabsTrigger value="courses" data-testid="tab-courses">الدورات</TabsTrigger>
