@@ -195,7 +195,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Hero Content API - PUT /api/hero-content"
     - "AdminDashboard - Hero Section Tab"
     - "Hero Section في HomePage - Dynamic Content"
     - "Video Section في HomePage - Dynamic Content"
