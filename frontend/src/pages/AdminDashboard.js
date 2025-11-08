@@ -36,7 +36,7 @@ const AdminDashboard = () => {
 
   const fetchAllData = async () => {
     try {
-      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes] = await Promise.all([
+      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes] = await Promise.all([
         axios.get(`${API_URL}/stats`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/health-cases`),
@@ -44,7 +44,8 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/projects`),
         axios.get(`${API_URL}/initiatives`),
         axios.get(`${API_URL}/stories`),
-        axios.get(`${API_URL}/donations`)
+        axios.get(`${API_URL}/donations`),
+        axios.get(`${API_URL}/mission-content`)
       ]);
 
       setStats(statsRes.data);
