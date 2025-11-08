@@ -83,13 +83,17 @@ const AdminDashboard = () => {
     
     try {
       // Handle mission content updates
-      if (['vision_text', 'principle', 'testimonial', 'models'].includes(dialogType)) {
+      if (['vision_text', 'vision_image', 'principle', 'testimonial', 'models'].includes(dialogType)) {
         let updateData = {};
         
         if (dialogType === 'vision_text') {
           updateData = {
             vision_text: formData.vision_text,
             vision_highlight: formData.vision_highlight
+          };
+        } else if (dialogType === 'vision_image') {
+          updateData = {
+            vision_image: formData.vision_image
           };
         } else if (dialogType === 'principle') {
           const principles = [...(missionContent.principles || [])];
