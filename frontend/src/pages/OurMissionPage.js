@@ -83,11 +83,22 @@ const OurMissionPage = () => {
               </div>
             </div>
             <div style={{flex: 1, minWidth: '300px', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 15px 40px rgba(0,0,0,0.1)', border: '3px solid #b8a57b'}}>
-              <img 
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800" 
-                alt="قيادة وتنمية مجتمعية"
-                style={{width: '100%', height: 'auto', display: 'block'}}
-              />
+              {content?.vision_image ? (
+                <img 
+                  src={content.vision_image} 
+                  alt="قيادة وتنمية مجتمعية"
+                  style={{width: '100%', height: 'auto', display: 'block'}}
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800';
+                  }}
+                />
+              ) : (
+                <img 
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800" 
+                  alt="قيادة وتنمية مجتمعية"
+                  style={{width: '100%', height: 'auto', display: 'block'}}
+                />
+              )}
             </div>
           </div>
         </div>
