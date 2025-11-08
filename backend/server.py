@@ -194,6 +194,26 @@ class SuccessStoryCreate(BaseModel):
     description: str
     image: Optional[str] = None
 
+# Mission Content Models
+class MissionContent(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "mission_content"  # Single document ID
+    vision_text: str
+    vision_highlight: str
+    principles: List[dict]  # [{icon, title, description}]
+    old_model: List[str]
+    new_model: List[str]
+    testimonials: List[dict]  # [{name, role, text}]
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class MissionContentUpdate(BaseModel):
+    vision_text: Optional[str] = None
+    vision_highlight: Optional[str] = None
+    principles: Optional[List[dict]] = None
+    old_model: Optional[List[str]] = None
+    new_model: Optional[List[str]] = None
+    testimonials: Optional[List[dict]] = None
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
