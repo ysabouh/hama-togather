@@ -216,6 +216,24 @@ class MissionContentUpdate(BaseModel):
     new_model: Optional[List[str]] = None
     testimonials: Optional[List[dict]] = None
 
+# Hero Section Models
+class HeroContent(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "hero_content"
+    title: str
+    subtitle: str
+    cta_text: str
+    cta_link: str
+    quotes: List[dict]  # [{text, ref, author}]
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class HeroContentUpdate(BaseModel):
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    cta_text: Optional[str] = None
+    cta_link: Optional[str] = None
+    quotes: Optional[List[dict]] = None
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
