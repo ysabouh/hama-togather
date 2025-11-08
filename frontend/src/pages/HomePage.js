@@ -96,32 +96,35 @@ const HomePage = () => {
       </section>
 
       {/* قسم الفيديو التوجيهي */}
-      <section className="video-section">
-        <div className="container">
-          <div className="video-container">
-            <div className="video-header">
-              <h2>شاهد كيف يمكنك إحداث فرق حقيقي</h2>
-              <p>فيديو توجيهي يشرح أهمية العمل التكافلي وكيفية المشاركة في مبادراتنا</p>
-            </div>
-            
-            <div className="video-wrapper">
-              <iframe
-                src="https://www.youtube.com/embed/XmYV-ZVZj04"
-                title="فيديو توجيهي عن التكافل المجتمعي"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            
-            <div className="video-description">
-              <h3>كيف يمكنك المشاركة في بناء مجتمع أفضل؟</h3>
-              <p>يشرح هذا الفيديو كيف يمكن لأي شخص، بغض النظر عن موقعه أو إمكانياته، أن يساهم في دعم المجتمع المحلي في مدينة حماة. سواء كنت مقيمًا في المحافظة أو مغتربًا في الخارج، هناك دائمًا طريقة للمساهمة.</p>
-              <p>من خلال منصتنا، يمكنك اختيار الطريقة التي تناسبك للمساعدة، سواء كانت كفالة عائلة، تقديم تبرعات عينية، المشاركة في المبادرات اليومية، أو دعم البرامج التعليمية والصحية.</p>
-              <a href="#services" className="cta-button">اكتشف طرق المساعدة</a>
+      {heroContent?.video_url && (
+        <section className="video-section">
+          <div className="container">
+            <div className="video-container">
+              <div className="video-header">
+                <h2>{heroContent.video_title || 'شاهد كيف يمكنك إحداث فرق حقيقي'}</h2>
+                <p>{heroContent.video_description || 'فيديو توجيهي يشرح أهمية العمل التكافلي وكيفية المشاركة في مبادراتنا'}</p>
+              </div>
+              
+              <div className="video-wrapper">
+                <iframe
+                  src={heroContent.video_url}
+                  title="فيديو توجيهي عن التكافل المجتمعي"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              
+              {heroContent.video_subtitle && (
+                <div className="video-description">
+                  <h3>كيف يمكنك المشاركة في بناء مجتمع أفضل؟</h3>
+                  <p>{heroContent.video_subtitle}</p>
+                  <a href="#services" className="cta-button">اكتشف طرق المساعدة</a>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* قسم الخدمات */}
       <section className="services" id="services">
