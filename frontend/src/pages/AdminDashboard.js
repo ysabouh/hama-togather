@@ -692,6 +692,233 @@ const AdminDashboard = () => {
               <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
             </TabsList>
 
+            {/* Hero Section Tab */}
+            <TabsContent value="hero">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">إدارة القسم الأول (Hero Section & Video)</h2>
+                
+                {heroContent && (
+                  <div className="space-y-8">
+                    {/* Hero Section Management */}
+                    <div className="border rounded-lg p-6 bg-gray-50">
+                      <h3 className="text-xl font-bold mb-4 text-emerald-700">Hero Section - القسم الرئيسي</h3>
+                      
+                      <div className="space-y-4">
+                        {/* Title & Subtitle */}
+                        <div>
+                          <Label>العنوان الرئيسي</Label>
+                          <Input
+                            value={heroContent.title || ''}
+                            onChange={(e) => setHeroContent({...heroContent, title: e.target.value})}
+                            className="text-lg font-bold"
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label>الوصف</Label>
+                          <Textarea
+                            value={heroContent.subtitle || ''}
+                            onChange={(e) => setHeroContent({...heroContent, subtitle: e.target.value})}
+                            rows={3}
+                          />
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label>نص الزر</Label>
+                            <Input
+                              value={heroContent.cta_text || ''}
+                              onChange={(e) => setHeroContent({...heroContent, cta_text: e.target.value})}
+                            />
+                          </div>
+                          <div>
+                            <Label>رابط الزر</Label>
+                            <Input
+                              value={heroContent.cta_link || ''}
+                              onChange={(e) => setHeroContent({...heroContent, cta_link: e.target.value})}
+                            />
+                          </div>
+                        </div>
+                        
+                        {/* Background Image */}
+                        <div>
+                          <Label>صورة الخلفية</Label>
+                          <div className="flex gap-2 items-center">
+                            <Input
+                              type="file"
+                              accept="image/*"
+                              onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  try {
+                                    const token = localStorage.getItem('token');
+                                    const res = await axios.post(`${API_URL}/upload-image`, formData, {
+                                      headers: { Authorization: `Bearer ${token}` }
+                                    });
+                                    setHeroContent({...heroContent, background_image: res.data.image_url});
+                                    toast.success('تم رفع الصورة بنجاح');
+                                  } catch (error) {
+                                    toast.error('فشل رفع الصورة');
+                                  }
+                                }
+                              }}
+                            />
+                            {heroContent.background_image && (
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setHeroContent({...heroContent, background_image: null})}
+                              >
+                                حذف
+                              </Button>
+                            )}
+                          </div>
+                          {heroContent.background_image && (
+                            <img src={heroContent.background_image} alt="background" className="mt-2 h-32 rounded" />
+                          )}
+                        </div>
+                        
+                        {/* Quotes Management */}
+                        <div className="border-t pt-4">
+                          <div className="flex justify-between items-center mb-3">
+                            <Label className="text-lg font-semibold">العبارات الإلهامية</Label>
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                const quotes = heroContent.quotes || [];
+                                quotes.push({ text: '', ref: '', author: '' });
+                                setHeroContent({...heroContent, quotes});
+                              }}
+                              className="bg-emerald-700"
+                            >
+                              <Plus className="w-4 h-4 ml-1" />
+                              إضافة عبارة
+                            </Button>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            {(heroContent.quotes || []).map((quote, index) => (
+                              <div key={index} className="border rounded p-3 bg-white">
+                                <div className="flex justify-between items-start mb-2">
+                                  <span className="text-sm font-semibold">عبارة {index + 1}</span>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => {
+                                      const quotes = [...heroContent.quotes];
+                                      quotes.splice(index, 1);
+                                      setHeroContent({...heroContent, quotes});
+                                    }}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                                <div className="space-y-2">
+                                  <Input
+                                    placeholder="النص"
+                                    value={quote.text || ''}
+                                    onChange={(e) => {
+                                      const quotes = [...heroContent.quotes];
+                                      quotes[index].text = e.target.value;
+                                      setHeroContent({...heroContent, quotes});
+                                    }}
+                                  />
+                                  <Input
+                                    placeholder="المرجع (اختياري)"
+                                    value={quote.ref || ''}
+                                    onChange={(e) => {
+                                      const quotes = [...heroContent.quotes];
+                                      quotes[index].ref = e.target.value;
+                                      setHeroContent({...heroContent, quotes});
+                                    }}
+                                  />
+                                  <Input
+                                    placeholder="المؤلف أو التعليق"
+                                    value={quote.author || ''}
+                                    onChange={(e) => {
+                                      const quotes = [...heroContent.quotes];
+                                      quotes[index].author = e.target.value;
+                                      setHeroContent({...heroContent, quotes});
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Video Section Management */}
+                    <div className="border rounded-lg p-6 bg-gray-50">
+                      <h3 className="text-xl font-bold mb-4 text-blue-700">Video Section - قسم الفيديو</h3>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <Label>رابط الفيديو (YouTube Embed URL)</Label>
+                          <Input
+                            value={heroContent.video_url || ''}
+                            onChange={(e) => setHeroContent({...heroContent, video_url: e.target.value})}
+                            placeholder="https://www.youtube.com/embed/VIDEO_ID"
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label>عنوان الفيديو</Label>
+                          <Input
+                            value={heroContent.video_title || ''}
+                            onChange={(e) => setHeroContent({...heroContent, video_title: e.target.value})}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label>وصف الفيديو (نص قصير)</Label>
+                          <Textarea
+                            value={heroContent.video_description || ''}
+                            onChange={(e) => setHeroContent({...heroContent, video_description: e.target.value})}
+                            rows={2}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label>النص التفصيلي أسفل الفيديو</Label>
+                          <Textarea
+                            value={heroContent.video_subtitle || ''}
+                            onChange={(e) => setHeroContent({...heroContent, video_subtitle: e.target.value})}
+                            rows={4}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Save Button */}
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={async () => {
+                          try {
+                            const token = localStorage.getItem('token');
+                            await axios.put(`${API_URL}/hero-content`, heroContent, {
+                              headers: { Authorization: `Bearer ${token}` }
+                            });
+                            toast.success('تم حفظ التغييرات بنجاح');
+                            fetchAllData();
+                          } catch (error) {
+                            toast.error('فشل حفظ التغييرات');
+                          }
+                        }}
+                        className="bg-emerald-700 px-8"
+                      >
+                        حفظ التغييرات
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
             {/* Families Tab */}
             <TabsContent value="families">
               <div className="bg-white rounded-xl shadow-lg p-6">
