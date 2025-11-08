@@ -1139,6 +1139,104 @@ const AdminDashboard = () => {
                 <div className="space-y-8">
                   {missionContent && (
                     <>
+                      {/* قسم Hero Section */}
+                      <div className="border rounded-lg p-6 bg-gradient-to-r from-emerald-50 to-blue-50">
+                        <h3 className="font-bold text-xl mb-4 text-emerald-800">قسم البطل (Hero Section)</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <Label>العنوان الرئيسي</Label>
+                            <Input
+                              value={missionContent.hero_title || ''}
+                              onChange={(e) => setMissionContent({...missionContent, hero_title: e.target.value})}
+                              className="text-lg font-bold"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label>النص الفرعي</Label>
+                            <Textarea
+                              value={missionContent.hero_subtitle || ''}
+                              onChange={(e) => setMissionContent({...missionContent, hero_subtitle: e.target.value})}
+                              rows={3}
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label>صورة الخلفية</Label>
+                            <div className="flex gap-2 items-center">
+                              <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                  const file = e.target.files[0];
+                                  if (file) {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    try {
+                                      const token = localStorage.getItem('token');
+                                      const res = await axios.post(`${API_URL}/upload-image`, formData, {
+                                        headers: { Authorization: `Bearer ${token}` }
+                                      });
+                                      setMissionContent({...missionContent, hero_background_image: res.data.image_url});
+                                      toast.success('تم رفع الصورة بنجاح');
+                                    } catch (error) {
+                                      toast.error('فشل رفع الصورة');
+                                    }
+                                  }
+                                }}
+                              />
+                              {missionContent.hero_background_image && (
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => setMissionContent({...missionContent, hero_background_image: null})}
+                                >
+                                  حذف
+                                </Button>
+                              )}
+                            </div>
+                            
+                            {/* معلومات إرشادية */}
+                            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm">
+                              <p className="font-semibold text-blue-900 mb-1">📌 معلومات مهمة:</p>
+                              <ul className="text-blue-800 space-y-1 mr-4">
+                                <li>• <strong>الأبعاد المثالية:</strong> 1920×1080 بكسل</li>
+                                <li>• <strong>الحجم الأقصى:</strong> 5 ميجابايت</li>
+                                <li>• <strong>ملاحظة:</strong> إذا لم تقم برفع صورة، سيتم استخدام الصورة الافتراضية</li>
+                              </ul>
+                            </div>
+                            
+                            {missionContent.hero_background_image && (
+                              <img src={missionContent.hero_background_image} alt="hero background" className="mt-2 h-32 rounded" />
+                            )}
+                          </div>
+                          
+                          <div className="flex justify-end pt-4">
+                            <Button
+                              onClick={async () => {
+                                try {
+                                  const token = localStorage.getItem('token');
+                                  await axios.put(`${API_URL}/mission-content`, {
+                                    hero_title: missionContent.hero_title,
+                                    hero_subtitle: missionContent.hero_subtitle,
+                                    hero_background_image: missionContent.hero_background_image
+                                  }, {
+                                    headers: { Authorization: `Bearer ${token}` }
+                                  });
+                                  toast.success('تم حفظ تغييرات Hero Section بنجاح');
+                                  fetchAllData();
+                                } catch (error) {
+                                  toast.error('فشل حفظ التغييرات');
+                                }
+                              }}
+                              className="bg-emerald-700"
+                            >
+                              حفظ تغييرات Hero Section
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      
                       {/* قسم نصوص وصورة الرؤية */}
                       <div className="border rounded-lg p-6">
                         <div className="flex justify-between items-center mb-4">
