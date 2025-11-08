@@ -35,44 +35,63 @@ const HomePage = () => {
     }
   }, [heroContent]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">جاري التحميل...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <Navbar />
 
       {/* قسم البطل */}
-      <section className="hero">
+      <section 
+        className="hero" 
+        style={heroContent?.background_image ? {
+          backgroundImage: `url(${heroContent.background_image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        } : {}}
+      >
         <div className="container">
-          <h1>معاً نَبني مجتمعاً متكافلاً في مدينة حماة</h1>
-          <p>منصة إلكترونية تمكن لجان الأحياء من تنظيم العمل التطوعي والتكافلي بين أفراد المجتمع والمغتربين ورواد المجتمع لمساعدة المحتاجين</p>
+          <h1>{heroContent?.title || 'معاً نَبني مجتمعاً متكافلاً في مدينة حماة'}</h1>
+          <p>{heroContent?.subtitle || 'منصة إلكترونية تمكن لجان الأحياء من تنظيم العمل التطوعي والتكافلي بين أفراد المجتمع والمغتربين ورواد المجتمع لمساعدة المحتاجين'}</p>
           
           {/* قسم العبارات الإلهامية */}
-          <div className="inspirational-quotes">
-            <div className="quote-slider">
-              {quotes.map((quote, index) => (
-                <div
-                  key={index}
-                  className={`quote-slide ${index === currentQuote ? 'active' : ''}`}
-                >
-                  <div className="quote-text">{quote.text}</div>
-                  {quote.ref && <div className="quote-text">{quote.ref}</div>}
-                  <div className="quote-author">{quote.author}</div>
-                </div>
-              ))}
+          {heroContent?.quotes && heroContent.quotes.length > 0 && (
+            <div className="inspirational-quotes">
+              <div className="quote-slider">
+                {heroContent.quotes.map((quote, index) => (
+                  <div
+                    key={index}
+                    className={`quote-slide ${index === currentQuote ? 'active' : ''}`}
+                  >
+                    <div className="quote-text">{quote.text}</div>
+                    {quote.ref && <div className="quote-text">{quote.ref}</div>}
+                    <div className="quote-author">{quote.author}</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="quote-nav">
+                {heroContent.quotes.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`nav-dot ${index === currentQuote ? 'active' : ''}`}
+                    onClick={() => setCurrentQuote(index)}
+                    data-index={index}
+                  />
+                ))}
+              </div>
             </div>
-            
-            <div className="quote-nav">
-              {quotes.map((_, index) => (
-                <button
-                  key={index}
-                  className={`nav-dot ${index === currentQuote ? 'active' : ''}`}
-                  onClick={() => setCurrentQuote(index)}
-                  data-index={index}
-                />
-              ))}
-            </div>
-          </div>
+          )}
           
-          <Link to="/families" className="cta-button">ابدأ رحلتك التطوعية</Link>
+          <Link to={heroContent?.cta_link || '/families'} className="cta-button">
+            {heroContent?.cta_text || 'ابدأ رحلتك التطوعية'}
+          </Link>
         </div>
       </section>
 
