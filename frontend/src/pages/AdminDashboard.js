@@ -323,6 +323,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="projects" data-testid="tab-projects">المشاريع</TabsTrigger>
               <TabsTrigger value="initiatives" data-testid="tab-initiatives">المبادرات</TabsTrigger>
               <TabsTrigger value="stories" data-testid="tab-stories">قصص النجاح</TabsTrigger>
+              <TabsTrigger value="mission" data-testid="tab-mission">رؤيتنا ورسالتنا</TabsTrigger>
               <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
             </TabsList>
 
