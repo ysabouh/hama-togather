@@ -146,6 +146,9 @@ backend:
       - working: true
         agent: "main"
         comment: "API موجود من قبل ويعمل بشكل صحيح. يقوم برفع الصور وتحويلها إلى Base64."
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار POST upload-image API بنجاح. يتطلب Admin authentication، يقبل ملفات الصور، يحولها إلى Base64 format بشكل صحيح، يرجع image_url بصيغة data:image/[type];base64,[data]. تم اختبار رفع صور PNG وحفظها كـ background_image في hero content."
 
 frontend:
   - task: "Hero Section في HomePage - Dynamic Content"
