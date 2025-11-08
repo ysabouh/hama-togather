@@ -56,6 +56,7 @@ const AdminDashboard = () => {
       setInitiatives(initiativesRes.data);
       setStories(storiesRes.data);
       setDonations(donationsRes.data);
+      setMissionContent(missionRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     }
