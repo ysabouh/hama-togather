@@ -119,15 +119,18 @@ backend:
 
   - task: "Hero Content API - PUT /api/hero-content"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "تم تحديث PUT API لدعم كل الحقول الجديدة. يحتاج اختبار."
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار PUT API بنجاح. يعمل مع Admin authentication، يدعم تحديث جميع الحقول (title, subtitle, cta_text, cta_link, background_image, quotes, video_url, video_title, video_description, video_subtitle)، يحفظ البيانات العربية بشكل صحيح في MongoDB، تم اختبار تحديث الاقتباسات ومعلومات الفيديو وصورة الخلفية. جميع البيانات تُحفظ وتُسترجع بنجاح."
 
   - task: "Image Upload API - POST /api/upload-image"
     implemented: true
