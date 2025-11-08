@@ -150,6 +150,18 @@ backend:
         agent: "testing"
         comment: "✅ تم اختبار POST upload-image API بنجاح. يتطلب Admin authentication، يقبل ملفات الصور، يحولها إلى Base64 format بشكل صحيح، يرجع image_url بصيغة data:image/[type];base64,[data]. تم اختبار رفع صور PNG وحفظها كـ background_image في hero content."
 
+  - task: "Login API - POST /api/auth/login"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار Login API بنجاح. يعمل مع credentials: admin@test.com/admin123، يرجع access_token صحيح، تم إنشاء admin user تلقائياً عند عدم وجوده، role=admin. تم إصلاح مشكلة MONGO_URL المفقودة في backend/.env وإعادة تشغيل الخدمة. Login API يعمل بشكل صحيح."
+
 frontend:
   - task: "Hero Section في HomePage - Dynamic Content"
     implemented: true
