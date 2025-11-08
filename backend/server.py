@@ -662,6 +662,43 @@ async def update_mission_content(content_input: MissionContentUpdate, admin: Use
     
     return updated
 
+# ============= Hero Content Routes =============
+
+@api_router.get("/hero-content")
+async def get_hero_content():
+    content = await db.hero_content.find_one({"id": "hero_content"}, {"_id": 0})
+    if not content:
+        # Return default content if not exists
+        return {
+            "id": "hero_content",
+            "title": "معاً نَبني مجتمعاً متكافلاً في مدينة حماة",
+            "subtitle": "منصة إلكترونية تمكن لجان الأحياء من تنظيم العمل التطوعي والتكافلي بين أفراد المجتمع",
+            "cta_text": "ابدأ رحلتك التطوعية",
+            "cta_link": "/families",
+            "quotes": [],
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+    if isinstance(content.get('updated_at'), str):
+        content['updated_at'] = datetime.fromisoformat(content['updated_at'])
+    return content
+
+@api_router.put("/hero-content")
+async def update_hero_content(content_input: HeroContentUpdate, admin: User = Depends(get_admin_user)):
+    update_data = content_input.model_dump(exclude_none=True)
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.hero_content.update_one(
+        {"id": "hero_content"},
+        {"$set": update_data},
+        upsert=True
+    )
+    
+    updated = await db.hero_content.find_one({"id": "hero_content"}, {"_id": 0})
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
+    
+    return updated
+
 # Image upload
 @api_router.post("/upload-image")
 async def upload_image(file: UploadFile = File(...), admin: User = Depends(get_admin_user)):
