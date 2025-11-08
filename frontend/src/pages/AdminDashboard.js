@@ -908,7 +908,7 @@ const AdminDashboard = () => {
                                     onClick={async () => {
                                       if (window.confirm('هل أنت متأكد من حذف الصورة؟')) {
                                         try {
-                                          await axios.put(`${API_URL}/mission-content`, { vision_image: null });
+                                          await axios.put(`${API_URL}/mission-content`, { vision_image: '' });
                                           toast.success('تم حذف الصورة');
                                           fetchAllData();
                                         } catch (error) {
