@@ -22,6 +22,7 @@ const AdminDashboard = () => {
   const [initiatives, setInitiatives] = useState([]);
   const [stories, setStories] = useState([]);
   const [donations, setDonations] = useState([]);
+  const [missionContent, setMissionContent] = useState(null);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
