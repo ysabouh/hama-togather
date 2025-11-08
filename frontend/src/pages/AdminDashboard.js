@@ -1153,6 +1153,7 @@ const AdminDashboard = () => {
             <DialogTitle className="text-right text-2xl">
               {dialogMode === 'create' ? 'إضافة' : 'تعديل'} {
                 dialogType === 'vision_text' ? 'نصوص الرؤية' :
+                dialogType === 'vision_image' ? 'صورة الرؤية' :
                 dialogType === 'principle' ? 'مبدأ' :
                 dialogType === 'testimonial' ? 'شهادة' :
                 dialogType === 'models' ? 'النماذج' :
