@@ -37,7 +37,7 @@ const AdminDashboard = () => {
 
   const fetchAllData = async () => {
     try {
-      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes] = await Promise.all([
+      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes] = await Promise.all([
         axios.get(`${API_URL}/stats`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/health-cases`),
@@ -46,7 +46,8 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/initiatives`),
         axios.get(`${API_URL}/stories`),
         axios.get(`${API_URL}/donations`),
-        axios.get(`${API_URL}/mission-content`)
+        axios.get(`${API_URL}/mission-content`),
+        axios.get(`${API_URL}/hero-content`)
       ]);
 
       setStats(statsRes.data);
@@ -58,6 +59,7 @@ const AdminDashboard = () => {
       setStories(storiesRes.data);
       setDonations(donationsRes.data);
       setMissionContent(missionRes.data);
+      setHeroContent(heroRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     }
