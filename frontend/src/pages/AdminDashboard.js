@@ -522,54 +522,222 @@ const AdminDashboard = () => {
             <TabsContent value="mission">
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">إدارة محتوى صفحة رؤيتنا ورسالتنا</h2>
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {missionContent && (
                     <>
-                      <div className="border rounded-lg p-4">
-                        <h3 className="font-bold text-lg mb-2">نص الرؤية</h3>
-                        <p className="text-gray-700 whitespace-pre-line">{missionContent.vision_text}</p>
-                      </div>
-                      
-                      <div className="border rounded-lg p-4 bg-emerald-50">
-                        <h3 className="font-bold text-lg mb-2">النص المميز</h3>
-                        <p className="text-emerald-900 font-semibold">{missionContent.vision_highlight}</p>
+                      {/* قسم نصوص الرؤية */}
+                      <div className="border rounded-lg p-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="font-bold text-xl">نصوص الرؤية</h3>
+                          <Button 
+                            onClick={() => {
+                              setDialogType('vision_text');
+                              setDialogMode('edit');
+                              setFormData({
+                                vision_text: missionContent.vision_text,
+                                vision_highlight: missionContent.vision_highlight
+                              });
+                              setShowDialog(true);
+                            }}
+                            size="sm"
+                            className="bg-blue-700"
+                            data-testid="edit-vision-btn"
+                          >
+                            <Edit className="w-4 h-4 ml-2" />
+                            تعديل النصوص
+                          </Button>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <h4 className="font-semibold mb-2 text-gray-700">نص الرؤية:</h4>
+                            <p className="text-gray-600 whitespace-pre-line bg-gray-50 p-4 rounded">{missionContent.vision_text}</p>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold mb-2 text-gray-700">النص المميز:</h4>
+                            <p className="text-emerald-900 font-semibold bg-emerald-50 p-4 rounded">{missionContent.vision_highlight}</p>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="border rounded-lg p-4">
-                        <h3 className="font-bold text-lg mb-4">المبادئ ({missionContent.principles?.length || 0})</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {/* قسم المبادئ */}
+                      <div className="border rounded-lg p-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="font-bold text-xl">المبادئ الأساسية ({missionContent.principles?.length || 0})</h3>
+                          <Button 
+                            onClick={() => {
+                              setDialogType('principle');
+                              setDialogMode('create');
+                              setFormData({icon: '🌱', title: '', description: ''});
+                              setShowDialog(true);
+                            }}
+                            size="sm"
+                            className="bg-emerald-700"
+                            data-testid="add-principle-btn"
+                          >
+                            <Plus className="w-4 h-4 ml-2" />
+                            إضافة مبدأ
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {missionContent.principles?.map((principle, idx) => (
-                            <div key={idx} className="bg-gray-50 p-4 rounded">
-                              <div className="text-3xl mb-2">{principle.icon}</div>
-                              <h4 className="font-bold mb-1">{principle.title}</h4>
-                              <p className="text-sm text-gray-600">{principle.description}</p>
+                            <div key={idx} className="bg-gray-50 p-4 rounded border hover:shadow-md transition-shadow">
+                              <div className="text-4xl mb-3">{principle.icon}</div>
+                              <h4 className="font-bold mb-2 text-lg">{principle.title}</h4>
+                              <p className="text-sm text-gray-600 mb-4">{principle.description}</p>
+                              <div className="flex gap-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    setDialogType('principle');
+                                    setDialogMode('edit');
+                                    setFormData({...principle, index: idx});
+                                    setShowDialog(true);
+                                  }}
+                                  data-testid={`edit-principle-${idx}`}
+                                >
+                                  <Edit className="w-3 h-3" />
+                                </Button>
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm"
+                                  onClick={async () => {
+                                    if (window.confirm('هل أنت متأكد من الحذف؟')) {
+                                      try {
+                                        const newPrinciples = missionContent.principles.filter((_, i) => i !== idx);
+                                        await axios.put(`${API_URL}/mission-content`, { principles: newPrinciples });
+                                        toast.success('تم الحذف بنجاح');
+                                        fetchAllData();
+                                      } catch (error) {
+                                        toast.error('فشل الحذف');
+                                      }
+                                    }
+                                  }}
+                                  data-testid={`delete-principle-${idx}`}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
                             </div>
                           ))}
                         </div>
                       </div>
 
-                      <div className="border rounded-lg p-4">
-                        <h3 className="font-bold text-lg mb-4">الشهادات ({missionContent.testimonials?.length || 0})</h3>
-                        <div className="space-y-3">
+                      {/* قسم النماذج */}
+                      <div className="border rounded-lg p-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="font-bold text-xl">نماذج التحول</h3>
+                          <Button 
+                            onClick={() => {
+                              setDialogType('models');
+                              setDialogMode('edit');
+                              setFormData({
+                                old_model: missionContent.old_model || [],
+                                new_model: missionContent.new_model || []
+                              });
+                              setShowDialog(true);
+                            }}
+                            size="sm"
+                            className="bg-purple-700"
+                            data-testid="edit-models-btn"
+                          >
+                            <Edit className="w-4 h-4 ml-2" />
+                            تعديل النماذج
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-red-50 p-4 rounded border-t-4 border-red-600">
+                            <h4 className="font-bold mb-3 text-red-900">النموذج التقليدي</h4>
+                            <ul className="space-y-2">
+                              {missionContent.old_model?.map((item, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <span className="text-red-600 font-bold">✗</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="bg-green-50 p-4 rounded border-t-4 border-emerald-600">
+                            <h4 className="font-bold mb-3 text-emerald-900">نموذجنا التحويلي</h4>
+                            <ul className="space-y-2">
+                              {missionContent.new_model?.map((item, idx) => (
+                                <li key={idx} className="text-sm flex items-start gap-2">
+                                  <span className="text-emerald-600 font-bold">✓</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* قسم الشهادات */}
+                      <div className="border rounded-lg p-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="font-bold text-xl">الشهادات ({missionContent.testimonials?.length || 0})</h3>
+                          <Button 
+                            onClick={() => {
+                              setDialogType('testimonial');
+                              setDialogMode('create');
+                              setFormData({name: '', role: '', text: '', avatar: ''});
+                              setShowDialog(true);
+                            }}
+                            size="sm"
+                            className="bg-amber-700"
+                            data-testid="add-testimonial-btn"
+                          >
+                            <Plus className="w-4 h-4 ml-2" />
+                            إضافة شهادة
+                          </Button>
+                        </div>
+                        <div className="space-y-4">
                           {missionContent.testimonials?.map((testimonial, idx) => (
-                            <div key={idx} className="bg-gray-50 p-4 rounded flex items-start gap-3">
-                              <div className="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                            <div key={idx} className="bg-gray-50 p-4 rounded border flex items-start gap-4 hover:shadow-md transition-shadow">
+                              <div className="w-14 h-14 bg-emerald-700 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
                                 {testimonial.avatar}
                               </div>
                               <div className="flex-1">
-                                <h4 className="font-bold">{testimonial.name}</h4>
-                                <p className="text-sm text-gray-500">{testimonial.role}</p>
-                                <p className="text-sm text-gray-700 mt-2 italic">"{testimonial.text}"</p>
+                                <h4 className="font-bold text-lg">{testimonial.name}</h4>
+                                <p className="text-sm text-gray-500 mb-2">{testimonial.role}</p>
+                                <p className="text-sm text-gray-700 italic">"{testimonial.text}"</p>
+                              </div>
+                              <div className="flex gap-2 flex-shrink-0">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    setDialogType('testimonial');
+                                    setDialogMode('edit');
+                                    setFormData({...testimonial, index: idx});
+                                    setShowDialog(true);
+                                  }}
+                                  data-testid={`edit-testimonial-${idx}`}
+                                >
+                                  <Edit className="w-3 h-3" />
+                                </Button>
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm"
+                                  onClick={async () => {
+                                    if (window.confirm('هل أنت متأكد من الحذف؟')) {
+                                      try {
+                                        const newTestimonials = missionContent.testimonials.filter((_, i) => i !== idx);
+                                        await axios.put(`${API_URL}/mission-content`, { testimonials: newTestimonials });
+                                        toast.success('تم الحذف بنجاح');
+                                        fetchAllData();
+                                      } catch (error) {
+                                        toast.error('فشل الحذف');
+                                      }
+                                    }
+                                  }}
+                                  data-testid={`delete-testimonial-${idx}`}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
                               </div>
                             </div>
                           ))}
                         </div>
-                      </div>
-
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-blue-800">
-                          ℹ️ لتعديل محتوى هذه الصفحة، يمكنك إضافة نموذج تعديل أو استخدام API مباشرة.
-                        </p>
                       </div>
                     </>
                   )}
