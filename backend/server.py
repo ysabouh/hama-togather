@@ -604,6 +604,44 @@ async def get_stats():
         "total_donated": total_amount
     }
 
+# ============= Mission Content Routes =============
+
+@api_router.get("/mission-content")
+async def get_mission_content():
+    content = await db.mission_content.find_one({"id": "mission_content"}, {"_id": 0})
+    if not content:
+        # Return default content if not exists
+        return {
+            "id": "mission_content",
+            "vision_text": "نحن نؤمن بأن شعبنا العظيم يستحق قيادة عظيمة تمكنه من النمو والتطور...",
+            "vision_highlight": "شعبنا العظيم يحتاج إلى قيادة عظيمة تساعده على التطور والنمو...",
+            "principles": [],
+            "old_model": [],
+            "new_model": [],
+            "testimonials": [],
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+    if isinstance(content.get('updated_at'), str):
+        content['updated_at'] = datetime.fromisoformat(content['updated_at'])
+    return content
+
+@api_router.put("/mission-content")
+async def update_mission_content(content_input: MissionContentUpdate, admin: User = Depends(get_admin_user)):
+    update_data = content_input.model_dump(exclude_none=True)
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.mission_content.update_one(
+        {"id": "mission_content"},
+        {"$set": update_data},
+        upsert=True
+    )
+    
+    updated = await db.mission_content.find_one({"id": "mission_content"}, {"_id": 0})
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
+    
+    return updated
+
 # Image upload
 @api_router.post("/upload-image")
 async def upload_image(file: UploadFile = File(...), admin: User = Depends(get_admin_user)):
