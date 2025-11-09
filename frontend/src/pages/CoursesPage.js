@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import LoadingLogo from '../components/LoadingLogo';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { GraduationCap, Calendar, Clock, Users } from 'lucide-react';
