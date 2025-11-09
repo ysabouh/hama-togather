@@ -37,11 +37,7 @@ const HomePage = () => {
   }, [heroContent]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">جاري التحميل...</div>
-      </div>
-    );
+    return <LoadingLogo />;
   }
 
   return (
