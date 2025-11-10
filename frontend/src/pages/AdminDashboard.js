@@ -24,6 +24,8 @@ const AdminDashboard = () => {
   const [donations, setDonations] = useState([]);
   const [missionContent, setMissionContent] = useState(null);
   const [heroContent, setHeroContent] = useState(null);
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [positions, setPositions] = useState([]);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
