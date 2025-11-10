@@ -1013,7 +1013,7 @@ const AdminDashboard = () => {
                         <tr key={neighborhood.id} className="hover:bg-gray-50">
                           <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.name}</td>
                           <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.number}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.family_count || 0}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.families_count || 0}</td>
                           <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.population_count || 0}</td>
                           <td className="px-4 py-3 text-sm">
                             <span className={`px-2 py-1 rounded-full text-xs ${neighborhood.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
