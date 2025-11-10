@@ -52,7 +52,8 @@ const RegisterPage = () => {
         full_name: formData.full_name,
         email: formData.email,
         password: formData.password,
-        role: 'donor'
+        role: 'donor',
+        neighborhood_id: formData.neighborhood_id
       });
       toast.success('تم إنشاء الحساب بنجاح');
       navigate('/');
