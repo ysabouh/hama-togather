@@ -231,9 +231,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "AdminDashboard - Hero Section Tab"
-    - "Hero Section في HomePage - Dynamic Content"
-    - "Video Section في HomePage - Dynamic Content"
+    - "Login Page - Admin Authentication"
+    - "AdminDashboard - Neighborhoods Tab Access"
+    - "AdminDashboard - Add New Neighborhood"
+    - "AdminDashboard - Edit Existing Neighborhood"
+    - "AdminDashboard - Delete Neighborhood"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
