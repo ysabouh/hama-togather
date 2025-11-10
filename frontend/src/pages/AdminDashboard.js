@@ -33,6 +33,14 @@ const AdminDashboard = () => {
   const [currentItem, setCurrentItem] = useState(null);
   const [formData, setFormData] = useState({});
 
+  // Setup axios with token from localStorage
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  }, []);
+
   useEffect(() => {
     fetchAllData();
   }, []);
