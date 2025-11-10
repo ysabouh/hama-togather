@@ -67,6 +67,7 @@ class Family(BaseModel):
     current_sponsors: int = 0
     image: Optional[str] = None
     status: str = "active"  # active, sponsored
+    neighborhood_id: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class FamilyCreate(BaseModel):
@@ -75,6 +76,7 @@ class FamilyCreate(BaseModel):
     description: str
     monthly_need: float
     image: Optional[str] = None
+    neighborhood_id: Optional[str] = None
 
 # Donation Models
 class Donation(BaseModel):
