@@ -839,6 +839,162 @@ async def upload_image(file: UploadFile = File(...), admin: User = Depends(get_a
     image_data = f"data:{file.content_type};base64,{base64_encoded}"
     return {"image_url": image_data}
 
+# ============= Neighborhoods Routes =============
+@api_router.get("/neighborhoods", response_model=List[Neighborhood])
+async def get_neighborhoods():
+    neighborhoods = await db.neighborhoods.find({}, {"_id": 0}).to_list(1000)
+    return neighborhoods
+
+@api_router.get("/neighborhoods/{neighborhood_id}", response_model=Neighborhood)
+async def get_neighborhood(neighborhood_id: str):
+    neighborhood = await db.neighborhoods.find_one({"id": neighborhood_id}, {"_id": 0})
+    if not neighborhood:
+        raise HTTPException(status_code=404, detail="Neighborhood not found")
+    return neighborhood
+
+@api_router.post("/neighborhoods", response_model=Neighborhood)
+async def create_neighborhood(neighborhood: NeighborhoodCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    neighborhood_obj = Neighborhood(**neighborhood.model_dump())
+    doc = neighborhood_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.neighborhoods.insert_one(doc)
+    return neighborhood_obj
+
+@api_router.put("/neighborhoods/{neighborhood_id}", response_model=Neighborhood)
+async def update_neighborhood(
+    neighborhood_id: str, 
+    neighborhood_update: NeighborhoodUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_data = {k: v for k, v in neighborhood_update.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = await db.neighborhoods.update_one({"id": neighborhood_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Neighborhood not found")
+    
+    updated = await db.neighborhoods.find_one({"id": neighborhood_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/neighborhoods/{neighborhood_id}")
+async def delete_neighborhood(neighborhood_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.neighborhoods.delete_one({"id": neighborhood_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Neighborhood not found")
+    return {"message": "Neighborhood deleted successfully"}
+
+# ============= Positions Routes =============
+@api_router.get("/positions", response_model=List[Position])
+async def get_positions():
+    positions = await db.positions.find({}, {"_id": 0}).to_list(1000)
+    return positions
+
+@api_router.post("/positions", response_model=Position)
+async def create_position(position: PositionCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    position_obj = Position(**position.model_dump())
+    doc = position_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.positions.insert_one(doc)
+    return position_obj
+
+@api_router.put("/positions/{position_id}", response_model=Position)
+async def update_position(
+    position_id: str,
+    position_update: PositionUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_data = {k: v for k, v in position_update.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = await db.positions.update_one({"id": position_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Position not found")
+    
+    updated = await db.positions.find_one({"id": position_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/positions/{position_id}")
+async def delete_position(position_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.positions.delete_one({"id": position_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Position not found")
+    return {"message": "Position deleted successfully"}
+
+# ============= Committee Members Routes =============
+@api_router.get("/committee-members", response_model=List[CommitteeMember])
+async def get_committee_members(neighborhood_id: Optional[str] = None):
+    query = {"neighborhood_id": neighborhood_id} if neighborhood_id else {}
+    members = await db.committee_members.find(query, {"_id": 0}).to_list(1000)
+    return members
+
+@api_router.get("/committee-members/{member_id}", response_model=CommitteeMember)
+async def get_committee_member(member_id: str):
+    member = await db.committee_members.find_one({"id": member_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Committee member not found")
+    return member
+
+@api_router.post("/committee-members", response_model=CommitteeMember)
+async def create_committee_member(member: CommitteeMemberCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    member_obj = CommitteeMember(**member.model_dump())
+    doc = member_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.committee_members.insert_one(doc)
+    return member_obj
+
+@api_router.put("/committee-members/{member_id}", response_model=CommitteeMember)
+async def update_committee_member(
+    member_id: str,
+    member_update: CommitteeMemberUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_data = {k: v for k, v in member_update.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = await db.committee_members.update_one({"id": member_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Committee member not found")
+    
+    updated = await db.committee_members.find_one({"id": member_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/committee-members/{member_id}")
+async def delete_committee_member(member_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.committee_members.delete_one({"id": member_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Committee member not found")
+    return {"message": "Committee member deleted successfully"}
+
 # Include router
 app.include_router(api_router)
 
