@@ -190,11 +190,11 @@ const AdminDashboard = () => {
             </div>
             <div>
               <Label>رقم الحي</Label>
-              <Input type="number" value={formData.number || ''} onChange={(e) => setFormData({...formData, number: parseInt(e.target.value)})} required />
+              <Input value={formData.number || ''} onChange={(e) => setFormData({...formData, number: e.target.value})} required />
             </div>
             <div>
               <Label>عدد العوائل</Label>
-              <Input type="number" value={formData.family_count || 0} onChange={(e) => setFormData({...formData, family_count: parseInt(e.target.value)})} />
+              <Input type="number" value={formData.families_count || 0} onChange={(e) => setFormData({...formData, families_count: parseInt(e.target.value)})} />
             </div>
             <div>
               <Label>عدد السكان</Label>
