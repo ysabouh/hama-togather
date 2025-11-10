@@ -259,7 +259,7 @@ class Neighborhood(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     number: str
-    polygon_coordinates: List[List[float]]  # [[lat, lng], [lat, lng], ...]
+    polygon_coordinates: Optional[List[List[float]]] = None  # [[lat, lng], [lat, lng], ...]
     is_active: bool = True
     image: Optional[str] = None
     logo: Optional[str] = None
