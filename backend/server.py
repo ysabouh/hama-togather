@@ -1033,6 +1033,28 @@ async def startup_db():
             doc['created_at'] = doc['created_at'].isoformat()
             await db.positions.insert_one(doc)
         logger.info(f"Created {len(default_positions)} default positions")
+    
+    # Create default admin user if no users exist
+    users_count = await db.users.count_documents({})
+    if users_count == 0:
+        admin_user = UserCreate(
+            full_name="Admin User",
+            email="admin@example.com",
+            password="admin",
+            role="admin"
+        )
+        hashed_password = get_password_hash(admin_user.password)
+        user_obj = User(
+            full_name=admin_user.full_name,
+            email=admin_user.email,
+            role=admin_user.role
+        )
+        user_dict = user_obj.model_dump()
+        user_dict['created_at'] = user_dict['created_at'].isoformat()
+        user_dict['password'] = hashed_password
+        
+        await db.users.insert_one(user_dict)
+        logger.info("Created default admin user (admin@example.com / admin)")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
