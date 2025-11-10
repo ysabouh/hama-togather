@@ -165,39 +165,48 @@ backend:
 frontend:
   - task: "Login Page - Admin Authentication"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/LoginPage.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "يحتاج اختبار تسجيل الدخول بـ admin@example.com/admin والتوجه إلى /admin"
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار تسجيل الدخول بنجاح. يعمل مع admin@example.com/admin، يتم التوجه إلى /admin بنجاح، صفحة تسجيل الدخول تعمل بشكل صحيح مع حقول البريد الإلكتروني وكلمة المرور وزر تسجيل الدخول."
 
   - task: "AdminDashboard - Neighborhoods Tab Access"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/AdminDashboard.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "يحتاج اختبار الوصول لتبويب الأحياء والتحقق من وجود جدول الأحياء"
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار الوصول لتبويب الأحياء بنجاح. تبويب الأحياء [data-testid='tab-neighborhoods'] موجود وقابل للنقر، جدول الأحياء [data-testid='neighborhoods-table'] يظهر بشكل صحيح مع البيانات الموجودة (10 أحياء)، جميع الأعمدة تظهر بشكل صحيح (الاسم، الرقم، عدد العوائل، عدد السكان، الحالة، الإجراءات)."
 
   - task: "AdminDashboard - Add New Neighborhood"
     implemented: true
-    working: "NA"
+    working: false
     file: "frontend/src/pages/AdminDashboard.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "يحتاج اختبار إضافة حي جديد بالبيانات: اسم الحي، رقم الحي، عدد العوائل، عدد السكان، حالة نشط"
+      - working: false
+        agent: "testing"
+        comment: "❌ مشكلة في إضافة حي جديد. زر 'إضافة حي جديد' [data-testid='add-neighborhood-btn'] يعمل وينفتح النموذج، يمكن ملء جميع الحقول (اسم الحي، رقم الحي، عدد العوائل، عدد السكان، خيار نشط)، لكن هناك مشكلة في النقر على زر الحفظ بسبب modal overlay يحجب الزر. يحتاج إصلاح مشكلة الـ modal overlay أو استخدام force=True في النقر."
 
   - task: "AdminDashboard - Edit Existing Neighborhood"
     implemented: true
@@ -210,6 +219,9 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "يحتاج اختبار تعديل حي موجود وحفظ التغييرات"
+      - working: "NA"
+        agent: "testing"
+        comment: "لم يتم اختبار التعديل بسبب مشكلة في إضافة الحي الجديد. أزرار التعديل موجودة في الجدول ولكن لم يتم اختبار الوظيفة بالكامل."
 
   - task: "AdminDashboard - Delete Neighborhood"
     implemented: true
@@ -222,6 +234,9 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "يحتاج اختبار حذف حي مع تأكيد الحذف"
+      - working: "NA"
+        agent: "testing"
+        comment: "لم يتم اختبار الحذف بسبب مشكلة في إضافة الحي الجديد. أزرار الحذف موجودة في الجدول ولكن لم يتم اختبار الوظيفة بالكامل."
 
 metadata:
   created_by: "main_agent"
