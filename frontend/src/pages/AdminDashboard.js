@@ -149,11 +149,12 @@ const AdminDashboard = () => {
         toast.success(dialogMode === 'create' ? 'تم الإضافة بنجاح' : 'تم التحديث بنجاح');
       } else {
         // Handle regular CRUD operations
+        const endpoint = dialogType === 'neighborhood' ? 'neighborhoods' : dialogType;
         if (dialogMode === 'create') {
-          await axios.post(`${API_URL}/${dialogType}`, formData);
+          await axios.post(`${API_URL}/${endpoint}`, formData);
           toast.success('تم الإضافة بنجاح');
         } else {
-          await axios.put(`${API_URL}/${dialogType}/${currentItem.id}`, formData);
+          await axios.put(`${API_URL}/${endpoint}/${currentItem.id}`, formData);
           toast.success('تم التحديث بنجاح');
         }
       }
