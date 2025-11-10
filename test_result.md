@@ -163,31 +163,19 @@ backend:
         comment: "✅ تم اختبار Login API بنجاح. يعمل مع credentials: admin@test.com/admin123، يرجع access_token صحيح، تم إنشاء admin user تلقائياً عند عدم وجوده، role=admin. تم إصلاح مشكلة MONGO_URL المفقودة في backend/.env وإعادة تشغيل الخدمة. Login API يعمل بشكل صحيح."
 
 frontend:
-  - task: "Hero Section في HomePage - Dynamic Content"
+  - task: "Login Page - Admin Authentication"
     implemented: true
     working: "NA"
-    file: "frontend/src/pages/HomePage.js"
+    file: "frontend/src/pages/LoginPage.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: "NA"
-        agent: "main"
-        comment: "تم تحديث HomePage ليقرأ البيانات من API ويعرضها ديناميكياً. تم تحديث Hero Section لعرض: العنوان، الوصف، الاقتباسات، زر CTA، صورة الخلفية."
+        agent: "testing"
+        comment: "يحتاج اختبار تسجيل الدخول بـ admin@example.com/admin والتوجه إلى /admin"
 
-  - task: "Video Section في HomePage - Dynamic Content"
-    implemented: true
-    working: "NA"
-    file: "frontend/src/pages/HomePage.js"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "تم تحديث Video Section ليعرض البيانات ديناميكياً من API: video_url, video_title, video_description, video_subtitle."
-
-  - task: "AdminDashboard - Hero Section Tab"
+  - task: "AdminDashboard - Neighborhoods Tab Access"
     implemented: true
     working: "NA"
     file: "frontend/src/pages/AdminDashboard.js"
@@ -196,8 +184,44 @@ frontend:
     needs_retesting: true
     status_history:
       - working: "NA"
-        agent: "main"
-        comment: "تم إضافة تبويب 'القسم الأول' في AdminDashboard مع واجهة كاملة لإدارة Hero Section و Video Section. يتضمن: تعديل العنوان والوصف، إدارة الاقتباسات (إضافة/تعديل/حذف)، رفع صورة الخلفية، تعديل محتوى Video Section، زر حفظ التغييرات."
+        agent: "testing"
+        comment: "يحتاج اختبار الوصول لتبويب الأحياء والتحقق من وجود جدول الأحياء"
+
+  - task: "AdminDashboard - Add New Neighborhood"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "يحتاج اختبار إضافة حي جديد بالبيانات: اسم الحي، رقم الحي، عدد العوائل، عدد السكان، حالة نشط"
+
+  - task: "AdminDashboard - Edit Existing Neighborhood"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "يحتاج اختبار تعديل حي موجود وحفظ التغييرات"
+
+  - task: "AdminDashboard - Delete Neighborhood"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "يحتاج اختبار حذف حي مع تأكيد الحذف"
 
 metadata:
   created_by: "main_agent"
