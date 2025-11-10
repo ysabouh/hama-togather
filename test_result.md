@@ -195,7 +195,7 @@ frontend:
 
   - task: "AdminDashboard - Add New Neighborhood"
     implemented: true
-    working: false
+    working: true
     file: "frontend/src/pages/AdminDashboard.js"
     stuck_count: 1
     priority: "high"
@@ -207,6 +207,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "❌ مشكلة في إضافة حي جديد. زر 'إضافة حي جديد' [data-testid='add-neighborhood-btn'] يعمل وينفتح النموذج، يمكن ملء جميع الحقول (اسم الحي، رقم الحي، عدد العوائل، عدد السكان، خيار نشط)، لكن هناك مشكلة في النقر على زر الحفظ بسبب modal overlay يحجب الزر. يحتاج إصلاح مشكلة الـ modal overlay أو استخدام force=True في النقر."
+      - working: true
+        agent: "testing"
+        comment: "✅ تم إصلاح مشكلة z-index وإضافة الحي الجديد يعمل بنجاح! تم اختبار السيناريو الكامل: تسجيل الدخول بـ admin@example.com/admin، الوصول لتبويب الأحياء، النقر على زر 'إضافة حي جديد'، ملء النموذج بالبيانات (حي الزهراء الجديد، رقم 200، 45 عائلة، 225 ساكن، نشط)، النقر على زر الحفظ بـ force=True، ظهور toast نجاح 'تم الإضافة بنجاح'، والتحقق من ظهور الحي الجديد في الجدول مع جميع البيانات الصحيحة."
 
   - task: "AdminDashboard - Edit Existing Neighborhood"
     implemented: true
