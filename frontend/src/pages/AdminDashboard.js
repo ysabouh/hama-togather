@@ -179,6 +179,38 @@ const AdminDashboard = () => {
 
   const renderFormFields = () => {
     switch (dialogType) {
+      case 'neighborhood':
+        return (
+          <>
+            <div>
+              <Label>اسم الحي</Label>
+              <Input value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+            </div>
+            <div>
+              <Label>رقم الحي</Label>
+              <Input type="number" value={formData.number || ''} onChange={(e) => setFormData({...formData, number: parseInt(e.target.value)})} required />
+            </div>
+            <div>
+              <Label>عدد العوائل</Label>
+              <Input type="number" value={formData.family_count || 0} onChange={(e) => setFormData({...formData, family_count: parseInt(e.target.value)})} />
+            </div>
+            <div>
+              <Label>عدد السكان</Label>
+              <Input type="number" value={formData.population_count || 0} onChange={(e) => setFormData({...formData, population_count: parseInt(e.target.value)})} />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active">نشط</Label>
+            </div>
+          </>
+        );
+
       case 'families':
         return (
           <>
