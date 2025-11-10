@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,17 +6,36 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { UserPlus } from 'lucide-react';
+import axios from 'axios';
+
+const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    neighborhood_id: ''
   });
+  const [neighborhoods, setNeighborhoods] = useState([]);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchNeighborhoods();
+  }, []);
+
+  const fetchNeighborhoods = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/neighborhoods`);
+      setNeighborhoods(response.data.filter(n => n.is_active));
+    } catch (error) {
+      console.error('Error fetching neighborhoods:', error);
+      toast.error('فشل تحميل قائمة الأحياء');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
