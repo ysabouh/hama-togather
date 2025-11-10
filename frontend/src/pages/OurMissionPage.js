@@ -288,8 +288,8 @@ const OurMissionPage = () => {
       </section>
 
       <Footer />
-
-      <style jsx>{`
+      
+      <style>{`
         .principle-card-hover:hover {
           transform: translateY(-10px);
         }
