@@ -255,13 +255,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "AdminDashboard - Add New Neighborhood"
     - "AdminDashboard - Edit Existing Neighborhood"
     - "AdminDashboard - Delete Neighborhood"
-  stuck_tasks:
-    - "AdminDashboard - Add New Neighborhood"
+  stuck_tasks: []
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
