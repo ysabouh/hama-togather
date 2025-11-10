@@ -213,11 +213,11 @@ frontend:
 
   - task: "AdminDashboard - Edit Existing Neighborhood"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/AdminDashboard.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
@@ -228,14 +228,17 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "بعد إصلاح مشكلة إضافة الحي، أزرار التعديل [Edit] موجودة ومرئية في جدول الأحياء. يحتاج اختبار منفصل لتعديل حي موجود والتحقق من حفظ التغييرات."
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار تعديل الحي بنجاح! السيناريو المكتمل: تسجيل الدخول بـ admin@example.com/admin، الوصول لتبويب الأحياء، النقر على زر التعديل للحي الأول، تعديل اسم الحي إلى 'حي معدل للاختبار' وعدد العوائل إلى 100، النقر على زر الحفظ، ظهور toast نجاح، والتحقق من تحديث البيانات في الجدول. PUT API يعمل بشكل صحيح (200 OK) والبيانات تُحفظ وتظهر في الجدول فوراً."
 
   - task: "AdminDashboard - Delete Neighborhood"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/AdminDashboard.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
@@ -246,6 +249,9 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "بعد إصلاح مشكلة إضافة الحي، أزرار الحذف [Trash] موجودة ومرئية في جدول الأحياء. يحتاج اختبار منفصل لحذف حي والتحقق من تأكيد الحذف."
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار حذف الحي بنجاح! السيناريو المكتمل: تسجيل الدخول، الوصول لتبويب الأحياء، النقر على زر الحذف (أيقونة سلة المهملات) للحي الأخير، ظهور alert dialog 'هل أنت متأكد من الحذف؟'، تأكيد الحذف، إرسال DELETE API request بنجاح (200 OK)، واختفاء الحي من الجدول فوراً. عدد الأحياء انخفض من 11 إلى 10. الوظيفة تعمل بشكل مثالي."
 
 metadata:
   created_by: "main_agent"
