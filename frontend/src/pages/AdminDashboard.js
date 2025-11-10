@@ -82,7 +82,16 @@ const AdminDashboard = () => {
   const openCreateDialog = (type) => {
     setDialogType(type);
     setDialogMode('create');
-    setFormData({});
+    // Set default values for neighborhood
+    if (type === 'neighborhood') {
+      setFormData({
+        is_active: true,
+        families_count: 0,
+        population_count: 0
+      });
+    } else {
+      setFormData({});
+    }
     setCurrentItem(null);
     setShowDialog(true);
   };
