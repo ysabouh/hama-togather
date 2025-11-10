@@ -270,7 +270,7 @@ class Neighborhood(BaseModel):
 class NeighborhoodCreate(BaseModel):
     name: str
     number: str
-    polygon_coordinates: List[List[float]]
+    polygon_coordinates: Optional[List[List[float]]] = None
     is_active: bool = True
     image: Optional[str] = None
     logo: Optional[str] = None
