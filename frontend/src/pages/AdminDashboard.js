@@ -184,7 +184,8 @@ const AdminDashboard = () => {
       toast.success('تم الحذف بنجاح');
       fetchAllData();
     } catch (error) {
-      toast.error('فشل الحذف');
+      console.error('Delete error:', error);
+      toast.error(error.response?.data?.detail || 'فشل الحذف');
     }
   };
 
