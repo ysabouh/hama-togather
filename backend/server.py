@@ -760,7 +760,7 @@ async def update_mission_content(content_input: MissionContentUpdate, admin: Use
     update_data = content_input.model_dump(exclude_none=True)
     update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
     
-    result = await db.mission_content.update_one(
+    await db.mission_content.update_one(
         {"id": "mission_content"},
         {"$set": update_data},
         upsert=True
