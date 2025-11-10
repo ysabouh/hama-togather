@@ -951,6 +951,74 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* Neighborhoods Tab */}
+            <TabsContent value="neighborhoods">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">إدارة الأحياء</h2>
+                  <Button onClick={() => openCreateDialog('neighborhood')} className="bg-emerald-700" data-testid="add-neighborhood-btn">
+                    <Plus className="w-5 h-5 ml-2" />
+                    إضافة حي جديد
+                  </Button>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full" data-testid="neighborhoods-table">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الاسم</th>
+                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الرقم</th>
+                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">عدد العوائل</th>
+                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">عدد السكان</th>
+                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الحالة</th>
+                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {neighborhoods.map((neighborhood) => (
+                        <tr key={neighborhood.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.number}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.family_count || 0}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.population_count || 0}</td>
+                          <td className="px-4 py-3 text-sm">
+                            <span className={`px-2 py-1 rounded-full text-xs ${neighborhood.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {neighborhood.is_active ? 'نشط' : 'غير نشط'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm">
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openEditDialog('neighborhood', neighborhood)}
+                                className="text-blue-600 hover:bg-blue-50"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDelete('neighborhood', neighborhood.id)}
+                                className="text-red-600 hover:bg-red-50"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {neighborhoods.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      لا توجد أحياء مسجلة حالياً
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
             {/* Families Tab */}
             <TabsContent value="families">
               <div className="bg-white rounded-xl shadow-lg p-6">
