@@ -234,7 +234,7 @@ frontend:
     working: "NA"
     file: "frontend/src/pages/AdminDashboard.js"
     stuck_count: 0
-    priority: "high"
+    priority: "medium"
     needs_retesting: true
     status_history:
       - working: "NA"
@@ -243,6 +243,9 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "لم يتم اختبار الحذف بسبب مشكلة في إضافة الحي الجديد. أزرار الحذف موجودة في الجدول ولكن لم يتم اختبار الوظيفة بالكامل."
+      - working: "NA"
+        agent: "testing"
+        comment: "بعد إصلاح مشكلة إضافة الحي، أزرار الحذف [Trash] موجودة ومرئية في جدول الأحياء. يحتاج اختبار منفصل لحذف حي والتحقق من تأكيد الحذف."
 
 metadata:
   created_by: "main_agent"
