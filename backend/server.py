@@ -41,6 +41,7 @@ class UserBase(BaseModel):
     email: EmailStr
     full_name: str
     role: str = "donor"  # admin or donor
+    neighborhood_id: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str
