@@ -250,6 +250,94 @@ class HeroContentUpdate(BaseModel):
     video_description: Optional[str] = None
     video_subtitle: Optional[str] = None
 
+# Neighborhood Models
+class Neighborhood(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    number: str
+    polygon_coordinates: List[List[float]]  # [[lat, lng], [lat, lng], ...]
+    is_active: bool = True
+    image: Optional[str] = None
+    logo: Optional[str] = None
+    families_count: int = 0
+    population_count: int = 0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class NeighborhoodCreate(BaseModel):
+    name: str
+    number: str
+    polygon_coordinates: List[List[float]]
+    is_active: bool = True
+    image: Optional[str] = None
+    logo: Optional[str] = None
+    families_count: int = 0
+    population_count: int = 0
+
+class NeighborhoodUpdate(BaseModel):
+    name: Optional[str] = None
+    number: Optional[str] = None
+    polygon_coordinates: Optional[List[List[float]]] = None
+    is_active: Optional[bool] = None
+    image: Optional[str] = None
+    logo: Optional[str] = None
+    families_count: Optional[int] = None
+    population_count: Optional[int] = None
+
+# Position/Role Models (للاختصاصات)
+class Position(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class PositionCreate(BaseModel):
+    title: str
+
+class PositionUpdate(BaseModel):
+    title: Optional[str] = None
+    is_active: Optional[bool] = None
+
+# Committee Member Models
+class CommitteeMember(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    first_name: str
+    father_name: str
+    last_name: str
+    neighborhood_id: str
+    position_id: str
+    phone: str
+    address: Optional[str] = None
+    email: Optional[EmailStr] = None
+    image: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CommitteeMemberCreate(BaseModel):
+    first_name: str
+    father_name: str
+    last_name: str
+    neighborhood_id: str
+    position_id: str
+    phone: str
+    address: Optional[str] = None
+    email: Optional[EmailStr] = None
+    image: Optional[str] = None
+
+class CommitteeMemberUpdate(BaseModel):
+    first_name: Optional[str] = None
+    father_name: Optional[str] = None
+    last_name: Optional[str] = None
+    neighborhood_id: Optional[str] = None
+    position_id: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    email: Optional[EmailStr] = None
+    image: Optional[str] = None
+    is_active: Optional[bool] = None
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
