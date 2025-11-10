@@ -216,7 +216,7 @@ frontend:
     working: "NA"
     file: "frontend/src/pages/AdminDashboard.js"
     stuck_count: 0
-    priority: "high"
+    priority: "medium"
     needs_retesting: true
     status_history:
       - working: "NA"
@@ -225,6 +225,9 @@ frontend:
       - working: "NA"
         agent: "testing"
         comment: "لم يتم اختبار التعديل بسبب مشكلة في إضافة الحي الجديد. أزرار التعديل موجودة في الجدول ولكن لم يتم اختبار الوظيفة بالكامل."
+      - working: "NA"
+        agent: "testing"
+        comment: "بعد إصلاح مشكلة إضافة الحي، أزرار التعديل [Edit] موجودة ومرئية في جدول الأحياء. يحتاج اختبار منفصل لتعديل حي موجود والتحقق من حفظ التغييرات."
 
   - task: "AdminDashboard - Delete Neighborhood"
     implemented: true
