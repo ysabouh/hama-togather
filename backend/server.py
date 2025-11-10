@@ -1034,9 +1034,9 @@ async def startup_db():
             await db.positions.insert_one(doc)
         logger.info(f"Created {len(default_positions)} default positions")
     
-    # Create default admin user if no users exist
-    users_count = await db.users.count_documents({})
-    if users_count == 0:
+    # Ensure default admin user exists
+    admin_exists = await db.users.find_one({"email": "admin@example.com"})
+    if not admin_exists:
         admin_user = UserCreate(
             full_name="Admin User",
             email="admin@example.com",
@@ -1055,6 +1055,8 @@ async def startup_db():
         
         await db.users.insert_one(user_dict)
         logger.info("Created default admin user (admin@example.com / admin)")
+    else:
+        logger.info("Admin user exists (admin@example.com)")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
