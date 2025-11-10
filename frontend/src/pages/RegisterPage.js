@@ -132,6 +132,25 @@ const RegisterPage = () => {
               />
             </div>
 
+            <div>
+              <Label htmlFor="neighborhood" className="text-right block mb-2">الحي *</Label>
+              <select
+                id="neighborhood"
+                value={formData.neighborhood_id}
+                onChange={(e) => setFormData({ ...formData, neighborhood_id: e.target.value })}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-right bg-white"
+                data-testid="neighborhood-select"
+              >
+                <option value="">اختر الحي</option>
+                {neighborhoods.map((neighborhood) => (
+                  <option key={neighborhood.id} value={neighborhood.id}>
+                    {neighborhood.name} - حي رقم {neighborhood.number}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <Button
               type="submit"
               className="w-full bg-emerald-700 hover:bg-emerald-800 text-lg py-6"
