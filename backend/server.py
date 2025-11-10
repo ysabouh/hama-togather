@@ -1012,6 +1012,28 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_db():
+    # Create default positions if they don't exist
+    default_positions = [
+        "رئيس اللجنة",
+        "نائب الرئيس",
+        "أمين الصندوق",
+        "مسؤول التواصل",
+        "مسؤول المشاريع",
+        "مسؤول التوعية",
+        "عضو لجنة"
+    ]
+    
+    existing_count = await db.positions.count_documents({})
+    if existing_count == 0:
+        for title in default_positions:
+            position = Position(title=title)
+            doc = position.model_dump()
+            doc['created_at'] = doc['created_at'].isoformat()
+            await db.positions.insert_one(doc)
+        logger.info(f"Created {len(default_positions)} default positions")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
