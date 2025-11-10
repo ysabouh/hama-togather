@@ -170,7 +170,8 @@ const AdminDashboard = () => {
       setShowDialog(false);
       fetchAllData();
     } catch (error) {
-      toast.error('فشل العملية');
+      console.error('Error:', error);
+      toast.error(error.response?.data?.detail || 'فشل العملية');
     }
   };
 
