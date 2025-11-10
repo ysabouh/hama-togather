@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "تحديث Hero Section و Video Section في HomePage ليكون قابل للإدارة الكاملة (إضافة/تعديل/حذف) من AdminDashboard"
+user_problem_statement: "اختبار ميزة إدارة الأحياء في لوحة التحكم - تسجيل الدخول، الوصول لتبويب الأحياء، إضافة حي جديد، تعديل حي موجود، حذف حي"
 
 backend:
   - task: "Hero Content API - GET /api/hero-content"
