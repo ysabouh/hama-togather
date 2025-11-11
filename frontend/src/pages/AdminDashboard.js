@@ -364,6 +364,7 @@ const AdminDashboard = () => {
         let endpoint = dialogType;
         if (dialogType === 'neighborhood') endpoint = 'neighborhoods';
         else if (dialogType === 'committee') endpoint = 'committee-members';
+        else if (dialogType === 'position') endpoint = 'positions';
         else if (dialogType === 'job') endpoint = 'jobs';
         else if (dialogType === 'education') endpoint = 'education-levels';
         
