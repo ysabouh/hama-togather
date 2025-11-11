@@ -1709,7 +1709,7 @@ const AdminDashboard = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => openNeighborhoodDetailsDialog(neighborhood)}
+                                onClick={() => openNeighborhoodDetails(neighborhood)}
                                 className="text-emerald-600 hover:bg-emerald-50"
                                 title="عرض التفاصيل واللجنة"
                               >
