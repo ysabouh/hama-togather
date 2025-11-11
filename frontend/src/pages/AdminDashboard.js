@@ -1028,28 +1028,44 @@ const AdminDashboard = () => {
                   <table className="w-full" data-testid="neighborhoods-table">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الاسم</th>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الرقم</th>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">عدد العوائل</th>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">عدد السكان</th>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الحالة</th>
-                        <th className="px-4 py-3 text-right text-sm font-semibold text-gray-900">الإجراءات</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الرقم</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد العوائل</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد السكان</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإنشاء</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ التعديل</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {neighborhoods.map((neighborhood) => (
                         <tr key={neighborhood.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.name}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.number}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.families_count || 0}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900">{neighborhood.population_count || 0}</td>
-                          <td className="px-4 py-3 text-sm">
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.number}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.families_count || 0}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.population_count || 0}</td>
+                          <td className="px-4 py-3 text-sm text-center">
                             <span className={`px-2 py-1 rounded-full text-xs ${neighborhood.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                               {neighborhood.is_active ? 'نشط' : 'غير نشط'}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-sm">
-                            <div className="flex gap-2">
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center">
+                            {neighborhood.created_at ? new Date(neighborhood.created_at).toLocaleDateString('ar-SY', {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit'
+                            }) : '-'}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center">
+                            {neighborhood.updated_at ? new Date(neighborhood.updated_at).toLocaleDateString('ar-SY', {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit'
+                            }) : '-'}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-center">
+                            <div className="flex gap-2 justify-center">
                               <Button
                                 size="sm"
                                 variant="outline"
