@@ -1528,10 +1528,60 @@ const AdminDashboard = () => {
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-bold text-gray-900">إدارة الأحياء</h2>
-                  <Button onClick={() => openCreateDialog('neighborhood')} className="bg-emerald-700" data-testid="add-neighborhood-btn">
-                    <Plus className="w-5 h-5 ml-2" />
-                    إضافة حي جديد
-                  </Button>
+                  <div className="flex gap-3 items-center">
+                    {neighborhoodsSortColumn && (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setNeighborhoodsSortColumn(null);
+                          setNeighborhoodsSortDirection('asc');
+                        }}
+                        className="text-sm"
+                      >
+                        <X className="w-4 h-4 ml-2" />
+                        إلغاء الفرز
+                      </Button>
+                    )}
+                    <Button onClick={() => openCreateDialog('neighborhood')} className="bg-emerald-700" data-testid="add-neighborhood-btn">
+                      <Plus className="w-5 h-5 ml-2" />
+                      إضافة حي جديد
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Search and Filter Controls */}
+                <div className="mb-6 flex gap-4 items-center">
+                  <div className="flex-1 relative">
+                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Input
+                      type="text"
+                      placeholder="بحث في الاسم، الرقم..."
+                      value={neighborhoodsSearchQuery}
+                      onChange={(e) => setNeighborhoodsSearchQuery(e.target.value)}
+                      className="pr-10"
+                    />
+                    {neighborhoodsSearchQuery && (
+                      <button
+                        onClick={() => setNeighborhoodsSearchQuery('')}
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="show_inactive_neighborhoods"
+                      checked={showInactiveNeighborhoods}
+                      onChange={(e) => setShowInactiveNeighborhoods(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-300"
+                    />
+                    <Label htmlFor="show_inactive_neighborhoods" className="text-sm cursor-pointer">
+                      عرض الأحياء غير النشطة
+                    </Label>
+                  </div>
                 </div>
 
                 <div className="overflow-x-auto">
