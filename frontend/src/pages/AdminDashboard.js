@@ -1417,8 +1417,21 @@ const AdminDashboard = () => {
                         const neighborhood = neighborhoods.find(n => n.id === member.neighborhood_id);
                         const position = positions.find(p => p.id === member.position_id);
                         return (
-                          <tr key={member.id} className="hover:bg-gray-50">
+                          <tr key={member.id} className={`hover:bg-gray-50 ${member.is_active === false ? 'bg-gray-100 opacity-60' : ''}`}>
                             <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                            <td className="px-4 py-3 text-sm text-center">
+                              {member.is_active !== false ? (
+                                <div className="flex items-center justify-center gap-1 text-green-600">
+                                  <CheckCircle className="w-5 h-5" />
+                                  <span className="text-xs font-semibold">نشط</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center justify-center gap-1 text-red-600">
+                                  <XCircle className="w-5 h-5" />
+                                  <span className="text-xs font-semibold">موقوف</span>
+                                </div>
+                              )}
+                            </td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">
                               <div className="flex items-center gap-2 justify-center">
                                 {member.image && (
