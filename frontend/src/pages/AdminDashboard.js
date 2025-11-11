@@ -14,39 +14,6 @@ import { Plus, Edit, Trash2, Users, Heart, Activity, GraduationCap, Building2, H
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-// قائمة المهن/الأعمال
-const occupationOptions = [
-  { value: 'مهندس', label: 'مهندس' },
-  { value: 'طبيب', label: 'طبيب' },
-  { value: 'معلم', label: 'معلم' },
-  { value: 'محامي', label: 'محامي' },
-  { value: 'محاسب', label: 'محاسب' },
-  { value: 'صيدلي', label: 'صيدلي' },
-  { value: 'فني', label: 'فني' },
-  { value: 'موظف حكومي', label: 'موظف حكومي' },
-  { value: 'موظف قطاع خاص', label: 'موظف قطاع خاص' },
-  { value: 'تاجر', label: 'تاجر' },
-  { value: 'صاحب عمل حر', label: 'صاحب عمل حر' },
-  { value: 'عامل', label: 'عامل' },
-  { value: 'متقاعد', label: 'متقاعد' },
-  { value: 'طالب', label: 'طالب' },
-  { value: 'ربة منزل', label: 'ربة منزل' },
-  { value: 'أخرى', label: 'أخرى' }
-];
-
-// قائمة المؤهلات الدراسية
-const educationOptions = [
-  { value: 'دكتوراه', label: 'دكتوراه' },
-  { value: 'ماجستير', label: 'ماجستير' },
-  { value: 'بكالوريوس', label: 'بكالوريوس' },
-  { value: 'دبلوم', label: 'دبلوم' },
-  { value: 'ثانوية عامة', label: 'ثانوية عامة' },
-  { value: 'إعدادية', label: 'إعدادية' },
-  { value: 'ابتدائية', label: 'ابتدائية' },
-  { value: 'يقرأ ويكتب', label: 'يقرأ ويكتب' },
-  { value: 'أمي', label: 'أمي' }
-];
-
 // تنسيق react-select بالعربية
 const customSelectStyles = {
   control: (base) => ({
