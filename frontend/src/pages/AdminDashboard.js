@@ -987,6 +987,46 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'job':
+        return (
+          <>
+            <div>
+              <Label>اسم العمل</Label>
+              <Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} required />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_job"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_job">نشط</Label>
+            </div>
+          </>
+        );
+
+      case 'education':
+        return (
+          <>
+            <div>
+              <Label>المؤهل الدراسي</Label>
+              <Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} required />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_edu"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_edu">نشط</Label>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
