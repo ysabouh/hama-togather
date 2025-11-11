@@ -1103,6 +1103,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="hero" data-testid="tab-hero">القسم الأول</TabsTrigger>
               <TabsTrigger value="neighborhoods" data-testid="tab-neighborhoods">الأحياء</TabsTrigger>
               <TabsTrigger value="committees" data-testid="tab-committees">لجان الأحياء</TabsTrigger>
+              <TabsTrigger value="positions" data-testid="tab-positions">المناصب</TabsTrigger>
               <TabsTrigger value="jobs" data-testid="tab-jobs">قائمة الأعمال</TabsTrigger>
               <TabsTrigger value="education" data-testid="tab-education">المؤهلات الدراسية</TabsTrigger>
               <TabsTrigger value="families" data-testid="tab-families">العائلات</TabsTrigger>
