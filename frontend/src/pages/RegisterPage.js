@@ -11,6 +11,40 @@ import Select from 'react-select';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// تنسيق react-select بالعربية
+const customSelectStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    textAlign: 'right',
+    borderColor: state.isFocused ? '#059669' : '#d1d5db',
+    boxShadow: state.isFocused ? '0 0 0 1px #059669' : 'none',
+    '&:hover': {
+      borderColor: '#059669'
+    }
+  }),
+  menu: (provided) => ({
+    ...provided,
+    textAlign: 'right',
+    zIndex: 9999
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    textAlign: 'right',
+    backgroundColor: state.isSelected ? '#059669' : state.isFocused ? '#d1fae5' : 'white',
+    color: state.isSelected ? 'white' : '#111827',
+    cursor: 'pointer'
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    textAlign: 'right',
+    color: '#9ca3af'
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    textAlign: 'right'
+  })
+};
+
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     full_name: '',
