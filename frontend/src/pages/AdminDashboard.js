@@ -1236,6 +1236,98 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* Committee Members Tab */}
+            <TabsContent value="committees">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">إدارة لجان الأحياء</h2>
+                  <Button onClick={() => openCreateDialog('committee')} className="bg-emerald-700" data-testid="add-committee-btn">
+                    <Plus className="w-5 h-5 ml-2" />
+                    إضافة عضو لجنة
+                  </Button>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full" data-testid="committee-table">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم الكامل</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المنصب</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم الهاتف</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المواليد</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمل</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المؤهل</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإضافة</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {committeeMembers.map((member, index) => {
+                        const neighborhood = neighborhoods.find(n => n.id === member.neighborhood_id);
+                        const position = positions.find(p => p.id === member.position_id);
+                        return (
+                          <tr key={member.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">
+                              <div className="flex items-center gap-2 justify-center">
+                                {member.image && (
+                                  <img src={member.image} alt={member.first_name} className="w-8 h-8 rounded-full object-cover" />
+                                )}
+                                <span>{member.first_name} {member.father_name} {member.last_name}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood?.name || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{position?.title || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.phone}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.date_of_birth || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.occupation || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.education || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center whitespace-nowrap">
+                              {member.created_at ? new Date(member.created_at).toLocaleString('ar-SY', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                              }) : '-'}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-center">
+                              <div className="flex gap-2 justify-center">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => openEditDialog('committee', member)}
+                                  className="text-blue-600 hover:bg-blue-50"
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleDelete('committee', member.id)}
+                                  className="text-red-600 hover:bg-red-50"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  {committeeMembers.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      لا توجد أعضاء لجان مسجلين حالياً
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
             {/* Families Tab */}
             <TabsContent value="families">
               <div className="bg-white rounded-xl shadow-lg p-6">
