@@ -754,6 +754,7 @@ const AdminDashboard = () => {
             <TabsList className="mb-6 bg-white p-2 rounded-lg shadow">
               <TabsTrigger value="hero" data-testid="tab-hero">القسم الأول</TabsTrigger>
               <TabsTrigger value="neighborhoods" data-testid="tab-neighborhoods">الأحياء</TabsTrigger>
+              <TabsTrigger value="committees" data-testid="tab-committees">لجان الأحياء</TabsTrigger>
               <TabsTrigger value="families" data-testid="tab-families">العائلات</TabsTrigger>
               <TabsTrigger value="health" data-testid="tab-health">الحالات الصحية</TabsTrigger>
               <TabsTrigger value="courses" data-testid="tab-courses">الدورات</TabsTrigger>
