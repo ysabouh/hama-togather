@@ -26,6 +26,9 @@ const AdminDashboard = () => {
   const [heroContent, setHeroContent] = useState(null);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [positions, setPositions] = useState([]);
+  const [neighborhoodsPage, setNeighborhoodsPage] = useState(1);
+  const [neighborhoodsTotal, setNeighborhoodsTotal] = useState(0);
+  const [neighborhoodsTotalPages, setNeighborhoodsTotalPages] = useState(0);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
