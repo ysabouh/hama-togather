@@ -502,7 +502,7 @@ const AdminDashboard = () => {
                 <Select
                   value={formData.occupation ? { value: formData.occupation, label: formData.occupation } : null}
                   onChange={(option) => setFormData({...formData, occupation: option?.value || ''})}
-                  options={occupationOptions}
+                  options={jobs.filter(j => j.is_active).map(j => ({ value: j.title, label: j.title }))}
                   placeholder="ابحث واختر العمل..."
                   isClearable
                   isSearchable
@@ -514,7 +514,7 @@ const AdminDashboard = () => {
                 <Select
                   value={formData.education ? { value: formData.education, label: formData.education } : null}
                   onChange={(option) => setFormData({...formData, education: option?.value || ''})}
-                  options={educationOptions}
+                  options={educationLevels.filter(e => e.is_active).map(e => ({ value: e.title, label: e.title }))}
                   placeholder="ابحث واختر المؤهل..."
                   isClearable
                   isSearchable
