@@ -1714,8 +1714,28 @@ const AdminDashboard = () => {
                     </tbody>
                   </table>
                   {getSortedMembers().length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      {showInactiveMembers ? 'لا توجد أعضاء لجان مسجلين حالياً' : 'لا توجد أعضاء نشطين حالياً'}
+                    <div className="text-center py-12">
+                      {searchQuery ? (
+                        <div className="flex flex-col items-center gap-3">
+                          <Search className="w-12 h-12 text-gray-300" />
+                          <p className="text-gray-500 font-medium">لا توجد نتائج للبحث عن "{searchQuery}"</p>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setSearchQuery('')}
+                            className="mt-2"
+                          >
+                            مسح البحث
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-3">
+                          <Users className="w-12 h-12 text-gray-300" />
+                          <p className="text-gray-500 font-medium">
+                            {showInactiveMembers ? 'لا توجد أعضاء لجان مسجلين حالياً' : 'لا توجد أعضاء نشطين حالياً'}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
