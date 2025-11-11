@@ -1129,14 +1129,10 @@ const AdminDashboard = () => {
               {/* القائمة المنسدلة للأحياء */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm px-3 py-1.5 text-sm font-medium transition-all"
-                    data-testid="neighborhoods-dropdown"
-                  >
+                  <TabsTrigger value={activeNeighborhoodTab} data-testid="neighborhoods-dropdown" className="relative">
                     الأحياء
                     <ChevronDown className="w-4 h-4 mr-2" />
-                  </Button>
+                  </TabsTrigger>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('neighborhoods')} className="cursor-pointer">
