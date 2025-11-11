@@ -244,6 +244,91 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'committee':
+        return (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>الاسم الأول *</Label>
+                <Input value={formData.first_name || ''} onChange={(e) => setFormData({...formData, first_name: e.target.value})} required />
+              </div>
+              <div>
+                <Label>اسم الأب *</Label>
+                <Input value={formData.father_name || ''} onChange={(e) => setFormData({...formData, father_name: e.target.value})} required />
+              </div>
+            </div>
+            <div>
+              <Label>الكنية *</Label>
+              <Input value={formData.last_name || ''} onChange={(e) => setFormData({...formData, last_name: e.target.value})} required />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>الحي *</Label>
+                <select 
+                  value={formData.neighborhood_id || ''} 
+                  onChange={(e) => setFormData({...formData, neighborhood_id: e.target.value})} 
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="">اختر الحي</option>
+                  {neighborhoods.map(n => <option key={n.id} value={n.id}>{n.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <Label>المنصب *</Label>
+                <select 
+                  value={formData.position_id || ''} 
+                  onChange={(e) => setFormData({...formData, position_id: e.target.value})} 
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="">اختر المنصب</option>
+                  {positions.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>المواليد</Label>
+                <Input type="date" value={formData.date_of_birth || ''} onChange={(e) => setFormData({...formData, date_of_birth: e.target.value})} />
+              </div>
+              <div>
+                <Label>رقم الهاتف *</Label>
+                <Input value={formData.phone || ''} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>العمل</Label>
+                <Input value={formData.occupation || ''} onChange={(e) => setFormData({...formData, occupation: e.target.value})} />
+              </div>
+              <div>
+                <Label>المؤهل الدراسي</Label>
+                <Input value={formData.education || ''} onChange={(e) => setFormData({...formData, education: e.target.value})} />
+              </div>
+            </div>
+            <div>
+              <Label>الصورة (Base64 أو URL)</Label>
+              <Input value={formData.image || ''} onChange={(e) => setFormData({...formData, image: e.target.value})} placeholder="أو استخدم زر رفع الصورة" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setFormData({...formData, image: reader.result});
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                className="mt-2"
+              />
+            </div>
+          </>
+        );
+
       case 'families':
         return (
           <>
