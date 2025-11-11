@@ -2217,8 +2217,15 @@ const AdminDashboard = () => {
               <Button type="button" variant="outline" onClick={() => setShowDialog(false)}>
                 إلغاء
               </Button>
-              <Button type="submit" className="bg-emerald-700" data-testid="submit-form-btn">
-                {dialogMode === 'create' ? 'إضافة' : 'تحديث'}
+              <Button type="submit" className="bg-emerald-700" data-testid="submit-form-btn" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    جارٍ الحفظ...
+                  </>
+                ) : (
+                  dialogMode === 'create' ? 'إضافة' : 'تحديث'
+                )}
               </Button>
             </div>
           </form>
