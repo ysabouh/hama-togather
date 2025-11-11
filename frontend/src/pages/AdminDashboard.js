@@ -289,17 +289,24 @@ const AdminDashboard = () => {
   const handleDelete = async (type, id) => {
     if (!window.confirm('هل أنت متأكد من الحذف؟')) return;
     
+    setLoading(true);
+    const loadingToast = toast.loading('جارٍ الحذف...');
+    
     try {
       let endpoint = type;
       if (type === 'neighborhood') endpoint = 'neighborhoods';
       else if (type === 'committee') endpoint = 'committee-members';
       
       await axios.delete(`${API_URL}/${endpoint}/${id}`);
+      toast.dismiss(loadingToast);
       toast.success('تم الحذف بنجاح');
       fetchAllData();
     } catch (error) {
       console.error('Delete error:', error);
+      toast.dismiss(loadingToast);
       toast.error(error.response?.data?.detail || 'فشل الحذف');
+    } finally {
+      setLoading(false);
     }
   };
 
