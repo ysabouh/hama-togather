@@ -2100,8 +2100,17 @@ const AdminDashboard = () => {
               {/* المعلومات الشخصية */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="text-right bg-white p-3 rounded-lg border">
-                  <span className="text-sm text-gray-600 font-semibold">المواليد:</span>
-                  <p className="text-base text-gray-900 mt-1">{viewingMember.date_of_birth || '-'}</p>
+                  <span className="text-sm text-gray-600 font-semibold">المواليد / العمر:</span>
+                  {viewingMember.date_of_birth ? (
+                    <>
+                      <p className="text-base text-gray-900 mt-1">{viewingMember.date_of_birth}</p>
+                      <p className="text-lg font-bold text-emerald-700 mt-1">
+                        {calculateAge(viewingMember.date_of_birth)} سنة
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-base text-gray-900 mt-1">-</p>
+                  )}
                 </div>
                 <div className="text-right bg-white p-3 rounded-lg border">
                   <span className="text-sm text-gray-600 font-semibold">العمل:</span>
