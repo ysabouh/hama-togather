@@ -267,9 +267,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "AdminDashboard - Edit Existing Neighborhood"
-  stuck_tasks:
-    - "AdminDashboard - Edit Existing Neighborhood"
+    - "All neighborhood management features tested successfully"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
