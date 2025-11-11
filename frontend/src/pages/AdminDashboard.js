@@ -1355,7 +1355,7 @@ const AdminDashboard = () => {
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم الكامل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المنصب</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المواليد</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمر</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المؤهل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإضافة</th>
