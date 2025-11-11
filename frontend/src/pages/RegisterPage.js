@@ -179,22 +179,33 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <Label htmlFor="neighborhood" className="text-right block mb-2">الحي *</Label>
-              <select
+              <Label htmlFor="neighborhood" className="text-right block mb-2">
+                الحي <span className="text-red-600">*</span>
+              </Label>
+              <Select
                 id="neighborhood"
-                value={formData.neighborhood_id}
-                onChange={(e) => setFormData({ ...formData, neighborhood_id: e.target.value })}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-right bg-white"
+                value={selectedNeighborhood}
+                onChange={(option) => {
+                  setSelectedNeighborhood(option);
+                  setFormData({ ...formData, neighborhood_id: option ? option.value : '' });
+                }}
+                options={neighborhoods.map(n => ({
+                  value: n.id,
+                  label: `${n.name} - حي رقم ${n.number}`
+                }))}
+                placeholder="ابحث واختر الحي..."
+                isClearable
+                isSearchable
+                styles={customSelectStyles}
+                noOptionsMessage={() => 'لا توجد نتائج'}
                 data-testid="neighborhood-select"
-              >
-                <option value="">اختر الحي</option>
-                {neighborhoods.map((neighborhood) => (
-                  <option key={neighborhood.id} value={neighborhood.id}>
-                    {neighborhood.name} - حي رقم {neighborhood.number}
-                  </option>
-                ))}
-              </select>
+                required
+              />
+              {!formData.neighborhood_id && (
+                <p className="text-xs text-gray-500 mt-1 text-right">
+                  يمكنك البحث باسم الحي أو رقمه
+                </p>
+              )}
             </div>
 
             <Button
