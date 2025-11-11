@@ -1005,6 +1005,100 @@ async def delete_position(position_id: str, current_user: User = Depends(get_cur
         raise HTTPException(status_code=404, detail="Position not found")
     return {"message": "Position deleted successfully"}
 
+# ============= Jobs/Occupations Routes =============
+@api_router.get("/jobs", response_model=List[Job])
+async def get_jobs():
+    jobs = await db.jobs.find({}, {"_id": 0}).to_list(1000)
+    return jobs
+
+@api_router.post("/jobs", response_model=Job)
+async def create_job(job: JobCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    job_obj = Job(**job.model_dump())
+    doc = job_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.jobs.insert_one(doc)
+    return job_obj
+
+@api_router.put("/jobs/{job_id}", response_model=Job)
+async def update_job(
+    job_id: str,
+    job_update: JobUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_data = {k: v for k, v in job_update.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = await db.jobs.update_one({"id": job_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    updated = await db.jobs.find_one({"id": job_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/jobs/{job_id}")
+async def delete_job(job_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.jobs.delete_one({"id": job_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return {"message": "Job deleted successfully"}
+
+# ============= Education Levels Routes =============
+@api_router.get("/education-levels", response_model=List[EducationLevel])
+async def get_education_levels():
+    levels = await db.education_levels.find({}, {"_id": 0}).to_list(1000)
+    return levels
+
+@api_router.post("/education-levels", response_model=EducationLevel)
+async def create_education_level(level: EducationLevelCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    level_obj = EducationLevel(**level.model_dump())
+    doc = level_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.education_levels.insert_one(doc)
+    return level_obj
+
+@api_router.put("/education-levels/{level_id}", response_model=EducationLevel)
+async def update_education_level(
+    level_id: str,
+    level_update: EducationLevelUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_data = {k: v for k, v in level_update.model_dump().items() if v is not None}
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data to update")
+    
+    result = await db.education_levels.update_one({"id": level_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Education level not found")
+    
+    updated = await db.education_levels.find_one({"id": level_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/education-levels/{level_id}")
+async def delete_education_level(level_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.education_levels.delete_one({"id": level_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Education level not found")
+    return {"message": "Education level deleted successfully"}
+
 # ============= Committee Members Routes =============
 @api_router.get("/committee-members", response_model=List[CommitteeMember])
 async def get_committee_members(neighborhood_id: Optional[str] = None):
