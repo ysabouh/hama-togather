@@ -12,6 +12,7 @@ import InitiativesPage from './pages/InitiativesPage';
 import AdminDashboard from './pages/AdminDashboard';
 import MyDonationsPage from './pages/MyDonationsPage';
 import OurMissionPage from './pages/OurMissionPage';
+import ProfilePage from './pages/ProfilePage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
