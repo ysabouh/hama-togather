@@ -303,6 +303,105 @@ const AdminDashboard = () => {
       <ArrowDown className="w-4 h-4 text-emerald-600" />;
   };
 
+  // Neighborhoods sorting and filtering
+  const handleNeighborhoodSort = (column) => {
+    if (neighborhoodsSortColumn === column) {
+      setNeighborhoodsSortDirection(neighborhoodsSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setNeighborhoodsSortColumn(column);
+      setNeighborhoodsSortDirection('asc');
+    }
+  };
+
+  const getSortedNeighborhoods = () => {
+    let filtered = neighborhoods.filter(n => showInactiveNeighborhoods || n.is_active !== false);
+    
+    if (neighborhoodsSearchQuery.trim()) {
+      const query = neighborhoodsSearchQuery.toLowerCase();
+      filtered = filtered.filter(neighborhood => {
+        const name = (neighborhood.name || '').toLowerCase();
+        const number = (neighborhood.number || '').toLowerCase();
+        
+        return name.includes(query) || number.includes(query);
+      });
+    }
+    
+    if (!neighborhoodsSortColumn) return filtered;
+
+    return [...filtered].sort((a, b) => {
+      let aValue, bValue;
+
+      switch (neighborhoodsSortColumn) {
+        case 'name':
+          aValue = a.name || '';
+          bValue = b.name || '';
+          break;
+        case 'number':
+          aValue = a.number || '';
+          bValue = b.number || '';
+          break;
+        case 'families_count':
+          aValue = a.families_count || 0;
+          bValue = b.families_count || 0;
+          break;
+        case 'population_count':
+          aValue = a.population_count || 0;
+          bValue = b.population_count || 0;
+          break;
+        case 'created_at':
+          aValue = new Date(a.created_at || 0);
+          bValue = new Date(b.created_at || 0);
+          break;
+        case 'updated_at':
+          aValue = new Date(a.updated_at || 0);
+          bValue = new Date(b.updated_at || 0);
+          break;
+        case 'status':
+          aValue = a.is_active !== false ? 1 : 0;
+          bValue = b.is_active !== false ? 1 : 0;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return neighborhoodsSortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return neighborhoodsSortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
+  const NeighborhoodSortIcon = ({ column }) => {
+    if (neighborhoodsSortColumn !== column) {
+      return <ArrowUpDown className="w-4 h-4 text-gray-400" />;
+    }
+    return neighborhoodsSortDirection === 'asc' ? 
+      <ArrowUp className="w-4 h-4 text-emerald-600" /> : 
+      <ArrowDown className="w-4 h-4 text-emerald-600" />;
+  };
+
+  const toggleNeighborhoodStatus = async (neighborhood) => {
+    const action = neighborhood.is_active ? 'إيقاف' : 'تفعيل';
+    if (!window.confirm(`هل أنت متأكد من ${action} هذا الحي؟`)) return;
+    
+    setLoading(true);
+    const loadingToast = toast.loading(`جارٍ ${action} الحي...`);
+    
+    try {
+      await axios.put(`${API_URL}/neighborhoods/${neighborhood.id}`, {
+        is_active: !neighborhood.is_active
+      });
+      toast.dismiss(loadingToast);
+      toast.success(`تم ${action} الحي بنجاح`);
+      fetchAllData();
+    } catch (error) {
+      console.error('Toggle status error:', error);
+      toast.dismiss(loadingToast);
+      toast.error(error.response?.data?.detail || `فشل ${action} الحي`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
