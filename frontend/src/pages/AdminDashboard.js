@@ -186,6 +186,11 @@ const AdminDashboard = () => {
     setViewMemberDialog(true);
   };
 
+  const openNeighborhoodDetailsDialog = (neighborhood) => {
+    setSelectedNeighborhood(neighborhood);
+    setViewNeighborhoodDetailsDialog(true);
+  };
+
   const toggleMemberStatus = async (member) => {
     const action = member.is_active ? 'إيقاف' : 'تفعيل';
     if (!window.confirm(`هل أنت متأكد من ${action} هذا العضو؟`)) return;
