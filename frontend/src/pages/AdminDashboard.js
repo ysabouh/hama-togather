@@ -77,6 +77,10 @@ const AdminDashboard = () => {
   const [neighborhoodsPage, setNeighborhoodsPage] = useState(1);
   const [neighborhoodsTotal, setNeighborhoodsTotal] = useState(0);
   const [neighborhoodsTotalPages, setNeighborhoodsTotalPages] = useState(0);
+  const [showInactiveNeighborhoods, setShowInactiveNeighborhoods] = useState(false);
+  const [neighborhoodsSortColumn, setNeighborhoodsSortColumn] = useState(null);
+  const [neighborhoodsSortDirection, setNeighborhoodsSortDirection] = useState('asc');
+  const [neighborhoodsSearchQuery, setNeighborhoodsSearchQuery] = useState('');
   const [viewMemberDialog, setViewMemberDialog] = useState(false);
   const [viewingMember, setViewingMember] = useState(null);
   const [loading, setLoading] = useState(false);
