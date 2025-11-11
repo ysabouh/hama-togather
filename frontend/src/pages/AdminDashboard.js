@@ -1028,6 +1028,7 @@ const AdminDashboard = () => {
                   <table className="w-full" data-testid="neighborhoods-table">
                     <thead className="bg-gray-50">
                       <tr>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الرقم</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد العوائل</th>
@@ -1039,8 +1040,11 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {neighborhoods.map((neighborhood) => (
+                      {neighborhoods.map((neighborhood, index) => (
                         <tr key={neighborhood.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">
+                            {(neighborhoodsPage - 1) * 20 + index + 1}
+                          </td>
                           <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.name}</td>
                           <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.number}</td>
                           <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood.families_count || 0}</td>
@@ -1050,18 +1054,26 @@ const AdminDashboard = () => {
                               {neighborhood.is_active ? 'نشط' : 'غير نشط'}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-900 text-center">
-                            {neighborhood.created_at ? new Date(neighborhood.created_at).toLocaleDateString('ar-SY', {
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center whitespace-nowrap">
+                            {neighborhood.created_at ? new Date(neighborhood.created_at).toLocaleString('ar-SY', {
                               year: 'numeric',
                               month: '2-digit',
-                              day: '2-digit'
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                              hour12: false
                             }) : '-'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-900 text-center">
-                            {neighborhood.updated_at ? new Date(neighborhood.updated_at).toLocaleDateString('ar-SY', {
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center whitespace-nowrap">
+                            {neighborhood.updated_at ? new Date(neighborhood.updated_at).toLocaleString('ar-SY', {
                               year: 'numeric',
                               month: '2-digit',
-                              day: '2-digit'
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                              hour12: false
                             }) : '-'}
                           </td>
                           <td className="px-4 py-3 text-sm text-center">
