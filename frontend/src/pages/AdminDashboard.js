@@ -398,6 +398,7 @@ const AdminDashboard = () => {
       let endpoint = type;
       if (type === 'neighborhood') endpoint = 'neighborhoods';
       else if (type === 'committee') endpoint = 'committee-members';
+      else if (type === 'position') endpoint = 'positions';
       else if (type === 'job') endpoint = 'jobs';
       else if (type === 'education') endpoint = 'education-levels';
       
