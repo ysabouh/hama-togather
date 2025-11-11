@@ -83,7 +83,7 @@ const AdminDashboard = () => {
   const [neighborhoodsSearchQuery, setNeighborhoodsSearchQuery] = useState('');
   const [viewMemberDialog, setViewMemberDialog] = useState(false);
   const [viewingMember, setViewingMember] = useState(null);
-  const [viewNeighborhoodDetailsDialog, setViewNeighborhoodDetailsDialog] = useState(false);
+  const [showNeighborhoodDetails, setShowNeighborhoodDetails] = useState(false);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
   const [loading, setLoading] = useState(false);
 
