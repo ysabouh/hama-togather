@@ -325,27 +325,31 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>الحي *</Label>
-                <select 
-                  value={formData.neighborhood_id || ''} 
-                  onChange={(e) => setFormData({...formData, neighborhood_id: e.target.value})} 
+                <Select
+                  value={neighborhoods.find(n => n.id === formData.neighborhood_id) ? 
+                    { value: formData.neighborhood_id, label: neighborhoods.find(n => n.id === formData.neighborhood_id)?.name } : null}
+                  onChange={(option) => setFormData({...formData, neighborhood_id: option?.value || ''})}
+                  options={neighborhoods.map(n => ({ value: n.id, label: n.name }))}
+                  placeholder="ابحث واختر الحي..."
+                  isClearable
+                  isSearchable
+                  styles={customSelectStyles}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">اختر الحي</option>
-                  {neighborhoods.map(n => <option key={n.id} value={n.id}>{n.name}</option>)}
-                </select>
+                />
               </div>
               <div>
                 <Label>المنصب *</Label>
-                <select 
-                  value={formData.position_id || ''} 
-                  onChange={(e) => setFormData({...formData, position_id: e.target.value})} 
+                <Select
+                  value={positions.find(p => p.id === formData.position_id) ? 
+                    { value: formData.position_id, label: positions.find(p => p.id === formData.position_id)?.title } : null}
+                  onChange={(option) => setFormData({...formData, position_id: option?.value || ''})}
+                  options={positions.map(p => ({ value: p.id, label: p.title }))}
+                  placeholder="ابحث واختر المنصب..."
+                  isClearable
+                  isSearchable
+                  styles={customSelectStyles}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">اختر المنصب</option>
-                  {positions.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
-                </select>
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -361,11 +365,27 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>العمل</Label>
-                <Input value={formData.occupation || ''} onChange={(e) => setFormData({...formData, occupation: e.target.value})} />
+                <Select
+                  value={formData.occupation ? { value: formData.occupation, label: formData.occupation } : null}
+                  onChange={(option) => setFormData({...formData, occupation: option?.value || ''})}
+                  options={occupationOptions}
+                  placeholder="ابحث واختر العمل..."
+                  isClearable
+                  isSearchable
+                  styles={customSelectStyles}
+                />
               </div>
               <div>
                 <Label>المؤهل الدراسي</Label>
-                <Input value={formData.education || ''} onChange={(e) => setFormData({...formData, education: e.target.value})} />
+                <Select
+                  value={formData.education ? { value: formData.education, label: formData.education } : null}
+                  onChange={(option) => setFormData({...formData, education: option?.value || ''})}
+                  options={educationOptions}
+                  placeholder="ابحث واختر المؤهل..."
+                  isClearable
+                  isSearchable
+                  styles={customSelectStyles}
+                />
               </div>
             </div>
             <div>
