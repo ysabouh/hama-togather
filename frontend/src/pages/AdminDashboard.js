@@ -1081,6 +1081,38 @@ const AdminDashboard = () => {
                     </div>
                   )}
                 </div>
+                
+                {/* Pagination */}
+                {neighborhoodsTotalPages > 1 && (
+                  <div className="flex items-center justify-between mt-6 px-4">
+                    <div className="text-sm text-gray-600">
+                      عرض {neighborhoods.length} من {neighborhoodsTotal} حي
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setNeighborhoodsPage(prev => Math.max(1, prev - 1))}
+                        disabled={neighborhoodsPage === 1}
+                      >
+                        السابق
+                      </Button>
+                      <div className="flex items-center gap-2 px-3">
+                        <span className="text-sm">
+                          صفحة {neighborhoodsPage} من {neighborhoodsTotalPages}
+                        </span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setNeighborhoodsPage(prev => Math.min(neighborhoodsTotalPages, prev + 1))}
+                        disabled={neighborhoodsPage === neighborhoodsTotalPages}
+                      >
+                        التالي
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </TabsContent>
 
