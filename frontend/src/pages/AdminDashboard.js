@@ -115,9 +115,6 @@ const AdminDashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('handleSubmit called - dialogType:', dialogType, 'dialogMode:', dialogMode);
-    console.log('formData:', formData);
-    console.log('currentItem:', currentItem);
     
     try {
       // Handle mission content updates
