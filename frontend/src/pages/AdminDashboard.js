@@ -1697,18 +1697,19 @@ const AdminDashboard = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => openEditDialog('neighborhood', neighborhood)}
-                                className="text-blue-600 hover:bg-blue-50"
+                                onClick={() => toggleNeighborhoodStatus(neighborhood)}
+                                className={neighborhood.is_active ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
+                                title={neighborhood.is_active ? "إيقاف الحي" : "تفعيل الحي"}
                               >
-                                <Edit className="w-4 h-4" />
+                                {neighborhood.is_active ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                               </Button>
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => handleDelete('neighborhood', neighborhood.id)}
-                                className="text-red-600 hover:bg-red-50"
+                                onClick={() => openEditDialog('neighborhood', neighborhood)}
+                                className="text-blue-600 hover:bg-blue-50"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Edit className="w-4 h-4" />
                               </Button>
                             </div>
                           </td>
