@@ -1477,15 +1477,87 @@ const AdminDashboard = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم الكامل</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المنصب</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمر</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمل</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المؤهل</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإضافة</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ التعديل</th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('status')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>الحالة</span>
+                            <SortIcon column="status" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('name')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>الاسم الكامل</span>
+                            <SortIcon column="name" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('neighborhood')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>الحي</span>
+                            <SortIcon column="neighborhood" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('position')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>المنصب</span>
+                            <SortIcon column="position" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('age')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>العمر</span>
+                            <SortIcon column="age" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('occupation')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>العمل</span>
+                            <SortIcon column="occupation" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('education')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>المؤهل</span>
+                            <SortIcon column="education" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('created_at')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>تاريخ الإضافة</span>
+                            <SortIcon column="created_at" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors"
+                          onClick={() => handleSort('updated_at')}
+                        >
+                          <div className="flex items-center justify-center gap-1">
+                            <span>تاريخ التعديل</span>
+                            <SortIcon column="updated_at" />
+                          </div>
+                        </th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
                       </tr>
                     </thead>
