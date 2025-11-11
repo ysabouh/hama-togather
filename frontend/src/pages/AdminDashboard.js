@@ -137,7 +137,7 @@ const AdminDashboard = () => {
 
   const fetchAllData = async () => {
     try {
-      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes] = await Promise.all([
+      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes] = await Promise.all([
         axios.get(`${API_URL}/stats`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/health-cases`),
@@ -150,7 +150,9 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/hero-content`),
         axios.get(`${API_URL}/neighborhoods?page=${neighborhoodsPage}&limit=20`),
         axios.get(`${API_URL}/positions`),
-        axios.get(`${API_URL}/committee-members`)
+        axios.get(`${API_URL}/committee-members`),
+        axios.get(`${API_URL}/jobs`),
+        axios.get(`${API_URL}/education-levels`)
       ]);
 
       setStats(statsRes.data);
@@ -168,6 +170,8 @@ const AdminDashboard = () => {
       setNeighborhoodsTotalPages(neighborhoodsRes.data.pages);
       setPositions(positionsRes.data);
       setCommitteeMembers(committeeMembersRes.data);
+      setJobs(jobsRes.data);
+      setEducationLevels(educationLevelsRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     }
