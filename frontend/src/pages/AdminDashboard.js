@@ -61,7 +61,7 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/donations`),
         axios.get(`${API_URL}/mission-content`),
         axios.get(`${API_URL}/hero-content`),
-        axios.get(`${API_URL}/neighborhoods`),
+        axios.get(`${API_URL}/neighborhoods?page=${neighborhoodsPage}&limit=20`),
         axios.get(`${API_URL}/positions`)
       ]);
 
@@ -75,7 +75,9 @@ const AdminDashboard = () => {
       setDonations(donationsRes.data);
       setMissionContent(missionRes.data);
       setHeroContent(heroRes.data);
-      setNeighborhoods(neighborhoodsRes.data);
+      setNeighborhoods(neighborhoodsRes.data.items);
+      setNeighborhoodsTotal(neighborhoodsRes.data.total);
+      setNeighborhoodsTotalPages(neighborhoodsRes.data.pages);
       setPositions(positionsRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
