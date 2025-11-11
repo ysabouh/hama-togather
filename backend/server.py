@@ -330,6 +330,9 @@ class CommitteeMemberCreate(BaseModel):
     neighborhood_id: str
     position_id: str
     phone: str
+    date_of_birth: Optional[str] = None
+    occupation: Optional[str] = None
+    education: Optional[str] = None
     address: Optional[str] = None
     email: Optional[EmailStr] = None
     image: Optional[str] = None
