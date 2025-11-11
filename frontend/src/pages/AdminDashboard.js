@@ -360,6 +360,8 @@ const AdminDashboard = () => {
         let endpoint = dialogType;
         if (dialogType === 'neighborhood') endpoint = 'neighborhoods';
         else if (dialogType === 'committee') endpoint = 'committee-members';
+        else if (dialogType === 'job') endpoint = 'jobs';
+        else if (dialogType === 'education') endpoint = 'education-levels';
         
         if (dialogMode === 'create') {
           await axios.post(`${API_URL}/${endpoint}`, formData);
