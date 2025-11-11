@@ -203,7 +203,10 @@ const AdminDashboard = () => {
     if (!window.confirm('هل أنت متأكد من الحذف؟')) return;
     
     try {
-      const endpoint = type === 'neighborhood' ? 'neighborhoods' : type;
+      let endpoint = type;
+      if (type === 'neighborhood') endpoint = 'neighborhoods';
+      else if (type === 'committee') endpoint = 'committee-members';
+      
       await axios.delete(`${API_URL}/${endpoint}/${id}`);
       toast.success('تم الحذف بنجاح');
       fetchAllData();
