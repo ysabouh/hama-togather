@@ -1505,9 +1505,9 @@ const AdminDashboard = () => {
                       })}
                     </tbody>
                   </table>
-                  {committeeMembers.length === 0 && (
+                  {committeeMembers.filter(m => showInactiveMembers || m.is_active !== false).length === 0 && (
                     <div className="text-center py-8 text-gray-500">
-                      لا توجد أعضاء لجان مسجلين حالياً
+                      {showInactiveMembers ? 'لا توجد أعضاء لجان مسجلين حالياً' : 'لا توجد أعضاء نشطين حالياً'}
                     </div>
                   )}
                 </div>
