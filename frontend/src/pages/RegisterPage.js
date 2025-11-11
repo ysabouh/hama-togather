@@ -54,6 +54,7 @@ const RegisterPage = () => {
     neighborhood_id: ''
   });
   const [neighborhoods, setNeighborhoods] = useState([]);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
