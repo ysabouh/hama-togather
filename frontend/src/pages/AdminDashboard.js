@@ -100,6 +100,7 @@ const AdminDashboard = () => {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [positions, setPositions] = useState([]);
   const [committeeMembers, setCommitteeMembers] = useState([]);
+  const [showInactiveMembers, setShowInactiveMembers] = useState(false);
   const [neighborhoodsPage, setNeighborhoodsPage] = useState(1);
   const [neighborhoodsTotal, setNeighborhoodsTotal] = useState(0);
   const [neighborhoodsTotalPages, setNeighborhoodsTotalPages] = useState(0);
