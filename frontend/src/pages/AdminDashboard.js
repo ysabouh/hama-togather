@@ -3006,6 +3006,145 @@ const AdminDashboard = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Neighborhood Details Dialog (Master-Details) */}
+      <Dialog open={viewNeighborhoodDetailsDialog} onOpenChange={setViewNeighborhoodDetailsDialog}>
+        <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto" data-testid="neighborhood-details-dialog">
+          <DialogHeader>
+            <DialogTitle className="text-right text-2xl font-bold text-emerald-700">
+              تفاصيل الحي ولجنته
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedNeighborhood && (
+            <div className="space-y-6">
+              {/* معلومات الحي (Master) */}
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6 border-r-4 border-emerald-600">
+                <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                  <MapPin className="w-6 h-6" />
+                  معلومات الحي
+                </h3>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-sm text-gray-600 mb-1">اسم الحي</p>
+                    <p className="text-lg font-bold text-gray-900">{selectedNeighborhood.name}</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-sm text-gray-600 mb-1">رقم الحي</p>
+                    <p className="text-lg font-bold text-gray-900">{selectedNeighborhood.number}</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-sm text-gray-600 mb-1">الحالة</p>
+                    <span className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold ${selectedNeighborhood.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {selectedNeighborhood.is_active ? 'نشط' : 'غير نشط'}
+                    </span>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-sm text-gray-600 mb-1">عدد العوائل</p>
+                    <p className="text-lg font-bold text-gray-900">{selectedNeighborhood.families_count || 0}</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-sm text-gray-600 mb-1">عدد السكان</p>
+                    <p className="text-lg font-bold text-gray-900">{selectedNeighborhood.population_count || 0}</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                    <p className="text-sm text-gray-600 mb-1">تاريخ الإنشاء</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {selectedNeighborhood.created_at ? new Date(selectedNeighborhood.created_at).toLocaleDateString('ar-SY') : '-'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* أعضاء لجنة الحي (Details) */}
+              <div className="bg-white rounded-lg border border-gray-200">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                  <h3 className="text-xl font-bold text-blue-900 flex items-center gap-2">
+                    <Users className="w-6 h-6" />
+                    أعضاء لجنة الحي ({committeeMembers.filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false).length} عضو)
+                  </h3>
+                </div>
+                
+                <div className="p-6">
+                  {committeeMembers.filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false).length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم الكامل</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المنصب</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم الهاتف</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمر</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمل</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المؤهل</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {committeeMembers
+                            .filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false)
+                            .map((member, index) => (
+                              <tr key={member.id} className="hover:bg-gray-50">
+                                <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                                <td className="px-4 py-3 text-sm text-center">
+                                  <div className="flex items-center justify-center gap-2">
+                                    {member.image && (
+                                      <img 
+                                        src={member.image} 
+                                        alt={member.first_name}
+                                        className="w-8 h-8 rounded-full object-cover"
+                                      />
+                                    )}
+                                    <span className="font-medium text-gray-900">
+                                      {member.first_name} {member.father_name} {member.last_name}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-3 text-sm text-center">
+                                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                    {positions.find(p => p.id === member.position_id)?.title || '-'}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-3 text-sm text-gray-900 text-center" dir="ltr">{member.phone || '-'}</td>
+                                <td className="px-4 py-3 text-sm text-gray-900 text-center">
+                                  {member.date_of_birth ? `${calculateAge(member.date_of_birth)} سنة` : '-'}
+                                </td>
+                                <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.occupation || '-'}</td>
+                                <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.education || '-'}</td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-500 text-lg">لا يوجد أعضاء في لجنة هذا الحي</p>
+                      <p className="text-gray-400 text-sm mt-2">يمكنك إضافة أعضاء من قسم "لجان الأحياء"</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* زر الإغلاق */}
+              <div className="flex justify-center pt-4">
+                <Button 
+                  onClick={() => setViewNeighborhoodDetailsDialog(false)}
+                  className="bg-emerald-700 hover:bg-emerald-800 px-8"
+                >
+                  إغلاق
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Form Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="sm:max-w-2xl" data-testid="admin-dialog">
