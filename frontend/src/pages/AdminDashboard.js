@@ -48,6 +48,10 @@ const AdminDashboard = () => {
     fetchAllData();
   }, []);
 
+  useEffect(() => {
+    fetchAllData();
+  }, [neighborhoodsPage]);
+
   const fetchAllData = async () => {
     try {
       const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes] = await Promise.all([
