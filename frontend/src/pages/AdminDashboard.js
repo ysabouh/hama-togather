@@ -2232,6 +2232,17 @@ const AdminDashboard = () => {
       </Dialog>
 
       <Footer />
+
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
+          <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4 shadow-2xl">
+            <Loader2 className="w-12 h-12 text-emerald-700 animate-spin" />
+            <p className="text-lg font-semibold text-gray-900">جارٍ المعالجة...</p>
+            <p className="text-sm text-gray-600">الرجاء الانتظار</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
