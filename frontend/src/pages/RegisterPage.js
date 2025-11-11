@@ -80,6 +80,11 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.neighborhood_id) {
+      toast.error('يرجى اختيار الحي');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error('كلمات المرور غير متطابقة');
       return;
