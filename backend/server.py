@@ -841,10 +841,31 @@ async def upload_image(file: UploadFile = File(...), admin: User = Depends(get_a
     return {"image_url": image_data}
 
 # ============= Neighborhoods Routes =============
-@api_router.get("/neighborhoods", response_model=List[Neighborhood])
-async def get_neighborhoods():
-    neighborhoods = await db.neighborhoods.find({}, {"_id": 0}).to_list(1000)
-    return neighborhoods
+@api_router.get("/neighborhoods")
+async def get_neighborhoods(page: int = 1, limit: int = 20):
+    """
+    Get neighborhoods with pagination
+    - page: Page number (default: 1)
+    - limit: Items per page (default: 20)
+    """
+    skip = (page - 1) * limit
+    
+    # Get total count
+    total = await db.neighborhoods.count_documents({})
+    
+    # Get paginated neighborhoods
+    neighborhoods = await db.neighborhoods.find(
+        {}, 
+        {"_id": 0}
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    return {
+        "items": neighborhoods,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit  # Calculate total pages
+    }
 
 @api_router.get("/neighborhoods/{neighborhood_id}", response_model=Neighborhood)
 async def get_neighborhood(neighborhood_id: str):
