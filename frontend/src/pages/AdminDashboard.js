@@ -1589,18 +1589,74 @@ const AdminDashboard = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الرقم</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد العوائل</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد السكان</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإنشاء</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ التعديل</th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('name')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            الاسم
+                            <NeighborhoodSortIcon column="name" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('number')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            الرقم
+                            <NeighborhoodSortIcon column="number" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('families_count')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            عدد العوائل
+                            <NeighborhoodSortIcon column="families_count" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('population_count')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            عدد السكان
+                            <NeighborhoodSortIcon column="population_count" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('status')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            الحالة
+                            <NeighborhoodSortIcon column="status" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('created_at')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            تاريخ الإنشاء
+                            <NeighborhoodSortIcon column="created_at" />
+                          </div>
+                        </th>
+                        <th 
+                          className="px-4 py-3 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleNeighborhoodSort('updated_at')}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            تاريخ التعديل
+                            <NeighborhoodSortIcon column="updated_at" />
+                          </div>
+                        </th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {neighborhoods.map((neighborhood, index) => (
+                      {getSortedNeighborhoods().map((neighborhood, index) => (
                         <tr key={neighborhood.id} className="hover:bg-gray-50">
                           <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">
                             {(neighborhoodsPage - 1) * 20 + index + 1}
