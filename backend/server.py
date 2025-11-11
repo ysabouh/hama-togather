@@ -344,6 +344,9 @@ class CommitteeMemberUpdate(BaseModel):
     neighborhood_id: Optional[str] = None
     position_id: Optional[str] = None
     phone: Optional[str] = None
+    date_of_birth: Optional[str] = None
+    occupation: Optional[str] = None
+    education: Optional[str] = None
     address: Optional[str] = None
     email: Optional[EmailStr] = None
     image: Optional[str] = None
