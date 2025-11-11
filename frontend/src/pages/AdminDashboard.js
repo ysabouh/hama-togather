@@ -1125,11 +1125,43 @@ const AdminDashboard = () => {
           <Tabs defaultValue="families" className="w-full">
             <TabsList className="mb-6 bg-white p-2 rounded-lg shadow">
               <TabsTrigger value="hero" data-testid="tab-hero">القسم الأول</TabsTrigger>
-              <TabsTrigger value="neighborhoods" data-testid="tab-neighborhoods">الأحياء</TabsTrigger>
-              <TabsTrigger value="committees" data-testid="tab-committees">لجان الأحياء</TabsTrigger>
-              <TabsTrigger value="positions" data-testid="tab-positions">المناصب</TabsTrigger>
-              <TabsTrigger value="jobs" data-testid="tab-jobs">قائمة الأعمال</TabsTrigger>
-              <TabsTrigger value="education" data-testid="tab-education">المؤهلات الدراسية</TabsTrigger>
+              
+              {/* القائمة المنسدلة للأحياء */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm px-3 py-1.5 text-sm font-medium transition-all"
+                    data-testid="neighborhoods-dropdown"
+                  >
+                    الأحياء
+                    <ChevronDown className="w-4 h-4 mr-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('neighborhoods')} className="cursor-pointer">
+                    <MapPin className="w-4 h-4 ml-2" />
+                    الأحياء
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('committees')} className="cursor-pointer">
+                    <Users className="w-4 h-4 ml-2" />
+                    لجان الأحياء
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('positions')} className="cursor-pointer">
+                    <Building2 className="w-4 h-4 ml-2" />
+                    المناصب
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('jobs')} className="cursor-pointer">
+                    <BookOpen className="w-4 h-4 ml-2" />
+                    قائمة الأعمال
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('education')} className="cursor-pointer">
+                    <GraduationCap className="w-4 h-4 ml-2" />
+                    المؤهلات الدراسية
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               <TabsTrigger value="families" data-testid="tab-families">العائلات</TabsTrigger>
               <TabsTrigger value="health" data-testid="tab-health">الحالات الصحية</TabsTrigger>
               <TabsTrigger value="courses" data-testid="tab-courses">الدورات</TabsTrigger>
