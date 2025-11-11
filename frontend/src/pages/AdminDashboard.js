@@ -1380,7 +1380,11 @@ const AdminDashboard = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood?.name || '-'}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{position?.title || '-'}</td>
-                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.date_of_birth || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center">
+                              {member.date_of_birth ? (
+                                <span className="font-medium">{calculateAge(member.date_of_birth)} سنة</span>
+                              ) : '-'}
+                            </td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.occupation || '-'}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.education || '-'}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center whitespace-nowrap">
