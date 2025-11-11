@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { UserPlus } from 'lucide-react';
 import axios from 'axios';
+import Select from 'react-select';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
