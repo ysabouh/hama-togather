@@ -85,6 +85,7 @@ const AdminDashboard = () => {
       setNeighborhoodsTotal(neighborhoodsRes.data.total);
       setNeighborhoodsTotalPages(neighborhoodsRes.data.pages);
       setPositions(positionsRes.data);
+      setCommitteeMembers(committeeMembersRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     }
