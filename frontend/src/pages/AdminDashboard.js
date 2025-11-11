@@ -259,7 +259,6 @@ const AdminDashboard = () => {
         }
         
         await axios.put(`${API_URL}/mission-content`, updateData);
-        toast.success(dialogMode === 'create' ? 'تم الإضافة بنجاح' : 'تم التحديث بنجاح');
       } else {
         // Handle regular CRUD operations
         let endpoint = dialogType;
