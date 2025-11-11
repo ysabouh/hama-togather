@@ -1717,9 +1717,9 @@ const AdminDashboard = () => {
                       ))}
                     </tbody>
                   </table>
-                  {neighborhoods.length === 0 && (
+                  {getSortedNeighborhoods().length === 0 && (
                     <div className="text-center py-8 text-gray-500">
-                      لا توجد أحياء مسجلة حالياً
+                      {neighborhoodsSearchQuery ? 'لا توجد نتائج مطابقة للبحث' : 'لا توجد أحياء مسجلة حالياً'}
                     </div>
                   )}
                 </div>
