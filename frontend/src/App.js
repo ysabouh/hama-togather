@@ -51,6 +51,14 @@ function App() {
             <Route path="/initiatives" element={<InitiativesPage />} />
             <Route path="/our-mission" element={<OurMissionPage />} />
             <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/my-donations" 
               element={
                 <ProtectedRoute>
