@@ -1492,11 +1492,11 @@ const AdminDashboard = () => {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => handleDelete('committee', member.id)}
-                                  className="text-red-600 hover:bg-red-50"
-                                  title="حذف"
+                                  onClick={() => toggleMemberStatus(member)}
+                                  className={member.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-emerald-600 hover:bg-emerald-50"}
+                                  title={member.is_active !== false ? "إيقاف العضو" : "تفعيل العضو"}
                                 >
-                                  <Trash2 className="w-4 h-4" />
+                                  {member.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                                 </Button>
                               </div>
                             </td>
