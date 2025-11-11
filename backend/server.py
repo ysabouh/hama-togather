@@ -1013,6 +1013,9 @@ async def update_committee_member(
     if not update_data:
         raise HTTPException(status_code=400, detail="No data to update")
     
+    # Add updated_at timestamp
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
     result = await db.committee_members.update_one({"id": member_id}, {"$set": update_data})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Committee member not found")
