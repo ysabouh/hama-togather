@@ -1378,10 +1378,21 @@ const AdminDashboard = () => {
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-bold text-gray-900">إدارة لجان الأحياء</h2>
-                  <Button onClick={() => openCreateDialog('committee')} className="bg-emerald-700" data-testid="add-committee-btn">
-                    <Plus className="w-5 h-5 ml-2" />
-                    إضافة عضو لجنة
-                  </Button>
+                  <div className="flex gap-3 items-center">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={showInactiveMembers}
+                        onChange={(e) => setShowInactiveMembers(e.target.checked)}
+                        className="w-4 h-4 text-emerald-600 rounded"
+                      />
+                      <span className="text-sm text-gray-700">عرض الأعضاء غير النشطين</span>
+                    </label>
+                    <Button onClick={() => openCreateDialog('committee')} className="bg-emerald-700" data-testid="add-committee-btn">
+                      <Plus className="w-5 h-5 ml-2" />
+                      إضافة عضو لجنة
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="overflow-x-auto">
