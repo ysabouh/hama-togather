@@ -223,6 +223,81 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      // Toggle direction if clicking same column
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new column and default to ascending
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const getSortedMembers = () => {
+    let filtered = committeeMembers.filter(m => showInactiveMembers || m.is_active !== false);
+    
+    if (!sortColumn) return filtered;
+
+    return [...filtered].sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortColumn) {
+        case 'name':
+          aValue = `${a.first_name} ${a.father_name} ${a.last_name}`;
+          bValue = `${b.first_name} ${b.father_name} ${b.last_name}`;
+          break;
+        case 'neighborhood':
+          aValue = neighborhoods.find(n => n.id === a.neighborhood_id)?.name || '';
+          bValue = neighborhoods.find(n => n.id === b.neighborhood_id)?.name || '';
+          break;
+        case 'position':
+          aValue = positions.find(p => p.id === a.position_id)?.title || '';
+          bValue = positions.find(p => p.id === b.position_id)?.title || '';
+          break;
+        case 'age':
+          aValue = a.date_of_birth ? calculateAge(a.date_of_birth) : -1;
+          bValue = b.date_of_birth ? calculateAge(b.date_of_birth) : -1;
+          break;
+        case 'occupation':
+          aValue = a.occupation || '';
+          bValue = b.occupation || '';
+          break;
+        case 'education':
+          aValue = a.education || '';
+          bValue = b.education || '';
+          break;
+        case 'created_at':
+          aValue = new Date(a.created_at || 0);
+          bValue = new Date(b.created_at || 0);
+          break;
+        case 'updated_at':
+          aValue = new Date(a.updated_at || 0);
+          bValue = new Date(b.updated_at || 0);
+          break;
+        case 'status':
+          aValue = a.is_active !== false ? 1 : 0;
+          bValue = b.is_active !== false ? 1 : 0;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
+  const SortIcon = ({ column }) => {
+    if (sortColumn !== column) {
+      return <ArrowUpDown className="w-4 h-4 text-gray-400" />;
+    }
+    return sortDirection === 'asc' ? 
+      <ArrowUp className="w-4 h-4 text-emerald-600" /> : 
+      <ArrowDown className="w-4 h-4 text-emerald-600" />;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
