@@ -86,6 +86,7 @@ const AdminDashboard = () => {
   const [dialogMode, setDialogMode] = useState('create'); // create or edit
   const [currentItem, setCurrentItem] = useState(null);
   const [formData, setFormData] = useState({});
+  const [activeNeighborhoodTab, setActiveNeighborhoodTab] = useState('neighborhoods');
 
   // Setup axios with token from localStorage
   useEffect(() => {
