@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, LayoutDashboard, Heart } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { LogOut, User, LayoutDashboard, Heart, Settings, ChevronDown } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
