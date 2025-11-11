@@ -147,12 +147,16 @@ const AdminDashboard = () => {
   const openCreateDialog = (type) => {
     setDialogType(type);
     setDialogMode('create');
-    // Set default values for neighborhood
+    // Set default values
     if (type === 'neighborhood') {
       setFormData({
         is_active: true,
         families_count: 0,
         population_count: 0
+      });
+    } else if (type === 'job' || type === 'education') {
+      setFormData({
+        is_active: true
       });
     } else {
       setFormData({});
