@@ -2213,7 +2213,7 @@ const AdminDashboard = () => {
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             {renderFormFields()}
             <div className="flex gap-3 justify-end">
-              <Button type="button" variant="outline" onClick={() => setShowDialog(false)}>
+              <Button type="button" variant="outline" onClick={() => setShowDialog(false)} disabled={loading}>
                 إلغاء
               </Button>
               <Button type="submit" className="bg-emerald-700" data-testid="submit-form-btn" disabled={loading}>
