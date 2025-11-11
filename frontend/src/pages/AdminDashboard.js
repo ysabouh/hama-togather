@@ -1456,6 +1456,16 @@ const AdminDashboard = () => {
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-bold text-gray-900">إدارة لجان الأحياء</h2>
                   <div className="flex gap-3 items-center">
+                    {sortColumn && (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => { setSortColumn(null); setSortDirection('asc'); }}
+                        className="text-gray-600"
+                      >
+                        إعادة تعيين الفرز
+                      </Button>
+                    )}
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
