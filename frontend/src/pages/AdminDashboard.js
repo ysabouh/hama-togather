@@ -154,7 +154,7 @@ const AdminDashboard = () => {
         families_count: 0,
         population_count: 0
       });
-    } else if (type === 'job' || type === 'education') {
+    } else if (type === 'position' || type === 'job' || type === 'education') {
       setFormData({
         is_active: true
       });
