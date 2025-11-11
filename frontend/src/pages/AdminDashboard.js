@@ -236,7 +236,28 @@ const AdminDashboard = () => {
   };
 
   const getSortedMembers = () => {
+    // Filter by active status
     let filtered = committeeMembers.filter(m => showInactiveMembers || m.is_active !== false);
+    
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(member => {
+        const fullName = `${member.first_name} ${member.father_name} ${member.last_name}`.toLowerCase();
+        const neighborhood = neighborhoods.find(n => n.id === member.neighborhood_id)?.name.toLowerCase() || '';
+        const position = positions.find(p => p.id === member.position_id)?.title.toLowerCase() || '';
+        const occupation = (member.occupation || '').toLowerCase();
+        const education = (member.education || '').toLowerCase();
+        const phone = (member.phone || '').toLowerCase();
+        
+        return fullName.includes(query) ||
+               neighborhood.includes(query) ||
+               position.includes(query) ||
+               occupation.includes(query) ||
+               education.includes(query) ||
+               phone.includes(query);
+      });
+    }
     
     if (!sortColumn) return filtered;
 
