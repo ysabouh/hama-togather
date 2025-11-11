@@ -198,6 +198,29 @@ const AdminDashboard = () => {
     setViewMemberDialog(true);
   };
 
+  const toggleMemberStatus = async (member) => {
+    const action = member.is_active ? 'إيقاف' : 'تفعيل';
+    if (!window.confirm(`هل أنت متأكد من ${action} هذا العضو؟`)) return;
+    
+    setLoading(true);
+    const loadingToast = toast.loading(`جارٍ ${action} العضو...`);
+    
+    try {
+      await axios.put(`${API_URL}/committee-members/${member.id}`, {
+        is_active: !member.is_active
+      });
+      toast.dismiss(loadingToast);
+      toast.success(`تم ${action} العضو بنجاح`);
+      fetchAllData();
+    } catch (error) {
+      console.error('Toggle status error:', error);
+      toast.dismiss(loadingToast);
+      toast.error(error.response?.data?.detail || `فشل ${action} العضو`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
