@@ -303,6 +303,36 @@ class PositionUpdate(BaseModel):
     title: Optional[str] = None
     is_active: Optional[bool] = None
 
+# Job/Occupation Models (قائمة الأعمال)
+class Job(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class JobCreate(BaseModel):
+    title: str
+
+class JobUpdate(BaseModel):
+    title: Optional[str] = None
+    is_active: Optional[bool] = None
+
+# Education Level Models (قائمة المؤهلات الدراسية)
+class EducationLevel(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class EducationLevelCreate(BaseModel):
+    title: str
+
+class EducationLevelUpdate(BaseModel):
+    title: Optional[str] = None
+    is_active: Optional[bool] = None
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
