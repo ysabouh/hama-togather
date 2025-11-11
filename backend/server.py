@@ -313,11 +313,15 @@ class CommitteeMember(BaseModel):
     neighborhood_id: str
     position_id: str
     phone: str
+    date_of_birth: Optional[str] = None  # المواليد
+    occupation: Optional[str] = None  # العمل
+    education: Optional[str] = None  # المؤهل الدراسي
     address: Optional[str] = None
     email: Optional[EmailStr] = None
     image: Optional[str] = None
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
 
 class CommitteeMemberCreate(BaseModel):
     first_name: str
