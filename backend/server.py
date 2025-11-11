@@ -470,6 +470,62 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
+# ============= User Profile Routes =============
+@api_router.put("/users/me", response_model=User)
+async def update_profile(
+    full_name: str = None,
+    email: str = None,
+    neighborhood_id: str = None,
+    current_user: User = Depends(get_current_user)
+):
+    update_data = {}
+    
+    if full_name:
+        update_data['full_name'] = full_name
+    
+    if email and email != current_user.email:
+        # التحقق من أن البريد الإلكتروني غير مستخدم
+        existing = await db.users.find_one({"email": email, "id": {"$ne": current_user.id}})
+        if existing:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        update_data['email'] = email
+    
+    if neighborhood_id:
+        update_data['neighborhood_id'] = neighborhood_id
+    
+    if update_data:
+        await db.users.update_one({"id": current_user.id}, {"$set": update_data})
+    
+    # جلب المستخدم المحدث
+    updated_user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+    if isinstance(updated_user['created_at'], str):
+        updated_user['created_at'] = datetime.fromisoformat(updated_user['created_at'])
+    
+    return User(**{k: v for k, v in updated_user.items() if k != 'password'})
+
+@api_router.put("/users/change-password")
+async def change_password(
+    current_password: str,
+    new_password: str,
+    current_user: User = Depends(get_current_user)
+):
+    # جلب المستخدم مع كلمة المرور
+    user_doc = await db.users.find_one({"id": current_user.id})
+    
+    if not user_doc or not verify_password(current_password, user_doc['password']):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    
+    # تشفير كلمة المرور الجديدة
+    hashed_password = get_password_hash(new_password)
+    
+    # تحديث كلمة المرور
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"password": hashed_password}}
+    )
+    
+    return {"message": "Password changed successfully"}
+
 # ============= Family Routes =============
 
 @api_router.get("/families", response_model=List[Family])
