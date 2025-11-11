@@ -1400,6 +1400,7 @@ const AdminDashboard = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم الكامل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المنصب</th>
@@ -1412,7 +1413,7 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {committeeMembers.map((member, index) => {
+                      {committeeMembers.filter(m => showInactiveMembers || m.is_active !== false).map((member, index) => {
                         const neighborhood = neighborhoods.find(n => n.id === member.neighborhood_id);
                         const position = positions.find(p => p.id === member.position_id);
                         return (
