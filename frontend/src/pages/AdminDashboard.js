@@ -186,9 +186,14 @@ const AdminDashboard = () => {
     setViewMemberDialog(true);
   };
 
-  const openNeighborhoodDetailsDialog = (neighborhood) => {
+  const openNeighborhoodDetails = (neighborhood) => {
     setSelectedNeighborhood(neighborhood);
-    setViewNeighborhoodDetailsDialog(true);
+    setShowNeighborhoodDetails(true);
+  };
+
+  const closeNeighborhoodDetails = () => {
+    setShowNeighborhoodDetails(false);
+    setSelectedNeighborhood(null);
   };
 
   const toggleMemberStatus = async (member) => {
