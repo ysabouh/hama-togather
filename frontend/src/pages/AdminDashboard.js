@@ -173,6 +173,11 @@ const AdminDashboard = () => {
     setShowDialog(true);
   };
 
+  const openViewDialog = (member) => {
+    setViewingMember(member);
+    setViewMemberDialog(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
