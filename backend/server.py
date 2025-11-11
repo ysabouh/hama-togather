@@ -1196,6 +1196,37 @@ async def startup_db():
             await db.positions.insert_one(doc)
         logger.info(f"Created {len(default_positions)} default positions")
     
+    # Create default jobs/occupations if they don't exist
+    default_jobs = [
+        'مهندس', 'طبيب', 'معلم', 'محامي', 'محاسب', 'صيدلي', 'فني',
+        'موظف حكومي', 'موظف قطاع خاص', 'تاجر', 'صاحب عمل حر',
+        'عامل', 'متقاعد', 'طالب', 'ربة منزل', 'أخرى'
+    ]
+    
+    existing_jobs_count = await db.jobs.count_documents({})
+    if existing_jobs_count == 0:
+        for title in default_jobs:
+            job = Job(title=title)
+            doc = job.model_dump()
+            doc['created_at'] = doc['created_at'].isoformat()
+            await db.jobs.insert_one(doc)
+        logger.info(f"Created {len(default_jobs)} default jobs")
+    
+    # Create default education levels if they don't exist
+    default_education_levels = [
+        'دكتوراه', 'ماجستير', 'بكالوريوس', 'دبلوم',
+        'ثانوية عامة', 'إعدادية', 'ابتدائية', 'يقرأ ويكتب', 'أمي'
+    ]
+    
+    existing_education_count = await db.education_levels.count_documents({})
+    if existing_education_count == 0:
+        for title in default_education_levels:
+            level = EducationLevel(title=title)
+            doc = level.model_dump()
+            doc['created_at'] = doc['created_at'].isoformat()
+            await db.education_levels.insert_one(doc)
+        logger.info(f"Created {len(default_education_levels)} default education levels")
+    
     # Ensure default admin user exists
     admin_exists = await db.users.find_one({"email": "admin@example.com"})
     if not admin_exists:
