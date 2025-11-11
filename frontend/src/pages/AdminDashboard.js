@@ -178,7 +178,10 @@ const AdminDashboard = () => {
         toast.success(dialogMode === 'create' ? 'تم الإضافة بنجاح' : 'تم التحديث بنجاح');
       } else {
         // Handle regular CRUD operations
-        const endpoint = dialogType === 'neighborhood' ? 'neighborhoods' : dialogType;
+        let endpoint = dialogType;
+        if (dialogType === 'neighborhood') endpoint = 'neighborhoods';
+        else if (dialogType === 'committee') endpoint = 'committee-members';
+        
         if (dialogMode === 'create') {
           await axios.post(`${API_URL}/${endpoint}`, formData);
           toast.success('تم الإضافة بنجاح');
