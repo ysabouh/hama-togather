@@ -1779,6 +1779,156 @@ const AdminDashboard = () => {
                   </div>
                 )}
               </div>
+              ) : (
+                /* صفحة تفاصيل الحي الداخلية */
+                <div className="space-y-6">
+                  {/* زر الرجوع */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <Button 
+                      onClick={closeNeighborhoodDetails}
+                      variant="outline"
+                      className="flex items-center gap-2"
+                    >
+                      <ArrowRight className="w-5 h-5" />
+                      رجوع إلى قائمة الأحياء
+                    </Button>
+                  </div>
+
+                  {selectedNeighborhood && (
+                    <div className="space-y-6">
+                      {/* معلومات الحي (Master) */}
+                      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-8 border-r-4 border-emerald-600 shadow-lg">
+                        <h2 className="text-3xl font-bold text-emerald-900 mb-6 flex items-center gap-3">
+                          <MapPin className="w-8 h-8" />
+                          معلومات الحي
+                        </h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">اسم الحي</p>
+                            <p className="text-2xl font-bold text-gray-900">{selectedNeighborhood.name}</p>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">رقم الحي</p>
+                            <p className="text-2xl font-bold text-gray-900">{selectedNeighborhood.number}</p>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">الحالة</p>
+                            <span className={`inline-flex px-4 py-2 rounded-full text-base font-semibold ${selectedNeighborhood.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {selectedNeighborhood.is_active ? 'نشط' : 'غير نشط'}
+                            </span>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">عدد العوائل</p>
+                            <p className="text-2xl font-bold text-emerald-700">{selectedNeighborhood.families_count || 0}</p>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">عدد السكان</p>
+                            <p className="text-2xl font-bold text-emerald-700">{selectedNeighborhood.population_count || 0}</p>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">تاريخ الإنشاء</p>
+                            <p className="text-lg font-medium text-gray-900">
+                              {selectedNeighborhood.created_at ? new Date(selectedNeighborhood.created_at).toLocaleDateString('ar-SY') : '-'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* أعضاء لجنة الحي (Details) */}
+                      <div className="bg-white rounded-xl shadow-lg border border-gray-200">
+                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6 rounded-t-xl">
+                          <h2 className="text-3xl font-bold text-white flex items-center gap-3">
+                            <Users className="w-8 h-8" />
+                            أعضاء لجنة الحي ({committeeMembers.filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false).length} عضو)
+                          </h2>
+                        </div>
+                        
+                        <div className="p-8">
+                          {committeeMembers.filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false).length > 0 ? (
+                            <div className="overflow-x-auto">
+                              <table className="w-full">
+                                <thead className="bg-gray-50">
+                                  <tr>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">#</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">الصورة</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">الاسم الكامل</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">المنصب</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">رقم الهاتف</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">العمر</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">العمل</th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 border-b">المؤهل</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                  {committeeMembers
+                                    .filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false)
+                                    .map((member, index) => (
+                                      <tr key={member.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="px-6 py-4 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                                        <td className="px-6 py-4 text-center">
+                                          {member.image ? (
+                                            <img 
+                                              src={member.image} 
+                                              alt={member.first_name}
+                                              className="w-12 h-12 rounded-full object-cover mx-auto border-2 border-gray-200"
+                                            />
+                                          ) : (
+                                            <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mx-auto">
+                                              <Users className="w-6 h-6 text-gray-400" />
+                                            </div>
+                                          )}
+                                        </td>
+                                        <td className="px-6 py-4 text-base text-center">
+                                          <span className="font-semibold text-gray-900">
+                                            {member.first_name} {member.father_name} {member.last_name}
+                                          </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                          <span className="px-3 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                            {positions.find(p => p.id === member.position_id)?.title || '-'}
+                                          </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-base text-gray-900 text-center font-medium" dir="ltr">{member.phone || '-'}</td>
+                                        <td className="px-6 py-4 text-base text-gray-900 text-center">
+                                          {member.date_of_birth ? `${calculateAge(member.date_of_birth)} سنة` : '-'}
+                                        </td>
+                                        <td className="px-6 py-4 text-base text-gray-900 text-center">{member.occupation || '-'}</td>
+                                        <td className="px-6 py-4 text-base text-gray-900 text-center">{member.education || '-'}</td>
+                                      </tr>
+                                    ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          ) : (
+                            <div className="text-center py-16">
+                              <Users className="w-20 h-20 text-gray-300 mx-auto mb-4" />
+                              <p className="text-gray-500 text-xl font-medium mb-2">لا يوجد أعضاء في لجنة هذا الحي</p>
+                              <p className="text-gray-400 text-base">يمكنك إضافة أعضاء من قسم "لجان الأحياء"</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* زر الرجوع في الأسفل */}
+                      <div className="flex justify-center pt-6">
+                        <Button 
+                          onClick={closeNeighborhoodDetails}
+                          className="bg-emerald-700 hover:bg-emerald-800 px-8 py-3 text-lg"
+                        >
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                          رجوع إلى قائمة الأحياء
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </TabsContent>
 
             {/* Committee Members Tab */}
