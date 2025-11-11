@@ -268,10 +268,8 @@ const AdminDashboard = () => {
         
         if (dialogMode === 'create') {
           await axios.post(`${API_URL}/${endpoint}`, formData);
-          toast.success('تم الإضافة بنجاح');
         } else {
           await axios.put(`${API_URL}/${endpoint}/${currentItem.id}`, formData);
-          toast.success('تم التحديث بنجاح');
         }
       }
       
