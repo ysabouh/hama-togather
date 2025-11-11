@@ -65,8 +65,12 @@ const RegisterPage = () => {
 
   const fetchNeighborhoods = async () => {
     try {
-      const response = await axios.get(`${API_URL}/neighborhoods`);
-      setNeighborhoods(response.data.filter(n => n.is_active));
+      // جلب جميع الأحياء بدون pagination
+      const response = await axios.get(`${API_URL}/neighborhoods?page=1&limit=1000`);
+      const activeNeighborhoods = response.data.items ? 
+        response.data.items.filter(n => n.is_active !== false) : 
+        response.data.filter(n => n.is_active !== false);
+      setNeighborhoods(activeNeighborhoods);
     } catch (error) {
       console.error('Error fetching neighborhoods:', error);
       toast.error('فشل تحميل قائمة الأحياء');
