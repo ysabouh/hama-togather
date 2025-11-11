@@ -2028,6 +2028,129 @@ const AdminDashboard = () => {
         </div>
       </div>
 
+      {/* View Member Details Dialog */}
+      <Dialog open={viewMemberDialog} onOpenChange={setViewMemberDialog}>
+        <DialogContent className="sm:max-w-3xl" data-testid="view-member-dialog">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-right">تفاصيل عضو اللجنة</DialogTitle>
+          </DialogHeader>
+          {viewingMember && (
+            <div className="space-y-6">
+              {/* الصورة الشخصية */}
+              {viewingMember.image && (
+                <div className="flex justify-center">
+                  <img 
+                    src={viewingMember.image} 
+                    alt={viewingMember.first_name} 
+                    className="w-32 h-32 rounded-full object-cover border-4 border-emerald-100"
+                  />
+                </div>
+              )}
+              
+              {/* المعلومات الأساسية */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+                <div className="text-right">
+                  <span className="text-sm text-gray-600 font-semibold">الاسم الكامل:</span>
+                  <p className="text-lg text-gray-900 mt-1">
+                    {viewingMember.first_name} {viewingMember.father_name} {viewingMember.last_name}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm text-gray-600 font-semibold">الحي:</span>
+                  <p className="text-lg text-gray-900 mt-1">
+                    {neighborhoods.find(n => n.id === viewingMember.neighborhood_id)?.name || '-'}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm text-gray-600 font-semibold">المنصب:</span>
+                  <p className="text-lg text-gray-900 mt-1">
+                    {positions.find(p => p.id === viewingMember.position_id)?.title || '-'}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm text-gray-600 font-semibold">رقم الهاتف:</span>
+                  <p className="text-lg text-gray-900 mt-1 font-semibold text-emerald-700">
+                    {viewingMember.phone}
+                  </p>
+                </div>
+              </div>
+
+              {/* المعلومات الشخصية */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-right bg-white p-3 rounded-lg border">
+                  <span className="text-sm text-gray-600 font-semibold">المواليد:</span>
+                  <p className="text-base text-gray-900 mt-1">{viewingMember.date_of_birth || '-'}</p>
+                </div>
+                <div className="text-right bg-white p-3 rounded-lg border">
+                  <span className="text-sm text-gray-600 font-semibold">العمل:</span>
+                  <p className="text-base text-gray-900 mt-1">{viewingMember.occupation || '-'}</p>
+                </div>
+                <div className="text-right bg-white p-3 rounded-lg border">
+                  <span className="text-sm text-gray-600 font-semibold">المؤهل الدراسي:</span>
+                  <p className="text-base text-gray-900 mt-1">{viewingMember.education || '-'}</p>
+                </div>
+              </div>
+
+              {/* العنوان والبريد */}
+              {(viewingMember.address || viewingMember.email) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {viewingMember.address && (
+                    <div className="text-right bg-white p-3 rounded-lg border">
+                      <span className="text-sm text-gray-600 font-semibold">العنوان:</span>
+                      <p className="text-base text-gray-900 mt-1">{viewingMember.address}</p>
+                    </div>
+                  )}
+                  {viewingMember.email && (
+                    <div className="text-right bg-white p-3 rounded-lg border">
+                      <span className="text-sm text-gray-600 font-semibold">البريد الإلكتروني:</span>
+                      <p className="text-base text-gray-900 mt-1">{viewingMember.email}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* التواريخ */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                <div className="text-right">
+                  <span className="text-xs text-gray-500">تاريخ الإضافة:</span>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {viewingMember.created_at ? new Date(viewingMember.created_at).toLocaleString('ar-SY', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    }) : '-'}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs text-gray-500">آخر تعديل:</span>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {viewingMember.updated_at ? new Date(viewingMember.updated_at).toLocaleString('ar-SY', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    }) : '-'}
+                  </p>
+                </div>
+              </div>
+
+              {/* زر الإغلاق */}
+              <div className="flex justify-center pt-4">
+                <Button 
+                  onClick={() => setViewMemberDialog(false)}
+                  className="bg-emerald-700 hover:bg-emerald-800 px-8"
+                >
+                  إغلاق
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Form Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="sm:max-w-2xl" data-testid="admin-dialog">
