@@ -1704,6 +1704,15 @@ const AdminDashboard = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
+                                onClick={() => openNeighborhoodDetailsDialog(neighborhood)}
+                                className="text-emerald-600 hover:bg-emerald-50"
+                                title="عرض التفاصيل واللجنة"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
                                 onClick={() => toggleNeighborhoodStatus(neighborhood)}
                                 className={neighborhood.is_active ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
                                 title={neighborhood.is_active ? "إيقاف الحي" : "تفعيل الحي"}
@@ -1715,6 +1724,7 @@ const AdminDashboard = () => {
                                 variant="outline"
                                 onClick={() => openEditDialog('neighborhood', neighborhood)}
                                 className="text-blue-600 hover:bg-blue-50"
+                                title="تعديل"
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
