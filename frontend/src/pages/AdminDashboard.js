@@ -2131,6 +2131,21 @@ const AdminDashboard = () => {
                 </div>
               )}
               
+              {/* حالة العضو */}
+              <div className="flex justify-center">
+                {viewingMember.is_active !== false ? (
+                  <div className="flex items-center gap-2 px-6 py-3 bg-green-50 border-2 border-green-200 rounded-full">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    <span className="text-lg font-bold text-green-700">عضو نشط</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 px-6 py-3 bg-red-50 border-2 border-red-200 rounded-full">
+                    <XCircle className="w-6 h-6 text-red-600" />
+                    <span className="text-lg font-bold text-red-700">عضو موقوف</span>
+                  </div>
+                )}
+              </div>
+
               {/* المعلومات الأساسية */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
                 <div className="text-right">
