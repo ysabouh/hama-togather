@@ -993,6 +993,26 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'position':
+        return (
+          <>
+            <div>
+              <Label>المنصب</Label>
+              <Input value={formData.title || ''} onChange={(e) => setFormData({...formData, title: e.target.value})} required />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_position"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_position">نشط</Label>
+            </div>
+          </>
+        );
+
       case 'job':
         return (
           <>
