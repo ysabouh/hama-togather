@@ -275,11 +275,16 @@ const AdminDashboard = () => {
         }
       }
       
+      toast.dismiss(loadingToast);
+      toast.success(dialogMode === 'create' ? 'تم الإضافة بنجاح' : 'تم التحديث بنجاح');
       setShowDialog(false);
       fetchAllData();
     } catch (error) {
       console.error('Error:', error);
+      toast.dismiss(loadingToast);
       toast.error(error.response?.data?.detail || 'فشل العملية');
+    } finally {
+      setLoading(false);
     }
   };
 
