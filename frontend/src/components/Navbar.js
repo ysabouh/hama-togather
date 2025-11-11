@@ -55,41 +55,50 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             {user ? (
               <>
-                <span className="hidden md:inline text-sm text-gray-600" data-testid="user-name">مرحباً، {user.full_name}</span>
-                {user.role === 'admin' && (
-                  <Button 
-                    onClick={() => navigate('/admin')} 
-                    variant="outline" 
-                    size="sm"
-                    className="gap-2"
-                    data-testid="admin-dashboard-btn"
-                  >
-                    <LayoutDashboard className="w-4 h-4" />
-                    لوحة التحكم
-                  </Button>
-                )}
-                {user.role === 'donor' && (
-                  <Button 
-                    onClick={() => navigate('/my-donations')} 
-                    variant="outline" 
-                    size="sm"
-                    className="gap-2"
-                    data-testid="my-donations-btn"
-                  >
-                    <Heart className="w-4 h-4" />
-                    تبرعاتي
-                  </Button>
-                )}
-                <Button 
-                  onClick={handleLogout} 
-                  variant="destructive" 
-                  size="sm"
-                  className="gap-2"
-                  data-testid="logout-btn"
-                >
-                  <LogOut className="w-4 h-4" />
-                  خروج
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="gap-2" data-testid="user-menu">
+                      <User className="w-4 h-4" />
+                      <span className="hidden md:inline">{user.full_name}</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="px-2 py-1.5 text-sm font-semibold text-gray-900">
+                      {user.full_name}
+                    </div>
+                    <div className="px-2 py-1.5 text-xs text-gray-500">
+                      {user.email}
+                    </div>
+                    <DropdownMenuSeparator />
+                    
+                    <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                      <Settings className="w-4 h-4 ml-2" />
+                      تعديل الملف الشخصي
+                    </DropdownMenuItem>
+                    
+                    {user.role === 'admin' && (
+                      <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
+                        <LayoutDashboard className="w-4 h-4 ml-2" />
+                        لوحة التحكم
+                      </DropdownMenuItem>
+                    )}
+                    
+                    {user.role === 'donor' && (
+                      <DropdownMenuItem onClick={() => navigate('/my-donations')} className="cursor-pointer">
+                        <Heart className="w-4 h-4 ml-2" />
+                        تبرعاتي
+                      </DropdownMenuItem>
+                    )}
+                    
+                    <DropdownMenuSeparator />
+                    
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
+                      <LogOut className="w-4 h-4 ml-2" />
+                      تسجيل الخروج
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <>
