@@ -1504,6 +1504,33 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
+                {/* Search Bar */}
+                <div className="mb-6">
+                  <div className="relative max-w-md">
+                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Input
+                      type="text"
+                      placeholder="بحث في الأعضاء (الاسم، الحي، المنصب، العمل، المؤهل، الهاتف...)"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pr-10 pl-10 text-right"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                  {searchQuery && (
+                    <p className="text-sm text-gray-600 mt-2 text-right">
+                      النتائج: {getSortedMembers().length} من {committeeMembers.filter(m => showInactiveMembers || m.is_active !== false).length}
+                    </p>
+                  )}
+                </div>
+
                 <div className="overflow-x-auto">
                   <table className="w-full" data-testid="committee-table">
                     <thead className="bg-gray-50">
