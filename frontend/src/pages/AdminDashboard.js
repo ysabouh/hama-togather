@@ -105,6 +105,7 @@ const AdminDashboard = () => {
   const [neighborhoodsTotalPages, setNeighborhoodsTotalPages] = useState(0);
   const [viewMemberDialog, setViewMemberDialog] = useState(false);
   const [viewingMember, setViewingMember] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
