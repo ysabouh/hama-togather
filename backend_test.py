@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Hero Content Management
-Tests GET, PUT, and POST endpoints for hero content management
+Backend API Testing for Jobs and Education Levels Management
+Tests CRUD operations for Jobs and Education Levels endpoints
 """
 
 import requests
@@ -12,8 +12,8 @@ from PIL import Image
 
 # Configuration
 BACKEND_URL = "https://togetherhama.preview.emergentagent.com/api"
-ADMIN_EMAIL = "admin@test.com"
-ADMIN_PASSWORD = "admin123"
+ADMIN_EMAIL = "admin@example.com"
+ADMIN_PASSWORD = "admin"
 
 class HeroContentTester:
     def __init__(self):
