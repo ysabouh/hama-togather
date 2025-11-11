@@ -1337,11 +1337,11 @@ const AdminDashboard = () => {
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم الكامل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المنصب</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم الهاتف</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المواليد</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">العمل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">المؤهل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإضافة</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ التعديل</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
                       </tr>
                     </thead>
@@ -1362,7 +1362,6 @@ const AdminDashboard = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{neighborhood?.name || '-'}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{position?.title || '-'}</td>
-                            <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.phone}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.date_of_birth || '-'}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.occupation || '-'}</td>
                             <td className="px-4 py-3 text-sm text-gray-900 text-center">{member.education || '-'}</td>
@@ -1376,13 +1375,33 @@ const AdminDashboard = () => {
                                 hour12: false
                               }) : '-'}
                             </td>
+                            <td className="px-4 py-3 text-sm text-gray-900 text-center whitespace-nowrap">
+                              {member.updated_at ? new Date(member.updated_at).toLocaleString('ar-SY', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                              }) : '-'}
+                            </td>
                             <td className="px-4 py-3 text-sm text-center">
                               <div className="flex gap-2 justify-center">
                                 <Button
                                   size="sm"
                                   variant="outline"
+                                  onClick={() => openViewDialog(member)}
+                                  className="text-green-600 hover:bg-green-50"
+                                  title="عرض التفاصيل"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
                                   onClick={() => openEditDialog('committee', member)}
                                   className="text-blue-600 hover:bg-blue-50"
+                                  title="تعديل"
                                 >
                                   <Edit className="w-4 h-4" />
                                 </Button>
@@ -1391,6 +1410,7 @@ const AdminDashboard = () => {
                                   variant="outline"
                                   onClick={() => handleDelete('committee', member.id)}
                                   className="text-red-600 hover:bg-red-50"
+                                  title="حذف"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
