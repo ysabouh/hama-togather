@@ -1562,7 +1562,7 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {committeeMembers.filter(m => showInactiveMembers || m.is_active !== false).map((member, index) => {
+                      {getSortedMembers().map((member, index) => {
                         const neighborhood = neighborhoods.find(n => n.id === member.neighborhood_id);
                         const position = positions.find(p => p.id === member.position_id);
                         return (
