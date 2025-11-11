@@ -103,6 +103,7 @@ const AdminDashboard = () => {
   const [showInactiveMembers, setShowInactiveMembers] = useState(false);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
+  const [searchQuery, setSearchQuery] = useState('');
   const [neighborhoodsPage, setNeighborhoodsPage] = useState(1);
   const [neighborhoodsTotal, setNeighborhoodsTotal] = useState(0);
   const [neighborhoodsTotalPages, setNeighborhoodsTotalPages] = useState(0);
