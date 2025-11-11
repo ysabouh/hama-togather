@@ -213,10 +213,10 @@ frontend:
 
   - task: "AdminDashboard - Edit Existing Neighborhood"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/pages/AdminDashboard.js"
-    stuck_count: 0
-    priority: "medium"
+    stuck_count: 1
+    priority: "high"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -231,6 +231,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "✅ تم اختبار تعديل الحي بنجاح! السيناريو المكتمل: تسجيل الدخول بـ admin@example.com/admin، الوصول لتبويب الأحياء، النقر على زر التعديل للحي الأول، تعديل اسم الحي إلى 'حي معدل للاختبار' وعدد العوائل إلى 100، النقر على زر الحفظ، ظهور toast نجاح، والتحقق من تحديث البيانات في الجدول. PUT API يعمل بشكل صحيح (200 OK) والبيانات تُحفظ وتظهر في الجدول فوراً."
+      - working: false
+        agent: "testing"
+        comment: "❌ تم اكتشاف مشكلة خطيرة في تعديل الحي! التشخيص الشامل أظهر: 1) نموذج التعديل يفتح بنجاح ويعرض البيانات الحالية، 2) يمكن تعديل اسم الحي في الحقل، 3) عند النقر على زر الحفظ، النموذج يُغلق لكن لا يتم إرسال أي PUT request إلى الـ API، 4) لا تظهر رسائل نجاح أو خطأ، 5) البيانات لا تُحدث في الجدول. المشكلة: الـ handleSubmit function لا يتم استدعاؤها أو لا ترسل الطلب للـ API. يحتاج فحص كود JavaScript في AdminDashboard.js خاصة في handleSubmit و openEditDialog functions."
 
   - task: "AdminDashboard - Delete Neighborhood"
     implemented: true
