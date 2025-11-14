@@ -1475,6 +1475,10 @@ const AdminDashboard = () => {
                     <Tag className="w-4 h-4 ml-2" />
                     تصنيف العائلات
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('income-levels')} className="cursor-pointer">
+                    <Building2 className="w-4 h-4 ml-2" />
+                    مستويات الدخل
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               
