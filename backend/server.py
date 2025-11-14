@@ -44,6 +44,7 @@ class UserBase(BaseModel):
     neighborhood_id: Optional[str] = None
     phone: Optional[str] = None
     committee_member_id: Optional[str] = None  # ربط المستخدم بعضو اللجنة إذا كان عضو أو رئيس لجنة
+    is_active: bool = True
 
 class UserCreate(UserBase):
     password: str
