@@ -328,13 +328,13 @@ class PasswordChangeTester:
 
 def main():
     """Main test execution"""
-    tester = HeroContentTester()
+    tester = PasswordChangeTester()
     success = tester.run_all_tests()
     
     if success:
-        print("\n✅ Hero Content Management APIs are working correctly")
+        print("\n✅ Password Change functionality is working correctly")
     else:
-        print("\n❌ Some Hero Content Management APIs have issues")
+        print("\n❌ Password Change functionality has issues")
     
     return success
 
