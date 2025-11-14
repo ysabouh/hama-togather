@@ -347,6 +347,27 @@ class EducationLevelUpdate(BaseModel):
     title: Optional[str] = None
     is_active: Optional[bool] = None
 
+# User Role Models (أنواع المستخدمين)
+class UserRole(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # اسم الدور (admin, user, committee_member, etc.)
+    display_name: str  # الاسم المعروض بالعربية
+    description: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class UserRoleCreate(BaseModel):
+    name: str
+    display_name: str
+    description: Optional[str] = None
+
+class UserRoleUpdate(BaseModel):
+    name: Optional[str] = None
+    display_name: Optional[str] = None
+    description: Optional[str] = None
+    is_active: Optional[bool] = None
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
