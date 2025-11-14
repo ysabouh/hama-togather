@@ -133,57 +133,40 @@ class PasswordChangeTester:
             print(f"❌ Login test error: {str(e)}")
             return False
     
-    def test_upload_image(self):
-        """Test POST /api/upload-image (requires admin authentication)"""
-        print("\n🖼️  Testing POST /api/upload-image...")
+    def test_login_with_new_password(self):
+        """Test login with new password (should succeed after password change)"""
+        print("\n✅ Testing Login with New Password (should succeed)...")
         
-        if not self.admin_token:
-            print("❌ No admin token available")
-            return False
+        login_data = {
+            "username": ADMIN_EMAIL,
+            "password": "newpass123"  # New password
+        }
         
         try:
-            # Create a test image
-            img = Image.new('RGB', (100, 100), color='red')
-            img_buffer = io.BytesIO()
-            img.save(img_buffer, format='PNG')
-            img_buffer.seek(0)
-            
-            headers = {
-                "Authorization": f"Bearer {self.admin_token}"
-            }
-            
-            files = {
-                'file': ('test_image.png', img_buffer, 'image/png')
-            }
-            
-            response = self.session.post(
-                f"{BACKEND_URL}/upload-image",
-                files=files,
-                headers=headers
+            # Use a new session to avoid cached tokens
+            new_session = requests.Session()
+            response = new_session.post(
+                f"{BACKEND_URL}/auth/login",
+                data=login_data,
+                headers={"Content-Type": "application/x-www-form-urlencoded"}
             )
             
             if response.status_code == 200:
                 data = response.json()
-                print("✅ POST upload-image successful")
+                print("✅ Login with new password successful")
+                print(f"   New token: {data['access_token'][:20]}...")
+                print(f"   User: {data['user']['email']} ({data['user']['role']})")
                 
-                if 'image_url' in data:
-                    image_url = data['image_url']
-                    if image_url.startswith('data:image/'):
-                        print("✅ Image URL format correct (Base64)")
-                        print(f"   Image URL: {image_url[:50]}...")
-                    else:
-                        print(f"⚠️  Unexpected image URL format: {image_url[:50]}...")
-                else:
-                    print("⚠️  No image_url in response")
-                
+                # Update our token for future tests
+                self.admin_token = data["access_token"]
                 return True, data
             else:
-                print(f"❌ POST upload-image failed: {response.status_code}")
+                print(f"❌ Login with new password failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False, None
                 
         except Exception as e:
-            print(f"❌ POST upload-image error: {str(e)}")
+            print(f"❌ Login with new password error: {str(e)}")
             return False, None
     
     def test_put_with_background_image(self):
