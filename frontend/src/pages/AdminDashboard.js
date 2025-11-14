@@ -1267,6 +1267,50 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'family-category':
+        return (
+          <>
+            <div>
+              <Label>اسم التصنيف</Label>
+              <Input 
+                value={formData.name || ''} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                placeholder="مثال: أسر محتاجة"
+                required 
+              />
+            </div>
+            <div>
+              <Label>الوصف (اختياري)</Label>
+              <Textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                placeholder="وصف التصنيف"
+                rows={3}
+              />
+            </div>
+            <div>
+              <Label>اللون (اختياري)</Label>
+              <Input 
+                type="color"
+                value={formData.color || '#3B82F6'} 
+                onChange={(e) => setFormData({...formData, color: e.target.value})} 
+                className="h-12 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">اختر لوناً مميزاً لهذا التصنيف</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_category"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_category">نشط</Label>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
