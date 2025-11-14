@@ -492,8 +492,10 @@ async def get_all_users(current_user: User = Depends(get_current_user)):
     
     users = await db.users.find({}, {"_id": 0, "password": 0}).to_list(1000)
     for user in users:
-        if isinstance(user['created_at'], str):
+        if isinstance(user.get('created_at'), str):
             user['created_at'] = datetime.fromisoformat(user['created_at'])
+        if isinstance(user.get('updated_at'), str):
+            user['updated_at'] = datetime.fromisoformat(user['updated_at'])
     return users
 
 @api_router.put("/users/{user_id}/role")
