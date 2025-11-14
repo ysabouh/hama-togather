@@ -203,6 +203,7 @@ const AdminDashboard = () => {
       setLoadingEducations(false);
       setLoadingUserRoles(false);
       setLoadingFamilyCategories(false);
+      setLoadingIncomeLevels(false);
     }
   };
 
