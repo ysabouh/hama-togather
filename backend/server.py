@@ -485,29 +485,26 @@ async def get_me(current_user: User = Depends(get_current_user)):
 # ============= User Profile Routes =============
 @api_router.put("/users/me", response_model=User)
 async def update_profile(
-    full_name: str = None,
-    email: str = None,
-    neighborhood_id: str = None,
-    phone: str = None,
+    profile_data: UpdateProfileRequest,
     current_user: User = Depends(get_current_user)
 ):
     update_data = {}
     
-    if full_name:
-        update_data['full_name'] = full_name
+    if profile_data.full_name:
+        update_data['full_name'] = profile_data.full_name
     
-    if email and email != current_user.email:
+    if profile_data.email and profile_data.email != current_user.email:
         # التحقق من أن البريد الإلكتروني غير مستخدم
-        existing = await db.users.find_one({"email": email, "id": {"$ne": current_user.id}})
+        existing = await db.users.find_one({"email": profile_data.email, "id": {"$ne": current_user.id}})
         if existing:
             raise HTTPException(status_code=400, detail="Email already registered")
-        update_data['email'] = email
+        update_data['email'] = profile_data.email
     
-    if neighborhood_id:
-        update_data['neighborhood_id'] = neighborhood_id
+    if profile_data.neighborhood_id:
+        update_data['neighborhood_id'] = profile_data.neighborhood_id
     
-    if phone is not None:  # السماح بحذف رقم الجوال
-        update_data['phone'] = phone
+    if profile_data.phone is not None:  # السماح بحذف رقم الجوال
+        update_data['phone'] = profile_data.phone
     
     if update_data:
         await db.users.update_one({"id": current_user.id}, {"$set": update_data})
