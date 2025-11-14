@@ -76,7 +76,8 @@ const ProfilePage = () => {
     setFormData({
       full_name: user.full_name || '',
       email: user.email || '',
-      neighborhood_id: user.neighborhood_id || ''
+      neighborhood_id: user.neighborhood_id || '',
+      phone: user.phone || ''
     });
 
     fetchNeighborhoods();
