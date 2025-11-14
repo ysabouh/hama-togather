@@ -3111,14 +3111,6 @@ const AdminDashboard = () => {
                           <p className="text-sm text-gray-600">الأم</p>
                           <p className="text-lg font-semibold">{selectedFamily?.mother_present ? '✅ موجودة' : '❌ غير موجودة'}</p>
                         </div>
-                        <div>
-                          <p className="text-sm text-gray-600">عدد الأطفال الذكور</p>
-                          <p className="text-lg font-semibold text-blue-600">{selectedFamily?.male_children_count || 0}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">عدد الأطفال الإناث</p>
-                          <p className="text-lg font-semibold text-pink-600">{selectedFamily?.female_children_count || 0}</p>
-                        </div>
                       </div>
                     </div>
 
