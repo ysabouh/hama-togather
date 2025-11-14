@@ -53,7 +53,7 @@ const RegisterPage = () => {
     confirmPassword: '',
     neighborhood_id: '',
     phone: '',
-    role: 'user'
+    role: 'user'  // دائماً مستخدم عادي عند التسجيل
   });
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
