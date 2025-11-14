@@ -2808,34 +2808,205 @@ const AdminDashboard = () => {
 
             {/* Families Tab */}
             <TabsContent value="families">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">إدارة العائلات</h2>
-                  <Button onClick={() => openCreateDialog('families')} className="bg-emerald-700" data-testid="add-family-btn">
-                    <Plus className="w-5 h-5 ml-2" />
-                    إضافة عائلة
-                  </Button>
-                </div>
-                <div className="space-y-4">
-                  {families.map((family) => (
-                    <div key={family.id} className="border rounded-lg p-4 flex justify-between items-start" data-testid={`family-item-${family.id}`}>
-                      <div>
-                        <h3 className="font-bold text-lg">{family.name}</h3>
-                        <p className="text-sm text-gray-600">عدد الأفراد: {family.members_count}</p>
-                        <p className="text-sm text-gray-600">الحاجة الشهرية: {family.monthly_need.toLocaleString()} ل.س</p>
+              {!showFamilyDetails ? (
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900">إدارة العائلات</h2>
+                    <Button onClick={() => openCreateDialog('families')} className="bg-emerald-700" data-testid="add-family-btn">
+                      <Plus className="w-5 h-5 ml-2" />
+                      إضافة عائلة
+                    </Button>
+                  </div>
+
+                  <div className="mb-4 flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="show_inactive_families"
+                      checked={showInactiveFamilies}
+                      onChange={(e) => setShowInactiveFamilies(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-300"
+                    />
+                    <Label htmlFor="show_inactive_families" className="text-sm cursor-pointer">
+                      عرض العائلات غير النشطة
+                    </Label>
+                  </div>
+
+                  <div className="space-y-4">
+                    {families
+                      .filter(f => showInactiveFamilies || f.is_active !== false)
+                      .map((family) => (
+                      <div key={family.id} className="border rounded-lg p-4 flex justify-between items-start hover:bg-gray-50" data-testid={`family-item-${family.id}`}>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="font-bold text-lg">{family.name}</h3>
+                            <span className={`px-2 py-1 rounded-full text-xs ${family.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {family.is_active !== false ? 'نشط' : 'غير نشط'}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
+                            <p>عدد الأفراد: {family.members_count}</p>
+                            <p>الحاجة الشهرية: {family.monthly_need.toLocaleString()} ل.س</p>
+                            <p>تاريخ الإنشاء: {family.created_at ? new Date(family.created_at).toLocaleDateString('ar-SY') : '-'}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => {
+                              setSelectedFamily(family);
+                              setShowFamilyDetails(true);
+                            }}
+                            className="text-blue-600 hover:bg-blue-50"
+                            title="عرض التفاصيل"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => openEditDialog('families', family)} 
+                            data-testid={`edit-family-${family.id}`}
+                            className="text-green-600 hover:bg-green-50"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={async () => {
+                              const action = family.is_active !== false ? 'إيقاف' : 'تفعيل';
+                              if (!window.confirm(`هل تريد ${action} هذه العائلة؟`)) return;
+                              try {
+                                await axios.put(`${API_URL}/families/${family.id}/toggle-status`, { is_active: !family.is_active });
+                                toast.success(`تم ${action} العائلة بنجاح`);
+                                fetchAllData();
+                              } catch (error) {
+                                toast.error(error.response?.data?.detail || `فشل ${action} العائلة`);
+                              }
+                            }}
+                            className={family.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
+                            title={family.is_active !== false ? "إيقاف" : "تفعيل"}
+                          >
+                            {family.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => openEditDialog('families', family)} data-testid={`edit-family-${family.id}`}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button variant="destructive" size="sm" onClick={() => handleDelete('families', family.id)} data-testid={`delete-family-${family.id}`}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                    ))}
+                    {families.filter(f => showInactiveFamilies || f.is_active !== false).length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        {showInactiveFamilies ? 'لا توجد عائلات مسجلة' : 'لا توجد عائلات نشطة'}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <div className="mb-6">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        setShowFamilyDetails(false);
+                        setSelectedFamily(null);
+                      }}
+                      className="mb-4"
+                    >
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                      رجوع إلى القائمة
+                    </Button>
+                    <div className="border-b-4 border-emerald-600 pb-4">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-3xl font-bold text-gray-900">{selectedFamily?.name}</h2>
+                        <span className={`px-3 py-1 rounded-full text-sm ${selectedFamily?.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                          {selectedFamily?.is_active !== false ? 'نشط' : 'غير نشط'}
+                        </span>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">المعلومات الأساسية</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600">عدد الأفراد</p>
+                          <p className="text-lg font-semibold text-gray-900">{selectedFamily?.members_count}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">الحاجة الشهرية</p>
+                          <p className="text-lg font-semibold text-emerald-700">{selectedFamily?.monthly_need.toLocaleString()} ل.س</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">التصنيف</p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            {familyCategories.find(c => c.id === selectedFamily?.category_id)?.name || 'غير محدد'}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">مستوى الدخل</p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            {incomeLevels.find(l => l.id === selectedFamily?.income_level_id)?.name || 'غير محدد'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">معلومات العائلة</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600">الأب</p>
+                          <p className="text-lg font-semibold">{selectedFamily?.father_present ? '✅ موجود' : '❌ غير موجود'}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">الأم</p>
+                          <p className="text-lg font-semibold">{selectedFamily?.mother_present ? '✅ موجودة' : '❌ غير موجودة'}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">عدد الأطفال الذكور</p>
+                          <p className="text-lg font-semibold text-blue-600">{selectedFamily?.male_children_count || 0}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">عدد الأطفال الإناث</p>
+                          <p className="text-lg font-semibold text-pink-600">{selectedFamily?.female_children_count || 0}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-span-2 space-y-4">
+                      <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">الوصف</h3>
+                      <p className="text-gray-700 leading-relaxed">{selectedFamily?.description}</p>
+                    </div>
+
+                    <div className="col-span-2 border-t pt-4 mt-4">
+                      <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                        <div>
+                          <p className="font-medium">تاريخ الإنشاء</p>
+                          <p>{selectedFamily?.created_at ? new Date(selectedFamily.created_at).toLocaleString('ar-SY', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: false
+                          }) : '-'}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">آخر تحديث</p>
+                          <p>{selectedFamily?.updated_at ? new Date(selectedFamily.updated_at).toLocaleString('ar-SY', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: false
+                          }) : 'لم يتم التحديث'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </TabsContent>
 
             {/* Family Categories Tab */}
