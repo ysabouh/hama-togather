@@ -82,6 +82,10 @@ const AdminDashboard = () => {
   const [neighborhoodsSortColumn, setNeighborhoodsSortColumn] = useState(null);
   const [neighborhoodsSortDirection, setNeighborhoodsSortDirection] = useState('asc');
   const [neighborhoodsSearchQuery, setNeighborhoodsSearchQuery] = useState('');
+  const [usersSearchQuery, setUsersSearchQuery] = useState('');
+  const [usersSortColumn, setUsersSortColumn] = useState(null);
+  const [usersSortDirection, setUsersSortDirection] = useState('asc');
+  const [showInactiveUsers, setShowInactiveUsers] = useState(false);
   const [viewMemberDialog, setViewMemberDialog] = useState(false);
   const [viewingMember, setViewingMember] = useState(null);
   const [showNeighborhoodDetails, setShowNeighborhoodDetails] = useState(false);
