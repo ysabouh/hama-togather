@@ -56,7 +56,8 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
-    neighborhood_id: ''
+    neighborhood_id: '',
+    phone: ''
   });
   const [passwordData, setPasswordData] = useState({
     current_password: '',
