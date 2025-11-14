@@ -148,7 +148,7 @@ const AdminDashboard = () => {
     setLoadingIncomeLevels(true);
     
     try {
-      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes, familyCategoriesRes] = await Promise.all([
+      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes, familyCategoriesRes, incomeLevelsRes] = await Promise.all([
         axios.get(`${API_URL}/stats`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/health-cases`),
