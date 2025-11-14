@@ -738,12 +738,26 @@ async def update_family(family_id: str, family_input: FamilyCreate, admin: User 
         updated['created_at'] = datetime.fromisoformat(updated['created_at'])
     return Family(**updated)
 
-@api_router.delete("/families/{family_id}")
-async def delete_family(family_id: str, admin: User = Depends(get_admin_user)):
-    result = await db.families.delete_one({"id": family_id})
-    if result.deleted_count == 0:
+@api_router.put("/families/{family_id}/toggle-status")
+async def toggle_family_status(
+    family_id: str,
+    request: dict,
+    admin: User = Depends(get_admin_user)
+):
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    update_data = {
+        "is_active": is_active,
+        "updated_at": datetime.now(timezone.utc)
+    }
+    
+    result = await db.families.update_one({"id": family_id}, {"$set": update_data})
+    if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Family not found")
-    return {"message": "Family deleted successfully"}
+    
+    return {"message": f"Family {'activated' if is_active else 'deactivated'} successfully"}
 
 # ============= Family Categories Routes =============
 @api_router.get("/family-categories", response_model=List[FamilyCategory])
