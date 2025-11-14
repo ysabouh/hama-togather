@@ -733,11 +733,14 @@ async def update_family(family_id: str, family_input: FamilyCreate, admin: User 
         raise HTTPException(status_code=404, detail="Family not found")
     
     update_data = family_input.model_dump()
+    update_data['updated_at'] = datetime.now(timezone.utc)
     await db.families.update_one({"id": family_id}, {"$set": update_data})
     
     updated = await db.families.find_one({"id": family_id}, {"_id": 0})
-    if isinstance(updated['created_at'], str):
+    if isinstance(updated.get('created_at'), str):
         updated['created_at'] = datetime.fromisoformat(updated['created_at'])
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
     return Family(**updated)
 
 @api_router.put("/families/{family_id}/toggle-status")
