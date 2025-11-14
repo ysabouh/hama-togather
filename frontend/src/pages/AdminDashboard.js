@@ -184,6 +184,7 @@ const AdminDashboard = () => {
       setEducationLevels(educationLevelsRes.data);
       setUsers(usersRes.data);
       setUserRoles(userRolesRes.data);
+      setFamilyCategories(familyCategoriesRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     } finally {
