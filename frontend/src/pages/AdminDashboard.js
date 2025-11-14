@@ -2834,88 +2834,216 @@ const AdminDashboard = () => {
                     </Button>
                   </div>
 
-                  <div className="mb-4 flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="show_inactive_families"
-                      checked={showInactiveFamilies}
-                      onChange={(e) => setShowInactiveFamilies(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300"
-                    />
-                    <Label htmlFor="show_inactive_families" className="text-sm cursor-pointer">
-                      عرض العائلات غير النشطة
-                    </Label>
+                  <div className="mb-4 flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1 relative">
+                      <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Input
+                        type="text"
+                        placeholder="البحث عن عائلة (الاسم، الحي، التصنيف)..."
+                        value={familiesSearchQuery}
+                        onChange={(e) => {
+                          setFamiliesSearchQuery(e.target.value);
+                          setFamiliesPage(1);
+                        }}
+                        className="pr-10"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="show_inactive_families"
+                        checked={showInactiveFamilies}
+                        onChange={(e) => setShowInactiveFamilies(e.target.checked)}
+                        className="w-4 h-4 rounded border-gray-300"
+                      />
+                      <Label htmlFor="show_inactive_families" className="text-sm cursor-pointer whitespace-nowrap">
+                        عرض غير النشطة
+                      </Label>
+                    </div>
                   </div>
 
-                  <div className="space-y-4">
-                    {families
-                      .filter(f => showInactiveFamilies || f.is_active !== false)
-                      .map((family) => (
-                      <div key={family.id} className="border rounded-lg p-4 flex justify-between items-start hover:bg-gray-50" data-testid={`family-item-${family.id}`}>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-bold text-lg">{family.name}</h3>
-                            <span className={`px-2 py-1 rounded-full text-xs ${family.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                              {family.is_active !== false ? 'نشط' : 'غير نشط'}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-4 gap-4 text-sm text-gray-600">
-                            <p>عدد الأفراد: {family.members_count}</p>
-                            <p>الحاجة الشهرية: {family.monthly_need.toLocaleString()} ل.س</p>
-                            <p>الحي: {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || 'غير محدد'}</p>
-                            <p>تاريخ الإنشاء: {family.created_at ? new Date(family.created_at).toLocaleDateString('ar-SY') : '-'}</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => {
-                              setSelectedFamily(family);
-                              setShowFamilyDetails(true);
-                            }}
-                            className="text-blue-600 hover:bg-blue-50"
-                            title="عرض التفاصيل"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => openEditDialog('families', family)} 
-                            data-testid={`edit-family-${family.id}`}
-                            className="text-green-600 hover:bg-green-50"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={async () => {
-                              const action = family.is_active !== false ? 'إيقاف' : 'تفعيل';
-                              if (!window.confirm(`هل تريد ${action} هذه العائلة؟`)) return;
-                              try {
-                                await axios.put(`${API_URL}/families/${family.id}/toggle-status`, { is_active: !family.is_active });
-                                toast.success(`تم ${action} العائلة بنجاح`);
-                                fetchAllData();
-                              } catch (error) {
-                                toast.error(error.response?.data?.detail || `فشل ${action} العائلة`);
-                              }
-                            }}
-                            className={family.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
-                            title={family.is_active !== false ? "إيقاف" : "تفعيل"}
-                          >
-                            {family.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                    {families.filter(f => showInactiveFamilies || f.is_active !== false).length === 0 && (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم العائلة</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد الأفراد</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحاجة الشهرية</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">التصنيف</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {(() => {
+                          const filteredFamilies = families
+                            .filter(f => showInactiveFamilies || f.is_active !== false)
+                            .filter(f => {
+                              if (!familiesSearchQuery) return true;
+                              const query = familiesSearchQuery.toLowerCase();
+                              const neighborhood = neighborhoods.find(n => n.id === f.neighborhood_id)?.name || '';
+                              const category = familyCategories.find(c => c.id === f.category_id)?.name || '';
+                              return f.name.toLowerCase().includes(query) ||
+                                     neighborhood.toLowerCase().includes(query) ||
+                                     category.toLowerCase().includes(query);
+                            });
+                          
+                          const totalPages = Math.ceil(filteredFamilies.length / familiesPerPage);
+                          const startIndex = (familiesPage - 1) * familiesPerPage;
+                          const paginatedFamilies = filteredFamilies.slice(startIndex, startIndex + familiesPerPage);
+
+                          return (
+                            <>
+                              {paginatedFamilies.map((family, index) => (
+                                <tr key={family.id} className="hover:bg-gray-50" data-testid={`family-item-${family.id}`}>
+                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">{startIndex + index + 1}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{family.name}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">{family.members_count}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">{family.monthly_need.toLocaleString()} ل.س</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">
+                                    {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">
+                                    {familyCategories.find(c => c.id === family.category_id)?.name || '-'}
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-center">
+                                    <span className={`px-2 py-1 rounded-full text-xs ${family.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                      {family.is_active !== false ? 'نشط' : 'غير نشط'}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-center">
+                                    <div className="flex gap-2 justify-center">
+                                      <Button 
+                                        variant="outline" 
+                                        size="sm" 
+                                        onClick={() => {
+                                          setSelectedFamily(family);
+                                          setShowFamilyDetails(true);
+                                        }}
+                                        className="text-blue-600 hover:bg-blue-50"
+                                        title="عرض التفاصيل"
+                                      >
+                                        <Eye className="w-4 h-4" />
+                                      </Button>
+                                      <Button 
+                                        variant="outline" 
+                                        size="sm" 
+                                        onClick={() => openEditDialog('families', family)} 
+                                        data-testid={`edit-family-${family.id}`}
+                                        className="text-green-600 hover:bg-green-50"
+                                      >
+                                        <Edit className="w-4 h-4" />
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={async () => {
+                                          const action = family.is_active !== false ? 'إيقاف' : 'تفعيل';
+                                          if (!window.confirm(`هل تريد ${action} هذه العائلة؟`)) return;
+                                          try {
+                                            await axios.put(`${API_URL}/families/${family.id}/toggle-status`, { is_active: !family.is_active });
+                                            toast.success(`تم ${action} العائلة بنجاح`);
+                                            fetchAllData();
+                                          } catch (error) {
+                                            toast.error(error.response?.data?.detail || `فشل ${action} العائلة`);
+                                          }
+                                        }}
+                                        className={family.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
+                                        title={family.is_active !== false ? "إيقاف" : "تفعيل"}
+                                      >
+                                        {family.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
+                                      </Button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </>
+                          );
+                        })()}
+                      </tbody>
+                    </table>
+                    {families.filter(f => showInactiveFamilies || f.is_active !== false).filter(f => {
+                      if (!familiesSearchQuery) return true;
+                      const query = familiesSearchQuery.toLowerCase();
+                      const neighborhood = neighborhoods.find(n => n.id === f.neighborhood_id)?.name || '';
+                      const category = familyCategories.find(c => c.id === f.category_id)?.name || '';
+                      return f.name.toLowerCase().includes(query) ||
+                             neighborhood.toLowerCase().includes(query) ||
+                             category.toLowerCase().includes(query);
+                    }).length === 0 && (
                       <div className="text-center py-8 text-gray-500">
-                        {showInactiveFamilies ? 'لا توجد عائلات مسجلة' : 'لا توجد عائلات نشطة'}
+                        {familiesSearchQuery ? 'لا توجد نتائج للبحث' : (showInactiveFamilies ? 'لا توجد عائلات مسجلة' : 'لا توجد عائلات نشطة')}
                       </div>
                     )}
                   </div>
+
+                  {/* Pagination */}
+                  {(() => {
+                    const filteredFamilies = families
+                      .filter(f => showInactiveFamilies || f.is_active !== false)
+                      .filter(f => {
+                        if (!familiesSearchQuery) return true;
+                        const query = familiesSearchQuery.toLowerCase();
+                        const neighborhood = neighborhoods.find(n => n.id === f.neighborhood_id)?.name || '';
+                        const category = familyCategories.find(c => c.id === f.category_id)?.name || '';
+                        return f.name.toLowerCase().includes(query) ||
+                               neighborhood.toLowerCase().includes(query) ||
+                               category.toLowerCase().includes(query);
+                      });
+                    const totalPages = Math.ceil(filteredFamilies.length / familiesPerPage);
+                    
+                    if (totalPages > 1) {
+                      return (
+                        <div className="mt-6 flex items-center justify-between border-t pt-4">
+                          <div className="text-sm text-gray-600">
+                            عرض {((familiesPage - 1) * familiesPerPage) + 1} - {Math.min(familiesPage * familiesPerPage, filteredFamilies.length)} من {filteredFamilies.length}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setFamiliesPage(p => Math.max(1, p - 1))}
+                              disabled={familiesPage === 1}
+                            >
+                              السابق
+                            </Button>
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                              .filter(page => {
+                                return page === 1 || 
+                                       page === totalPages || 
+                                       Math.abs(page - familiesPage) <= 1;
+                              })
+                              .map((page, idx, arr) => (
+                                <React.Fragment key={page}>
+                                  {idx > 0 && arr[idx - 1] !== page - 1 && (
+                                    <span className="px-2 py-1 text-gray-400">...</span>
+                                  )}
+                                  <Button
+                                    variant={familiesPage === page ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => setFamiliesPage(page)}
+                                    className={familiesPage === page ? "bg-emerald-600" : ""}
+                                  >
+                                    {page}
+                                  </Button>
+                                </React.Fragment>
+                              ))}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setFamiliesPage(p => Math.min(totalPages, p + 1))}
+                              disabled={familiesPage === totalPages}
+                            >
+                              التالي
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
               ) : (
                 <div className="bg-white rounded-xl shadow-lg p-6">
