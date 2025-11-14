@@ -51,7 +51,9 @@ const RegisterPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    neighborhood_id: ''
+    neighborhood_id: '',
+    phone: '',
+    role: 'user'
   });
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
