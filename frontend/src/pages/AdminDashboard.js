@@ -2663,6 +2663,115 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* Family Categories Tab */}
+            <TabsContent value="family-categories">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">تصنيف العائلات</h2>
+                  <Button onClick={() => openCreateDialog('family-category')} className="bg-emerald-600 hover:bg-emerald-700">
+                    <Plus className="w-4 h-4 ml-2" />
+                    إضافة تصنيف
+                  </Button>
+                </div>
+
+                <div className="mb-4 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="show_inactive_family_categories"
+                    checked={showInactiveFamilyCategories}
+                    onChange={(e) => setShowInactiveFamilyCategories(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <Label htmlFor="show_inactive_family_categories" className="text-sm cursor-pointer">
+                    عرض التصنيفات غير النشطة
+                  </Label>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم التصنيف</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الوصف</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اللون</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {familyCategories
+                        .filter(cat => showInactiveFamilyCategories || cat.is_active !== false)
+                        .map((category, index) => (
+                        <tr key={category.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{category.name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center">{category.description || '-'}</td>
+                          <td className="px-4 py-3 text-sm text-center">
+                            {category.color ? (
+                              <div className="flex items-center justify-center gap-2">
+                                <div 
+                                  className="w-6 h-6 rounded border border-gray-300" 
+                                  style={{backgroundColor: category.color}}
+                                />
+                                <span className="text-xs text-gray-500">{category.color}</span>
+                              </div>
+                            ) : '-'}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-center">
+                            <span className={`px-2 py-1 rounded-full text-xs ${category.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {category.is_active !== false ? 'نشط' : 'غير نشط'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-center">
+                            <div className="flex gap-2 justify-center">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openEditDialog('family-category', category)}
+                                className="text-blue-600 hover:bg-blue-50"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={async () => {
+                                  const action = category.is_active !== false ? 'إيقاف' : 'تفعيل';
+                                  if (!window.confirm(`هل تريد ${action} هذا التصنيف؟`)) return;
+                                  try {
+                                    await axios.put(`${API_URL}/family-categories/${category.id}/toggle-status`, { is_active: !category.is_active });
+                                    toast.success(`تم ${action} التصنيف بنجاح`);
+                                    fetchAllData();
+                                  } catch (error) {
+                                    toast.error(error.response?.data?.detail || `فشل ${action} التصنيف`);
+                                  }
+                                }}
+                                className={category.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
+                                title={category.is_active !== false ? "إيقاف" : "تفعيل"}
+                              >
+                                {category.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {loadingFamilyCategories ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
+                      <p className="text-gray-500">جاري تحميل تصنيفات العائلات...</p>
+                    </div>
+                  ) : familyCategories.filter(cat => showInactiveFamilyCategories || cat.is_active !== false).length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      {showInactiveFamilyCategories ? 'لا توجد تصنيفات مسجلة حالياً' : 'لا توجد تصنيفات نشطة حالياً'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
             {/* Health Cases Tab */}
             <TabsContent value="health">
               <div className="bg-white rounded-xl shadow-lg p-6">
