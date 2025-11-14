@@ -3188,7 +3188,12 @@ const AdminDashboard = () => {
                       ))}
                     </tbody>
                   </table>
-                  {users.filter(u => showInactiveUsers || u.is_active !== false).length === 0 && (
+                  {loadingUsers ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
+                      <p className="text-gray-500">جاري تحميل المستخدمين...</p>
+                    </div>
+                  ) : users.filter(u => showInactiveUsers || u.is_active !== false).length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                       {usersSearchQuery ? 'لا توجد نتائج مطابقة للبحث' : 'لا يوجد مستخدمين'}
                     </div>
