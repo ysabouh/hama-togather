@@ -40,8 +40,10 @@ api_router = APIRouter(prefix="/api")
 class UserBase(BaseModel):
     email: EmailStr
     full_name: str
-    role: str = "donor"  # admin or donor
+    role: str = "user"  # user, admin, committee_member, committee_president
     neighborhood_id: Optional[str] = None
+    phone: Optional[str] = None
+    committee_member_id: Optional[str] = None  # ربط المستخدم بعضو اللجنة إذا كان عضو أو رئيس لجنة
 
 class UserCreate(UserBase):
     password: str
