@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Jobs and Education Levels Management
-Tests CRUD operations for Jobs and Education Levels endpoints
+Backend API Testing for Password Change Functionality
+Tests password change scenarios with correct and incorrect current passwords
 """
 
 import requests
