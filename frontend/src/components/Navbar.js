@@ -70,6 +70,19 @@ const Navbar = () => {
                     <div className="px-2 py-1.5 text-xs text-gray-500">
                       {user.email}
                     </div>
+                    <div className="px-2 py-1.5">
+                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                        user.role === 'admin' ? 'bg-red-100 text-red-800' :
+                        user.role === 'committee_president' ? 'bg-blue-100 text-blue-800' :
+                        user.role === 'committee_member' ? 'bg-green-100 text-green-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {user.role === 'admin' ? 'مدير النظام' :
+                         user.role === 'committee_president' ? 'رئيس لجنة' :
+                         user.role === 'committee_member' ? 'عضو لجنة' :
+                         'مستخدم عادي'}
+                      </span>
+                    </div>
                     <DropdownMenuSeparator />
                     
                     <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
