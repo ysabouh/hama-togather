@@ -3183,11 +3183,27 @@ const AdminDashboard = () => {
                           <td className="px-4 py-3 text-sm text-gray-900 text-center">
                             {neighborhoods.find(n => n.id === user.neighborhood_id)?.name || '-'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-600 text-center">
-                            {user.created_at ? new Date(user.created_at).toLocaleDateString('ar-SY', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '-'}
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">
+                            {user.created_at ? new Date(user.created_at).toLocaleString('ar-SY', { 
+                              year: 'numeric', 
+                              month: '2-digit', 
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                              hour12: false
+                            }) : '-'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-600 text-center">
-                            {user.updated_at ? new Date(user.updated_at).toLocaleDateString('ar-SY', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '-'}
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">
+                            {user.updated_at ? new Date(user.updated_at).toLocaleString('ar-SY', { 
+                              year: 'numeric', 
+                              month: '2-digit', 
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                              hour12: false
+                            }) : '-'}
                           </td>
                           <td className="px-4 py-3 text-sm text-center">
                             <span className={`px-2 py-1 rounded-full text-xs ${user.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
