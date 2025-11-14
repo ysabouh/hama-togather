@@ -111,6 +111,9 @@ const AdminDashboard = () => {
   const [showInactiveFamilies, setShowInactiveFamilies] = useState(false);
   const [selectedFamily, setSelectedFamily] = useState(null);
   const [showFamilyDetails, setShowFamilyDetails] = useState(false);
+  const [familiesSearchQuery, setFamiliesSearchQuery] = useState('');
+  const [familiesPage, setFamiliesPage] = useState(1);
+  const familiesPerPage = 10;
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
