@@ -556,6 +556,7 @@ const AdminDashboard = () => {
       else if (type === 'position') endpoint = 'positions';
       else if (type === 'job') endpoint = 'jobs';
       else if (type === 'education') endpoint = 'education-levels';
+      else if (type === 'user-role') endpoint = 'user-roles';
       
       await axios.delete(`${API_URL}/${endpoint}/${id}`);
       toast.dismiss(loadingToast);
