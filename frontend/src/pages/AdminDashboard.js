@@ -3143,6 +3143,8 @@ const AdminDashboard = () => {
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم الجوال</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">نوع المستخدم</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإنشاء</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">آخر تحديث</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
                         <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
                       </tr>
