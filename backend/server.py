@@ -473,6 +473,13 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    # التحقق من أن الحساب نشط
+    if user.get('is_active') == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="حسابك متوقف. يرجى التواصل مع الإدارة"
+        )
+    
     if isinstance(user['created_at'], str):
         user['created_at'] = datetime.fromisoformat(user['created_at'])
     
