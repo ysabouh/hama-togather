@@ -2856,9 +2856,10 @@ const AdminDashboard = () => {
                               {family.is_active !== false ? 'نشط' : 'غير نشط'}
                             </span>
                           </div>
-                          <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
+                          <div className="grid grid-cols-4 gap-4 text-sm text-gray-600">
                             <p>عدد الأفراد: {family.members_count}</p>
                             <p>الحاجة الشهرية: {family.monthly_need.toLocaleString()} ل.س</p>
+                            <p>الحي: {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || 'غير محدد'}</p>
                             <p>تاريخ الإنشاء: {family.created_at ? new Date(family.created_at).toLocaleDateString('ar-SY') : '-'}</p>
                           </div>
                         </div>
