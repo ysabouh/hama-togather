@@ -2232,7 +2232,12 @@ const AdminDashboard = () => {
                       })}
                     </tbody>
                   </table>
-                  {getSortedMembers().length === 0 && (
+                  {loadingCommittees ? (
+                    <div className="text-center py-12">
+                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
+                      <p className="text-gray-500">جاري تحميل أعضاء اللجان...</p>
+                    </div>
+                  ) : getSortedMembers().length === 0 && (
                     <div className="text-center py-12">
                       {searchQuery ? (
                         <div className="flex flex-col items-center gap-3">
