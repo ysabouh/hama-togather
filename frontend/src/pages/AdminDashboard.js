@@ -112,6 +112,7 @@ const AdminDashboard = () => {
   const [activeNeighborhoodTab, setActiveNeighborhoodTab] = useState('neighborhoods');
   const [activeUsersTab, setActiveUsersTab] = useState('users');
   const [activeSiteTab, setActiveSiteTab] = useState('hero');
+  const [activeFamiliesTab, setActiveFamiliesTab] = useState('families');
 
   // Setup axios with token from localStorage
   useEffect(() => {
