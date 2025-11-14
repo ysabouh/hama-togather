@@ -1379,6 +1379,61 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'income-level':
+        return (
+          <>
+            <div>
+              <Label>اسم المستوى</Label>
+              <Input 
+                value={formData.name || ''} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                placeholder="مثال: منخفض"
+                required 
+              />
+            </div>
+            <div>
+              <Label>الوصف (اختياري)</Label>
+              <Textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                placeholder="وصف مستوى الدخل"
+                rows={2}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>الحد الأدنى (ل.س)</Label>
+                <Input 
+                  type="number"
+                  min="0"
+                  value={formData.min_amount || 0} 
+                  onChange={(e) => setFormData({...formData, min_amount: parseInt(e.target.value) || 0})} 
+                />
+              </div>
+              <div>
+                <Label>الحد الأقصى (ل.س)</Label>
+                <Input 
+                  type="number"
+                  min="0"
+                  value={formData.max_amount || ''} 
+                  onChange={(e) => setFormData({...formData, max_amount: e.target.value ? parseInt(e.target.value) : null})} 
+                  placeholder="اتركه فارغاً لـ (أكثر من)"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_income"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_income">نشط</Label>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
