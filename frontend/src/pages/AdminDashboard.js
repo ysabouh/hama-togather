@@ -1313,7 +1313,26 @@ const AdminDashboard = () => {
               <TabsTrigger value="stories" data-testid="tab-stories">قصص النجاح</TabsTrigger>
               <TabsTrigger value="mission" data-testid="tab-mission">رؤيتنا ورسالتنا</TabsTrigger>
               <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
-              <TabsTrigger value="users" data-testid="tab-users">المستخدمين</TabsTrigger>
+              
+              {/* القائمة المنسدلة للمستخدمين */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <TabsTrigger value={activeUsersTab} data-testid="users-dropdown" className="relative">
+                    المستخدمين
+                    <ChevronDown className="w-4 h-4 mr-2" />
+                  </TabsTrigger>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem onClick={() => setActiveUsersTab('users')} className="cursor-pointer">
+                    <Users className="w-4 h-4 ml-2" />
+                    قائمة المستخدمين
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveUsersTab('user-roles')} className="cursor-pointer">
+                    <Building2 className="w-4 h-4 ml-2" />
+                    أنواع المستخدمين
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </TabsList>
 
             {/* Hero Section Tab */}
