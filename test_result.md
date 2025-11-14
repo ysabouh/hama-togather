@@ -162,6 +162,18 @@ backend:
         agent: "testing"
         comment: "✅ تم اختبار Login API بنجاح. يعمل مع credentials: admin@test.com/admin123، يرجع access_token صحيح، تم إنشاء admin user تلقائياً عند عدم وجوده، role=admin. تم إصلاح مشكلة MONGO_URL المفقودة في backend/.env وإعادة تشغيل الخدمة. Login API يعمل بشكل صحيح."
 
+  - task: "Password Change API - PUT /api/users/change-password"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ تم اختبار Password Change API بنجاح شامل حسب المتطلبات المحددة. جميع السيناريوهات تعمل بشكل صحيح: 1) تغيير كلمة المرور مع كلمة المرور الحالية الصحيحة - نجح مع رسالة 'Password changed successfully' و status 200، 2) تسجيل الدخول بكلمة المرور القديمة بعد التغيير - فشل بشكل صحيح مع status 401، 3) تسجيل الدخول بكلمة المرور الجديدة - نجح بشكل صحيح، 4) تغيير كلمة المرور مع كلمة مرور حالية خاطئة - فشل بشكل صحيح مع status 400 ورسالة 'Current password is incorrect'، 5) إعادة تغيير كلمة المرور للأصل - نجح. تم اختبار جميع المتطلبات بنجاح (6/6 اختبارات نجحت). API يعمل وفقاً للمواصفات المطلوبة."
+
 frontend:
   - task: "Login Page - Admin Authentication"
     implemented: true
