@@ -569,12 +569,15 @@ async def update_profile(
         update_data['phone'] = profile_data.phone
     
     if update_data:
+        update_data['updated_at'] = datetime.now(timezone.utc)
         await db.users.update_one({"id": current_user.id}, {"$set": update_data})
     
     # جلب المستخدم المحدث
     updated_user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
-    if isinstance(updated_user['created_at'], str):
+    if isinstance(updated_user.get('created_at'), str):
         updated_user['created_at'] = datetime.fromisoformat(updated_user['created_at'])
+    if isinstance(updated_user.get('updated_at'), str):
+        updated_user['updated_at'] = datetime.fromisoformat(updated_user['updated_at'])
     
     return User(**{k: v for k, v in updated_user.items() if k != 'password'})
 
