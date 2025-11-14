@@ -482,6 +482,7 @@ async def update_profile(
     full_name: str = None,
     email: str = None,
     neighborhood_id: str = None,
+    phone: str = None,
     current_user: User = Depends(get_current_user)
 ):
     update_data = {}
@@ -498,6 +499,9 @@ async def update_profile(
     
     if neighborhood_id:
         update_data['neighborhood_id'] = neighborhood_id
+    
+    if phone is not None:  # السماح بحذف رقم الجوال
+        update_data['phone'] = phone
     
     if update_data:
         await db.users.update_one({"id": current_user.id}, {"$set": update_data})
