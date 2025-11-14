@@ -52,43 +52,50 @@ class PasswordChangeTester:
             print(f"❌ Admin login error: {str(e)}")
             return False
     
-    def test_get_hero_content(self):
-        """Test GET /api/hero-content (no authentication required)"""
-        print("\n📖 Testing GET /api/hero-content...")
+    def test_change_password_correct(self):
+        """Test PUT /api/users/change-password with correct current password"""
+        print("\n🔐 Testing Password Change with Correct Current Password...")
+        
+        if not self.admin_token:
+            print("❌ No admin token available")
+            return False
+        
+        # Test data for password change
+        password_data = {
+            "current_password": ADMIN_PASSWORD,  # "admin"
+            "new_password": "newpass123"
+        }
         
         try:
-            response = self.session.get(f"{BACKEND_URL}/hero-content")
+            headers = {
+                "Authorization": f"Bearer {self.admin_token}",
+                "Content-Type": "application/json"
+            }
+            
+            response = self.session.put(
+                f"{BACKEND_URL}/users/change-password",
+                json=password_data,
+                headers=headers
+            )
             
             if response.status_code == 200:
                 data = response.json()
-                print("✅ GET hero-content successful")
+                print("✅ Password change with correct current password successful")
                 
-                # Verify required fields
-                required_fields = [
-                    'title', 'subtitle', 'cta_text', 'cta_link', 
-                    'background_image', 'quotes', 'video_url', 
-                    'video_title', 'video_description', 'video_subtitle'
-                ]
-                
-                missing_fields = [field for field in required_fields if field not in data]
-                if missing_fields:
-                    print(f"⚠️  Missing fields: {missing_fields}")
+                if data.get('message') == "Password changed successfully":
+                    print("✅ Correct success message returned")
                 else:
-                    print("✅ All required fields present")
+                    print(f"⚠️  Unexpected message: {data.get('message')}")
                 
-                print(f"   Title: {data.get('title', 'N/A')}")
-                print(f"   Subtitle: {data.get('subtitle', 'N/A')[:50]}...")
-                print(f"   Quotes count: {len(data.get('quotes', []))}")
-                print(f"   Video URL: {data.get('video_url', 'N/A')}")
-                
+                print(f"   Response: {data}")
                 return True, data
             else:
-                print(f"❌ GET hero-content failed: {response.status_code}")
+                print(f"❌ Password change failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False, None
                 
         except Exception as e:
-            print(f"❌ GET hero-content error: {str(e)}")
+            print(f"❌ Password change error: {str(e)}")
             return False, None
     
     def test_put_hero_content(self):
