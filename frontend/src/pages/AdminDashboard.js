@@ -100,6 +100,7 @@ const AdminDashboard = () => {
   const [loadingPositions, setLoadingPositions] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(false);
   const [loadingEducations, setLoadingEducations] = useState(false);
+  const [loadingUserRoles, setLoadingUserRoles] = useState(false);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
