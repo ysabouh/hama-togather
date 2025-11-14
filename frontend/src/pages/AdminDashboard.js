@@ -3336,6 +3336,19 @@ const AdminDashboard = () => {
                   </Button>
                 </div>
 
+                <div className="mb-4 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="show_inactive_roles"
+                    checked={showInactiveRoles}
+                    onChange={(e) => setShowInactiveRoles(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <Label htmlFor="show_inactive_roles" className="text-sm cursor-pointer">
+                    عرض الأنواع غير النشطة
+                  </Label>
+                </div>
+
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gray-50">
