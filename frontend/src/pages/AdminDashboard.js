@@ -1399,12 +1399,6 @@ const AdminDashboard = () => {
               </DropdownMenu>
               
               <TabsTrigger value="families" data-testid="tab-families">العائلات</TabsTrigger>
-              <TabsTrigger value="health" data-testid="tab-health">الحالات الصحية</TabsTrigger>
-              <TabsTrigger value="courses" data-testid="tab-courses">الدورات</TabsTrigger>
-              <TabsTrigger value="projects" data-testid="tab-projects">المشاريع</TabsTrigger>
-              <TabsTrigger value="initiatives" data-testid="tab-initiatives">المبادرات</TabsTrigger>
-              <TabsTrigger value="stories" data-testid="tab-stories">قصص النجاح</TabsTrigger>
-              <TabsTrigger value="mission" data-testid="tab-mission">رؤيتنا ورسالتنا</TabsTrigger>
               <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
               
               {/* القائمة المنسدلة للمستخدمين */}
