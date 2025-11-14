@@ -159,13 +159,16 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <Label htmlFor="phone" className="text-right block mb-2">رقم الجوال</Label>
+              <Label htmlFor="phone" className="text-right block mb-2">
+                رقم الجوال <span className="text-red-600">*</span>
+              </Label>
               <Input
                 id="phone"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="0912345678"
+                required
                 className="text-right"
                 data-testid="phone-input"
                 dir="ltr"
