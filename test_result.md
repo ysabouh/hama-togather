@@ -279,7 +279,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "All neighborhood management features tested successfully"
+    - "Password Change API testing completed successfully"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
