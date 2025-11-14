@@ -106,6 +106,8 @@ const AdminDashboard = () => {
   const [loadingUserRoles, setLoadingUserRoles] = useState(false);
   const [loadingFamilyCategories, setLoadingFamilyCategories] = useState(false);
   const [showInactiveFamilyCategories, setShowInactiveFamilyCategories] = useState(false);
+  const [loadingIncomeLevels, setLoadingIncomeLevels] = useState(false);
+  const [showInactiveIncomeLevels, setShowInactiveIncomeLevels] = useState(false);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
