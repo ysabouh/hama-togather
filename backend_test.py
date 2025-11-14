@@ -98,83 +98,40 @@ class PasswordChangeTester:
             print(f"❌ Password change error: {str(e)}")
             return False, None
     
-    def test_put_hero_content(self):
-        """Test PUT /api/hero-content (requires admin authentication)"""
-        print("\n📝 Testing PUT /api/hero-content...")
+    def test_login_with_old_password(self):
+        """Test login with old password (should fail after password change)"""
+        print("\n🚫 Testing Login with Old Password (should fail)...")
         
-        if not self.admin_token:
-            print("❌ No admin token available")
-            return False
-        
-        # Arabic test data
-        test_data = {
-            "title": "عنوان جديد للقسم الرئيسي - اختبار",
-            "subtitle": "وصف جديد للقسم الرئيسي يتضمن معلومات محدثة عن المنصة والخدمات المقدمة للمجتمع",
-            "cta_text": "انضم إلينا الآن",
-            "cta_link": "/register",
-            "quotes": [
-                {
-                    "text": "\" إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ \"",
-                    "ref": "- الحجرات 10",
-                    "author": "الأخوة في الإيمان أساس التكافل الاجتماعي"
-                },
-                {
-                    "text": "قال ﷺ: «مَن نفَّس عن مؤمنٍ كُربةً من كُرَب الدنيا نفَّس الله عنه كُربةً من كُرَب يوم القيامة»",
-                    "ref": "",
-                    "author": "العطاء والمساعدة طريق إلى رضا الله"
-                }
-            ],
-            "video_url": "https://www.youtube.com/embed/test-video-id",
-            "video_title": "فيديو تجريبي - كيفية المساهمة في العمل التطوعي",
-            "video_description": "شرح مفصل عن كيفية المشاركة في الأنشطة التطوعية والتكافلية",
-            "video_subtitle": "هذا فيديو تجريبي يوضح الطرق المختلفة للمساهمة في دعم المجتمع المحلي"
+        login_data = {
+            "username": ADMIN_EMAIL,
+            "password": ADMIN_PASSWORD  # Old password "admin"
         }
         
         try:
-            headers = {
-                "Authorization": f"Bearer {self.admin_token}",
-                "Content-Type": "application/json"
-            }
-            
-            response = self.session.put(
-                f"{BACKEND_URL}/hero-content",
-                json=test_data,
-                headers=headers
+            # Use a new session to avoid cached tokens
+            new_session = requests.Session()
+            response = new_session.post(
+                f"{BACKEND_URL}/auth/login",
+                data=login_data,
+                headers={"Content-Type": "application/x-www-form-urlencoded"}
             )
             
-            if response.status_code == 200:
-                data = response.json()
-                print("✅ PUT hero-content successful")
-                
-                # Verify data was updated
-                if data.get('title') == test_data['title']:
-                    print("✅ Title updated correctly")
-                else:
-                    print(f"⚠️  Title mismatch: expected '{test_data['title']}', got '{data.get('title')}'")
-                
-                if len(data.get('quotes', [])) == len(test_data['quotes']):
-                    print("✅ Quotes updated correctly")
-                else:
-                    print(f"⚠️  Quotes count mismatch: expected {len(test_data['quotes'])}, got {len(data.get('quotes', []))}")
-                
-                if data.get('video_title') == test_data['video_title']:
-                    print("✅ Video info updated correctly")
-                else:
-                    print(f"⚠️  Video title mismatch")
-                
-                print(f"   Updated title: {data.get('title')}")
-                print(f"   Updated quotes count: {len(data.get('quotes', []))}")
-                print(f"   Updated video title: {data.get('video_title')}")
-                
-                return True, data
-            else:
-                print(f"❌ PUT hero-content failed: {response.status_code}")
+            if response.status_code == 401:
+                print("✅ Login with old password correctly failed (401)")
                 print(f"   Response: {response.text}")
-                return False, None
+                return True
+            elif response.status_code == 200:
+                print("❌ Login with old password unexpectedly succeeded")
+                print(f"   This indicates password was not changed properly")
+                return False
+            else:
+                print(f"❌ Unexpected response code: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
                 
         except Exception as e:
-            print(f"❌ PUT hero-content error: {str(e)}")
-            return False, None
+            print(f"❌ Login test error: {str(e)}")
+            return False
     
     def test_upload_image(self):
         """Test POST /api/upload-image (requires admin authentication)"""
