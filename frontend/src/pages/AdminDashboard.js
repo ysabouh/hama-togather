@@ -3277,6 +3277,79 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* User Roles Tab */}
+            <TabsContent value="user-roles">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">أنواع المستخدمين</h2>
+                  <Button onClick={() => openCreateDialog('user-role')} className="bg-emerald-600 hover:bg-emerald-700">
+                    <Plus className="w-4 h-4 ml-2" />
+                    إضافة نوع مستخدم
+                  </Button>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الاسم المعروض</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم الدور (بالإنجليزية)</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الوصف</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
+                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {userRoles.map((role, index) => (
+                        <tr key={role.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{role.display_name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">{role.name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600 text-center">{role.description || '-'}</td>
+                          <td className="px-4 py-3 text-sm text-center">
+                            <span className={`px-2 py-1 rounded-full text-xs ${role.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {role.is_active !== false ? 'نشط' : 'غير نشط'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-center">
+                            <div className="flex gap-2 justify-center">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openEditDialog('user-role', role)}
+                                className="text-blue-600 hover:bg-blue-50"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDelete('user-role', role.id)}
+                                className="text-red-600 hover:bg-red-50"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {loadingUserRoles ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
+                      <p className="text-gray-500">جاري تحميل أنواع المستخدمين...</p>
+                    </div>
+                  ) : userRoles.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      لا توجد أنواع مستخدمين مسجلة حالياً
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
           </Tabs>
         </div>
       </div>
