@@ -2899,9 +2899,6 @@ const AdminDashboard = () => {
                                 <tr key={family.id} className="hover:bg-gray-50" data-testid={`family-item-${family.id}`}>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">{startIndex + index + 1}</td>
                                   <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{family.name}</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">
-                                    {(family.male_children_count || 0) + (family.female_children_count || 0)}
-                                  </td>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">{family.monthly_need.toLocaleString()} ل.س</td>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">
                                     {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
