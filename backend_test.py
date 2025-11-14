@@ -15,7 +15,7 @@ BACKEND_URL = "https://togetherhama.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 
-class HeroContentTester:
+class PasswordChangeTester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
