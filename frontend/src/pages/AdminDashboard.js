@@ -3373,10 +3373,21 @@ const AdminDashboard = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => handleDelete('user-role', role.id)}
-                                className="text-red-600 hover:bg-red-50"
+                                onClick={async () => {
+                                  const action = role.is_active !== false ? 'إيقاف' : 'تفعيل';
+                                  if (!window.confirm(`هل تريد ${action} هذا النوع؟`)) return;
+                                  try {
+                                    await axios.put(`${API_URL}/user-roles/${role.id}/toggle-status`, { is_active: !role.is_active });
+                                    toast.success(`تم ${action} النوع بنجاح`);
+                                    fetchAllData();
+                                  } catch (error) {
+                                    toast.error(error.response?.data?.detail || `فشل ${action} النوع`);
+                                  }
+                                }}
+                                className={role.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
+                                title={role.is_active !== false ? "إيقاف" : "تفعيل"}
                               >
-                                <Trash2 className="w-4 h-4" />
+                                {role.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                               </Button>
                             </div>
                           </td>
