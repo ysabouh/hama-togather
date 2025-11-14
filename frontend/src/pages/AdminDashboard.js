@@ -1288,6 +1288,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="stories" data-testid="tab-stories">قصص النجاح</TabsTrigger>
               <TabsTrigger value="mission" data-testid="tab-mission">رؤيتنا ورسالتنا</TabsTrigger>
               <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
+              <TabsTrigger value="users" data-testid="tab-users">المستخدمين</TabsTrigger>
             </TabsList>
 
             {/* Hero Section Tab */}
