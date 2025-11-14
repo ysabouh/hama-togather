@@ -56,6 +56,10 @@ class Token(BaseModel):
     token_type: str
     user: User
 
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
 # Family Models
 class Family(BaseModel):
     model_config = ConfigDict(extra="ignore")
