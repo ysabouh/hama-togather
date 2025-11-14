@@ -1212,6 +1212,51 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'user-role':
+        return (
+          <>
+            <div>
+              <Label>الاسم المعروض (بالعربية)</Label>
+              <Input 
+                value={formData.display_name || ''} 
+                onChange={(e) => setFormData({...formData, display_name: e.target.value})} 
+                placeholder="مثال: مدير نظام"
+                required 
+              />
+            </div>
+            <div>
+              <Label>اسم الدور (بالإنجليزية)</Label>
+              <Input 
+                value={formData.name || ''} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                placeholder="example: admin"
+                required 
+                dir="ltr"
+              />
+              <p className="text-xs text-gray-500 mt-1">يُستخدم في النظام (بدون مسافات، أحرف صغيرة)</p>
+            </div>
+            <div>
+              <Label>الوصف (اختياري)</Label>
+              <Textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                placeholder="وصف صلاحيات هذا الدور"
+                rows={3}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_role"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_role">نشط</Label>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
