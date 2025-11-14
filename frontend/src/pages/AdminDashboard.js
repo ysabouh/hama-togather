@@ -124,6 +124,14 @@ const AdminDashboard = () => {
   }, [neighborhoodsPage]);
 
   const fetchAllData = async () => {
+    // تعيين جميع حالات التحميل إلى true
+    setLoadingUsers(true);
+    setLoadingNeighborhoods(true);
+    setLoadingCommittees(true);
+    setLoadingPositions(true);
+    setLoadingJobs(true);
+    setLoadingEducations(true);
+    
     try {
       const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes] = await Promise.all([
         axios.get(`${API_URL}/stats`),
@@ -164,6 +172,14 @@ const AdminDashboard = () => {
       setUsers(usersRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
+    } finally {
+      // إيقاف جميع حالات التحميل
+      setLoadingUsers(false);
+      setLoadingNeighborhoods(false);
+      setLoadingCommittees(false);
+      setLoadingPositions(false);
+      setLoadingJobs(false);
+      setLoadingEducations(false);
     }
   };
 
