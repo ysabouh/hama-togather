@@ -11,7 +11,7 @@ import io
 from PIL import Image
 
 # Configuration
-BACKEND_URL = "https://maabani.preview.emergentagent.com/api"
+BACKEND_URL = "https://hamah-support.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 
