@@ -700,8 +700,10 @@ async def change_password(
 async def get_families():
     families = await db.families.find({}, {"_id": 0}).to_list(1000)
     for family in families:
-        if isinstance(family['created_at'], str):
+        if isinstance(family.get('created_at'), str):
             family['created_at'] = datetime.fromisoformat(family['created_at'])
+        if isinstance(family.get('updated_at'), str):
+            family['updated_at'] = datetime.fromisoformat(family['updated_at'])
     return families
 
 @api_router.get("/families/{family_id}", response_model=Family)
