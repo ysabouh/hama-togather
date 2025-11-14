@@ -89,7 +89,9 @@ class Family(BaseModel):
     mother_present: Optional[bool] = None  # الأم موجودة
     female_children_count: Optional[int] = 0  # عدد الأطفال الإناث
     male_children_count: Optional[int] = 0  # عدد الأطفال الذكور
+    is_active: bool = True  # للحذف الناعم
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
 
 class FamilyCreate(BaseModel):
     name: str
