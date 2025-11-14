@@ -256,43 +256,63 @@ class PasswordChangeTester:
             return False, None
     
     def run_all_tests(self):
-        """Run all hero content API tests"""
-        print("=" * 60)
-        print("🚀 Starting Hero Content Management API Tests")
-        print("=" * 60)
+        """Run all password change API tests"""
+        print("=" * 70)
+        print("🚀 Starting Password Change Functionality Tests")
+        print("=" * 70)
         
         results = {
             'admin_login': False,
-            'get_hero_content': False,
-            'put_hero_content': False,
-            'upload_image': False,
-            'put_with_image': False,
-            'data_persistence': False
+            'change_password_correct': False,
+            'login_old_password_fails': False,
+            'login_new_password_succeeds': False,
+            'change_password_incorrect': False,
+            'change_password_back': False
         }
         
-        # Test admin login
+        # Test 1: Admin login with original password
         results['admin_login'] = self.login_admin()
         
-        # Test GET endpoint (no auth required)
-        results['get_hero_content'], _ = self.test_get_hero_content()
-        
-        # Test PUT endpoint (requires auth)
         if results['admin_login']:
-            results['put_hero_content'], _ = self.test_put_hero_content()
-            results['upload_image'], _ = self.test_upload_image()
-            results['put_with_image'], _ = self.test_put_with_background_image()
-            results['data_persistence'] = self.verify_data_persistence()
+            # Test 2: Test password change with incorrect current password first
+            results['change_password_incorrect'], _ = self.test_change_password_incorrect()
+            
+            # Test 3: Change password with correct current password
+            results['change_password_correct'], _ = self.test_change_password_correct()
+            
+            if results['change_password_correct']:
+                # Test 4: Try to login with old password (should fail)
+                results['login_old_password_fails'] = self.test_login_with_old_password()
+                
+                # Test 5: Try to login with new password (should succeed)
+                results['login_new_password_succeeds'], _ = self.test_login_with_new_password()
+                
+                # Test 6: Change password back to original for cleanup
+                if results['login_new_password_succeeds']:
+                    results['change_password_back'], _ = self.test_change_password_back()
+            else:
+                print("\n⚠️  Skipping login tests due to password change failure")
         else:
-            print("\n⚠️  Skipping authenticated tests due to login failure")
+            print("\n⚠️  Skipping all tests due to login failure")
         
         # Print summary
-        print("\n" + "=" * 60)
-        print("📊 TEST RESULTS SUMMARY")
-        print("=" * 60)
+        print("\n" + "=" * 70)
+        print("📊 PASSWORD CHANGE TEST RESULTS SUMMARY")
+        print("=" * 70)
+        
+        test_descriptions = {
+            'admin_login': 'Initial Admin Login (admin@example.com / admin)',
+            'change_password_incorrect': 'Password Change with Wrong Current Password',
+            'change_password_correct': 'Password Change with Correct Current Password',
+            'login_old_password_fails': 'Login with Old Password (should fail)',
+            'login_new_password_succeeds': 'Login with New Password (should succeed)',
+            'change_password_back': 'Change Password Back to Original'
+        }
         
         for test_name, success in results.items():
             status = "✅ PASS" if success else "❌ FAIL"
-            print(f"{test_name.replace('_', ' ').title()}: {status}")
+            description = test_descriptions.get(test_name, test_name.replace('_', ' ').title())
+            print(f"{description}: {status}")
         
         total_tests = len(results)
         passed_tests = sum(results.values())
@@ -300,10 +320,10 @@ class PasswordChangeTester:
         print(f"\nOverall: {passed_tests}/{total_tests} tests passed")
         
         if passed_tests == total_tests:
-            print("🎉 All tests passed!")
+            print("🎉 All password change tests passed!")
             return True
         else:
-            print("⚠️  Some tests failed - check details above")
+            print("⚠️  Some password change tests failed - check details above")
             return False
 
 def main():
