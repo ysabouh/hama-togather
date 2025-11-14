@@ -167,22 +167,6 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <Label htmlFor="role" className="text-right block mb-2">نوع المستخدم</Label>
-              <select
-                id="role"
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-right bg-white"
-                data-testid="role-select"
-              >
-                <option value="user">مستخدم عادي</option>
-                <option value="committee_member">عضو لجنة</option>
-                <option value="committee_president">رئيس لجنة</option>
-              </select>
-            </div>
-
-            <div>
               <Label htmlFor="password" className="text-right block mb-2">كلمة المرور</Label>
               <Input
                 id="password"
