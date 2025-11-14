@@ -4112,7 +4112,7 @@ const AdminDashboard = () => {
 
       {/* Form Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="sm:max-w-2xl" data-testid="admin-dialog">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" data-testid="admin-dialog">
           <DialogHeader>
             <DialogTitle className="text-right text-2xl">
               {dialogMode === 'create' ? 'إضافة' : 'تعديل'} {
@@ -4125,9 +4125,11 @@ const AdminDashboard = () => {
               }
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-            {renderFormFields()}
-            <div className="flex gap-3 justify-end">
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+            <div className="space-y-4 mt-4 overflow-y-auto px-1">
+              {renderFormFields()}
+            </div>
+            <div className="flex gap-3 justify-end pt-4 mt-4 border-t">
               <Button type="button" variant="outline" onClick={() => setShowDialog(false)} disabled={loading}>
                 إلغاء
               </Button>
