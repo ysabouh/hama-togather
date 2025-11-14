@@ -516,7 +516,7 @@ async def update_user_role(
 @api_router.put("/users/{user_id}/toggle-status")
 async def toggle_user_status(
     user_id: str,
-    is_active: bool,
+    request: dict,
     current_user: User = Depends(get_current_user)
 ):
     if current_user.role != "admin":
@@ -526,7 +526,16 @@ async def toggle_user_status(
     if user_id == current_user.id:
         raise HTTPException(status_code=400, detail="Cannot disable your own account")
     
-    result = await db.users.update_one({"id": user_id}, {"$set": {"is_active": is_active}})
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    update_data = {
+        "is_active": is_active,
+        "updated_at": datetime.now(timezone.utc)
+    }
+    
+    result = await db.users.update_one({"id": user_id}, {"$set": update_data})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
     
