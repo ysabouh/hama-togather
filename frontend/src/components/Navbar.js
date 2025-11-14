@@ -90,17 +90,15 @@ const Navbar = () => {
                       تعديل الملف الشخصي
                     </DropdownMenuItem>
                     
+                    <DropdownMenuItem onClick={() => navigate('/my-donations')} className="cursor-pointer">
+                      <Heart className="w-4 h-4 ml-2" />
+                      تبرعاتي
+                    </DropdownMenuItem>
+                    
                     {user.role === 'admin' && (
                       <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
                         <LayoutDashboard className="w-4 h-4 ml-2" />
                         لوحة التحكم
-                      </DropdownMenuItem>
-                    )}
-                    
-                    {user.role === 'donor' && (
-                      <DropdownMenuItem onClick={() => navigate('/my-donations')} className="cursor-pointer">
-                        <Heart className="w-4 h-4 ml-2" />
-                        تبرعاتي
                       </DropdownMenuItem>
                     )}
                     
