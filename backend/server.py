@@ -706,6 +706,65 @@ async def delete_family(family_id: str, admin: User = Depends(get_admin_user)):
         raise HTTPException(status_code=404, detail="Family not found")
     return {"message": "Family deleted successfully"}
 
+# ============= Family Categories Routes =============
+@api_router.get("/family-categories", response_model=List[FamilyCategory])
+async def get_family_categories(current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    categories = await db.family_categories.find({}, {"_id": 0}).to_list(1000)
+    return categories
+
+@api_router.post("/family-categories", response_model=FamilyCategory)
+async def create_family_category(category_data: FamilyCategoryCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    category = FamilyCategory(**category_data.model_dump())
+    await db.family_categories.insert_one(category.model_dump())
+    return category
+
+@api_router.put("/family-categories/{category_id}", response_model=FamilyCategory)
+async def update_family_category(
+    category_id: str,
+    category_data: FamilyCategoryUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_dict = {k: v for k, v in category_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    result = await db.family_categories.update_one({"id": category_id}, {"$set": update_dict})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Family category not found")
+    
+    updated_category = await db.family_categories.find_one({"id": category_id}, {"_id": 0})
+    return FamilyCategory(**updated_category)
+
+@api_router.put("/family-categories/{category_id}/toggle-status")
+async def toggle_family_category_status(
+    category_id: str,
+    request: dict,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    result = await db.family_categories.update_one(
+        {"id": category_id}, 
+        {"$set": {"is_active": is_active}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Family category not found")
+    
+    return {"message": f"Family category {'activated' if is_active else 'deactivated'} successfully"}
+
 # ============= Health Cases Routes =============
 
 @api_router.get("/health-cases", response_model=List[HealthCase])
