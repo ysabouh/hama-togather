@@ -741,6 +741,66 @@ const AdminDashboard = () => {
               <Input type="number" value={formData.members_count || ''} onChange={(e) => setFormData({...formData, members_count: parseInt(e.target.value)})} required />
             </div>
             <div>
+              <Label>تصنيف العائلة</Label>
+              <select 
+                value={formData.category_id || ''} 
+                onChange={(e) => setFormData({...formData, category_id: e.target.value})}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="">اختر التصنيف</option>
+                {familyCategories.filter(c => c.is_active !== false).map(cat => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <Label>مستوى الدخل الشهري</Label>
+              <select 
+                value={formData.income_level_id || ''} 
+                onChange={(e) => setFormData({...formData, income_level_id: e.target.value})}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="">اختر مستوى الدخل</option>
+                {incomeLevels.filter(l => l.is_active !== false).map(level => (
+                  <option key={level.id} value={level.id}>
+                    {level.name} ({level.min_amount || 0} - {level.max_amount ? level.max_amount + ' ل.س' : 'أكثر'})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="father_present"
+                  checked={formData.father_present ?? false}
+                  onChange={(e) => setFormData({...formData, father_present: e.target.checked})}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="father_present">الأب موجود</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="mother_present"
+                  checked={formData.mother_present ?? false}
+                  onChange={(e) => setFormData({...formData, mother_present: e.target.checked})}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="mother_present">الأم موجودة</Label>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>عدد الأطفال الذكور</Label>
+                <Input type="number" min="0" value={formData.male_children_count || 0} onChange={(e) => setFormData({...formData, male_children_count: parseInt(e.target.value) || 0})} />
+              </div>
+              <div>
+                <Label>عدد الأطفال الإناث</Label>
+                <Input type="number" min="0" value={formData.female_children_count || 0} onChange={(e) => setFormData({...formData, female_children_count: parseInt(e.target.value) || 0})} />
+              </div>
+            </div>
+            <div>
               <Label>الحاجة الشهرية (ل.س)</Label>
               <Input type="number" value={formData.monthly_need || ''} onChange={(e) => setFormData({...formData, monthly_need: parseFloat(e.target.value)})} required />
             </div>
