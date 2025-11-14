@@ -28,7 +28,9 @@ const LoginPage = () => {
         navigate('/');
       }
     } catch (error) {
-      toast.error('فشل تسجيل الدخول. رجاء التحقق من البيانات');
+      // عرض الرسالة من Backend إذا كانت متوفرة
+      const errorMessage = error.response?.data?.detail || 'فشل تسجيل الدخول. رجاء التحقق من البيانات';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
