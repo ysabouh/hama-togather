@@ -3362,7 +3362,9 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {userRoles.map((role, index) => (
+                      {userRoles
+                        .filter(role => showInactiveRoles || role.is_active !== false)
+                        .map((role, index) => (
                         <tr key={role.id} className="hover:bg-gray-50">
                           <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
                           <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{role.display_name}</td>
