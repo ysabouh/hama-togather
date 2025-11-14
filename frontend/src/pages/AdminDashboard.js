@@ -186,6 +186,7 @@ const AdminDashboard = () => {
       setLoadingPositions(false);
       setLoadingJobs(false);
       setLoadingEducations(false);
+      setLoadingUserRoles(false);
     }
   };
 
