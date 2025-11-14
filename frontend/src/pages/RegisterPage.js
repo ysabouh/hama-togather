@@ -87,6 +87,11 @@ const RegisterPage = () => {
       return;
     }
 
+    if (!formData.phone || formData.phone.trim() === '') {
+      toast.error('يرجى إدخال رقم الجوال');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error('كلمات المرور غير متطابقة');
       return;
@@ -99,8 +104,9 @@ const RegisterPage = () => {
         full_name: formData.full_name,
         email: formData.email,
         password: formData.password,
-        role: 'donor',
-        neighborhood_id: formData.neighborhood_id
+        role: formData.role,  // استخدام الدور من formData
+        neighborhood_id: formData.neighborhood_id,
+        phone: formData.phone  // إضافة رقم الجوال
       });
       toast.success('تم إنشاء الحساب بنجاح');
       navigate('/');
