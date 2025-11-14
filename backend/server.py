@@ -82,6 +82,13 @@ class Family(BaseModel):
     image: Optional[str] = None
     status: str = "active"  # active, sponsored
     neighborhood_id: Optional[str] = None
+    # الحقول الجديدة
+    category_id: Optional[str] = None  # تصنيف العائلة
+    income_level_id: Optional[str] = None  # مستوى الدخل الشهري
+    father_present: Optional[bool] = None  # الأب موجود
+    mother_present: Optional[bool] = None  # الأم موجودة
+    female_children_count: Optional[int] = 0  # عدد الأطفال الإناث
+    male_children_count: Optional[int] = 0  # عدد الأطفال الذكور
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class FamilyCreate(BaseModel):
@@ -91,6 +98,12 @@ class FamilyCreate(BaseModel):
     monthly_need: float
     image: Optional[str] = None
     neighborhood_id: Optional[str] = None
+    category_id: Optional[str] = None
+    income_level_id: Optional[str] = None
+    father_present: Optional[bool] = None
+    mother_present: Optional[bool] = None
+    female_children_count: Optional[int] = 0
+    male_children_count: Optional[int] = 0
 
 # Donation Models
 class Donation(BaseModel):
