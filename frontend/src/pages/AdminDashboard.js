@@ -3415,9 +3415,9 @@ const AdminDashboard = () => {
                       <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
                       <p className="text-gray-500">جاري تحميل أنواع المستخدمين...</p>
                     </div>
-                  ) : userRoles.length === 0 && (
+                  ) : userRoles.filter(role => showInactiveRoles || role.is_active !== false).length === 0 && (
                     <div className="text-center py-8 text-gray-500">
-                      لا توجد أنواع مستخدمين مسجلة حالياً
+                      {showInactiveRoles ? 'لا توجد أنواع مستخدمين مسجلة حالياً' : 'لا توجد أنواع نشطة حالياً'}
                     </div>
                   )}
                 </div>
