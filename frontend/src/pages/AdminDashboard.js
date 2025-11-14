@@ -1406,7 +1406,26 @@ const AdminDashboard = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              <TabsTrigger value="families" data-testid="tab-families">العائلات</TabsTrigger>
+              {/* القائمة المنسدلة للعائلات */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <TabsTrigger value={activeFamiliesTab} data-testid="families-dropdown" className="relative">
+                    العائلات
+                    <ChevronDown className="w-4 h-4 mr-2" />
+                  </TabsTrigger>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('families')} className="cursor-pointer">
+                    <Users className="w-4 h-4 ml-2" />
+                    قائمة العائلات
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('family-categories')} className="cursor-pointer">
+                    <Tag className="w-4 h-4 ml-2" />
+                    تصنيف العائلات
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
               
               {/* القائمة المنسدلة للمستخدمين */}
