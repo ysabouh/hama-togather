@@ -62,6 +62,12 @@ class ChangePasswordRequest(BaseModel):
     current_password: str
     new_password: str
 
+class UpdateProfileRequest(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+    neighborhood_id: Optional[str] = None
+    phone: Optional[str] = None
+
 # Family Models
 class Family(BaseModel):
     model_config = ConfigDict(extra="ignore")
