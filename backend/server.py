@@ -1300,15 +1300,27 @@ async def update_user_role(
     updated_role = await db.user_roles.find_one({"id": role_id}, {"_id": 0})
     return UserRole(**updated_role)
 
-@api_router.delete("/user-roles/{role_id}")
-async def delete_user_role(role_id: str, current_user: User = Depends(get_current_user)):
+@api_router.put("/user-roles/{role_id}/toggle-status")
+async def toggle_user_role_status(
+    role_id: str,
+    request: dict,
+    current_user: User = Depends(get_current_user)
+):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     
-    result = await db.user_roles.delete_one({"id": role_id})
-    if result.deleted_count == 0:
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    result = await db.user_roles.update_one(
+        {"id": role_id}, 
+        {"$set": {"is_active": is_active}}
+    )
+    if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User role not found")
-    return {"message": "User role deleted successfully"}
+    
+    return {"message": f"User role {'activated' if is_active else 'deactivated'} successfully"}
 
 # ============= Committee Members Routes =============
 @api_router.get("/committee-members", response_model=List[CommitteeMember])
