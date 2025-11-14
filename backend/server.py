@@ -1263,6 +1263,53 @@ async def delete_education_level(level_id: str, current_user: User = Depends(get
         raise HTTPException(status_code=404, detail="Education level not found")
     return {"message": "Education level deleted successfully"}
 
+# ============= User Roles Routes =============
+@api_router.get("/user-roles", response_model=List[UserRole])
+async def get_user_roles(current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    roles = await db.user_roles.find({}, {"_id": 0}).to_list(1000)
+    return roles
+
+@api_router.post("/user-roles", response_model=UserRole)
+async def create_user_role(role_data: UserRoleCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    role = UserRole(**role_data.model_dump())
+    await db.user_roles.insert_one(role.model_dump())
+    return role
+
+@api_router.put("/user-roles/{role_id}", response_model=UserRole)
+async def update_user_role(
+    role_id: str,
+    role_data: UserRoleUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_dict = {k: v for k, v in role_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    result = await db.user_roles.update_one({"id": role_id}, {"$set": update_dict})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User role not found")
+    
+    updated_role = await db.user_roles.find_one({"id": role_id}, {"_id": 0})
+    return UserRole(**updated_role)
+
+@api_router.delete("/user-roles/{role_id}")
+async def delete_user_role(role_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.user_roles.delete_one({"id": role_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="User role not found")
+    return {"message": "User role deleted successfully"}
+
 # ============= Committee Members Routes =============
 @api_router.get("/committee-members", response_model=List[CommitteeMember])
 async def get_committee_members(neighborhood_id: Optional[str] = None):
