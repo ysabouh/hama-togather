@@ -2329,7 +2329,12 @@ const AdminDashboard = () => {
                       ))}
                     </tbody>
                   </table>
-                  {positions.length === 0 && (
+                  {loadingPositions ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
+                      <p className="text-gray-500">جاري تحميل المناصب...</p>
+                    </div>
+                  ) : positions.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                       لا توجد مناصب مسجلة حالياً
                     </div>
