@@ -70,6 +70,7 @@ const AdminDashboard = () => {
   const [committeeMembers, setCommitteeMembers] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [educationLevels, setEducationLevels] = useState([]);
+  const [users, setUsers] = useState([]);
   const [showInactiveMembers, setShowInactiveMembers] = useState(false);
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
