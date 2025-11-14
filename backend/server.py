@@ -482,6 +482,55 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
+# ============= Users Management Routes (Admin Only) =============
+@api_router.get("/users", response_model=List[User])
+async def get_all_users(current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    users = await db.users.find({}, {"_id": 0, "password": 0}).to_list(1000)
+    for user in users:
+        if isinstance(user['created_at'], str):
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+    return users
+
+@api_router.put("/users/{user_id}/role")
+async def update_user_role(
+    user_id: str,
+    role: str,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    if role not in ["user", "admin", "committee_member", "committee_president"]:
+        raise HTTPException(status_code=400, detail="Invalid role")
+    
+    result = await db.users.update_one({"id": user_id}, {"$set": {"role": role}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {"message": "User role updated successfully"}
+
+@api_router.put("/users/{user_id}/toggle-status")
+async def toggle_user_status(
+    user_id: str,
+    is_active: bool,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # منع تعطيل الحساب الشخصي
+    if user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Cannot disable your own account")
+    
+    result = await db.users.update_one({"id": user_id}, {"$set": {"is_active": is_active}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {"message": f"User {'activated' if is_active else 'deactivated'} successfully"}
+
 # ============= User Profile Routes =============
 @api_router.put("/users/me", response_model=User)
 async def update_profile(
