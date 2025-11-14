@@ -802,6 +802,65 @@ async def toggle_family_category_status(
     
     return {"message": f"Family category {'activated' if is_active else 'deactivated'} successfully"}
 
+# ============= Income Levels Routes =============
+@api_router.get("/income-levels", response_model=List[IncomeLevel])
+async def get_income_levels(current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    levels = await db.income_levels.find({}, {"_id": 0}).to_list(1000)
+    return levels
+
+@api_router.post("/income-levels", response_model=IncomeLevel)
+async def create_income_level(level_data: IncomeLevelCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    level = IncomeLevel(**level_data.model_dump())
+    await db.income_levels.insert_one(level.model_dump())
+    return level
+
+@api_router.put("/income-levels/{level_id}", response_model=IncomeLevel)
+async def update_income_level(
+    level_id: str,
+    level_data: IncomeLevelUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_dict = {k: v for k, v in level_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    result = await db.income_levels.update_one({"id": level_id}, {"$set": update_dict})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Income level not found")
+    
+    updated_level = await db.income_levels.find_one({"id": level_id}, {"_id": 0})
+    return IncomeLevel(**updated_level)
+
+@api_router.put("/income-levels/{level_id}/toggle-status")
+async def toggle_income_level_status(
+    level_id: str,
+    request: dict,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    result = await db.income_levels.update_one(
+        {"id": level_id}, 
+        {"$set": {"is_active": is_active}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Income level not found")
+    
+    return {"message": f"Income level {'activated' if is_active else 'deactivated'} successfully"}
+
 # ============= Health Cases Routes =============
 
 @api_router.get("/health-cases", response_model=List[HealthCase])
