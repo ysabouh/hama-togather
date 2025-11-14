@@ -209,17 +209,51 @@ class PasswordChangeTester:
             print(f"❌ Password change back error: {str(e)}")
             return False, None
     
-    def verify_data_persistence(self):
-        """Verify that updated data persists by fetching it again"""
-        print("\n🔄 Testing data persistence...")
+    def test_change_password_incorrect(self):
+        """Test PUT /api/users/change-password with incorrect current password"""
+        print("\n🚫 Testing Password Change with Incorrect Current Password...")
         
-        success, data = self.test_get_hero_content()
-        if success:
-            print("✅ Data persistence verified - GET after PUT returns updated data")
-            return True
-        else:
-            print("❌ Data persistence verification failed")
+        if not self.admin_token:
+            print("❌ No admin token available")
             return False
+        
+        # Test data with wrong current password
+        password_data = {
+            "current_password": "wrongpassword",  # Incorrect current password
+            "new_password": "newpass123"
+        }
+        
+        try:
+            headers = {
+                "Authorization": f"Bearer {self.admin_token}",
+                "Content-Type": "application/json"
+            }
+            
+            response = self.session.put(
+                f"{BACKEND_URL}/users/change-password",
+                json=password_data,
+                headers=headers
+            )
+            
+            if response.status_code == 400:
+                data = response.json()
+                print("✅ Password change with incorrect current password correctly failed (400)")
+                
+                if data.get('detail') == "Current password is incorrect":
+                    print("✅ Correct error message returned")
+                else:
+                    print(f"⚠️  Unexpected error message: {data.get('detail')}")
+                
+                print(f"   Response: {data}")
+                return True, data
+            else:
+                print(f"❌ Password change with incorrect password should fail with 400, got: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False, None
+                
+        except Exception as e:
+            print(f"❌ Password change with incorrect password error: {str(e)}")
+            return False, None
     
     def run_all_tests(self):
         """Run all hero content API tests"""
