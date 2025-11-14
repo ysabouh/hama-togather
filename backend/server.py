@@ -598,7 +598,10 @@ async def change_password(
     # تحديث كلمة المرور
     await db.users.update_one(
         {"id": current_user.id},
-        {"$set": {"password": hashed_password}}
+        {"$set": {
+            "password": hashed_password,
+            "updated_at": datetime.now(timezone.utc)
+        }}
     )
     
     return {"message": "Password changed successfully"}
