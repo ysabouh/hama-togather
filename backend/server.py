@@ -389,6 +389,30 @@ class FamilyCategoryUpdate(BaseModel):
     color: Optional[str] = None
     is_active: Optional[bool] = None
 
+# Income Level Models (مستويات الدخل الشهري)
+class IncomeLevel(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # اسم المستوى (منخفض، متوسط، مرتفع)
+    description: Optional[str] = None
+    min_amount: Optional[int] = None  # الحد الأدنى
+    max_amount: Optional[int] = None  # الحد الأقصى
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class IncomeLevelCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    min_amount: Optional[int] = None
+    max_amount: Optional[int] = None
+
+class IncomeLevelUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    min_amount: Optional[int] = None
+    max_amount: Optional[int] = None
+    is_active: Optional[bool] = None
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
