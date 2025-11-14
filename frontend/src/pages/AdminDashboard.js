@@ -91,6 +91,14 @@ const AdminDashboard = () => {
   const [showNeighborhoodDetails, setShowNeighborhoodDetails] = useState(false);
   const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  // حالات التحميل لكل قائمة
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [loadingNeighborhoods, setLoadingNeighborhoods] = useState(false);
+  const [loadingCommittees, setLoadingCommittees] = useState(false);
+  const [loadingPositions, setLoadingPositions] = useState(false);
+  const [loadingJobs, setLoadingJobs] = useState(false);
+  const [loadingEducations, setLoadingEducations] = useState(false);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
