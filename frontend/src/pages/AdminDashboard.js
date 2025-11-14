@@ -73,6 +73,7 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
   const [familyCategories, setFamilyCategories] = useState([]);
+  const [incomeLevels, setIncomeLevels] = useState([]);
   const [showInactiveMembers, setShowInactiveMembers] = useState(false);
   const [showInactiveRoles, setShowInactiveRoles] = useState(false);
   const [sortColumn, setSortColumn] = useState(null);
