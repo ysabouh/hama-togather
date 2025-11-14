@@ -106,6 +106,7 @@ const AdminDashboard = () => {
   const [currentItem, setCurrentItem] = useState(null);
   const [formData, setFormData] = useState({});
   const [activeNeighborhoodTab, setActiveNeighborhoodTab] = useState('neighborhoods');
+  const [activeUsersTab, setActiveUsersTab] = useState('users');
 
   // Setup axios with token from localStorage
   useEffect(() => {
