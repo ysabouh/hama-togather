@@ -239,6 +239,19 @@ const ProfilePage = () => {
               </div>
 
               <div>
+                <Label htmlFor="phone">رقم الجوال</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="text-right"
+                  placeholder="0912345678"
+                  dir="ltr"
+                />
+              </div>
+
+              <div>
                 <Label htmlFor="neighborhood">
                   الحي <span className="text-red-600">*</span>
                 </Label>
