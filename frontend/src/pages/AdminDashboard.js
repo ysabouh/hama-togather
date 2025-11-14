@@ -533,6 +533,7 @@ const AdminDashboard = () => {
         else if (dialogType === 'job') endpoint = 'jobs';
         else if (dialogType === 'education') endpoint = 'education-levels';
         else if (dialogType === 'user-role') endpoint = 'user-roles';
+        else if (dialogType === 'family-category') endpoint = 'family-categories';
         
         if (dialogMode === 'create') {
           await axios.post(`${API_URL}/${endpoint}`, formData);
