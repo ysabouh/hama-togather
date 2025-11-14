@@ -141,6 +141,7 @@ const AdminDashboard = () => {
     setLoadingJobs(true);
     setLoadingEducations(true);
     setLoadingUserRoles(true);
+    setLoadingFamilyCategories(true);
     
     try {
       const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes] = await Promise.all([
