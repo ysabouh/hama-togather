@@ -810,16 +810,6 @@ const AdminDashboard = () => {
                 <Label htmlFor="mother_present">الأم موجودة</Label>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>عدد الأطفال الذكور</Label>
-                <Input type="number" min="0" value={formData.male_children_count || 0} onChange={(e) => setFormData({...formData, male_children_count: parseInt(e.target.value) || 0})} />
-              </div>
-              <div>
-                <Label>عدد الأطفال الإناث</Label>
-                <Input type="number" min="0" value={formData.female_children_count || 0} onChange={(e) => setFormData({...formData, female_children_count: parseInt(e.target.value) || 0})} />
-              </div>
-            </div>
             <div>
               <Label>الحاجة الشهرية (ل.س)</Label>
               <Input type="number" value={formData.monthly_need || ''} onChange={(e) => setFormData({...formData, monthly_need: parseFloat(e.target.value)})} required />
