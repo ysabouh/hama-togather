@@ -1837,16 +1837,39 @@ const AdminDashboard = () => {
                               {selectedNeighborhood.created_at ? new Date(selectedNeighborhood.created_at).toLocaleDateString('ar-SY') : '-'}
                             </p>
                           </div>
+                          
+                          <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                            <p className="text-sm text-gray-600 mb-2 font-medium">تاريخ التحديث</p>
+                            <p className="text-lg font-medium text-gray-900">
+                              {selectedNeighborhood.updated_at ? new Date(selectedNeighborhood.updated_at).toLocaleDateString('ar-SY') : '-'}
+                            </p>
+                          </div>
                         </div>
                       </div>
 
                       {/* أعضاء لجنة الحي (Details) */}
-                      <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6 rounded-t-xl">
-                          <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-                            <Users className="w-8 h-8" />
-                            أعضاء لجنة الحي ({committeeMembers.filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false).length} عضو)
-                          </h2>
+                      <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                        <div className="bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 px-8 py-6 relative">
+                          <div className="absolute inset-0 bg-black opacity-5"></div>
+                          <div className="relative flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                                <Users className="w-8 h-8 text-white" />
+                              </div>
+                              <div>
+                                <h2 className="text-3xl font-bold text-white mb-1">
+                                  أعضاء لجنة الحي
+                                </h2>
+                                <p className="text-emerald-50 text-sm">
+                                  {committeeMembers.filter(m => m.neighborhood_id === selectedNeighborhood.id && m.is_active !== false).length} عضو مسجل
+                                </p>
+                              </div>
+                            </div>
+                            <div className="hidden md:flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                              <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+                              <span className="text-white text-sm font-medium">نشط</span>
+                            </div>
+                          </div>
                         </div>
                         
                         <div className="p-8">
