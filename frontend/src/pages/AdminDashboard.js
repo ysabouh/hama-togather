@@ -772,6 +772,19 @@ const AdminDashboard = () => {
                 ))}
               </select>
             </div>
+            <div>
+              <Label>الحي</Label>
+              <select 
+                value={formData.neighborhood_id || ''} 
+                onChange={(e) => setFormData({...formData, neighborhood_id: e.target.value})}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="">اختر الحي</option>
+                {neighborhoods.filter(n => n.is_deleted !== true).map(neighborhood => (
+                  <option key={neighborhood.id} value={neighborhood.id}>{neighborhood.name}</option>
+                ))}
+              </select>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
                 <input
