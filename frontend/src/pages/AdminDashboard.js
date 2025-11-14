@@ -2951,6 +2951,12 @@ const AdminDashboard = () => {
                           <p className="text-lg font-semibold text-emerald-700">{selectedFamily?.monthly_need.toLocaleString()} ل.س</p>
                         </div>
                         <div>
+                          <p className="text-sm text-gray-600">الحي</p>
+                          <p className="text-lg font-semibold text-gray-900">
+                            {neighborhoods.find(n => n.id === selectedFamily?.neighborhood_id)?.name || 'غير محدد'}
+                          </p>
+                        </div>
+                        <div>
                           <p className="text-sm text-gray-600">التصنيف</p>
                           <p className="text-lg font-semibold text-gray-900">
                             {familyCategories.find(c => c.id === selectedFamily?.category_id)?.name || 'غير محدد'}
