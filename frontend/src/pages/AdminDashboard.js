@@ -2483,7 +2483,12 @@ const AdminDashboard = () => {
                       ))}
                     </tbody>
                   </table>
-                  {educationLevels.length === 0 && (
+                  {loadingEducations ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
+                      <p className="text-gray-500">جاري تحميل المؤهلات الدراسية...</p>
+                    </div>
+                  ) : educationLevels.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                       لا توجد مؤهلات مسجلة حالياً
                     </div>
