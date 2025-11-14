@@ -169,24 +169,18 @@ class PasswordChangeTester:
             print(f"❌ Login with new password error: {str(e)}")
             return False, None
     
-    def test_put_with_background_image(self):
-        """Test PUT /api/hero-content with background image update"""
-        print("\n🖼️📝 Testing PUT /api/hero-content with background image...")
+    def test_change_password_back(self):
+        """Change password back to original for cleanup"""
+        print("\n🔄 Changing Password Back to Original...")
         
         if not self.admin_token:
             print("❌ No admin token available")
             return False
         
-        # First upload an image
-        upload_success, upload_data = self.test_upload_image()
-        if not upload_success:
-            print("❌ Cannot test background image update - image upload failed")
-            return False
-        
-        # Now update hero content with the uploaded image
-        test_data = {
-            "title": "عنوان محدث مع صورة خلفية",
-            "background_image": upload_data['image_url']
+        # Change password back to "admin"
+        password_data = {
+            "current_password": "newpass123",  # Current new password
+            "new_password": ADMIN_PASSWORD     # Back to "admin"
         }
         
         try:
@@ -196,28 +190,23 @@ class PasswordChangeTester:
             }
             
             response = self.session.put(
-                f"{BACKEND_URL}/hero-content",
-                json=test_data,
+                f"{BACKEND_URL}/users/change-password",
+                json=password_data,
                 headers=headers
             )
             
             if response.status_code == 200:
                 data = response.json()
-                print("✅ PUT hero-content with background image successful")
-                
-                if data.get('background_image') == test_data['background_image']:
-                    print("✅ Background image updated correctly")
-                else:
-                    print("⚠️  Background image not updated correctly")
-                
+                print("✅ Password changed back to original successfully")
+                print(f"   Response: {data}")
                 return True, data
             else:
-                print(f"❌ PUT hero-content with background image failed: {response.status_code}")
+                print(f"❌ Password change back failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False, None
                 
         except Exception as e:
-            print(f"❌ PUT hero-content with background image error: {str(e)}")
+            print(f"❌ Password change back error: {str(e)}")
             return False, None
     
     def verify_data_persistence(self):
