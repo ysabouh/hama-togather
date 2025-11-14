@@ -2868,7 +2868,6 @@ const AdminDashboard = () => {
                         <tr>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم العائلة</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">عدد الأولاد</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحاجة الشهرية</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">التصنيف</th>
