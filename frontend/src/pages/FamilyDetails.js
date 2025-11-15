@@ -186,11 +186,8 @@ const FamilyDetails = () => {
     }
   ];
 
-  // Mock family images - TODO: جلب من family model
-  const familyImages = [
-    'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400',
-    'https://images.unsplash.com/photo-1609220136736-443140cffec6?w=400'
-  ];
+  // استخدام الصور الحقيقية من family model
+  const familyImages = family?.images || [];
 
   if (loading) {
     return (
