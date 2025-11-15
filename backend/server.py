@@ -832,6 +832,55 @@ async def get_public_families_stats():
             "categories": result,
             "total_families": len(families)
         }
+
+@api_router.get("/public/families-by-category/{category_id}")
+async def get_families_by_category(
+    category_id: str,
+    neighborhood_id: str = None,
+    current_user: User = Depends(get_current_user)
+):
+    """جلب عائلات تصنيف معين - يتطلب تسجيل دخول"""
+    try:
+        # بناء الـ query
+        query = {
+            "category_id": category_id,
+            "is_active": {"$ne": False}
+        }
+        
+        # إذا لم يكن مدير، نعرض فقط عائلات حيه
+        if current_user.role != "admin" and current_user.neighborhood_id:
+            query["neighborhood_id"] = current_user.neighborhood_id
+        
+        # إذا كان مدير واختار حي معين
+        if neighborhood_id and current_user.role == "admin":
+            query["neighborhood_id"] = neighborhood_id
+        
+        # جلب العائلات
+        families = await db.families.find(query, {"_id": 0}).to_list(1000)
+        
+        # تحويل التواريخ
+        for family in families:
+            if isinstance(family.get('created_at'), str):
+                family['created_at'] = datetime.fromisoformat(family['created_at'])
+            if isinstance(family.get('updated_at'), str):
+                family['updated_at'] = datetime.fromisoformat(family['updated_at'])
+        
+        return families
+    except Exception as e:
+        print(f"Error in get_families_by_category: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/public/neighborhoods")
+async def get_neighborhoods():
+    """جلب جميع الأحياء النشطة - بدون authentication"""
+    try:
+        neighborhoods = await db.neighborhoods.find({"is_active": {"$ne": False}}, {"_id": 0}).to_list(1000)
+        return neighborhoods
+    except Exception as e:
+        print(f"Error in get_neighborhoods: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
     except Exception as e:
         print(f"Error in get_public_families_stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
