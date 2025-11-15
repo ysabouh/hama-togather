@@ -125,6 +125,9 @@ const AdminDashboard = () => {
   const familiesPerPage = 10;
   const [showFamilyNeedsDialog, setShowFamilyNeedsDialog] = useState(false);
   const [selectedFamilyForNeeds, setSelectedFamilyForNeeds] = useState(null);
+  const [showFamilyImagesDialog, setShowFamilyImagesDialog] = useState(false);
+  const [selectedFamilyForImages, setSelectedFamilyForImages] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
