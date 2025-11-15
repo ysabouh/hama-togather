@@ -74,10 +74,15 @@ class UpdateProfileRequest(BaseModel):
 class Family(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    family_number: Optional[str] = None  # رقم العائلة (تلقائي، غير قابل للتعديل)
+    family_code: Optional[str] = None  # رمز العائلة
+    fac_name: Optional[str] = None  # اسم الفاك (اسم مستعار)
     name: str
+    phone: Optional[str] = None  # رقم الهاتف
     members_count: int
     description: str
     monthly_need: float
+    need_assessment: Optional[str] = None  # تقييم الاحتياج (منخفض، متوسط، مرتفع، حرج/عاجل)
     current_sponsors: int = 0
     image: Optional[str] = None
     status: str = "active"  # active, sponsored
