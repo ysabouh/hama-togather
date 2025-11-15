@@ -4589,6 +4589,18 @@ const AdminDashboard = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Family Needs Manager Dialog */}
+      {selectedFamilyForNeeds && (
+        <FamilyNeedsManager
+          familyId={selectedFamilyForNeeds.id}
+          isOpen={showFamilyNeedsDialog}
+          onClose={() => {
+            setShowFamilyNeedsDialog(false);
+            setSelectedFamilyForNeeds(null);
+          }}
+        />
+      )}
+
       <Footer />
 
       {/* Loading Overlay */}
