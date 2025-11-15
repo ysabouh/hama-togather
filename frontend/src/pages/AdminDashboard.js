@@ -3322,6 +3322,15 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* قائمة احتياجات العائلة */}
+                    <FamilyNeedsList 
+                      familyId={selectedFamily?.id}
+                      onManageClick={() => {
+                        setSelectedFamilyForNeeds(selectedFamily);
+                        setShowFamilyNeedsDialog(true);
+                      }}
+                    />
                   </div>
                 </div>
               )}
