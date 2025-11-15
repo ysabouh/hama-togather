@@ -68,11 +68,12 @@ const FamilyDetails = () => {
       }
 
       // جلب البيانات المساعدة
-      const [categoriesRes, neighborhoodsRes, incomeLevelsRes, needAssessmentsRes] = await Promise.all([
+      const [categoriesRes, neighborhoodsRes, incomeLevelsRes, needAssessmentsRes, needsRes] = await Promise.all([
         axios.get(`${API_URL}/family-categories`),
         axios.get(`${API_URL}/public/neighborhoods`),
         axios.get(`${API_URL}/income-levels`),
-        axios.get(`${API_URL}/need-assessments`)
+        axios.get(`${API_URL}/need-assessments`),
+        axios.get(`${API_URL}/needs`)
       ]);
 
       // ربط البيانات
@@ -81,6 +82,7 @@ const FamilyDetails = () => {
       setNeighborhood(neighborhoodsRes.data.find(n => n.id === familyData.neighborhood_id));
       setIncomeLevel(incomeLevelsRes.data.find(i => i.id === familyData.income_level_id));
       setNeedAssessment(needAssessmentsRes.data.find(n => n.id === familyData.need_assessment_id));
+      setAllNeeds(needsRes.data.filter(n => n.is_active !== false));
 
     } catch (error) {
       console.error('Error fetching family details:', error);
