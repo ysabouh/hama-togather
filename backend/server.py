@@ -89,7 +89,8 @@ class Family(BaseModel):
     need_assessment: Optional[str] = None  # للتوافق مع البيانات القديمة (deprecated)
     need_assessment_id: Optional[str] = None  # معرف تقييم الاحتياج (الجديد)
     current_sponsors: int = 0
-    image: Optional[str] = None
+    image: Optional[str] = None  # صورة واحدة (deprecated)
+    images: Optional[List[str]] = []  # قائمة صور العائلة
     status: str = "active"  # active, sponsored
     neighborhood_id: Optional[str] = None
     # الحقول الجديدة
