@@ -621,6 +621,61 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleFamilyImageUpload = async (e, familyId) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    const loadingToast = toast.loading('جارٍ رفع الصورة...');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      await axios.post(`${API_URL}/families/${familyId}/images`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      toast.dismiss(loadingToast);
+      toast.success('تم رفع الصورة بنجاح');
+      
+      // إعادة جلب بيانات العائلة
+      const response = await axios.get(`${API_URL}/families/${familyId}`);
+      setSelectedFamilyForImages(response.data);
+      fetchAllData();
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.dismiss(loadingToast);
+      toast.error('فشل رفع الصورة');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleFamilyImageDelete = async (familyId, imageIndex) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذه الصورة؟')) return;
+
+    const loadingToast = toast.loading('جارٍ الحذف...');
+
+    try {
+      await axios.delete(`${API_URL}/families/${familyId}/images/${imageIndex}`);
+
+      toast.dismiss(loadingToast);
+      toast.success('تم حذف الصورة بنجاح');
+      
+      // إعادة جلب بيانات العائلة
+      const response = await axios.get(`${API_URL}/families/${familyId}`);
+      setSelectedFamilyForImages(response.data);
+      fetchAllData();
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toast.dismiss(loadingToast);
+      toast.error('فشل حذف الصورة');
+    }
+  };
+
   const renderFormFields = () => {
     switch (dialogType) {
       case 'neighborhood':
