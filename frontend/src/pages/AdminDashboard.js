@@ -2809,79 +2809,12 @@ const AdminDashboard = () => {
 
             {/* Jobs Tab */}
             <TabsContent value="jobs">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">إدارة قائمة الأعمال</h2>
-                  <Button onClick={() => openCreateDialog('job')} className="bg-emerald-700" data-testid="add-job-btn">
-                    <Plus className="w-5 h-5 ml-2" />
-                    إضافة عمل جديد
-                  </Button>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full" data-testid="jobs-table">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم العمل</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تاريخ الإنشاء</th>
-                        <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {jobs.map((job, index) => (
-                        <tr key={job.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
-                          <td className="px-4 py-3 text-sm text-gray-900 text-center">{job.title}</td>
-                          <td className="px-4 py-3 text-sm text-center">
-                            <span className={`px-2 py-1 rounded-full text-xs ${job.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                              {job.is_active ? 'نشط' : 'غير نشط'}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-sm text-gray-900 text-center whitespace-nowrap">
-                            {job.created_at ? new Date(job.created_at).toLocaleString('ar-SY', {
-                              year: 'numeric',
-                              month: '2-digit',
-                              day: '2-digit'
-                            }) : '-'}
-                          </td>
-                          <td className="px-4 py-3 text-sm text-center">
-                            <div className="flex gap-2 justify-center">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => openEditDialog('job', job)}
-                                className="text-blue-600 hover:bg-blue-50"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleDelete('job', job.id)}
-                                className="text-red-600 hover:bg-red-50"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {loadingJobs ? (
-                    <div className="text-center py-8">
-                      <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-2" />
-                      <p className="text-gray-500">جاري تحميل الأعمال...</p>
-                    </div>
-                  ) : jobs.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      لا توجد أعمال مسجلة حالياً
-                    </div>
-                  )}
-                </div>
-              </div>
+              <ReferenceDataManagement 
+                type="jobs"
+                data={jobs}
+                loading={loadingJobs}
+                onDataChange={fetchAllData}
+              />
             </TabsContent>
 
             {/* Education Levels Tab */}
