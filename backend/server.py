@@ -808,7 +808,7 @@ async def get_public_families_stats():
     """إحصائيات عامة للعائلات حسب التصنيفات - بدون authentication"""
     try:
         # جلب جميع العائلات النشطة
-        families = await db.families.find({"is_active": {"$ne": False}}, {"_id": 0, "id": 1, "family_category_id": 1}).to_list(10000)
+        families = await db.families.find({"is_active": {"$ne": False}}, {"_id": 0, "id": 1, "category_id": 1}).to_list(10000)
         
         # جلب جميع التصنيفات النشطة
         categories = await db.family_categories.find({"is_active": {"$ne": False}}, {"_id": 0}).to_list(1000)
@@ -816,7 +816,7 @@ async def get_public_families_stats():
         # حساب عدد العائلات لكل تصنيف
         category_counts = {}
         for family in families:
-            cat_id = family.get('family_category_id')
+            cat_id = family.get('category_id')
             if cat_id:
                 category_counts[cat_id] = category_counts.get(cat_id, 0) + 1
         
