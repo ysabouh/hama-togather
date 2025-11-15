@@ -963,6 +963,70 @@ async def toggle_income_level_status(
     
     return {"message": f"Income level {'activated' if is_active else 'deactivated'} successfully"}
 
+# ============= Need Assessment Routes =============
+
+@api_router.get("/need-assessments", response_model=List[NeedAssessment])
+async def get_need_assessments(current_user: User = Depends(get_current_user)):
+    assessments = await db.need_assessments.find({}, {"_id": 0}).to_list(1000)
+    return [NeedAssessment(**assessment) for assessment in assessments]
+
+@api_router.post("/need-assessments", response_model=NeedAssessment)
+async def create_need_assessment(
+    assessment_input: NeedAssessmentCreate,
+    admin: User = Depends(get_admin_user)
+):
+    assessment_dict = assessment_input.model_dump()
+    assessment_obj = NeedAssessment(**assessment_dict)
+    
+    doc = assessment_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.need_assessments.insert_one(doc)
+    return assessment_obj
+
+@api_router.put("/need-assessments/{assessment_id}", response_model=NeedAssessment)
+async def update_need_assessment(
+    assessment_id: str,
+    assessment_data: NeedAssessmentUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    existing = await db.need_assessments.find_one({"id": assessment_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Need assessment not found")
+    
+    update_dict = {k: v for k, v in assessment_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    result = await db.need_assessments.update_one({"id": assessment_id}, {"$set": update_dict})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Need assessment not found")
+    
+    updated_assessment = await db.need_assessments.find_one({"id": assessment_id}, {"_id": 0})
+    return NeedAssessment(**updated_assessment)
+
+@api_router.put("/need-assessments/{assessment_id}/toggle-status")
+async def toggle_need_assessment_status(
+    assessment_id: str,
+    request: dict,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    result = await db.need_assessments.update_one(
+        {"id": assessment_id}, 
+        {"$set": {"is_active": is_active}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Need assessment not found")
+    
+    return {"message": f"Need assessment {'activated' if is_active else 'deactivated'} successfully"}
+
 # ============= Health Cases Routes =============
 
 @api_router.get("/health-cases", response_model=List[HealthCase])
