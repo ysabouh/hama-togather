@@ -208,6 +208,7 @@ const AdminDashboard = () => {
       setFamilyCategories(familyCategoriesRes.data);
       setIncomeLevels(incomeLevelsRes.data);
       setNeedAssessments(needAssessmentsRes.data);
+      setNeeds(needsRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     } finally {
@@ -222,6 +223,7 @@ const AdminDashboard = () => {
       setLoadingFamilyCategories(false);
       setLoadingIncomeLevels(false);
       setLoadingNeedAssessments(false);
+      setLoadingNeeds(false);
     }
   };
 
