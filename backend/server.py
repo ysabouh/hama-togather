@@ -1160,6 +1160,142 @@ async def toggle_need_status(
     
     return {"message": f"Need {'activated' if is_active else 'deactivated'} successfully"}
 
+
+# ============= Family Needs Routes (احتياجات العائلات) =============
+
+@api_router.get("/families/{family_id}/needs")
+async def get_family_needs(family_id: str, current_user: User = Depends(get_current_user)):
+    """الحصول على جميع احتياجات عائلة معينة"""
+    # التحقق من وجود العائلة
+    family = await db.families.find_one({"id": family_id}, {"_id": 0})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    
+    # الحصول على احتياجات العائلة
+    family_needs = await db.family_needs.find({"family_id": family_id}, {"_id": 0}).to_list(1000)
+    
+    # إضافة معلومات الاحتياج الكاملة والمستخدمين
+    result = []
+    for fn in family_needs:
+        # الحصول على بيانات الاحتياج
+        need = await db.needs.find_one({"id": fn["need_id"]}, {"_id": 0})
+        
+        # الحصول على بيانات المستخدمين
+        created_by_user = None
+        updated_by_user = None
+        if fn.get("created_by_user_id"):
+            created_by = await db.users.find_one({"id": fn["created_by_user_id"]}, {"_id": 0, "id": 1, "full_name": 1})
+            if created_by:
+                created_by_user = created_by
+        if fn.get("updated_by_user_id"):
+            updated_by = await db.users.find_one({"id": fn["updated_by_user_id"]}, {"_id": 0, "id": 1, "full_name": 1})
+            if updated_by:
+                updated_by_user = updated_by
+        
+        result.append({
+            **fn,
+            "need": need,
+            "created_by_user": created_by_user,
+            "updated_by_user": updated_by_user
+        })
+    
+    return result
+
+@api_router.post("/families/{family_id}/needs")
+async def add_family_need(
+    family_id: str, 
+    need_input: FamilyNeedCreate, 
+    current_user: User = Depends(get_current_user)
+):
+    """إضافة احتياج جديد للعائلة"""
+    # التحقق من وجود العائلة
+    family = await db.families.find_one({"id": family_id}, {"_id": 0})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    
+    # التحقق من وجود الاحتياج
+    need = await db.needs.find_one({"id": need_input.need_id}, {"_id": 0})
+    if not need:
+        raise HTTPException(status_code=404, detail="Need not found")
+    
+    # التحقق من عدم تكرار الاحتياج
+    existing = await db.family_needs.find_one({
+        "family_id": family_id,
+        "need_id": need_input.need_id
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="هذا الاحتياج موجود بالفعل لهذه العائلة")
+    
+    # إنشاء السجل
+    family_need_dict = need_input.model_dump()
+    family_need_dict["family_id"] = family_id
+    family_need_dict["created_by_user_id"] = current_user.id
+    
+    family_need = FamilyNeed(**family_need_dict)
+    doc = family_need.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.family_needs.insert_one(doc)
+    
+    return family_need
+
+@api_router.put("/families/{family_id}/needs/{need_record_id}")
+async def update_family_need(
+    family_id: str,
+    need_record_id: str,
+    need_update: FamilyNeedUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """تحديث احتياج عائلة"""
+    # التحقق من وجود السجل
+    existing = await db.family_needs.find_one({
+        "id": need_record_id,
+        "family_id": family_id
+    })
+    if not existing:
+        raise HTTPException(status_code=404, detail="Family need record not found")
+    
+    # تحديث السجل
+    update_data = {k: v for k, v in need_update.model_dump().items() if v is not None}
+    update_data["updated_by_user_id"] = current_user.id
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.family_needs.update_one(
+        {"id": need_record_id},
+        {"$set": update_data}
+    )
+    
+    # إرجاع السجل المحدث
+    updated_record = await db.family_needs.find_one({"id": need_record_id}, {"_id": 0})
+    
+    # تحويل التواريخ
+    if isinstance(updated_record.get('created_at'), str):
+        updated_record['created_at'] = datetime.fromisoformat(updated_record['created_at'])
+    if isinstance(updated_record.get('updated_at'), str):
+        updated_record['updated_at'] = datetime.fromisoformat(updated_record['updated_at'])
+    
+    return FamilyNeed(**updated_record)
+
+@api_router.delete("/families/{family_id}/needs/{need_record_id}")
+async def delete_family_need(
+    family_id: str,
+    need_record_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """حذف احتياج من عائلة"""
+    # التحقق من وجود السجل
+    existing = await db.family_needs.find_one({
+        "id": need_record_id,
+        "family_id": family_id
+    })
+    if not existing:
+        raise HTTPException(status_code=404, detail="Family need record not found")
+    
+    # حذف السجل
+    await db.family_needs.delete_one({"id": need_record_id})
+    
+    return {"message": "Family need deleted successfully"}
+
 # ============= Health Cases Routes =============
 
 @api_router.get("/health-cases", response_model=List[HealthCase])
