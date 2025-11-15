@@ -3103,17 +3103,28 @@ const AdminDashboard = () => {
               ) : (
                 <div className="bg-white rounded-xl shadow-lg p-6">
                   <div className="mb-6">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        setShowFamilyDetails(false);
-                        setSelectedFamily(null);
-                      }}
-                      className="mb-4"
-                    >
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                      رجوع إلى القائمة
-                    </Button>
+                    <div className="flex gap-3 mb-4">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          setShowFamilyDetails(false);
+                          setSelectedFamily(null);
+                        }}
+                      >
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                        رجوع إلى القائمة
+                      </Button>
+                      <Button 
+                        className="bg-emerald-600 hover:bg-emerald-700"
+                        onClick={() => {
+                          setSelectedFamilyForNeeds(selectedFamily);
+                          setShowFamilyNeedsDialog(true);
+                        }}
+                      >
+                        <Tag className="w-4 h-4 ml-2" />
+                        إدارة الاحتياجات
+                      </Button>
+                    </div>
                     <div className="border-b-4 border-emerald-600 pb-4">
                       <div className="flex items-center justify-between">
                         <h2 className="text-3xl font-bold text-gray-900">{selectedFamily?.name}</h2>
