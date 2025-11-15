@@ -3102,22 +3102,23 @@ const AdminDashboard = () => {
                   })()}
                 </div>
               ) : (
-                <div className="bg-white rounded-xl shadow-lg p-6">
-                  <div className="mb-6">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        setShowFamilyDetails(false);
-                        setSelectedFamily(null);
-                      }}
-                      className="mb-4"
-                    >
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                      رجوع إلى القائمة
-                    </Button>
-                    <div className="border-b-4 border-emerald-600 pb-4">
-                      <div className="flex items-center justify-between">
-                        <h2 className="text-3xl font-bold text-gray-900">{selectedFamily?.name}</h2>
+                <>
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="mb-6">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          setShowFamilyDetails(false);
+                          setSelectedFamily(null);
+                        }}
+                        className="mb-4"
+                      >
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                        رجوع إلى القائمة
+                      </Button>
+                      <div className="border-b-4 border-emerald-600 pb-4">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-3xl font-bold text-gray-900">{selectedFamily?.name}</h2>
                         <span className={`px-3 py-1 rounded-full text-sm ${selectedFamily?.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                           {selectedFamily?.is_active !== false ? 'نشط' : 'غير نشط'}
                         </span>
