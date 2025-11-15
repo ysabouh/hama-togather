@@ -825,6 +825,20 @@ const AdminDashboard = () => {
                 ))}
               </select>
             </div>
+            <div>
+              <Label>تقييم الاحتياج من قبل اللجنة</Label>
+              <select 
+                value={formData.need_assessment || ''} 
+                onChange={(e) => setFormData({...formData, need_assessment: e.target.value})}
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="">اختر التقييم</option>
+                <option value="منخفض">منخفض</option>
+                <option value="متوسط">متوسط</option>
+                <option value="مرتفع">مرتفع</option>
+                <option value="حرج/عاجل">حرج/عاجل</option>
+              </select>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
                 <input
