@@ -139,8 +139,8 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
 
           {/* جدول الاحتياجات - عرض كامل */}
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="overflow-x-auto" style={{maxWidth: '100%'}}>
+              <table className="w-full min-w-max">
                 <thead className="bg-emerald-100">
                   <tr>
                     <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">#</th>
