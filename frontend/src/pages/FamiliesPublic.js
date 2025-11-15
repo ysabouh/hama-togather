@@ -30,14 +30,30 @@ const FamiliesPublic = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (categoryId && user) {
+      const category = categories.find(c => c.id === categoryId);
+      setSelectedCategory(category);
+      fetchFamiliesByCategory(categoryId);
+      
+      // جلب الأحياء إذا كان مدير
+      if (user.role === 'admin') {
+        fetchNeighborhoods();
+      }
+    } else if (categoryId && !user) {
+      // إذا حاول الوصول لتصنيف بدون تسجيل دخول
+      navigate('/login?redirect=/families-public?category=' + categoryId);
+    } else {
+      setSelectedCategory(null);
+      setFamilies([]);
+    }
+  }, [categoryId, user, categories]);
+
   const fetchData = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/public/families-stats`);
-      
       setCategories(response.data.categories || []);
-      console.log('Categories with counts:', response.data.categories);
-      console.log('Total families:', response.data.total_families);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -45,18 +61,79 @@ const FamiliesPublic = () => {
     }
   };
 
+  const fetchFamiliesByCategory = async (catId, neighborhoodId = null) => {
+    setLoadingFamilies(true);
+    try {
+      let url = `${API_URL}/public/families-by-category/${catId}`;
+      if (neighborhoodId) {
+        url += `?neighborhood_id=${neighborhoodId}`;
+      }
+      
+      const response = await axios.get(url);
+      setFamilies(response.data);
+      
+      // جلب البيانات المساعدة
+      if (response.data.length > 0 && incomeLevels.length === 0) {
+        const [incomeLevelsRes, needAssessmentsRes] = await Promise.all([
+          axios.get(`${API_URL}/income-levels`),
+          axios.get(`${API_URL}/need-assessments`)
+        ]);
+        setIncomeLevels(incomeLevelsRes.data.filter(i => i.is_active !== false));
+        setNeedAssessments(needAssessmentsRes.data.filter(n => n.is_active !== false));
+      }
+    } catch (error) {
+      console.error('Error fetching families:', error);
+      if (error.response?.status === 401) {
+        navigate('/login?redirect=/families-public?category=' + catId);
+      }
+    } finally {
+      setLoadingFamilies(false);
+    }
+  };
+
+  const fetchNeighborhoods = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/public/neighborhoods`);
+      setNeighborhoods(response.data);
+    } catch (error) {
+      console.error('Error fetching neighborhoods:', error);
+    }
+  };
+
   const getCategoryCount = (category) => {
-    // العدد موجود مباشرة في الـ category من الـ API
     return category.families_count || 0;
   };
 
   const handleCategoryClick = (category) => {
-    navigate(`/families?category=${category.id}`);
+    if (!user) {
+      navigate('/login?redirect=/families-public?category=' + category.id);
+    } else {
+      navigate('/families-public?category=' + category.id);
+    }
+  };
+
+  const handleNeighborhoodChange = (selected) => {
+    setSelectedNeighborhood(selected);
+    if (selectedCategory) {
+      fetchFamiliesByCategory(selectedCategory.id, selected?.value);
+    }
   };
 
   const getCategoryIcon = (index) => {
     const icons = ['👨‍👩‍👧‍👦', '👩‍👧‍👦', '🧓', '🏥', '🎓', '💼', '🏠', '👶', '🎯'];
     return icons[index % icons.length];
+  };
+
+  const getIncomeLevel = (incomeLevelId) => {
+    return incomeLevels.find(i => i.id === incomeLevelId);
+  };
+
+  const getNeedAssessment = (needAssessmentId) => {
+    return needAssessments.find(n => n.id === needAssessmentId);
+  };
+
+  const getNeighborhood = (neighborhoodId) => {
+    return neighborhoods.find(n => n.id === neighborhoodId);
   };
 
   return (
