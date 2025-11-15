@@ -1747,10 +1747,6 @@ const AdminDashboard = () => {
                     <HandHeart className="w-4 h-4 ml-2" />
                     المبادرات
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('needs')} className="cursor-pointer">
-                    <Tag className="w-4 h-4 ml-2" />
-                    الاحتياجات
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setActiveSiteTab('stories')} className="cursor-pointer">
                     <Heart className="w-4 h-4 ml-2" />
                     قصص النجاح
