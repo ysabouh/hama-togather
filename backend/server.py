@@ -801,6 +801,43 @@ async def get_families():
             family['updated_at'] = datetime.fromisoformat(family['updated_at'])
     return families
 
+# ============= Public Routes (لا تحتاج authentication) =============
+
+@api_router.get("/public/families-stats")
+async def get_public_families_stats():
+    """إحصائيات عامة للعائلات حسب التصنيفات - بدون authentication"""
+    try:
+        # جلب جميع العائلات النشطة
+        families = await db.families.find({"is_active": {"$ne": False}}, {"_id": 0, "id": 1, "family_category_id": 1}).to_list(10000)
+        
+        # جلب جميع التصنيفات النشطة
+        categories = await db.family_categories.find({"is_active": {"$ne": False}}, {"_id": 0}).to_list(1000)
+        
+        # حساب عدد العائلات لكل تصنيف
+        category_counts = {}
+        for family in families:
+            cat_id = family.get('family_category_id')
+            if cat_id:
+                category_counts[cat_id] = category_counts.get(cat_id, 0) + 1
+        
+        # إضافة العدد لكل تصنيف
+        result = []
+        for category in categories:
+            result.append({
+                **category,
+                "families_count": category_counts.get(category['id'], 0)
+            })
+        
+        return {
+            "categories": result,
+            "total_families": len(families)
+        }
+    except Exception as e:
+        print(f"Error in get_public_families_stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 @api_router.get("/families/{family_id}", response_model=Family)
 async def get_family(family_id: str):
     family = await db.families.find_one({"id": family_id}, {"_id": 0})
