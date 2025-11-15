@@ -784,6 +784,35 @@ const AdminDashboard = () => {
                 <Input type="number" value={formData.members_count || ''} onChange={(e) => setFormData({...formData, members_count: parseInt(e.target.value)})} required />
               </div>
             </div>
+            <div className="border-t pt-4 mt-4">
+              <h4 className="text-md font-semibold text-gray-700 mb-3">معلومات المعيل (رب العائلة)</h4>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label>الاسم الأول</Label>
+                  <Input 
+                    value={formData.provider_first_name || ''} 
+                    onChange={(e) => setFormData({...formData, provider_first_name: e.target.value})} 
+                    placeholder="مثال: محمد"
+                  />
+                </div>
+                <div>
+                  <Label>اسم الأب</Label>
+                  <Input 
+                    value={formData.provider_father_name || ''} 
+                    onChange={(e) => setFormData({...formData, provider_father_name: e.target.value})} 
+                    placeholder="مثال: أحمد"
+                  />
+                </div>
+                <div>
+                  <Label>الكنية</Label>
+                  <Input 
+                    value={formData.provider_surname || ''} 
+                    onChange={(e) => setFormData({...formData, provider_surname: e.target.value})} 
+                    placeholder="مثال: أبو خالد"
+                  />
+                </div>
+              </div>
+            </div>
             <div>
               <Label>تصنيف العائلة</Label>
               <select 
