@@ -473,6 +473,30 @@ class NeedAssessmentUpdate(BaseModel):
     priority: Optional[int] = None
     is_active: Optional[bool] = None
 
+# Need Models (الاحتياجات)
+class Need(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # اسم الاحتياج
+    description: Optional[str] = None  # التوصيف
+    default_amount: Optional[float] = None  # المبلغ الافتراضي المطلوب
+    is_active: bool = True
+    created_by_user_id: Optional[str] = None  # المستخدم الذي أضاف
+    updated_by_user_id: Optional[str] = None  # المستخدم الذي عدل
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+
+class NeedCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    default_amount: Optional[float] = None
+
+class NeedUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    default_amount: Optional[float] = None
+    is_active: Optional[bool] = None
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
