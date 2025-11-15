@@ -357,12 +357,35 @@ const FamilyDetails = () => {
                 )}
 
                 {/* Family Needs */}
-                {familyNeeds.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                       <Package className="w-6 h-6 text-emerald-600" />
                       احتياجات العائلة
                     </h2>
+                    {user?.role === 'admin' && (
+                      <button
+                        onClick={() => setShowAddNeedModal(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-semibold"
+                      >
+                        <Package className="w-4 h-4" />
+                        إضافة احتياج
+                      </button>
+                    )}
+                  </div>
+                  
+                  {familyNeeds.length === 0 ? (
+                    <div className="text-center py-12 bg-gray-50 rounded-lg">
+                      <Package className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-600 font-semibold mb-2">لا توجد احتياجات مسجلة</p>
+                      <p className="text-sm text-gray-400">
+                        {user?.role === 'admin' 
+                          ? 'استخدم الزر أعلاه لإضافة احتياجات العائلة'
+                          : 'لم يتم تسجيل احتياجات لهذه العائلة حتى الآن'
+                        }
+                      </p>
+                    </div>
+                  ) : (
                     <div className="space-y-3">
                       {familyNeeds.map((need, index) => (
                         <div
@@ -389,8 +412,8 @@ const FamilyDetails = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {/* Family Images */}
                 {familyImages.length > 0 && (
