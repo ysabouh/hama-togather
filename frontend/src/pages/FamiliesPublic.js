@@ -154,6 +154,45 @@ const FamiliesPublic = () => {
     <div className="min-h-screen bg-gray-50" dir="rtl">
       <Navbar />
 
+      {/* Login Prompt Modal */}
+      {showLoginPrompt && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={handleLoginCancel}>
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 transform transition-all animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center mb-6">
+              <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                <Heart className="w-8 h-8 text-emerald-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                تسجيل الدخول مطلوب
+              </h3>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                لمشاهدة تفاصيل العائلات المحتاجة والمساهمة في مساعدتهم، يجب عليك تسجيل الدخول أولاً
+              </p>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleLoginConfirm}
+                className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all flex items-center justify-center gap-2"
+              >
+                <Users className="w-5 h-5" />
+                تسجيل الدخول الآن
+              </button>
+              
+              <button
+                onClick={handleLoginCancel}
+                className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 text-white py-20 overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-10"></div>
