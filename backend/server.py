@@ -884,11 +884,6 @@ async def get_neighborhoods():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-    except Exception as e:
-        print(f"Error in get_public_families_stats: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 
 @api_router.get("/families/{family_id}", response_model=Family)
 async def get_family(family_id: str):
