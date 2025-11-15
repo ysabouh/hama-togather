@@ -177,7 +177,8 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/users`),
         axios.get(`${API_URL}/user-roles`),
         axios.get(`${API_URL}/family-categories`),
-        axios.get(`${API_URL}/income-levels`)
+        axios.get(`${API_URL}/income-levels`),
+        axios.get(`${API_URL}/need-assessments`)
       ]);
 
       setStats(statsRes.data);
