@@ -9,43 +9,25 @@ const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const FamiliesPublic = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get('category');
 
   const [families, setFamilies] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [incomeLevels, setIncomeLevels] = useState([]);
-  const [needAssessments, setNeedAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (categoryId && categories.length > 0) {
-      const category = categories.find(c => c.id === categoryId);
-      setSelectedCategory(category);
-    } else {
-      setSelectedCategory(null);
-    }
-  }, [categoryId, categories]);
-
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [familiesRes, categoriesRes, incomeLevelsRes, needAssessmentsRes] = await Promise.all([
+      const [familiesRes, categoriesRes] = await Promise.all([
         axios.get(`${API_URL}/families`),
-        axios.get(`${API_URL}/family-categories`),
-        axios.get(`${API_URL}/income-levels`),
-        axios.get(`${API_URL}/need-assessments`)
+        axios.get(`${API_URL}/family-categories`)
       ]);
 
       setFamilies(familiesRes.data.items || familiesRes.data);
       setCategories(categoriesRes.data.filter(c => c.is_active !== false));
-      setIncomeLevels(incomeLevelsRes.data.filter(i => i.is_active !== false));
-      setNeedAssessments(needAssessmentsRes.data.filter(n => n.is_active !== false));
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -57,31 +39,14 @@ const FamiliesPublic = () => {
     return families.filter(f => f.family_category_id === categoryId && f.is_active !== false).length;
   };
 
-  const getFilteredFamilies = () => {
-    if (!selectedCategory) {
-      return families.filter(f => f.is_active !== false);
-    }
-    return families.filter(f => f.family_category_id === selectedCategory.id && f.is_active !== false);
-  };
-
   const handleCategoryClick = (category) => {
     navigate(`/families?category=${category.id}`);
   };
 
-  const getIncomeLevel = (incomeLevelId) => {
-    return incomeLevels.find(i => i.id === incomeLevelId);
-  };
-
-  const getNeedAssessment = (needAssessmentId) => {
-    return needAssessments.find(n => n.id === needAssessmentId);
-  };
-
   const getCategoryIcon = (index) => {
-    const icons = ['👨‍👩‍👧‍👦', '👩‍👧‍👦', '🧓', '🏥', '🎓', '💼'];
+    const icons = ['👨‍👩‍👧‍👦', '👩‍👧‍👦', '🧓', '🏥', '🎓', '💼', '🏠', '👶', '🎯'];
     return icons[index % icons.length];
   };
-
-  const filteredFamilies = getFilteredFamilies();
 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
