@@ -164,7 +164,8 @@ const FamiliesPublic = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Categories Section - يظهر فقط إذا لم يتم اختيار تصنيف */}
+      {!selectedCategory && (
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
