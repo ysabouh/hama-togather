@@ -159,84 +159,84 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {familyNeeds.map((needRecord, index) => (
                     <tr key={needRecord.id} className="hover:bg-emerald-50 transition-colors border-b border-gray-200">
-                      <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
+                      <td className="px-4 py-4 text-sm text-gray-700 text-center font-bold border-r border-gray-200">{index + 1}</td>
                       
                       {/* اسم الاحتياج */}
-                      <td className="px-4 py-3 text-sm text-gray-900 text-center font-semibold">
+                      <td className="px-4 py-4 text-sm text-gray-900 text-center font-bold border-r border-gray-200">
                         {needRecord.need?.name || '-'}
                       </td>
                       
                       {/* الوصف */}
-                      <td className="px-4 py-3 text-sm text-gray-600 text-center max-w-xs">
-                        <div className="truncate" title={needRecord.need?.description}>
+                      <td className="px-4 py-4 text-sm text-gray-600 text-center min-w-[200px] border-r border-gray-200">
+                        <div className="line-clamp-2" title={needRecord.need?.description}>
                           {needRecord.need?.description || '-'}
                         </div>
                       </td>
                       
                       {/* المبلغ التقديري */}
-                      <td className="px-4 py-3 text-sm text-center">
+                      <td className="px-4 py-4 text-sm text-center border-r border-gray-200">
                         <div className="flex items-center justify-center gap-1">
                           <DollarSign className="w-4 h-4 text-green-600" />
-                          <span className="font-bold text-green-700">
+                          <span className="font-bold text-green-700 text-base">
                             {needRecord.estimated_amount?.toLocaleString('ar-SA') || 0}
                           </span>
                         </div>
                       </td>
                       
                       {/* الحالة */}
-                      <td className="px-4 py-3 text-sm text-center">
+                      <td className="px-4 py-4 text-sm text-center border-r border-gray-200">
                         {getStatusBadge(needRecord.status)}
                       </td>
                       
                       {/* الملاحظات */}
-                      <td className="px-4 py-3 text-sm text-gray-600 text-center max-w-xs">
-                        <div className="truncate" title={needRecord.notes}>
+                      <td className="px-4 py-4 text-sm text-gray-600 text-center min-w-[200px] border-r border-gray-200">
+                        <div className="line-clamp-2" title={needRecord.notes}>
                           {needRecord.notes || '-'}
                         </div>
                       </td>
                       
                       {/* تاريخ الإضافة - ميلادي */}
-                      <td className="px-4 py-3 text-sm text-gray-500 text-center whitespace-nowrap" dir="ltr">
+                      <td className="px-4 py-4 text-sm text-gray-600 text-center whitespace-nowrap border-r border-gray-200" dir="ltr">
                         <div className="flex items-center justify-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          <span className="text-xs">
+                          <Calendar className="w-4 h-4 text-gray-500" />
+                          <span className="text-xs font-medium">
                             {formatDateTimeGregorian(needRecord.created_at)}
                           </span>
                         </div>
                       </td>
                       
                       {/* أضيف بواسطة */}
-                      <td className="px-4 py-3 text-sm text-emerald-700 text-center">
+                      <td className="px-4 py-4 text-sm text-emerald-700 text-center border-r border-gray-200">
                         <div className="flex items-center justify-center gap-1">
-                          <User className="w-3 h-3" />
-                          <span className="text-xs font-semibold">
+                          <User className="w-4 h-4" />
+                          <span className="text-xs font-bold">
                             {needRecord.created_by_user?.full_name || '-'}
                           </span>
                         </div>
                       </td>
                       
                       {/* تاريخ التعديل - ميلادي */}
-                      <td className="px-4 py-3 text-sm text-gray-500 text-center whitespace-nowrap" dir="ltr">
+                      <td className="px-4 py-4 text-sm text-gray-600 text-center whitespace-nowrap border-r border-gray-200" dir="ltr">
                         <div className="flex items-center justify-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          <span className="text-xs">
+                          <Calendar className="w-4 h-4 text-gray-500" />
+                          <span className="text-xs font-medium">
                             {needRecord.updated_at ? formatDateTimeGregorian(needRecord.updated_at) : '-'}
                           </span>
                         </div>
                       </td>
                       
                       {/* عُدل بواسطة */}
-                      <td className="px-4 py-3 text-sm text-blue-700 text-center">
+                      <td className="px-4 py-4 text-sm text-blue-700 text-center border-r border-gray-200">
                         <div className="flex items-center justify-center gap-1">
-                          <User className="w-3 h-3" />
-                          <span className="text-xs font-semibold">
+                          <User className="w-4 h-4" />
+                          <span className="text-xs font-bold">
                             {needRecord.updated_by_user?.full_name || '-'}
                           </span>
                         </div>
                       </td>
                       
                       {/* الإجراءات */}
-                      <td className="px-4 py-3 text-sm text-center">
+                      <td className="px-4 py-4 text-sm text-center">
                         <div className="flex gap-2 justify-center">
                           {/* زر التعديل */}
                           <Button
