@@ -86,7 +86,8 @@ class Family(BaseModel):
     members_count: int
     description: str
     monthly_need: float
-    need_assessment: Optional[str] = None  # تقييم الاحتياج (منخفض، متوسط، مرتفع، حرج/عاجل)
+    need_assessment: Optional[str] = None  # للتوافق مع البيانات القديمة (deprecated)
+    need_assessment_id: Optional[str] = None  # معرف تقييم الاحتياج (الجديد)
     current_sponsors: int = 0
     image: Optional[str] = None
     status: str = "active"  # active, sponsored
