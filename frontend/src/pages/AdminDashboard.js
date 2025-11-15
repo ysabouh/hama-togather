@@ -3313,17 +3313,18 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* قائمة احتياجات العائلة - خارج الـ container لتأخذ كامل العرض */}
-                <div className="w-full">
-                  <FamilyNeedsList 
-                    familyId={selectedFamily?.id}
-                    onManageClick={() => {
-                      setSelectedFamilyForNeeds(selectedFamily);
-                      setShowFamilyNeedsDialog(true);
-                    }}
-                  />
-                </div>
+                
+                {selectedFamily && (
+                  <div className="w-full mt-6">
+                    <FamilyNeedsList 
+                      familyId={selectedFamily?.id}
+                      onManageClick={() => {
+                        setSelectedFamilyForNeeds(selectedFamily);
+                        setShowFamilyNeedsDialog(true);
+                      }}
+                    />
+                  </div>
+                )}
               )}
             </TabsContent>
 
