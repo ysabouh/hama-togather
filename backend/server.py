@@ -79,6 +79,10 @@ class Family(BaseModel):
     fac_name: Optional[str] = None  # اسم الفاك (اسم مستعار)
     name: str
     phone: Optional[str] = None  # رقم الهاتف
+    # معلومات المعيل
+    provider_first_name: Optional[str] = None  # الاسم الأول للمعيل
+    provider_father_name: Optional[str] = None  # اسم الأب للمعيل
+    provider_surname: Optional[str] = None  # الكنية للمعيل
     members_count: int
     description: str
     monthly_need: float
