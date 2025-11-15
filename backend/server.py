@@ -1051,6 +1051,89 @@ async def toggle_need_assessment_status(
     
     return {"message": f"Need assessment {'activated' if is_active else 'deactivated'} successfully"}
 
+# ============= Needs Routes (الاحتياجات) =============
+
+@api_router.get("/needs", response_model=List[Need])
+async def get_needs(current_user: User = Depends(get_current_user)):
+    needs = await db.needs.find({}, {"_id": 0}).to_list(1000)
+    return [Need(**need) for need in needs]
+
+@api_router.post("/needs", response_model=Need)
+async def create_need(
+    need_input: NeedCreate,
+    admin: User = Depends(get_admin_user)
+):
+    need_dict = need_input.model_dump()
+    
+    # حفظ معرف المستخدم الذي أضاف الاحتياج
+    need_dict['created_by_user_id'] = admin.id
+    
+    need_obj = Need(**need_dict)
+    
+    doc = need_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.needs.insert_one(doc)
+    return need_obj
+
+@api_router.put("/needs/{need_id}", response_model=Need)
+async def update_need(
+    need_id: str,
+    need_data: NeedUpdate,
+    admin: User = Depends(get_admin_user)
+):
+    existing = await db.needs.find_one({"id": need_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Need not found")
+    
+    update_dict = {k: v for k, v in need_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    # إضافة تاريخ التحديث ومعرف المستخدم الذي عدل
+    update_dict['updated_at'] = datetime.now(timezone.utc)
+    update_dict['updated_by_user_id'] = admin.id
+    
+    # الحفاظ على المستخدم الذي أنشأ الاحتياج
+    if 'created_by_user_id' in existing:
+        update_dict['created_by_user_id'] = existing['created_by_user_id']
+    
+    result = await db.needs.update_one({"id": need_id}, {"$set": update_dict})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Need not found")
+    
+    updated_need = await db.needs.find_one({"id": need_id}, {"_id": 0})
+    
+    # تحويل التواريخ
+    if isinstance(updated_need.get('created_at'), str):
+        updated_need['created_at'] = datetime.fromisoformat(updated_need['created_at'])
+    if isinstance(updated_need.get('updated_at'), str):
+        updated_need['updated_at'] = datetime.fromisoformat(updated_need['updated_at'])
+    
+    return Need(**updated_need)
+
+@api_router.put("/needs/{need_id}/toggle-status")
+async def toggle_need_status(
+    need_id: str,
+    request: dict,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    is_active = request.get("is_active")
+    if is_active is None:
+        raise HTTPException(status_code=400, detail="is_active field is required")
+    
+    result = await db.needs.update_one(
+        {"id": need_id}, 
+        {"$set": {"is_active": is_active}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Need not found")
+    
+    return {"message": f"Need {'activated' if is_active else 'deactivated'} successfully"}
+
 # ============= Health Cases Routes =============
 
 @api_router.get("/health-cases", response_model=List[HealthCase])
