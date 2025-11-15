@@ -26,8 +26,21 @@ const FamiliesPublic = () => {
         axios.get(`${API_URL}/family-categories`)
       ]);
 
-      setFamilies(familiesRes.data.items || familiesRes.data);
-      setCategories(categoriesRes.data.filter(c => c.is_active !== false));
+      const allFamilies = familiesRes.data.items || familiesRes.data;
+      const activeCategories = categoriesRes.data.filter(c => c.is_active !== false);
+
+      console.log('Total families loaded:', allFamilies.length);
+      console.log('Active categories:', activeCategories.length);
+      
+      // Debug: print family categories
+      allFamilies.forEach(f => {
+        if (f.family_category_id) {
+          console.log(`Family ${f.family_number}: category_id = ${f.family_category_id}`);
+        }
+      });
+
+      setFamilies(allFamilies);
+      setCategories(activeCategories);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -36,7 +49,9 @@ const FamiliesPublic = () => {
   };
 
   const getCategoryCount = (categoryId) => {
-    return families.filter(f => f.family_category_id === categoryId && f.is_active !== false).length;
+    const count = families.filter(f => f.family_category_id === categoryId && f.is_active !== false).length;
+    console.log(`Category ${categoryId} has ${count} families`);
+    return count;
   };
 
   const handleCategoryClick = (category) => {
