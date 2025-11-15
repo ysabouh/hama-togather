@@ -727,6 +727,27 @@ async def get_family(family_id: str):
 @api_router.post("/families", response_model=Family)
 async def create_family(family_input: FamilyCreate, admin: User = Depends(get_admin_user)):
     family_dict = family_input.model_dump()
+    
+    # توليد رقم العائلة تلقائياً
+    # نحصل على آخر رقم عائلة ونزيد واحد
+    last_family = await db.families.find_one(
+        {"family_number": {"$exists": True, "$ne": None}},
+        {"_id": 0, "family_number": 1},
+        sort=[("family_number", -1)]
+    )
+    
+    if last_family and last_family.get('family_number'):
+        # استخراج الرقم من الصيغة FAM-001
+        try:
+            last_num = int(last_family['family_number'].split('-')[1])
+            new_num = last_num + 1
+        except:
+            new_num = 1
+    else:
+        new_num = 1
+    
+    family_dict['family_number'] = f"FAM-{new_num:03d}"
+    
     family_obj = Family(**family_dict)
     
     doc = family_obj.model_dump()
