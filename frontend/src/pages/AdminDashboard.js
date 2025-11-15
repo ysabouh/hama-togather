@@ -1605,6 +1605,51 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'need':
+        return (
+          <>
+            <div>
+              <Label>اسم الاحتياج</Label>
+              <Input 
+                value={formData.name || ''} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                placeholder="مثال: مواد غذائية، دعم تعليمي"
+                required 
+              />
+            </div>
+            <div>
+              <Label>التوصيف (اختياري)</Label>
+              <Textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                placeholder="وصف تفصيلي للاحتياج"
+                rows={3}
+              />
+            </div>
+            <div>
+              <Label>المبلغ الافتراضي المطلوب (ل.س)</Label>
+              <Input 
+                type="number"
+                min="0"
+                step="1000"
+                value={formData.default_amount || ''} 
+                onChange={(e) => setFormData({...formData, default_amount: parseFloat(e.target.value) || 0})} 
+                placeholder="مثال: 500000"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_need"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_need">نشط</Label>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
