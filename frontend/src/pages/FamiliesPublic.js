@@ -362,10 +362,7 @@ const FamiliesPublic = () => {
                   return (
                     <div
                       key={family.id}
-                      onClick={() => {
-                        // TODO: سيتم إضافة التفاصيل لاحقاً
-                        console.log('Selected family:', family.id);
-                      }}
+                      onClick={() => navigate(`/family/${family.id}`)}
                       className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200 hover:border-emerald-400 cursor-pointer transform hover:-translate-y-2"
                     >
                       {/* Decorative Top Border */}
