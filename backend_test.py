@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Password Change Functionality
-Tests password change scenarios with correct and incorrect current passwords
+Backend API Testing for Families Public Page Functionality
+Tests public families stats, neighborhoods, and families by category with different user roles
 """
 
 import requests
