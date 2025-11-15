@@ -514,6 +514,185 @@ const FamilyDetails = () => {
         </div>
       </section>
 
+      {/* Donation Modal */}
+      {showDonationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowDonationModal(false)}>
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <Heart className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">تقديم المساعدة</h2>
+                    <p className="text-emerald-100 text-sm">لعائلة {family.name}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowDonationModal(false)}
+                  className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleDonationSubmit} className="p-6 space-y-6">
+              {/* Donor Info */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <User className="w-5 h-5 text-emerald-600" />
+                  معلومات المتبرع
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      الاسم الكامل <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={donationForm.donor_name}
+                      onChange={(e) => setDonationForm({...donationForm, donor_name: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                      placeholder="أدخل اسمك الكامل"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      رقم الهاتف <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={donationForm.donor_phone}
+                      onChange={(e) => setDonationForm({...donationForm, donor_phone: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                      placeholder="05xxxxxxxx"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    البريد الإلكتروني
+                  </label>
+                  <input
+                    type="email"
+                    value={donationForm.donor_email}
+                    onChange={(e) => setDonationForm({...donationForm, donor_email: e.target.value})}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                    placeholder="example@email.com"
+                  />
+                </div>
+              </div>
+
+              {/* Donation Details */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <Gift className="w-5 h-5 text-emerald-600" />
+                  تفاصيل المساعدة
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      نوع المساعدة <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      required
+                      value={donationForm.donation_type}
+                      onChange={(e) => setDonationForm({...donationForm, donation_type: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                    >
+                      <option value="مالية">مساعدة مالية</option>
+                      <option value="عينية">مساعدة عينية (طعام، ملابس، إلخ)</option>
+                      <option value="خدمية">خدمات (علاج، تعليم، إلخ)</option>
+                      <option value="أخرى">أخرى</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      القيمة/الكمية <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={donationForm.amount}
+                      onChange={(e) => setDonationForm({...donationForm, amount: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                      placeholder="مثال: 1000 ريال أو سلة غذائية"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    وصف المساعدة <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    required
+                    value={donationForm.description}
+                    onChange={(e) => setDonationForm({...donationForm, description: e.target.value})}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors resize-none"
+                    rows="3"
+                    placeholder="اكتب تفاصيل المساعدة التي تريد تقديمها..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    ملاحظات إضافية
+                  </label>
+                  <textarea
+                    value={donationForm.notes}
+                    onChange={(e) => setDonationForm({...donationForm, notes: e.target.value})}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors resize-none"
+                    rows="2"
+                    placeholder="أي ملاحظات أخرى..."
+                  />
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-4 rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                  <Heart className="w-5 h-5" />
+                  <span>تأكيد المساعدة</span>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => setShowDonationModal(false)}
+                  className="flex-1 sm:flex-initial bg-gray-100 text-gray-700 py-4 px-8 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                >
+                  إلغاء
+                </button>
+              </div>
+
+              {/* Info Message */}
+              <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-4">
+                <p className="text-sm text-emerald-800 text-center">
+                  💚 سيتم التواصل معك من قبل اللجنة لتنسيق تقديم المساعدة
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
