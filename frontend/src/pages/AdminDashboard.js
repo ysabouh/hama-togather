@@ -1815,6 +1815,10 @@ const AdminDashboard = () => {
                     <AlertCircle className="w-4 h-4 ml-2" />
                     تقييم الاحتياج
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('needs')} className="cursor-pointer">
+                    <Tag className="w-4 h-4 ml-2" />
+                    الاحتياجات
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               
