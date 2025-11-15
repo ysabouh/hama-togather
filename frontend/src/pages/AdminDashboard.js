@@ -3263,40 +3263,42 @@ const AdminDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">معلومات العائلة</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-gray-600">الأب</p>
-                          <p className="text-lg font-semibold">{selectedFamily?.father_present ? '✅ موجود' : '❌ غير موجود'}</p>
+                    {/* معلومات العائلة ومعلومات المعيل */}
+                    <div className="col-span-2 grid grid-cols-2 gap-6">
+                      {/* معلومات العائلة */}
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">معلومات العائلة</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-600">الأب</p>
+                            <p className="text-lg font-semibold">{selectedFamily?.father_present ? '✅ موجود' : '❌ غير موجود'}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-600">الأم</p>
+                            <p className="text-lg font-semibold">{selectedFamily?.mother_present ? '✅ موجودة' : '❌ غير موجودة'}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-sm text-gray-600">الأم</p>
-                          <p className="text-lg font-semibold">{selectedFamily?.mother_present ? '✅ موجودة' : '❌ غير موجودة'}</p>
+                      </div>
+
+                      {/* معلومات المعيل */}
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-semibold text-purple-800 border-b border-purple-300 pb-2">معلومات المعيل (رب العائلة)</h3>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 min-w-[80px]">الاسم الأول:</span>
+                            <span className="text-lg font-semibold text-purple-800">{selectedFamily?.provider_first_name || '-'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 min-w-[80px]">اسم الأب:</span>
+                            <span className="text-lg font-semibold text-purple-800">{selectedFamily?.provider_father_name || '-'}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 min-w-[80px]">الكنية:</span>
+                            <span className="text-lg font-semibold text-purple-800">{selectedFamily?.provider_surname || '-'}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-
-                    {/* معلومات المعيل */}
-                    {(selectedFamily?.provider_first_name || selectedFamily?.provider_father_name || selectedFamily?.provider_surname) && (
-                      <div className="col-span-2 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-6 shadow-sm">
-                        <h3 className="text-xl font-bold text-purple-900 border-b-2 border-purple-300 pb-3 mb-4">معلومات المعيل (رب العائلة)</h3>
-                        <div className="grid grid-cols-3 gap-6">
-                          <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <p className="text-sm text-gray-600 mb-2">الاسم الأول</p>
-                            <p className="text-xl font-semibold text-purple-800">{selectedFamily?.provider_first_name || '-'}</p>
-                          </div>
-                          <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <p className="text-sm text-gray-600 mb-2">اسم الأب</p>
-                            <p className="text-xl font-semibold text-purple-800">{selectedFamily?.provider_father_name || '-'}</p>
-                          </div>
-                          <div className="bg-white rounded-lg p-4 shadow-sm">
-                            <p className="text-sm text-gray-600 mb-2">الكنية</p>
-                            <p className="text-xl font-semibold text-purple-800">{selectedFamily?.provider_surname || '-'}</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
 
                     <div className="col-span-2 space-y-4">
                       <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">الوصف</h3>
