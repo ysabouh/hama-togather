@@ -117,7 +117,8 @@ class FamilyCreate(BaseModel):
     members_count: int
     description: str
     monthly_need: float
-    need_assessment: Optional[str] = None  # تقييم الاحتياج
+    need_assessment: Optional[str] = None  # للتوافق مع البيانات القديمة (deprecated)
+    need_assessment_id: Optional[str] = None  # معرف تقييم الاحتياج (الجديد)
     image: Optional[str] = None
     neighborhood_id: Optional[str] = None
     category_id: Optional[str] = None
