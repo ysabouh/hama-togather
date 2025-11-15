@@ -3227,7 +3227,7 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-span-2 border-t pt-4 mt-4">
-                      <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                      <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
                         <div>
                           <p className="font-medium">تاريخ الإنشاء</p>
                           <p>{selectedFamily?.created_at ? new Date(selectedFamily.created_at).toLocaleString('ar-SY', {
@@ -3238,6 +3238,16 @@ const AdminDashboard = () => {
                             minute: '2-digit',
                             hour12: false
                           }) : '-'}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium">أُضيفت بواسطة</p>
+                          <p className="text-emerald-700 font-semibold">
+                            {selectedFamily?.created_by_user_id ? (
+                              users.find(u => u.id === selectedFamily.created_by_user_id)?.full_name || 
+                              users.find(u => u.id === selectedFamily.created_by_user_id)?.email || 
+                              'مستخدم غير معروف'
+                            ) : '-'}
+                          </p>
                         </div>
                         <div>
                           <p className="font-medium">آخر تحديث</p>
