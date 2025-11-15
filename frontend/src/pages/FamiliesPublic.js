@@ -10,7 +10,6 @@ const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const FamiliesPublic = () => {
   const navigate = useNavigate();
 
-  const [families, setFamilies] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
