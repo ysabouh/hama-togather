@@ -3096,7 +3096,16 @@ const AdminDashboard = () => {
                         const query = familiesSearchQuery.toLowerCase();
                         const neighborhood = neighborhoods.find(n => n.id === f.neighborhood_id)?.name || '';
                         const category = familyCategories.find(c => c.id === f.category_id)?.name || '';
-                        return f.name.toLowerCase().includes(query) ||
+                        
+                        return (f.name || '').toLowerCase().includes(query) ||
+                               (f.family_number || '').toLowerCase().includes(query) ||
+                               (f.family_code || '').toLowerCase().includes(query) ||
+                               (f.fac_name || '').toLowerCase().includes(query) ||
+                               (f.phone || '').toLowerCase().includes(query) ||
+                               (f.provider_first_name || '').toLowerCase().includes(query) ||
+                               (f.provider_father_name || '').toLowerCase().includes(query) ||
+                               (f.provider_surname || '').toLowerCase().includes(query) ||
+                               (f.need_assessment || '').toLowerCase().includes(query) ||
                                neighborhood.toLowerCase().includes(query) ||
                                category.toLowerCase().includes(query);
                       });
