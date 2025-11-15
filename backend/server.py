@@ -1165,7 +1165,7 @@ async def toggle_need_status(
 
 @api_router.get("/families/{family_id}/needs")
 async def get_family_needs(family_id: str, current_user: User = Depends(get_current_user)):
-    """الحصول على جميع احتياجات عائلة معينة"""
+    """الحصول على جميع احتياجات عائلة معينة - محسّن للأداء"""
     # التحقق من وجود العائلة
     family = await db.families.find_one({"id": family_id}, {"_id": 0})
     if not family:
@@ -1174,29 +1174,37 @@ async def get_family_needs(family_id: str, current_user: User = Depends(get_curr
     # الحصول على احتياجات العائلة
     family_needs = await db.family_needs.find({"family_id": family_id}, {"_id": 0}).to_list(1000)
     
-    # إضافة معلومات الاحتياج الكاملة والمستخدمين
+    if not family_needs:
+        return []
+    
+    # جمع جميع الـ IDs مرة واحدة
+    need_ids = [fn["need_id"] for fn in family_needs]
+    user_ids = set()
+    for fn in family_needs:
+        if fn.get("created_by_user_id"):
+            user_ids.add(fn["created_by_user_id"])
+        if fn.get("updated_by_user_id"):
+            user_ids.add(fn["updated_by_user_id"])
+    
+    # جلب جميع الاحتياجات في query واحد
+    needs = await db.needs.find({"id": {"$in": need_ids}}, {"_id": 0}).to_list(1000)
+    needs_dict = {need["id"]: need for need in needs}
+    
+    # جلب جميع المستخدمين في query واحد
+    users = await db.users.find(
+        {"id": {"$in": list(user_ids)}}, 
+        {"_id": 0, "id": 1, "full_name": 1}
+    ).to_list(1000)
+    users_dict = {user["id"]: user for user in users}
+    
+    # بناء النتيجة
     result = []
     for fn in family_needs:
-        # الحصول على بيانات الاحتياج
-        need = await db.needs.find_one({"id": fn["need_id"]}, {"_id": 0})
-        
-        # الحصول على بيانات المستخدمين
-        created_by_user = None
-        updated_by_user = None
-        if fn.get("created_by_user_id"):
-            created_by = await db.users.find_one({"id": fn["created_by_user_id"]}, {"_id": 0, "id": 1, "full_name": 1})
-            if created_by:
-                created_by_user = created_by
-        if fn.get("updated_by_user_id"):
-            updated_by = await db.users.find_one({"id": fn["updated_by_user_id"]}, {"_id": 0, "id": 1, "full_name": 1})
-            if updated_by:
-                updated_by_user = updated_by
-        
         result.append({
             **fn,
-            "need": need,
-            "created_by_user": created_by_user,
-            "updated_by_user": updated_by_user
+            "need": needs_dict.get(fn["need_id"]),
+            "created_by_user": users_dict.get(fn.get("created_by_user_id")),
+            "updated_by_user": users_dict.get(fn.get("updated_by_user_id"))
         })
     
     return result
