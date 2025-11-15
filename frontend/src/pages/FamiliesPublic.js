@@ -228,6 +228,165 @@ const FamiliesPublic = () => {
           )}
         </div>
       </section>
+      )}
+
+      {/* Families Section - يظهر عند اختيار تصنيف */}
+      {selectedCategory && user && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                  {selectedCategory.name}
+                </h2>
+                <p className="text-xl text-gray-600">
+                  {families.length} عائلة محتاجة
+                </p>
+                {user.role !== 'admin' && user.neighborhood_id && (
+                  <p className="text-sm text-emerald-600 mt-1">
+                    📍 يتم عرض العائلات في حيك فقط
+                  </p>
+                )}
+              </div>
+              
+              <div className="flex gap-3">
+                {/* فلتر الأحياء - للمدير فقط */}
+                {user.role === 'admin' && neighborhoods.length > 0 && (
+                  <div className="min-w-[250px]">
+                    <Select
+                      value={selectedNeighborhood}
+                      onChange={handleNeighborhoodChange}
+                      options={[
+                        { value: null, label: 'جميع الأحياء' },
+                        ...neighborhoods.map(n => ({ value: n.id, label: n.name }))
+                      ]}
+                      styles={customSelectStyles}
+                      placeholder="فلترة حسب الحي..."
+                      isClearable
+                    />
+                  </div>
+                )}
+                
+                {/* زر العودة */}
+                <button
+                  onClick={() => navigate('/families-public')}
+                  className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors whitespace-nowrap"
+                >
+                  <Home className="w-5 h-5" />
+                  جميع التصنيفات
+                </button>
+              </div>
+            </div>
+
+            {/* Families Grid */}
+            {loadingFamilies ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <div key={i} className="bg-white rounded-xl p-6 animate-pulse">
+                    <div className="h-40 bg-gray-200 rounded-lg"></div>
+                  </div>
+                ))}
+              </div>
+            ) : families.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
+                <Users className="w-24 h-24 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">لا توجد عائلات</h3>
+                <p className="text-gray-500">
+                  {user.role === 'admin' 
+                    ? 'لا توجد عائلات في هذا التصنيف حالياً'
+                    : 'لا توجد عائلات في هذا التصنيف في حيك'
+                  }
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {families.map((family) => {
+                  const needAssessment = getNeedAssessment(family.need_assessment_id);
+                  const incomeLevel = getIncomeLevel(family.income_level_id);
+                  const neighborhood = getNeighborhood(family.neighborhood_id);
+
+                  return (
+                    <div
+                      key={family.id}
+                      className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-emerald-400"
+                    >
+                      {/* Header */}
+                      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-4 text-white">
+                        <div className="flex items-center justify-between">
+                          <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-mono">
+                            {family.family_number}
+                          </div>
+                          <div className="text-xl font-bold">
+                            {family.name}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Body */}
+                      <div className="p-6 space-y-4">
+                        {/* Neighborhood */}
+                        {neighborhood && (
+                          <div className="flex items-center gap-3 text-gray-700">
+                            <MapPin className="w-5 h-5 text-emerald-600" />
+                            <span className="text-sm font-semibold">{neighborhood.name}</span>
+                          </div>
+                        )}
+
+                        {/* Members Count */}
+                        <div className="flex items-center gap-3 text-gray-700">
+                          <Users className="w-5 h-5 text-emerald-600" />
+                          <span className="text-sm font-semibold">
+                            {family.members_count || ((family.male_children_count || 0) + (family.female_children_count || 0) + 2)} أفراد
+                          </span>
+                        </div>
+
+                        {/* Income Level */}
+                        {incomeLevel && (
+                          <div className="flex items-center gap-3 text-gray-700">
+                            <DollarSign className="w-5 h-5 text-emerald-600" />
+                            <span className="text-sm">{incomeLevel.name}</span>
+                          </div>
+                        )}
+
+                        {/* Description */}
+                        {family.description && (
+                          <p className="text-sm text-gray-600 line-clamp-2">
+                            {family.description}
+                          </p>
+                        )}
+
+                        {/* Need Assessment */}
+                        {needAssessment && (
+                          <div className="mt-4 pt-4 border-t">
+                            <div
+                              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
+                              style={{
+                                backgroundColor: `${needAssessment.color}20`,
+                                color: needAssessment.color,
+                                border: `2px solid ${needAssessment.color}`
+                              }}
+                            >
+                              <TrendingUp className="w-4 h-4" />
+                              {needAssessment.name}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Action Button */}
+                        <button className="w-full mt-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all flex items-center justify-center gap-2">
+                          <Heart className="w-5 h-5" />
+                          ساعد هذه العائلة
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
