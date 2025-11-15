@@ -353,7 +353,7 @@ const FamiliesPublic = () => {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {families.map((family) => {
                   const needAssessment = getNeedAssessment(family.need_assessment_id);
                   const incomeLevel = getIncomeLevel(family.income_level_id);
@@ -362,75 +362,117 @@ const FamiliesPublic = () => {
                   return (
                     <div
                       key={family.id}
-                      className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-emerald-400"
+                      onClick={() => {
+                        // TODO: سيتم إضافة التفاصيل لاحقاً
+                        console.log('Selected family:', family.id);
+                      }}
+                      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200 hover:border-emerald-400 cursor-pointer transform hover:-translate-y-2"
                     >
-                      {/* Header */}
-                      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-4 text-white">
-                        <div className="flex items-center justify-between">
-                          <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-mono">
-                            {family.family_number}
+                      {/* Decorative Top Border */}
+                      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+
+                      {/* Header with Family Name & Number */}
+                      <div className="relative pt-6 px-6 pb-4">
+                        <div className="flex items-start justify-between mb-4">
+                          {/* Family Number Badge */}
+                          <div className="flex items-center gap-2">
+                            <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-full shadow-lg transform group-hover:scale-110 transition-transform">
+                              <span className="text-sm font-bold font-mono">{family.family_number}</span>
+                            </div>
                           </div>
-                          <div className="text-xl font-bold">
-                            {family.name}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Body */}
-                      <div className="p-6 space-y-4">
-                        {/* Neighborhood */}
-                        {neighborhood && (
-                          <div className="flex items-center gap-3 text-gray-700">
-                            <MapPin className="w-5 h-5 text-emerald-600" />
-                            <span className="text-sm font-semibold">{neighborhood.name}</span>
-                          </div>
-                        )}
-
-                        {/* Members Count */}
-                        <div className="flex items-center gap-3 text-gray-700">
-                          <Users className="w-5 h-5 text-emerald-600" />
-                          <span className="text-sm font-semibold">
-                            {family.members_count || ((family.male_children_count || 0) + (family.female_children_count || 0) + 2)} أفراد
-                          </span>
-                        </div>
-
-                        {/* Income Level */}
-                        {incomeLevel && (
-                          <div className="flex items-center gap-3 text-gray-700">
-                            <DollarSign className="w-5 h-5 text-emerald-600" />
-                            <span className="text-sm">{incomeLevel.name}</span>
-                          </div>
-                        )}
-
-                        {/* Description */}
-                        {family.description && (
-                          <p className="text-sm text-gray-600 line-clamp-2">
-                            {family.description}
-                          </p>
-                        )}
-
-                        {/* Need Assessment */}
-                        {needAssessment && (
-                          <div className="mt-4 pt-4 border-t">
+                          
+                          {/* Need Assessment Badge - Top Right */}
+                          {needAssessment && (
                             <div
-                              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
+                              className="px-3 py-1 rounded-full text-xs font-bold shadow-md"
                               style={{
                                 backgroundColor: `${needAssessment.color}20`,
                                 color: needAssessment.color,
                                 border: `2px solid ${needAssessment.color}`
                               }}
                             >
-                              <TrendingUp className="w-4 h-4" />
                               {needAssessment.name}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Family Name */}
+                        <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors">
+                          {family.name}
+                        </h3>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="px-6">
+                        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                      </div>
+
+                      {/* Body - Family Details */}
+                      <div className="px-6 py-5 space-y-4">
+                        {/* Location & Members Info Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                          {/* Neighborhood */}
+                          {neighborhood && (
+                            <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 group-hover:bg-emerald-50 transition-colors">
+                              <div className="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                                <MapPin className="w-5 h-5 text-emerald-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs text-gray-500 mb-0.5">الحي</p>
+                                <p className="text-sm font-bold text-gray-900 truncate">{neighborhood.name}</p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Members Count */}
+                          <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 group-hover:bg-emerald-50 transition-colors">
+                            <div className="flex-shrink-0 w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition-colors">
+                              <Users className="w-5 h-5 text-teal-600" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-gray-500 mb-0.5">عدد الأفراد</p>
+                              <p className="text-sm font-bold text-gray-900">
+                                {family.members_count || ((family.male_children_count || 0) + (family.female_children_count || 0) + 2)} فرد
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Income Level - Full Width */}
+                        {incomeLevel && (
+                          <div className="flex items-center gap-3 bg-amber-50 rounded-lg p-3 border border-amber-200">
+                            <div className="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                              <DollarSign className="w-5 h-5 text-amber-600" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs text-amber-700 mb-0.5">مستوى الدخل</p>
+                              <p className="text-sm font-bold text-amber-900">{incomeLevel.name}</p>
                             </div>
                           </div>
                         )}
 
-                        {/* Action Button */}
-                        <button className="w-full mt-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all flex items-center justify-center gap-2">
-                          <Heart className="w-5 h-5" />
-                          ساعد هذه العائلة
-                        </button>
+                        {/* Description */}
+                        {family.description && (
+                          <div className="bg-gray-50 rounded-lg p-4 group-hover:bg-gray-100 transition-colors">
+                            <p className="text-xs text-gray-500 mb-2 font-semibold">الوصف</p>
+                            <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
+                              {family.description}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer - Action Button */}
+                      <div className="px-6 pb-6 pt-2">
+                        <div className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 rounded-xl font-bold text-base shadow-lg group-hover:from-emerald-600 group-hover:to-teal-700 group-hover:shadow-xl transition-all">
+                          <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                          <span>عرض تفاصيل العائلة</span>
+                        </div>
+                      </div>
+
+                      {/* Hover Glow Effect */}
+                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-cyan-500/5"></div>
                       </div>
                     </div>
                   );
