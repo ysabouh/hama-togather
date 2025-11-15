@@ -106,8 +106,8 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
   }
 
   return (
-    <div className="mt-8 w-full">
-      <div className="mb-6">
+    <div className="mt-8 w-full px-0">
+      <div className="mb-6 px-6">
         <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2 border-b-4 border-emerald-600 pb-3">
           <ShoppingCart className="w-6 h-6 text-emerald-600" />
           احتياجات العائلة
