@@ -99,10 +99,14 @@ class Family(BaseModel):
     updated_at: Optional[datetime] = None
 
 class FamilyCreate(BaseModel):
+    family_code: Optional[str] = None  # رمز العائلة
+    fac_name: Optional[str] = None  # اسم الفاك (اسم مستعار)
     name: str
+    phone: Optional[str] = None  # رقم الهاتف
     members_count: int
     description: str
     monthly_need: float
+    need_assessment: Optional[str] = None  # تقييم الاحتياج
     image: Optional[str] = None
     neighborhood_id: Optional[str] = None
     category_id: Optional[str] = None
