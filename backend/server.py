@@ -764,6 +764,11 @@ async def update_family(family_id: str, family_input: FamilyCreate, admin: User 
     
     update_data = family_input.model_dump()
     update_data['updated_at'] = datetime.now(timezone.utc)
+    
+    # الحفاظ على رقم العائلة (غير قابل للتعديل)
+    if 'family_number' in existing:
+        update_data['family_number'] = existing['family_number']
+    
     await db.families.update_one({"id": family_id}, {"$set": update_data})
     
     updated = await db.families.find_one({"id": family_id}, {"_id": 0})
