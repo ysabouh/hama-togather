@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { 
   Users, Heart, MapPin, DollarSign, TrendingUp, Calendar, 
   ArrowRight, Phone, Mail, Home, User, Baby, CheckCircle,
-  Clock, Package, X, Image as ImageIcon, History, Gift
+  Clock, Package, X, Image as ImageIcon, History, Gift, Plus
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
