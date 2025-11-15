@@ -1684,6 +1684,10 @@ const AdminDashboard = () => {
                     <Building2 className="w-4 h-4 ml-2" />
                     مستويات الدخل
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('need-assessments')} className="cursor-pointer">
+                    <AlertCircle className="w-4 h-4 ml-2" />
+                    تقييم الاحتياج
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               
