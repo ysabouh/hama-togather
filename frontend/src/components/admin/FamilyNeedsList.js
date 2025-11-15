@@ -116,7 +116,7 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
       </div>
 
       {familyNeeds.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 mx-6">
           <ShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600 text-lg mb-2">لا توجد احتياجات مسجلة لهذه العائلة</p>
           <p className="text-gray-400 text-sm">قم بإضافة احتياجات جديدة من خلال dialog الإدارة</p>
@@ -124,7 +124,7 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
       ) : (
         <>
           {/* ملخص المبالغ */}
-          <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-5 mb-6 shadow-sm">
+          <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-5 mb-6 shadow-sm mx-6">
             <div className="flex items-center justify-between">
               <span className="text-gray-800 font-bold text-xl">المجموع الكلي للاحتياجات:</span>
               <div className="flex items-center gap-2">
@@ -137,8 +137,8 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
             </div>
           </div>
 
-          {/* جدول الاحتياجات - عرض كامل */}
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200">
+          {/* جدول الاحتياجات - عرض كامل للشاشة */}
+          <div className="bg-white overflow-hidden shadow-lg border-t-4 border-b-4 border-emerald-600">
             <div className="overflow-x-auto w-full">
               <table className="w-full min-w-max border-collapse">
                 <thead className="bg-gradient-to-r from-emerald-600 to-teal-600">
