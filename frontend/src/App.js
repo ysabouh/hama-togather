@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import FamiliesPage from './pages/FamiliesPage';
+import FamiliesPublic from './pages/FamiliesPublic';
 import HealthCasesPage from './pages/HealthCasesPage';
 import CoursesPage from './pages/CoursesPage';
 import ProjectsPage from './pages/ProjectsPage';
