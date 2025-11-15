@@ -497,6 +497,32 @@ class NeedUpdate(BaseModel):
     default_amount: Optional[float] = None
     is_active: Optional[bool] = None
 
+
+# FamilyNeed Models (جدول وسيط بين العائلات والاحتياجات)
+class FamilyNeed(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    family_id: str  # معرف العائلة
+    need_id: str  # معرف الاحتياج
+    estimated_amount: float = 0.0  # المبلغ التقديري
+    notes: Optional[str] = None  # ملاحظات
+    status: str = "pending"  # pending, fulfilled, cancelled
+    created_by_user_id: Optional[str] = None  # المستخدم الذي أضاف
+    updated_by_user_id: Optional[str] = None  # المستخدم الذي عدل
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+
+class FamilyNeedCreate(BaseModel):
+    need_id: str
+    estimated_amount: float = 0.0
+    notes: Optional[str] = None
+    status: str = "pending"
+
+class FamilyNeedUpdate(BaseModel):
+    estimated_amount: Optional[float] = None
+    notes: Optional[str] = None
+    status: Optional[str] = None
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
