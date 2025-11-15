@@ -100,6 +100,7 @@ class Family(BaseModel):
     male_children_count: Optional[int] = 0  # عدد الأطفال الذكور
     is_active: bool = True  # للحذف الناعم
     created_by_user_id: Optional[str] = None  # معرف المستخدم الذي أضاف العائلة
+    updated_by_user_id: Optional[str] = None  # معرف المستخدم الذي قام بآخر تعديل
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime] = None
 
