@@ -3308,22 +3308,23 @@ const AdminDashboard = () => {
                                 ) : (selectedFamily?.updated_at ? 'غير محدد' : '-')}
                               </p>
                             </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="w-full mt-6">
-                  <FamilyNeedsList 
-                    familyId={selectedFamily?.id}
-                    onManageClick={() => {
-                      setSelectedFamilyForNeeds(selectedFamily);
-                      setShowFamilyNeedsDialog(true);
-                    }}
-                  />
-                </div>
+                  
+                  <div className="w-full mt-6">
+                    <FamilyNeedsList 
+                      familyId={selectedFamily?.id}
+                      onManageClick={() => {
+                        setSelectedFamilyForNeeds(selectedFamily);
+                        setShowFamilyNeedsDialog(true);
+                      }}
+                    />
+                  </div>
+                </>
               )}
             </TabsContent>
 
