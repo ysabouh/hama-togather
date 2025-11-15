@@ -2942,13 +2942,32 @@ const AdminDashboard = () => {
                               {paginatedFamilies.map((family, index) => (
                                 <tr key={family.id} className="hover:bg-gray-50" data-testid={`family-item-${family.id}`}>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">{startIndex + index + 1}</td>
-                                  <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{family.name}</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">{family.monthly_need.toLocaleString()} ل.س</td>
+                                  <td className="px-4 py-3 text-sm text-center">
+                                    <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded">
+                                      {family.family_number || '-'}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-gray-900 text-center">{family.family_code || '-'}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{family.fac_name || '-'}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">{family.phone || '-'}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">
                                     {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
                                   </td>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">
                                     {familyCategories.find(c => c.id === family.category_id)?.name || '-'}
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-center">
+                                    {family.need_assessment ? (
+                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                        family.need_assessment === 'منخفض' ? 'bg-green-100 text-green-800' :
+                                        family.need_assessment === 'متوسط' ? 'bg-yellow-100 text-yellow-800' :
+                                        family.need_assessment === 'مرتفع' ? 'bg-orange-100 text-orange-800' :
+                                        family.need_assessment === 'حرج/عاجل' ? 'bg-red-100 text-red-800' :
+                                        'bg-gray-100 text-gray-800'
+                                      }`}>
+                                        {family.need_assessment}
+                                      </span>
+                                    ) : '-'}
                                   </td>
                                   <td className="px-4 py-3 text-sm text-center">
                                     <span className={`px-2 py-1 rounded-full text-xs ${family.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
