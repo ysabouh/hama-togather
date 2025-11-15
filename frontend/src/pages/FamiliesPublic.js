@@ -25,6 +25,8 @@ const FamiliesPublic = () => {
   const [needAssessments, setNeedAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingFamilies, setLoadingFamilies] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [pendingCategoryId, setPendingCategoryId] = useState(null);
 
   useEffect(() => {
     fetchData();
