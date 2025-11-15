@@ -3304,38 +3304,69 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="col-span-2 border-t pt-4 mt-4">
-                      <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
-                        <div>
-                          <p className="font-medium">تاريخ الإنشاء</p>
-                          <p>{selectedFamily?.created_at ? new Date(selectedFamily.created_at).toLocaleString('ar-SY', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                          }) : '-'}</p>
+                      <div className="grid grid-cols-2 gap-6">
+                        {/* معلومات الإنشاء */}
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
+                          <h4 className="text-md font-bold text-green-900 mb-3 flex items-center gap-2">
+                            <span>📝</span> معلومات الإنشاء
+                          </h4>
+                          <div className="space-y-2">
+                            <div>
+                              <p className="text-xs text-gray-600">تاريخ الإنشاء</p>
+                              <p className="text-sm font-semibold text-gray-900">
+                                {selectedFamily?.created_at ? new Date(selectedFamily.created_at).toLocaleString('ar-SY', {
+                                  year: 'numeric',
+                                  month: '2-digit',
+                                  day: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: false
+                                }) : '-'}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-600">أُضيفت بواسطة</p>
+                              <p className="text-sm font-bold text-emerald-700">
+                                {selectedFamily?.created_by_user_id ? (
+                                  users.find(u => u.id === selectedFamily.created_by_user_id)?.full_name || 
+                                  users.find(u => u.id === selectedFamily.created_by_user_id)?.email || 
+                                  'مستخدم غير معروف'
+                                ) : '-'}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium">أُضيفت بواسطة</p>
-                          <p className="text-emerald-700 font-semibold">
-                            {selectedFamily?.created_by_user_id ? (
-                              users.find(u => u.id === selectedFamily.created_by_user_id)?.full_name || 
-                              users.find(u => u.id === selectedFamily.created_by_user_id)?.email || 
-                              'مستخدم غير معروف'
-                            ) : '-'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-medium">آخر تحديث</p>
-                          <p>{selectedFamily?.updated_at ? new Date(selectedFamily.updated_at).toLocaleString('ar-SY', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                          }) : 'لم يتم التحديث'}</p>
+
+                        {/* معلومات التحديث */}
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                          <h4 className="text-md font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <span>✏️</span> معلومات آخر تحديث
+                          </h4>
+                          <div className="space-y-2">
+                            <div>
+                              <p className="text-xs text-gray-600">تاريخ آخر تحديث</p>
+                              <p className="text-sm font-semibold text-gray-900">
+                                {selectedFamily?.updated_at ? new Date(selectedFamily.updated_at).toLocaleString('ar-SY', {
+                                  year: 'numeric',
+                                  month: '2-digit',
+                                  day: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: false
+                                }) : 'لم يتم التحديث'}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-600">عُدلت بواسطة</p>
+                              <p className="text-sm font-bold text-blue-700">
+                                {selectedFamily?.updated_by_user_id ? (
+                                  users.find(u => u.id === selectedFamily.updated_by_user_id)?.full_name || 
+                                  users.find(u => u.id === selectedFamily.updated_by_user_id)?.email || 
+                                  'مستخدم غير معروف'
+                                ) : (selectedFamily?.updated_at ? 'غير محدد' : '-')}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
