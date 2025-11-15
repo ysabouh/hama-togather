@@ -360,6 +360,75 @@ const FamilyDetails = () => {
                     </div>
                   </div>
                 )}
+
+                {/* Family Images */}
+                {familyImages.length > 0 && (
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <ImageIcon className="w-6 h-6 text-emerald-600" />
+                      صور العائلة
+                    </h2>
+                    <div className="grid grid-cols-2 gap-4">
+                      {familyImages.map((image, index) => (
+                        <div
+                          key={index}
+                          className="relative aspect-video rounded-lg overflow-hidden group cursor-pointer"
+                        >
+                          <img
+                            src={image}
+                            alt={`صورة ${index + 1}`}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Donation History */}
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <History className="w-6 h-6 text-emerald-600" />
+                    تاريخ المساعدات السابقة
+                  </h2>
+                  
+                  {donationHistory.length === 0 ? (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <Gift className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500">لا توجد مساعدات مسجلة حتى الآن</p>
+                      <p className="text-sm text-gray-400 mt-1">كن أول من يساعد هذه العائلة!</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {donationHistory.map((donation) => (
+                        <div
+                          key={donation.id}
+                          className="relative border-r-4 border-emerald-500 pr-6 pb-4"
+                        >
+                          {/* Timeline Dot */}
+                          <div className="absolute right-0 top-0 w-4 h-4 bg-emerald-500 rounded-full transform translate-x-1/2 ring-4 ring-white"></div>
+                          
+                          <div className="bg-gray-50 rounded-lg p-4 hover:bg-emerald-50 transition-colors">
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <h3 className="font-bold text-gray-900">{donation.donor_name}</h3>
+                                <p className="text-sm text-emerald-600 font-semibold mt-1">
+                                  {donation.donation_type} - {donation.amount}
+                                </p>
+                              </div>
+                              <span className="text-xs text-gray-500 flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {formatDate(donation.date)}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600">{donation.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Sidebar - 1 column */}
