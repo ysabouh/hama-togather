@@ -95,10 +95,24 @@ const ReferenceDataManagement = ({
         onDataChange={onDataChange}
         fields={[
           { name: 'name', label: 'اسم التصنيف', required: true, placeholder: 'مثل: أولوية قصوى، متوسطة، منخفضة' },
+          { name: 'color', label: 'اللون', required: false, type: 'color', placeholder: '#3b82f6', defaultValue: '#3b82f6' },
           { name: 'description', label: 'الوصف', required: false, type: 'textarea', placeholder: 'وصف التصنيف...' }
         ]}
         columns={[
           { key: 'name', label: 'اسم التصنيف', className: 'text-gray-900 font-medium' },
+          { 
+            key: 'color', 
+            label: 'اللون', 
+            render: (item) => item.color ? (
+              <div className="flex items-center justify-center gap-2">
+                <div 
+                  className="w-6 h-6 rounded border border-gray-300" 
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-xs text-gray-500">{item.color}</span>
+              </div>
+            ) : '-'
+          },
           { key: 'description', label: 'الوصف', className: 'text-gray-600' }
         ]}
         createButtonText="إضافة تصنيف"
