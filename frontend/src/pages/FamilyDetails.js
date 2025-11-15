@@ -99,6 +99,68 @@ const FamilyDetails = () => {
     }
   };
 
+  const handleDonationSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // TODO: إضافة API endpoint للتبرعات
+      // await axios.post(`${API_URL}/donations`, {
+      //   ...donationForm,
+      //   family_id: familyId,
+      //   donor_id: user.id
+      // });
+      
+      toast.success('تم تسجيل التبرع بنجاح! شكراً لكرمك 💚');
+      setShowDonationModal(false);
+      setDonationForm({
+        donor_name: user?.name || '',
+        donor_phone: '',
+        donor_email: user?.email || '',
+        donation_type: 'مالية',
+        amount: '',
+        description: '',
+        notes: ''
+      });
+    } catch (error) {
+      console.error('Error submitting donation:', error);
+      toast.error('حدث خطأ في تسجيل التبرع');
+    }
+  };
+
+  // Mock donation history - TODO: جلب من API
+  const donationHistory = [
+    {
+      id: 1,
+      donor_name: 'متبرع كريم',
+      donation_type: 'مالية',
+      amount: '500 ريال',
+      date: '2025-01-10',
+      description: 'مساعدة مالية'
+    },
+    {
+      id: 2,
+      donor_name: 'أسرة خيرية',
+      donation_type: 'عينية',
+      amount: 'مواد غذائية',
+      date: '2025-01-05',
+      description: 'سلة غذائية كاملة'
+    },
+    {
+      id: 3,
+      donor_name: 'لجنة الحي',
+      donation_type: 'خدمية',
+      amount: 'زيارة طبية',
+      date: '2024-12-20',
+      description: 'فحص طبي شامل للعائلة'
+    }
+  ];
+
+  // Mock family images - TODO: جلب من family model
+  const familyImages = [
+    'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400',
+    'https://images.unsplash.com/photo-1609220136736-443140cffec6?w=400'
+  ];
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50" dir="rtl">
