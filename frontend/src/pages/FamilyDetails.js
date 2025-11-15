@@ -500,7 +500,10 @@ const FamilyDetails = () => {
                   <p className="text-emerald-100 text-sm mb-4">
                     كل مساهمة تحدث فرقاً كبيراً في حياة هذه العائلة
                   </p>
-                  <button className="w-full bg-white text-emerald-600 py-3 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2">
+                  <button 
+                    onClick={() => setShowDonationModal(true)}
+                    className="w-full bg-white text-emerald-600 py-3 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2"
+                  >
                     <Heart className="w-5 h-5" />
                     <span>تقديم المساعدة</span>
                   </button>
