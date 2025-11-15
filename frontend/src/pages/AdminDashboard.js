@@ -739,13 +739,50 @@ const AdminDashboard = () => {
       case 'families':
         return (
           <>
-            <div>
-              <Label>اسم العائلة</Label>
-              <Input value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+            {dialogMode === 'edit' && formData.family_number && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <Label className="text-blue-900 font-semibold">رقم العائلة (تلقائي)</Label>
+                <p className="text-xl font-bold text-blue-700 mt-1">{formData.family_number}</p>
+                <p className="text-xs text-blue-600 mt-1">* هذا الرقم تم توليده تلقائياً وغير قابل للتعديل</p>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>رمز العائلة</Label>
+                <Input 
+                  value={formData.family_code || ''} 
+                  onChange={(e) => setFormData({...formData, family_code: e.target.value})} 
+                  placeholder="مثال: FAM-A1"
+                />
+              </div>
+              <div>
+                <Label>اسم الفاك (اسم مستعار)</Label>
+                <Input 
+                  value={formData.fac_name || ''} 
+                  onChange={(e) => setFormData({...formData, fac_name: e.target.value})} 
+                  placeholder="اسم مستعار للعائلة"
+                />
+              </div>
             </div>
             <div>
-              <Label>عدد الأفراد</Label>
-              <Input type="number" value={formData.members_count || ''} onChange={(e) => setFormData({...formData, members_count: parseInt(e.target.value)})} required />
+              <Label>اسم العائلة الحقيقي</Label>
+              <Input value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>رقم الهاتف</Label>
+                <Input 
+                  type="tel" 
+                  value={formData.phone || ''} 
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})} 
+                  placeholder="09xxxxxxxx"
+                  dir="ltr"
+                />
+              </div>
+              <div>
+                <Label>عدد الأفراد</Label>
+                <Input type="number" value={formData.members_count || ''} onChange={(e) => setFormData({...formData, members_count: parseInt(e.target.value)})} required />
+              </div>
             </div>
             <div>
               <Label>تصنيف العائلة</Label>
