@@ -832,6 +832,9 @@ async def get_public_families_stats():
             "categories": result,
             "total_families": len(families)
         }
+    except Exception as e:
+        print(f"Error in get_public_families_stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/public/families-by-category/{category_id}")
 async def get_families_by_category(
