@@ -136,6 +136,28 @@ const FamilyDetails = () => {
     }
   };
 
+  const handleAddNeedSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      await axios.post(`${API_URL}/families/${familyId}/needs`, needForm);
+      
+      toast.success('تم إضافة الاحتياج بنجاح! ✅');
+      setShowAddNeedModal(false);
+      setNeedForm({
+        need_id: '',
+        amount: '',
+        notes: ''
+      });
+      
+      // إعادة تحميل البيانات
+      fetchFamilyDetails();
+    } catch (error) {
+      console.error('Error adding need:', error);
+      toast.error('حدث خطأ في إضافة الاحتياج');
+    }
+  };
+
   // Mock donation history - TODO: جلب من API
   const donationHistory = [
     {
