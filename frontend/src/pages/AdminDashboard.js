@@ -1531,6 +1531,72 @@ const AdminDashboard = () => {
           </>
         );
 
+      case 'need-assessment':
+        return (
+          <>
+            <div>
+              <Label>اسم التقييم</Label>
+              <Input 
+                value={formData.name || ''} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                placeholder="مثال: منخفض، متوسط، مرتفع"
+                required 
+              />
+            </div>
+            <div>
+              <Label>الوصف (اختياري)</Label>
+              <Textarea 
+                value={formData.description || ''} 
+                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                placeholder="وصف مستوى الاحتياج"
+                rows={2}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>الأولوية (0-10)</Label>
+                <Input 
+                  type="number"
+                  min="0"
+                  max="10"
+                  value={formData.priority || 0} 
+                  onChange={(e) => setFormData({...formData, priority: parseInt(e.target.value) || 0})} 
+                  placeholder="رقم الأولوية"
+                />
+                <p className="text-xs text-gray-500 mt-1">الرقم الأقل = أولوية أعلى</p>
+              </div>
+              <div>
+                <Label>اللون (Hex)</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    type="color"
+                    value={formData.color || '#3b82f6'} 
+                    onChange={(e) => setFormData({...formData, color: e.target.value})} 
+                    className="w-16 h-10 p-1"
+                  />
+                  <Input 
+                    type="text"
+                    value={formData.color || '#3b82f6'} 
+                    onChange={(e) => setFormData({...formData, color: e.target.value})} 
+                    placeholder="#3b82f6"
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="is_active_need"
+                checked={formData.is_active ?? true}
+                onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="is_active_need">نشط</Label>
+            </div>
+          </>
+        );
+
       default:
         return null;
     }
