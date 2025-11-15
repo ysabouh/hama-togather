@@ -447,6 +447,30 @@ class IncomeLevelUpdate(BaseModel):
     max_amount: Optional[int] = None
     is_active: Optional[bool] = None
 
+# Need Assessment Models (تقييم الاحتياج)
+class NeedAssessment(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # اسم التقييم (منخفض، متوسط، مرتفع، حرج/عاجل)
+    description: Optional[str] = None
+    color: Optional[str] = None  # لون مميز لكل مستوى
+    priority: Optional[int] = 0  # الأولوية (0-10)
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class NeedAssessmentCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    color: Optional[str] = None
+    priority: Optional[int] = 0
+
+class NeedAssessmentUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    color: Optional[str] = None
+    priority: Optional[int] = None
+    is_active: Optional[bool] = None
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
