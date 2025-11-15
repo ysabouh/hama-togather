@@ -568,6 +568,104 @@ const FamilyDetails = () => {
         </div>
       </section>
 
+      {/* Add Need Modal */}
+      {showAddNeedModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowAddNeedModal(false)}>
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-lg w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <Package className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">إضافة احتياج جديد</h2>
+                    <p className="text-emerald-100 text-sm">لعائلة {family?.name}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowAddNeedModal(false)}
+                  className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleAddNeedSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  نوع الاحتياج <span className="text-red-500">*</span>
+                </label>
+                <select
+                  required
+                  value={needForm.need_id}
+                  onChange={(e) => setNeedForm({...needForm, need_id: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                >
+                  <option value="">-- اختر نوع الاحتياج --</option>
+                  {allNeeds.map((need) => (
+                    <option key={need.id} value={need.id}>
+                      {need.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  الكمية/المقدار
+                </label>
+                <input
+                  type="text"
+                  value={needForm.amount}
+                  onChange={(e) => setNeedForm({...needForm, amount: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
+                  placeholder="مثال: 500 كجم، 10 قطع، إلخ"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  ملاحظات
+                </label>
+                <textarea
+                  value={needForm.notes}
+                  onChange={(e) => setNeedForm({...needForm, notes: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors resize-none"
+                  rows="3"
+                  placeholder="أي ملاحظات إضافية عن الاحتياج..."
+                />
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                  <CheckCircle className="w-5 h-5" />
+                  <span>إضافة الاحتياج</span>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => setShowAddNeedModal(false)}
+                  className="flex-1 sm:flex-initial bg-gray-100 text-gray-700 py-3 px-8 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Donation Modal */}
       {showDonationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowDonationModal(false)}>
