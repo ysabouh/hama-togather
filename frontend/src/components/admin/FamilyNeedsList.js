@@ -106,41 +106,41 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-6 shadow-sm mt-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold text-emerald-900 flex items-center gap-2 border-b-2 border-emerald-300 pb-2">
-          <ShoppingCart className="w-5 h-5 text-emerald-700" />
+    <div className="mt-8 w-full">
+      <div className="mb-6">
+        <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2 border-b-4 border-emerald-600 pb-3">
+          <ShoppingCart className="w-6 h-6 text-emerald-600" />
           احتياجات العائلة
-          <span className="text-sm font-normal text-emerald-700">({familyNeeds.length})</span>
+          <span className="text-lg font-normal text-gray-600">({familyNeeds.length})</span>
         </h3>
       </div>
 
       {familyNeeds.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-emerald-200">
-          <ShoppingCart className="w-16 h-16 text-emerald-300 mx-auto mb-4" />
+        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+          <ShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600 text-lg mb-2">لا توجد احتياجات مسجلة لهذه العائلة</p>
-          <p className="text-gray-400 text-sm">استخدم زر "إدارة الاحتياجات" أعلى الصفحة لإضافة احتياجات جديدة</p>
+          <p className="text-gray-400 text-sm">قم بإضافة احتياجات جديدة من خلال dialog الإدارة</p>
         </div>
       ) : (
         <>
           {/* ملخص المبالغ */}
-          <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border-r-4 border-emerald-600">
+          <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-5 mb-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-gray-700 font-semibold text-lg">المجموع الكلي للاحتياجات:</span>
+              <span className="text-gray-800 font-bold text-xl">المجموع الكلي للاحتياجات:</span>
               <div className="flex items-center gap-2">
-                <DollarSign className="w-6 h-6 text-green-600" />
-                <span className="text-3xl font-bold text-green-700">
+                <DollarSign className="w-7 h-7 text-green-600" />
+                <span className="text-4xl font-bold text-green-700">
                   {totalAmount.toLocaleString('ar-SA')}
                 </span>
-                <span className="text-base text-gray-500">ل.س</span>
+                <span className="text-lg text-gray-600">ل.س</span>
               </div>
             </div>
           </div>
 
           {/* جدول الاحتياجات - عرض كامل */}
-          <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-            <div className="overflow-x-auto" style={{maxWidth: '100%'}}>
-              <table className="w-full min-w-max">
+          <div className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200">
+            <div className="overflow-x-auto w-full">
+              <table className="w-full min-w-max border-collapse">
                 <thead className="bg-emerald-100">
                   <tr>
                     <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">#</th>
