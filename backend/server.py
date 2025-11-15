@@ -959,6 +959,62 @@ async def update_family(family_id: str, family_input: FamilyCreate, admin: User 
         updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
     return Family(**updated)
 
+@api_router.post("/families/{family_id}/images")
+async def add_family_image(family_id: str, file: UploadFile = File(...), admin: User = Depends(get_admin_user)):
+    """إضافة صورة للعائلة"""
+    family = await db.families.find_one({"id": family_id})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    
+    # قراءة الصورة وتحويلها إلى Base64
+    contents = await file.read()
+    base64_image = base64.b64encode(contents).decode('utf-8')
+    image_url = f"data:{file.content_type};base64,{base64_image}"
+    
+    # إضافة الصورة إلى قائمة الصور
+    current_images = family.get('images', [])
+    current_images.append(image_url)
+    
+    await db.families.update_one(
+        {"id": family_id},
+        {
+            "$set": {
+                "images": current_images,
+                "updated_at": datetime.now(timezone.utc),
+                "updated_by_user_id": admin.id
+            }
+        }
+    )
+    
+    return {"message": "Image added successfully", "image_url": image_url}
+
+@api_router.delete("/families/{family_id}/images/{image_index}")
+async def delete_family_image(family_id: str, image_index: int, admin: User = Depends(get_admin_user)):
+    """حذف صورة من العائلة"""
+    family = await db.families.find_one({"id": family_id})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    
+    current_images = family.get('images', [])
+    if image_index < 0 or image_index >= len(current_images):
+        raise HTTPException(status_code=404, detail="Image not found")
+    
+    # حذف الصورة من القائمة
+    current_images.pop(image_index)
+    
+    await db.families.update_one(
+        {"id": family_id},
+        {
+            "$set": {
+                "images": current_images,
+                "updated_at": datetime.now(timezone.utc),
+                "updated_by_user_id": admin.id
+            }
+        }
+    )
+    
+    return {"message": "Image deleted successfully"}
+
 @api_router.put("/families/{family_id}/toggle-status")
 async def toggle_family_status(
     family_id: str,
