@@ -782,6 +782,13 @@ async def update_family(family_id: str, family_input: FamilyCreate, admin: User 
     if 'family_number' in existing:
         update_data['family_number'] = existing['family_number']
     
+    # الحفاظ على المستخدم الذي أنشأ العائلة
+    if 'created_by_user_id' in existing:
+        update_data['created_by_user_id'] = existing['created_by_user_id']
+    
+    # حفظ معرف المستخدم الذي قام بالتعديل
+    update_data['updated_by_user_id'] = admin.id
+    
     await db.families.update_one({"id": family_id}, {"$set": update_data})
     
     updated = await db.families.find_one({"id": family_id}, {"_id": 0})
