@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import Select from 'react-select';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Users, Heart } from 'lucide-react';
+import { Users, Heart, MapPin, DollarSign, TrendingUp, Home, Filter } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { customSelectStyles } from '@/utils/adminHelpers';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const FamiliesPublic = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get('category');
+  const { user } = useAuth();
 
   const [categories, setCategories] = useState([]);
+  const [families, setFamilies] = useState([]);
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
+  const [incomeLevels, setIncomeLevels] = useState([]);
+  const [needAssessments, setNeedAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingFamilies, setLoadingFamilies] = useState(false);
 
   useEffect(() => {
     fetchData();
