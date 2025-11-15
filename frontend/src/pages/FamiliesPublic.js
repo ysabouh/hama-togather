@@ -106,7 +106,7 @@ const FamiliesPublic = () => {
                   <div className="flex flex-col items-center text-center space-y-4">
                     {/* العدد */}
                     <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-3xl font-bold w-20 h-20 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                      {getCategoryCount(category.id)}
+                      {getCategoryCount(category)}
                     </div>
 
                     {/* الأيقونة */}
