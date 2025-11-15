@@ -3032,6 +3032,18 @@ const AdminDashboard = () => {
                                       >
                                         <Edit className="w-4 h-4" />
                                       </Button>
+                                      <Button 
+                                        variant="outline" 
+                                        size="sm" 
+                                        onClick={() => {
+                                          setSelectedFamilyForImages(family);
+                                          setShowFamilyImagesDialog(true);
+                                        }}
+                                        className="text-purple-600 hover:bg-purple-50"
+                                        title="إدارة الصور"
+                                      >
+                                        <ImageIcon className="w-4 h-4" />
+                                      </Button>
                                       <Button
                                         size="sm"
                                         variant="outline"
