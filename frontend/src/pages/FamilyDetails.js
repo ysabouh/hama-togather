@@ -6,9 +6,10 @@ import Footer from '../components/Footer';
 import { 
   Users, Heart, MapPin, DollarSign, TrendingUp, Calendar, 
   ArrowRight, Phone, Mail, Home, User, Baby, CheckCircle,
-  Clock, Package
+  Clock, Package, X, Image as ImageIcon, History, Gift
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'sonner';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -24,6 +25,16 @@ const FamilyDetails = () => {
   const [incomeLevel, setIncomeLevel] = useState(null);
   const [needAssessment, setNeedAssessment] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showDonationModal, setShowDonationModal] = useState(false);
+  const [donationForm, setDonationForm] = useState({
+    donor_name: user?.name || '',
+    donor_phone: '',
+    donor_email: user?.email || '',
+    donation_type: 'مالية',
+    amount: '',
+    description: '',
+    notes: ''
+  });
 
   useEffect(() => {
     if (!user) {
