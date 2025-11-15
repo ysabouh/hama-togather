@@ -15,10 +15,13 @@ BACKEND_URL = "https://solidarity-hub-6.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 
-class PasswordChangeTester:
+class FamiliesPublicTester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
+        self.regular_user_token = None
+        self.regular_user_id = None
+        self.regular_user_neighborhood_id = None
         
     def login_admin(self):
         """Login as admin and get authentication token"""
