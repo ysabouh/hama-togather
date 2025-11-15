@@ -108,6 +108,9 @@ const AdminDashboard = () => {
   const [showInactiveFamilyCategories, setShowInactiveFamilyCategories] = useState(false);
   const [loadingIncomeLevels, setLoadingIncomeLevels] = useState(false);
   const [showInactiveIncomeLevels, setShowInactiveIncomeLevels] = useState(false);
+  const [needAssessments, setNeedAssessments] = useState([]);
+  const [loadingNeedAssessments, setLoadingNeedAssessments] = useState(false);
+  const [showInactiveNeedAssessments, setShowInactiveNeedAssessments] = useState(false);
   const [showInactiveFamilies, setShowInactiveFamilies] = useState(false);
   const [selectedFamily, setSelectedFamily] = useState(null);
   const [showFamilyDetails, setShowFamilyDetails] = useState(false);
