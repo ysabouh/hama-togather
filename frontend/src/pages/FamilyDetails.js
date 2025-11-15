@@ -26,6 +26,7 @@ const FamilyDetails = () => {
   const [needAssessment, setNeedAssessment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDonationModal, setShowDonationModal] = useState(false);
+  const [showAddNeedModal, setShowAddNeedModal] = useState(false);
   const [donationForm, setDonationForm] = useState({
     donor_name: user?.name || '',
     donor_phone: '',
@@ -35,6 +36,12 @@ const FamilyDetails = () => {
     description: '',
     notes: ''
   });
+  const [needForm, setNeedForm] = useState({
+    need_id: '',
+    amount: '',
+    notes: ''
+  });
+  const [allNeeds, setAllNeeds] = useState([]);
 
   useEffect(() => {
     if (!user) {
