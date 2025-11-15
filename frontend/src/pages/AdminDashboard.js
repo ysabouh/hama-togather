@@ -4676,6 +4676,78 @@ const AdminDashboard = () => {
       <Footer />
 
       {/* Loading Overlay */}
+      {/* Family Images Dialog */}
+      {showFamilyImagesDialog && selectedFamilyForImages && (
+        <Dialog open={showFamilyImagesDialog} onOpenChange={setShowFamilyImagesDialog}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-right">إدارة صور العائلة - {selectedFamilyForImages.name}</DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-6 pt-4">
+              {/* Upload Section */}
+              <div className="border-2 border-dashed border-emerald-300 rounded-xl p-8 text-center bg-emerald-50">
+                <ImageIcon className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-gray-900 mb-2">إضافة صورة جديدة</h3>
+                <p className="text-sm text-gray-600 mb-4">اختر صورة لإضافتها إلى ألبوم العائلة</p>
+                <label className="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                  <Plus className="w-5 h-5" />
+                  <span className="font-semibold">اختيار صورة</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFamilyImageUpload(e, selectedFamilyForImages.id)}
+                    disabled={uploadingImage}
+                  />
+                </label>
+                {uploadingImage && (
+                  <div className="mt-4 flex items-center justify-center gap-2 text-emerald-600">
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>جارٍ الرفع...</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Images Grid */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                  الصور الحالية ({selectedFamilyForImages.images?.length || 0})
+                </h3>
+                
+                {!selectedFamilyForImages.images || selectedFamilyForImages.images.length === 0 ? (
+                  <div className="text-center py-12 bg-gray-50 rounded-lg">
+                    <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-600">لا توجد صور لهذه العائلة</p>
+                    <p className="text-sm text-gray-400 mt-1">استخدم الزر أعلاه لإضافة صور</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {selectedFamilyForImages.images.map((image, index) => (
+                      <div key={index} className="relative group aspect-video rounded-lg overflow-hidden shadow-md">
+                        <img
+                          src={image}
+                          alt={`صورة ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center">
+                          <button
+                            onClick={() => handleFamilyImageDelete(selectedFamilyForImages.id, index)}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-white p-2 rounded-full hover:bg-red-700"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
           <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4 shadow-2xl">
