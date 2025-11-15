@@ -3314,17 +3314,15 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 
-                {selectedFamily && (
-                  <div className="w-full mt-6">
-                    <FamilyNeedsList 
-                      familyId={selectedFamily?.id}
-                      onManageClick={() => {
-                        setSelectedFamilyForNeeds(selectedFamily);
-                        setShowFamilyNeedsDialog(true);
-                      }}
-                    />
-                  </div>
-                )}
+                <div className="w-full mt-6">
+                  <FamilyNeedsList 
+                    familyId={selectedFamily?.id}
+                    onManageClick={() => {
+                      setSelectedFamilyForNeeds(selectedFamily);
+                      setShowFamilyNeedsDialog(true);
+                    }}
+                  />
+                </div>
               )}
             </TabsContent>
 
