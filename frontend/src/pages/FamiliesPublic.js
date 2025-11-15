@@ -108,10 +108,22 @@ const FamiliesPublic = () => {
 
   const handleCategoryClick = (category) => {
     if (!user) {
-      navigate('/login?redirect=/families-public?category=' + category.id);
+      // عرض رسالة تسجيل الدخول
+      setPendingCategoryId(category.id);
+      setShowLoginPrompt(true);
     } else {
       navigate('/families-public?category=' + category.id);
     }
+  };
+
+  const handleLoginConfirm = () => {
+    setShowLoginPrompt(false);
+    navigate('/login?redirect=/families-public?category=' + pendingCategoryId);
+  };
+
+  const handleLoginCancel = () => {
+    setShowLoginPrompt(false);
+    setPendingCategoryId(null);
   };
 
   const handleNeighborhoodChange = (selected) => {
