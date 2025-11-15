@@ -141,24 +141,24 @@ const FamilyNeedsList = ({ familyId, onManageClick }) => {
           <div className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200">
             <div className="overflow-x-auto w-full">
               <table className="w-full min-w-max border-collapse">
-                <thead className="bg-emerald-100">
+                <thead className="bg-gradient-to-r from-emerald-600 to-teal-600">
                   <tr>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">#</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">الاحتياج</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">الوصف</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">المبلغ التقديري</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">الحالة</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">ملاحظات</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">تاريخ الإضافة</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">أضيف بواسطة</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">تاريخ التعديل</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">عُدل بواسطة</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-emerald-900">الإجراءات</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">#</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">الاحتياج</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">الوصف</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">المبلغ التقديري</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">الحالة</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">ملاحظات</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">تاريخ الإضافة</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">أضيف بواسطة</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">تاريخ التعديل</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white border-r border-emerald-500">عُدل بواسطة</th>
+                    <th className="px-4 py-4 text-center text-sm font-bold text-white">الإجراءات</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200 bg-white">
                   {familyNeeds.map((needRecord, index) => (
-                    <tr key={needRecord.id} className="hover:bg-emerald-50 transition-colors">
+                    <tr key={needRecord.id} className="hover:bg-emerald-50 transition-colors border-b border-gray-200">
                       <td className="px-4 py-3 text-sm text-gray-600 text-center font-medium">{index + 1}</td>
                       
                       {/* اسم الاحتياج */}
