@@ -21,26 +21,11 @@ const FamiliesPublic = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [familiesRes, categoriesRes] = await Promise.all([
-        axios.get(`${API_URL}/families`),
-        axios.get(`${API_URL}/family-categories`)
-      ]);
-
-      const allFamilies = familiesRes.data.items || familiesRes.data;
-      const activeCategories = categoriesRes.data.filter(c => c.is_active !== false);
-
-      console.log('Total families loaded:', allFamilies.length);
-      console.log('Active categories:', activeCategories.length);
+      const response = await axios.get(`${API_URL}/public/families-stats`);
       
-      // Debug: print family categories
-      allFamilies.forEach(f => {
-        if (f.family_category_id) {
-          console.log(`Family ${f.family_number}: category_id = ${f.family_category_id}`);
-        }
-      });
-
-      setFamilies(allFamilies);
-      setCategories(activeCategories);
+      setCategories(response.data.categories || []);
+      console.log('Categories with counts:', response.data.categories);
+      console.log('Total families:', response.data.total_families);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -48,10 +33,9 @@ const FamiliesPublic = () => {
     }
   };
 
-  const getCategoryCount = (categoryId) => {
-    const count = families.filter(f => f.family_category_id === categoryId && f.is_active !== false).length;
-    console.log(`Category ${categoryId} has ${count} families`);
-    return count;
+  const getCategoryCount = (category) => {
+    // العدد موجود مباشرة في الـ category من الـ API
+    return category.families_count || 0;
   };
 
   const handleCategoryClick = (category) => {
