@@ -47,6 +47,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/families-public" element={<FamiliesPublic />} />
+            <Route path="/family/:familyId" element={<FamilyDetails />} />
             <Route path="/families" element={<FamiliesPage />} />
             <Route path="/health-cases" element={<HealthCasesPage />} />
             <Route path="/courses" element={<CoursesPage />} />
