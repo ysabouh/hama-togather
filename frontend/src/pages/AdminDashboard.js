@@ -2908,10 +2908,13 @@ const AdminDashboard = () => {
                       <thead className="bg-gray-50">
                         <tr>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم العائلة</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحاجة الشهرية</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم العائلة</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رمز العائلة</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم الفاك</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم الهاتف</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">التصنيف</th>
+                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تقييم الاحتياج</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
                         </tr>
