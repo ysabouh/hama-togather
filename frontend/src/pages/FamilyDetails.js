@@ -124,12 +124,10 @@ const FamilyDetails = () => {
     e.preventDefault();
     
     try {
-      // TODO: إضافة API endpoint للتبرعات
-      // await axios.post(`${API_URL}/donations`, {
-      //   ...donationForm,
-      //   family_id: familyId,
-      //   donor_id: user.id
-      // });
+      await axios.post(`${API_URL}/donations`, {
+        ...donationForm,
+        family_id: familyId
+      });
       
       toast.success('تم تسجيل التبرع بنجاح! شكراً لكرمك 💚');
       setShowDonationModal(false);
@@ -142,6 +140,9 @@ const FamilyDetails = () => {
         description: '',
         notes: ''
       });
+      
+      // إعادة جلب التبرعات
+      fetchFamilyDetails();
     } catch (error) {
       console.error('Error submitting donation:', error);
       toast.error('حدث خطأ في تسجيل التبرع');
