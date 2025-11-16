@@ -1674,9 +1674,14 @@ async def get_donations(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/donations", response_model=Donation)
 async def create_donation(donation_input: DonationCreate, current_user: User = Depends(get_current_user)):
+    """إنشاء تبرع جديد"""
     donation_dict = donation_input.model_dump()
-    donation_dict['donor_id'] = current_user.id
-    donation_dict['donor_name'] = current_user.full_name
+    
+    # إذا كان المستخدم مسجلاً، نضيف معلوماته
+    if current_user:
+        donation_dict['donor_id'] = current_user.id
+        donation_dict['created_by_user_id'] = current_user.id
+    
     donation_obj = Donation(**donation_dict)
     
     doc = donation_obj.model_dump()
@@ -1684,6 +1689,25 @@ async def create_donation(donation_input: DonationCreate, current_user: User = D
     
     await db.donations.insert_one(doc)
     return donation_obj
+
+@api_router.get("/families/{family_id}/donations")
+async def get_family_donations(family_id: str):
+    """جلب جميع التبرعات لعائلة معينة"""
+    try:
+        donations = await db.donations.find(
+            {"family_id": family_id, "is_active": {"$ne": False}},
+            {"_id": 0}
+        ).sort("created_at", -1).to_list(1000)
+        
+        # تحويل التواريخ
+        for donation in donations:
+            if isinstance(donation.get('created_at'), str):
+                donation['created_at'] = datetime.fromisoformat(donation['created_at'])
+        
+        return donations
+    except Exception as e:
+        print(f"Error fetching family donations: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/stats")
 async def get_stats():
