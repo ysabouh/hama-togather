@@ -27,6 +27,8 @@ const FamilyDetails = () => {
   const [loading, setLoading] = useState(true);
   const [showDonationModal, setShowDonationModal] = useState(false);
   const [showAddNeedModal, setShowAddNeedModal] = useState(false);
+  const [showImageViewer, setShowImageViewer] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [donationForm, setDonationForm] = useState({
     donor_name: user?.name || '',
     donor_phone: '',
@@ -42,6 +44,7 @@ const FamilyDetails = () => {
     notes: ''
   });
   const [allNeeds, setAllNeeds] = useState([]);
+  const [donationHistory, setDonationHistory] = useState([]);
 
   useEffect(() => {
     if (!user) {
