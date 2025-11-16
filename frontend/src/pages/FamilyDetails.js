@@ -606,6 +606,91 @@ const FamilyDetails = () => {
         </div>
       </section>
 
+      {/* Image Viewer Modal */}
+      {showImageViewer && familyImages.length > 0 && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-50"
+          onClick={closeImageViewer}
+        >
+          {/* Close Button */}
+          <button
+            onClick={closeImageViewer}
+            className="absolute top-4 left-4 z-50 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors"
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
+
+          {/* Image Counter */}
+          <div className="absolute top-4 right-4 z-50 bg-black/50 text-white px-4 py-2 rounded-full text-sm font-semibold">
+            {currentImageIndex + 1} / {familyImages.length}
+          </div>
+
+          {/* Previous Button */}
+          {familyImages.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                prevImage();
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors"
+            >
+              <ChevronRight className="w-8 h-8 text-white" />
+            </button>
+          )}
+
+          {/* Next Button */}
+          {familyImages.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                nextImage();
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors"
+            >
+              <ChevronLeft className="w-8 h-8 text-white" />
+            </button>
+          )}
+
+          {/* Main Image */}
+          <div 
+            className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={familyImages[currentImageIndex]}
+              alt={`صورة ${currentImageIndex + 1}`}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            />
+          </div>
+
+          {/* Thumbnails */}
+          {familyImages.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 bg-black/50 p-3 rounded-full max-w-[90vw] overflow-x-auto">
+              {familyImages.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImageIndex(index);
+                  }}
+                  className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    index === currentImageIndex 
+                      ? 'border-emerald-500 scale-110' 
+                      : 'border-white/30 hover:border-white/60'
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`صورة مصغرة ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Add Need Modal */}
       {showAddNeedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowAddNeedModal(false)}>
