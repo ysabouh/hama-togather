@@ -129,25 +129,33 @@ class FamilyCreate(BaseModel):
     female_children_count: Optional[int] = 0
     male_children_count: Optional[int] = 0
 
-# Donation Models
+# Donation Models - نموذج محسّن للتبرعات
 class Donation(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    donor_id: str
-    donor_name: str
-    type: str  # family, health, material, education
-    target_id: Optional[str] = None  # ID of family/health_case/etc
-    amount: Optional[float] = None
-    items: Optional[str] = None  # For material donations
-    message: Optional[str] = None
-    status: str = "pending"  # pending, completed
+    family_id: str  # معرف العائلة المستفيدة
+    donor_id: Optional[str] = None  # معرف المتبرع (إذا كان مسجلاً)
+    donor_name: str  # اسم المتبرع
+    donor_phone: Optional[str] = None  # رقم هاتف المتبرع
+    donor_email: Optional[str] = None  # بريد المتبرع
+    donation_type: str  # مالية، عينية، خدمية، أخرى
+    amount: str  # القيمة أو الكمية (نص حر مثل: "500 ريال" أو "سلة غذائية")
+    description: str  # وصف المساعدة
+    notes: Optional[str] = None  # ملاحظات إضافية
+    status: str = "pending"  # pending, approved, completed, rejected
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_by_user_id: Optional[str] = None  # من قام بتسجيل التبرع
+    is_active: bool = True
 
 class DonationCreate(BaseModel):
-    type: str
-    target_id: Optional[str] = None
-    amount: Optional[float] = None
-    items: Optional[str] = None
+    family_id: str
+    donor_name: str
+    donor_phone: Optional[str] = None
+    donor_email: Optional[str] = None
+    donation_type: str
+    amount: str
+    description: str
+    notes: Optional[str] = None
     message: Optional[str] = None
 
 # Health Case Models
