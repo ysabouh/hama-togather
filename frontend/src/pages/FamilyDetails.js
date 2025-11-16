@@ -70,6 +70,15 @@ const FamilyDetails = () => {
         setFamilyNeeds([]);
       }
 
+      // جلب تاريخ التبرعات
+      try {
+        const donationsRes = await axios.get(`${API_URL}/families/${familyId}/donations`);
+        setDonationHistory(donationsRes.data || []);
+      } catch (error) {
+        console.error('Error fetching donations:', error);
+        setDonationHistory([]);
+      }
+
       // جلب البيانات المساعدة
       const [categoriesRes, neighborhoodsRes, incomeLevelsRes, needAssessmentsRes, needsRes] = await Promise.all([
         axios.get(`${API_URL}/family-categories`),
