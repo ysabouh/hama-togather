@@ -171,36 +171,40 @@ const FamilyDetails = () => {
     }
   };
 
-  // Mock donation history - TODO: جلب من API
-  const donationHistory = [
-    {
-      id: 1,
-      donor_name: 'متبرع كريم',
-      donation_type: 'مالية',
-      amount: '500 ريال',
-      date: '2025-01-10',
-      description: 'مساعدة مالية'
-    },
-    {
-      id: 2,
-      donor_name: 'أسرة خيرية',
-      donation_type: 'عينية',
-      amount: 'مواد غذائية',
-      date: '2025-01-05',
-      description: 'سلة غذائية كاملة'
-    },
-    {
-      id: 3,
-      donor_name: 'لجنة الحي',
-      donation_type: 'خدمية',
-      amount: 'زيارة طبية',
-      date: '2024-12-20',
-      description: 'فحص طبي شامل للعائلة'
-    }
-  ];
-
   // استخدام الصور الحقيقية من family model
   const familyImages = family?.images || [];
+
+  // وظائف عرض الصور
+  const openImageViewer = (index) => {
+    setCurrentImageIndex(index);
+    setShowImageViewer(true);
+  };
+
+  const closeImageViewer = () => {
+    setShowImageViewer(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % familyImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + familyImages.length) % familyImages.length);
+  };
+
+  // معالجة مفاتيح لوحة المفاتيح للـ image viewer
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!showImageViewer) return;
+      
+      if (e.key === 'Escape') closeImageViewer();
+      else if (e.key === 'ArrowRight') prevImage();
+      else if (e.key === 'ArrowLeft') nextImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showImageViewer, familyImages.length]);
 
   if (loading) {
     return (
