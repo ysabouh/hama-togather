@@ -434,20 +434,28 @@ const FamilyDetails = () => {
                   <div className="bg-white rounded-xl shadow-lg p-6">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                       <ImageIcon className="w-6 h-6 text-emerald-600" />
-                      صور العائلة
+                      صور العائلة ({familyImages.length})
                     </h2>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {familyImages.map((image, index) => (
                         <div
                           key={index}
-                          className="relative aspect-video rounded-lg overflow-hidden group cursor-pointer"
+                          onClick={() => openImageViewer(index)}
+                          className="relative aspect-video rounded-lg overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all"
                         >
                           <img
                             src={image}
                             alt={`صورة ${index + 1}`}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                           />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all"></div>
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-3">
+                              <Eye className="w-6 h-6 text-emerald-600" />
+                            </div>
+                          </div>
+                          <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+                            {index + 1} / {familyImages.length}
+                          </div>
                         </div>
                       ))}
                     </div>
