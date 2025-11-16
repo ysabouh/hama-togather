@@ -468,38 +468,53 @@ const FamilyDetails = () => {
                   <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <History className="w-6 h-6 text-emerald-600" />
                     تاريخ المساعدات السابقة
+                    <span className="text-sm font-normal text-gray-500">({donationHistory.length})</span>
                   </h2>
                   
                   {donationHistory.length === 0 ? (
-                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                    <div className="text-center py-12 bg-gray-50 rounded-lg">
                       <Gift className="w-16 h-16 text-gray-300 mx-auto mb-3" />
-                      <p className="text-gray-500">لا توجد مساعدات مسجلة حتى الآن</p>
-                      <p className="text-sm text-gray-400 mt-1">كن أول من يساعد هذه العائلة!</p>
+                      <p className="text-gray-600 font-semibold mb-1">لا توجد مساعدات مسجلة حتى الآن</p>
+                      <p className="text-sm text-gray-400">كن أول من يساعد هذه العائلة!</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {donationHistory.map((donation) => (
+                      {donationHistory.map((donation, idx) => (
                         <div
-                          key={donation.id}
-                          className="relative border-r-4 border-emerald-500 pr-6 pb-4"
+                          key={donation.id || idx}
+                          className="relative border-r-4 border-emerald-500 pr-6 pb-4 last:pb-0"
                         >
                           {/* Timeline Dot */}
                           <div className="absolute right-0 top-0 w-4 h-4 bg-emerald-500 rounded-full transform translate-x-1/2 ring-4 ring-white"></div>
                           
                           <div className="bg-gray-50 rounded-lg p-4 hover:bg-emerald-50 transition-colors">
-                            <div className="flex items-start justify-between mb-2">
-                              <div>
-                                <h3 className="font-bold text-gray-900">{donation.donor_name}</h3>
-                                <p className="text-sm text-emerald-600 font-semibold mt-1">
-                                  {donation.donation_type} - {donation.amount}
-                                </p>
+                            <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
+                              <div className="flex-1">
+                                <h3 className="font-bold text-gray-900 text-lg">{donation.donor_name}</h3>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                    {donation.donation_type}
+                                  </span>
+                                  <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
+                                </div>
                               </div>
-                              <span className="text-xs text-gray-500 flex items-center gap-1">
+                              <span className="text-xs text-gray-500 flex items-center gap-1 whitespace-nowrap">
                                 <Clock className="w-3 h-3" />
-                                {formatDate(donation.date)}
+                                {formatDate(donation.created_at)}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600">{donation.description}</p>
+                            <p className="text-sm text-gray-700 leading-relaxed">{donation.description}</p>
+                            {donation.notes && (
+                              <p className="text-xs text-gray-500 mt-2 italic">ملاحظات: {donation.notes}</p>
+                            )}
+                            {donation.donor_phone && (
+                              <div className="mt-2 pt-2 border-t border-gray-200">
+                                <p className="text-xs text-gray-600">
+                                  <Phone className="w-3 h-3 inline ml-1" />
+                                  {donation.donor_phone}
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}
