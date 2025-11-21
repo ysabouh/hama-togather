@@ -3255,6 +3255,11 @@ const AdminDashboard = () => {
                           <p className="text-lg font-semibold text-gray-900">
                             {incomeLevels.find(l => l.id === selectedFamily?.income_level_id)?.name || 'غير محدد'}
                           </p>
+                          {incomeLevels.find(l => l.id === selectedFamily?.income_level_id)?.description && (
+                            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                              {incomeLevels.find(l => l.id === selectedFamily?.income_level_id)?.description}
+                            </p>
+                          )}
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">تقييم الاحتياج</p>
