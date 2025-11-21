@@ -134,7 +134,7 @@ const HomePage = () => {
               <div className="service-content">
                 <h3>اكفل عائلة</h3>
                 <p>ساهم في كفالة عائلة محتاجة من خلال دعم مالي شهري يساعدهم في تلبية احتياجاتهم الأساسية</p>
-                <Link to="/families" className="service-button">اطلع على العائلات</Link>
+                <Link to="/families-public" className="service-button">اطلع على العائلات</Link>
               </div>
             </div>
             
