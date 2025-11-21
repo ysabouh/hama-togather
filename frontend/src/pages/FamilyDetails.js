@@ -27,6 +27,7 @@ const FamilyDetails = () => {
   const [needAssessment, setNeedAssessment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDonationModal, setShowDonationModal] = useState(false);
+  const [showConfirmDonation, setShowConfirmDonation] = useState(false);
   const [showAddNeedModal, setShowAddNeedModal] = useState(false);
   const [showImageViewer, setShowImageViewer] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
