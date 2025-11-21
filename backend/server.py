@@ -528,8 +528,11 @@ class FamilyNeedCreate(BaseModel):
     status: str = "pending"
 
 class FamilyNeedUpdate(BaseModel):
-    estimated_amount: Optional[float] = None
+    need_id: Optional[str] = None
+    amount: Optional[str] = None
     notes: Optional[str] = None
+    is_active: Optional[bool] = None
+    estimated_amount: Optional[float] = None
     status: Optional[str] = None
 
 # Committee Member Models
