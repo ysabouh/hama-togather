@@ -1904,6 +1904,39 @@ async def update_donation_status(
         print(f"Error updating donation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.post("/admin/recalculate-family-totals")
+async def recalculate_all_family_totals(current_user: User = Depends(get_current_user)):
+    """إعادة حساب جميع المبالغ الإجمالية لجميع العائلات - للمشرفين فقط"""
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=403, detail="غير مصرح")
+    
+    try:
+        families = await db.families.find({}, {"_id": 0, "id": 1}).to_list(10000)
+        updated_count = 0
+        results = []
+        
+        for family in families:
+            family_id = family.get('id')
+            if family_id:
+                needs_total = await update_family_total_needs_amount(family_id)
+                donations_total = await update_family_total_donations_amount(family_id)
+                updated_count += 1
+                results.append({
+                    "family_id": family_id,
+                    "needs_total": needs_total,
+                    "donations_total": donations_total
+                })
+        
+        return {
+            "success": True,
+            "message": f"تم تحديث {updated_count} عائلة بنجاح",
+            "updated_count": updated_count,
+            "results": results
+        }
+    except Exception as e:
+        print(f"خطأ في إعادة الحساب: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @api_router.get("/stats")
 async def get_stats():
     families_count = await db.families.count_documents({})
