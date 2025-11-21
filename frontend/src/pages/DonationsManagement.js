@@ -290,6 +290,10 @@ const DonationsManagement = () => {
                     <span className="text-sm text-gray-600">مكتملة:</span>
                     <span className="font-bold text-green-600">{stats.completed}</span>
                   </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">ملغية:</span>
+                    <span className="font-bold text-red-600">{stats.cancelled}</span>
+                  </div>
                 </div>
                 <p className="text-gray-600 font-semibold mt-3 pt-3 border-t">ملخص الحالات</p>
               </div>
