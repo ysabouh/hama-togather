@@ -473,6 +473,31 @@ const FamiliesPublic = () => {
                           </div>
                         )}
 
+                        {/* Need Assessment */}
+                        {needAssessment && (
+                          <div 
+                            className="flex items-center gap-3 rounded-lg p-3 border-2"
+                            style={{
+                              backgroundColor: `${needAssessment.color}10`,
+                              borderColor: `${needAssessment.color}40`
+                            }}
+                          >
+                            <div 
+                              className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+                              style={{ backgroundColor: `${needAssessment.color}20` }}
+                            >
+                              <TrendingUp className="w-5 h-5" style={{ color: needAssessment.color }} />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs mb-0.5" style={{ color: needAssessment.color }}>تقييم الاحتياج</p>
+                              <p className="text-sm font-bold" style={{ color: needAssessment.color }}>{needAssessment.name}</p>
+                              {needAssessment.description && (
+                                <p className="text-xs mt-1 leading-relaxed" style={{ color: `${needAssessment.color}cc` }}>{needAssessment.description}</p>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
                         {/* Description */}
                         {family.description && (
                           <div className="bg-gray-50 rounded-lg p-4 group-hover:bg-gray-100 transition-colors">
