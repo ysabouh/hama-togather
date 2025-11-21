@@ -327,6 +327,7 @@ test_plan:
     - "Family Needs Management - Enhanced Display and Admin Controls"
   stuck_tasks:
     - "Donation Confirmation Window - Scroll Testing"
+    - "Family Needs Management - Enhanced Display and Admin Controls"
   test_all: false
   test_priority: "high_first"
 
