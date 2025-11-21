@@ -891,37 +891,25 @@ const FamilyDetails = () => {
                   تفاصيل المساعدة
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      نوع المساعدة <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      required
-                      value={donationForm.donation_type}
-                      onChange={(e) => setDonationForm({...donationForm, donation_type: e.target.value})}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
-                    >
-                      <option value="مالية">مساعدة مالية</option>
-                      <option value="عينية">مساعدة عينية (طعام، ملابس، إلخ)</option>
-                      <option value="خدمية">خدمات (علاج، تعليم، إلخ)</option>
-                      <option value="أخرى">أخرى</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      القيمة/الكمية <span className="text-red-500">*</span>
-                    </label>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    المبلغ (بالليرة السورية) <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
                     <input
-                      type="text"
+                      type="number"
                       required
+                      min="0"
                       value={donationForm.amount}
                       onChange={(e) => setDonationForm({...donationForm, amount: e.target.value})}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
-                      placeholder="مثال: 1000 ريال أو سلة غذائية"
+                      placeholder="مثال: 100000"
                     />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">
+                      ل.س
+                    </span>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">أدخل المبلغ بالليرة السورية</p>
                 </div>
 
                 <div>
