@@ -79,6 +79,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/donations-management" 
+              element={
+                <ProtectedRoute adminOnly>
+                  <DonationsManagement />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
           <Toaster position="top-center" richColors />
         </div>
