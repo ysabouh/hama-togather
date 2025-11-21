@@ -1500,6 +1500,9 @@ async def delete_family_need(
     # حذف السجل
     await db.family_needs.delete_one({"id": need_record_id})
     
+    # تحديث المبلغ الإجمالي للعائلة
+    await update_family_total_needs_amount(family_id)
+    
     return {"message": "Family need deleted successfully"}
 
 # ============= Health Cases Routes =============
