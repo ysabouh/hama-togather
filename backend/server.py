@@ -1477,6 +1477,9 @@ async def update_family_need(
     if isinstance(updated_record.get('updated_at'), str):
         updated_record['updated_at'] = datetime.fromisoformat(updated_record['updated_at'])
     
+    # تحديث المبلغ الإجمالي للعائلة
+    await update_family_total_needs_amount(family_id)
+    
     return FamilyNeed(**updated_record)
 
 @api_router.delete("/families/{family_id}/needs/{need_record_id}")
