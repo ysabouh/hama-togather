@@ -1766,6 +1766,43 @@ async def get_family_donations(family_id: str):
         print(f"Error fetching family donations: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.put("/donations/{donation_id}")
+async def update_donation_status(
+    donation_id: str, 
+    status: str = None,
+    current_user: User = Depends(get_current_user)
+):
+    """تحديث حالة التبرع - متاح للمشرفين فقط"""
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=403, detail="غير مصرح لك بهذا الإجراء")
+    
+    try:
+        # التحقق من وجود التبرع
+        donation = await db.donations.find_one({"id": donation_id}, {"_id": 0})
+        if not donation:
+            raise HTTPException(status_code=404, detail="التبرع غير موجود")
+        
+        # تحديث الحالة
+        update_data = {}
+        if status:
+            update_data["status"] = status
+        
+        update_data["updated_at"] = datetime.now(timezone.utc)
+        
+        await db.donations.update_one(
+            {"id": donation_id},
+            {"$set": update_data}
+        )
+        
+        # جلب التبرع المحدث
+        updated_donation = await db.donations.find_one({"id": donation_id}, {"_id": 0})
+        return updated_donation
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error updating donation: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @api_router.get("/stats")
 async def get_stats():
     families_count = await db.families.count_documents({})
