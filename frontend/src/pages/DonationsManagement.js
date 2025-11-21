@@ -134,6 +134,8 @@ const DonationsManagement = () => {
         return <Check className="w-4 h-4" />;
       case 'قيد التنفيذ':
         return <Clock className="w-4 h-4" />;
+      case 'ملغي':
+        return <X className="w-4 h-4" />;
       case 'معلق':
       default:
         return <AlertCircle className="w-4 h-4" />;
