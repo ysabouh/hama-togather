@@ -294,7 +294,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Password Change API testing completed successfully"
+    - "Donations Management Page testing completed successfully"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
