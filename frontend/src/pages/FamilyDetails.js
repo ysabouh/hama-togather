@@ -729,6 +729,112 @@ const FamilyDetails = () => {
         </div>
       )}
 
+      {/* Confirmation Modal */}
+      {showConfirmDonation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4" onClick={() => setShowConfirmDonation(false)}>
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">تأكيد المساعدة</h2>
+                  <p className="text-emerald-100 text-sm">يرجى التأكد من صحة المعلومات</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 space-y-6">
+              {/* Family Info */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">معلومات العائلة</h3>
+                <div className="space-y-2">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">اسم العائلة:</span> {family?.name}
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-semibold">رقم العائلة:</span> {family?.family_number}
+                  </p>
+                </div>
+              </div>
+
+              {/* Donor Info */}
+              <div className="bg-emerald-50 rounded-lg p-4">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">معلومات المتبرع</h3>
+                <div className="space-y-2">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">الاسم:</span> {donationForm.donor_name}
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-semibold">رقم الهاتف:</span> {donationForm.donor_phone || 'غير متوفر'}
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-semibold">البريد الإلكتروني:</span> {donationForm.donor_email || 'غير متوفر'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Donation Details */}
+              <div className="bg-amber-50 rounded-lg p-4">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">تفاصيل المساعدة</h3>
+                <div className="space-y-2">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">المبلغ:</span> {donationForm.amount} ليرة سورية
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-semibold">الوصف:</span> {donationForm.description}
+                  </p>
+                  {donationForm.notes && (
+                    <p className="text-gray-700">
+                      <span className="font-semibold">ملاحظات:</span> {donationForm.notes}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Important Notice */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-bold text-blue-900 mb-1">معلومات هامة</h4>
+                    <p className="text-sm text-blue-800 leading-relaxed">
+                      سيتم إرسال معلومات التبرع إلى لجنة الحي المسؤولة عن هذه العائلة. سيقوم أحد أعضاء اللجنة بالتواصل معك لتنسيق عملية تقديم المساعدة وتحديد الطريقة والوقت المناسبين.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 pb-6">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={handleConfirmDonation}
+                  className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-4 rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                >
+                  <CheckCircle className="w-5 h-5" />
+                  <span>تأكيد وإرسال المساعدة</span>
+                </button>
+                
+                <button
+                  onClick={() => setShowConfirmDonation(false)}
+                  className="flex-1 sm:flex-initial bg-gray-100 text-gray-700 py-4 px-8 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                >
+                  رجوع
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Add Need Modal */}
       {showAddNeedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowAddNeedModal(false)}>
