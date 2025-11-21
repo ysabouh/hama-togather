@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "اختبار ميزة إدارة الأحياء في لوحة التحكم - تسجيل الدخول، الوصول لتبويب الأحياء، إضافة حي جديد، تعديل حي موجود، حذف حي"
+user_problem_statement: "اختبار صفحة إدارة التبرعات للمشرفين - تسجيل الدخول، الوصول للصفحة، التحقق من العناصر الأساسية، اختبار عرض التفاصيل، تحديث الحالة، البحث والفلترة"
 
 backend:
   - task: "Hero Content API - GET /api/hero-content"
