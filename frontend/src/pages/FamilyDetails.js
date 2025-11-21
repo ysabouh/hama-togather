@@ -1145,14 +1145,14 @@ const FamilyDetails = () => {
                 </div>
 
                 {/* Info Message */}
-                <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4">
+                <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-emerald-200 rounded-full flex items-center justify-center flex-shrink-0">
-                      <AlertCircle className="w-5 h-5 text-emerald-700" />
+                    <div className="w-8 h-8 bg-red-200 rounded-full flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="w-5 h-5 text-red-700" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-emerald-900 mb-1">معلومة هامة</h4>
-                      <p className="text-sm text-emerald-800 leading-relaxed">
+                      <h4 className="font-bold text-red-900 mb-1">معلومة هامة</h4>
+                      <p className="text-sm text-red-800 leading-relaxed">
                         سيتم التواصل معك من قبل لجنة الحي المسؤولة لتنسيق تقديم المساعدة وتحديد الطريقة والوقت المناسبين.
                       </p>
                     </div>
