@@ -363,6 +363,15 @@ const FamiliesPublic = () => {
                   const needAssessment = getNeedAssessment(family.need_assessment_id);
                   const incomeLevel = getIncomeLevel(family.income_level_id);
                   const neighborhood = getNeighborhood(family.neighborhood_id);
+                  
+                  // Debug: تحقق من البيانات
+                  if (family.family_number === 'FAD-25') {
+                    console.log('Family FAD-25 Debug:', {
+                      need_assessment_id: family.need_assessment_id,
+                      needAssessment: needAssessment,
+                      needAssessments: needAssessments
+                    });
+                  }
 
                   return (
                     <div
