@@ -321,7 +321,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Donation Confirmation Window - Scroll Testing"
+    - "Family Needs Management - Enhanced Display and Admin Controls"
   stuck_tasks:
     - "Donation Confirmation Window - Scroll Testing"
   test_all: false
