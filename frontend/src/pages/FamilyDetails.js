@@ -463,19 +463,33 @@ const FamilyDetails = () => {
                 {/* Family Needs */}
                 <div className="bg-white rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                    <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                      <Package className="w-6 h-6 text-emerald-600" />
-                      احتياجات العائلة
-                      {user?.role === 'admin' && (
-                        <button
-                          onClick={() => setShowAddNeedModal(true)}
-                          className="mr-3 flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-semibold shadow-md hover:shadow-lg"
-                        >
-                          <Plus className="w-4 h-4" />
-                          <span>إضافة احتياج</span>
-                        </button>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Package className="w-6 h-6 text-emerald-600" />
+                        <h2 className="text-2xl font-bold text-gray-900">احتياجات العائلة</h2>
+                        {user?.role === 'admin' && (
+                          <button
+                            onClick={() => setShowAddNeedModal(true)}
+                            className="mr-3 flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-semibold shadow-md hover:shadow-lg"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span>إضافة احتياج</span>
+                          </button>
+                        )}
+                      </div>
+                      {/* Total Amount */}
+                      {family?.total_needs_amount > 0 && (
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-5 py-3 rounded-xl shadow-lg">
+                          <DollarSign className="w-6 h-6" />
+                          <div>
+                            <p className="text-xs opacity-90">المبلغ الإجمالي للاحتياجات</p>
+                            <p className="text-2xl font-bold">
+                              {new Intl.NumberFormat('ar-SY').format(family.total_needs_amount)} ل.س
+                            </p>
+                          </div>
+                        </div>
                       )}
-                    </h2>
+                    </div>
                   </div>
                   
                   {familyNeeds.length === 0 ? (
