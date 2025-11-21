@@ -45,6 +45,8 @@ const FamilyDetails = () => {
     amount: '',
     notes: ''
   });
+  const [editingNeed, setEditingNeed] = useState(null);
+  const [showEditNeedModal, setShowEditNeedModal] = useState(false);
   const [allNeeds, setAllNeeds] = useState([]);
   const [donationHistory, setDonationHistory] = useState([]);
 
