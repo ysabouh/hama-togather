@@ -248,7 +248,12 @@ const FamiliesPublic = () => {
                 >
                   <div className="flex flex-col items-center text-center space-y-4">
                     {/* العدد */}
-                    <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-3xl font-bold w-20 h-20 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <div 
+                      className="text-white text-3xl font-bold w-20 h-20 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
+                      style={{
+                        background: category.color ? `linear-gradient(135deg, ${category.color}, ${category.color}dd)` : 'linear-gradient(135deg, #10b981, #0d9488)'
+                      }}
+                    >
                       {getCategoryCount(category)}
                     </div>
 
