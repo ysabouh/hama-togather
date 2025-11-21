@@ -485,29 +485,128 @@ const FamilyDetails = () => {
                       </p>
                     </div>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {familyNeeds.map((need, index) => (
                         <div
                           key={index}
-                          className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-emerald-50 transition-colors"
+                          className={`border-2 rounded-xl p-5 transition-all ${
+                            need.is_active !== false 
+                              ? 'bg-white border-emerald-200 hover:shadow-md' 
+                              : 'bg-gray-50 border-gray-200 opacity-60'
+                          }`}
                         >
-                          <div className="flex-shrink-0 mt-1">
-                            <CheckCircle className="w-6 h-6 text-emerald-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-bold text-gray-900 mb-1">{need.need_name || 'احتياج'}</h3>
-                            {need.amount && (
-                              <p className="text-sm text-gray-600 mb-1">الكمية: {need.amount}</p>
+                          <div className="flex items-start gap-4">
+                            {/* Icon */}
+                            <div className="flex-shrink-0 mt-1">
+                              <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                                need.is_active !== false 
+                                  ? 'bg-emerald-100' 
+                                  : 'bg-gray-200'
+                              }`}>
+                                <Package className={`w-6 h-6 ${
+                                  need.is_active !== false 
+                                    ? 'text-emerald-600' 
+                                    : 'text-gray-500'
+                                }`} />
+                              </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1">
+                              {/* Title and Status */}
+                              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                                <h3 className="text-lg font-bold text-gray-900">
+                                  {need.need_name || 'احتياج'}
+                                </h3>
+                                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                  need.is_active !== false
+                                    ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                                    : 'bg-gray-200 text-gray-600 border border-gray-300'
+                                }`}>
+                                  {need.is_active !== false ? '🟢 نشط' : '⭕ متوقف'}
+                                </span>
+                              </div>
+
+                              {/* Details Grid */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                                {need.amount && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-semibold text-gray-700">الكمية:</span>
+                                    <span className="text-gray-900 font-bold">{need.amount}</span>
+                                  </div>
+                                )}
+                                {need.created_at && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <Calendar className="w-4 h-4 text-gray-500" />
+                                    <span className="text-gray-600">
+                                      {new Date(need.created_at).toLocaleDateString('ar-SA', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric'
+                                      })}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Notes */}
+                              {need.notes && (
+                                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+                                  <p className="text-sm text-gray-700">
+                                    <span className="font-semibold text-amber-900">ملاحظات:</span> {need.notes}
+                                  </p>
+                                </div>
+                              )}
+
+                              {/* Category Badge */}
+                              {need.category && (
+                                <div className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200">
+                                  <Tag className="w-3 h-3" />
+                                  {need.category}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Admin Actions */}
+                            {user?.role === 'admin' && (
+                              <div className="flex flex-col gap-2">
+                                {/* Edit Button */}
+                                <button
+                                  onClick={() => handleEditNeed(need)}
+                                  className="p-2 bg-blue-100 text-blue-600 hover:bg-blue-200 rounded-lg transition-colors"
+                                  title="تعديل"
+                                >
+                                  <Edit className="w-5 h-5" />
+                                </button>
+
+                                {/* Toggle Active Button */}
+                                <button
+                                  onClick={() => handleToggleNeedStatus(need)}
+                                  className={`p-2 rounded-lg transition-colors ${
+                                    need.is_active !== false
+                                      ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200'
+                                      : 'bg-green-100 text-green-600 hover:bg-green-200'
+                                  }`}
+                                  title={need.is_active !== false ? 'تعطيل' : 'تفعيل'}
+                                >
+                                  {need.is_active !== false ? (
+                                    <X className="w-5 h-5" />
+                                  ) : (
+                                    <Check className="w-5 h-5" />
+                                  )}
+                                </button>
+
+                                {/* Delete Button */}
+                                <button
+                                  onClick={() => handleDeleteNeed(need)}
+                                  className="p-2 bg-red-100 text-red-600 hover:bg-red-200 rounded-lg transition-colors"
+                                  title="حذف"
+                                >
+                                  <Trash2 className="w-5 h-5" />
+                                </button>
+                              </div>
                             )}
-                            {need.notes && (
-                              <p className="text-sm text-gray-600">{need.notes}</p>
-                            )}
                           </div>
-                          {need.is_active !== false && (
-                            <span className="flex-shrink-0 px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">
-                              نشط
-                            </span>
-                          )}
                         </div>
                       ))}
                     </div>
