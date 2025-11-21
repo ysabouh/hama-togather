@@ -134,16 +134,22 @@ const FamilyDetails = () => {
     }
   };
 
-  const handleDonationSubmit = async (e) => {
+  const handleDonationSubmit = (e) => {
     e.preventDefault();
-    
+    // عرض نافذة التأكيد بدلاً من الإرسال مباشرة
+    setShowConfirmDonation(true);
+  };
+
+  const handleConfirmDonation = async () => {
     try {
       await axios.post(`${API_URL}/donations`, {
         ...donationForm,
-        family_id: familyId
+        family_id: familyId,
+        donation_type: 'مالية' // نوع ثابت
       });
       
       toast.success('تم تسجيل التبرع بنجاح! شكراً لكرمك 💚');
+      setShowConfirmDonation(false);
       setShowDonationModal(false);
       setDonationForm({
         donor_name: user?.name || '',
