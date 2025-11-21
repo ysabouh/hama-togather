@@ -1803,6 +1803,11 @@ async def create_donation(donation_input: DonationCreate, current_user: User = D
     doc['created_at'] = doc['created_at'].isoformat()
     
     await db.donations.insert_one(doc)
+    
+    # تحديث مجموع التبرعات للعائلة إذا كان التبرع مرتبط بعائلة
+    if donation_dict.get('family_id'):
+        await update_family_total_donations_amount(donation_dict['family_id'])
+    
     return donation_obj
 
 @api_router.get("/families/{family_id}/donations")
