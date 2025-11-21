@@ -35,6 +35,7 @@ const DonationsManagement = () => {
     pending: 0,
     inProgress: 0,
     completed: 0,
+    cancelled: 0,
     uniqueDonors: 0
   });
 
