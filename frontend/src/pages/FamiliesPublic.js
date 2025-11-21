@@ -449,6 +449,9 @@ const FamiliesPublic = () => {
                             <div className="flex-1">
                               <p className="text-xs text-amber-700 mb-0.5">مستوى الدخل</p>
                               <p className="text-sm font-bold text-amber-900">{incomeLevel.name}</p>
+                              {incomeLevel.description && (
+                                <p className="text-xs text-amber-600 mt-1 leading-relaxed">{incomeLevel.description}</p>
+                              )}
                             </div>
                           </div>
                         )}
