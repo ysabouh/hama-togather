@@ -96,10 +96,16 @@ const Navbar = () => {
                     </DropdownMenuItem>
                     
                     {user.role === 'admin' && (
-                      <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
-                        <LayoutDashboard className="w-4 h-4 ml-2" />
-                        لوحة التحكم
-                      </DropdownMenuItem>
+                      <>
+                        <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
+                          <LayoutDashboard className="w-4 h-4 ml-2" />
+                          لوحة التحكم
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/donations-management')} className="cursor-pointer">
+                          <Heart className="w-4 h-4 ml-2" />
+                          إدارة التبرعات
+                        </DropdownMenuItem>
+                      </>
                     )}
                     
                     <DropdownMenuSeparator />
