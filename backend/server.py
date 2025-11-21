@@ -1660,17 +1660,46 @@ async def delete_story(story_id: str, admin: User = Depends(get_admin_user)):
 
 # ============= Donations Routes =============
 
-@api_router.get("/donations", response_model=List[Donation])
+@api_router.get("/donations")
 async def get_donations(current_user: User = Depends(get_current_user)):
+    """جلب جميع التبرعات - بدون response_model للتوافق مع البيانات القديمة"""
     if current_user.role == "admin":
         donations = await db.donations.find({}, {"_id": 0}).to_list(1000)
     else:
         donations = await db.donations.find({"donor_id": current_user.id}, {"_id": 0}).to_list(1000)
     
+    # تحويل البيانات للصيغة الموحدة
+    result = []
     for donation in donations:
-        if isinstance(donation['created_at'], str):
+        # تحويل التواريخ
+        if isinstance(donation.get('created_at'), str):
             donation['created_at'] = datetime.fromisoformat(donation['created_at'])
-    return donations
+        
+        # توحيد الحقول بين القديم والجديد
+        normalized = {
+            'id': donation.get('id'),
+            'family_id': donation.get('family_id') or donation.get('target_id', ''),
+            'donor_id': donation.get('donor_id'),
+            'donor_name': donation.get('donor_name', 'متبرع'),
+            'donor_phone': donation.get('donor_phone'),
+            'donor_email': donation.get('donor_email'),
+            'donation_type': donation.get('donation_type') or donation.get('type', 'مالية'),
+            'amount': str(donation.get('amount', '')) if donation.get('amount') else donation.get('items', 'غير محدد'),
+            'description': donation.get('description') or donation.get('message', 'تبرع'),
+            'notes': donation.get('notes'),
+            'status': donation.get('status', 'pending'),
+            'created_at': donation.get('created_at'),
+            'created_by_user_id': donation.get('created_by_user_id'),
+            'is_active': donation.get('is_active', True),
+            # إضافة الحقول القديمة للتوافق
+            'type': donation.get('type', 'family'),
+            'target_id': donation.get('target_id') or donation.get('family_id'),
+            'items': donation.get('items'),
+            'message': donation.get('message')
+        }
+        result.append(normalized)
+    
+    return result
 
 @api_router.post("/donations", response_model=Donation)
 async def create_donation(donation_input: DonationCreate, current_user: User = Depends(get_current_user)):
