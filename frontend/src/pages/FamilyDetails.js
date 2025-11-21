@@ -800,12 +800,12 @@ const FamilyDetails = () => {
                 </div>
 
                 {/* Important Notice */}
-                <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="font-bold text-blue-900 mb-1">معلومات هامة</h4>
-                      <p className="text-sm text-blue-800 leading-relaxed">
+                      <h4 className="font-bold text-red-900 mb-1">معلومات هامة</h4>
+                      <p className="text-sm text-red-800 leading-relaxed">
                         سيتم إرسال معلومات التبرع إلى لجنة الحي المسؤولة عن هذه العائلة. سيقوم أحد أعضاء اللجنة بالتواصل معك لتنسيق عملية تقديم المساعدة وتحديد الطريقة والوقت المناسبين.
                       </p>
                     </div>
