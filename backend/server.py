@@ -1369,26 +1369,29 @@ async def get_family_needs(family_id: str, current_user: User = Depends(get_curr
 
 async def update_family_total_needs_amount(family_id: str):
     """تحديث المبلغ الإجمالي لاحتياجات العائلة"""
+    import re
     try:
-        # جلب جميع احتياجات العائلة النشطة
+        # جلب جميع احتياجات العائلة النشطة فقط
         family_needs = await db.family_needs.find({
             "family_id": family_id,
-            "is_active": True
+            "is_active": {"$ne": False}  # نشط أو غير محدد
         }, {"_id": 0}).to_list(1000)
         
-        # حساب المجموع
         total = 0.0
         for need in family_needs:
             amount_str = need.get("amount", "")
             if amount_str:
-                # محاولة استخراج الرقم من النص
                 try:
-                    # إزالة أي نص وأخذ الأرقام فقط
-                    import re
-                    numbers = re.findall(r'\d+\.?\d*', str(amount_str))
+                    # إزالة الفواصل والمسافات
+                    clean_str = str(amount_str).replace(",", "").replace(" ", "")
+                    # استخراج جميع الأرقام (مع دعم الأرقام العشرية)
+                    numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
                     if numbers:
-                        total += float(numbers[0])
-                except:
+                        # جمع جميع الأرقام المستخرجة (في حال وجود عدة أرقام)
+                        for num in numbers:
+                            total += float(num)
+                except Exception as e:
+                    print(f"خطأ في معالجة المبلغ '{amount_str}': {e}")
                     pass
         
         # تحديث العائلة
@@ -1397,9 +1400,10 @@ async def update_family_total_needs_amount(family_id: str):
             {"$set": {"total_needs_amount": total}}
         )
         
+        print(f"تم تحديث إجمالي احتياجات العائلة {family_id}: {total}")
         return total
     except Exception as e:
-        print(f"Error updating total needs amount: {e}")
+        print(f"خطأ في تحديث إجمالي الاحتياجات: {e}")
         return 0.0
 
 async def update_family_total_donations_amount(family_id: str):
