@@ -12,6 +12,7 @@ import CoursesPage from './pages/CoursesPage';
 import ProjectsPage from './pages/ProjectsPage';
 import InitiativesPage from './pages/InitiativesPage';
 import AdminDashboard from './pages/AdminDashboard';
+import DonationsManagement from './pages/DonationsManagement';
 import MyDonationsPage from './pages/MyDonationsPage';
 import OurMissionPage from './pages/OurMissionPage';
 import ProfilePage from './pages/ProfilePage';
