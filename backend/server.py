@@ -1694,17 +1694,45 @@ async def create_donation(donation_input: DonationCreate, current_user: User = D
 async def get_family_donations(family_id: str):
     """جلب جميع التبرعات لعائلة معينة"""
     try:
+        # البحث بكلا الحقلين: family_id (الجديد) و target_id (القديم)
         donations = await db.donations.find(
-            {"family_id": family_id, "is_active": {"$ne": False}},
+            {
+                "$or": [
+                    {"family_id": family_id},
+                    {"target_id": family_id, "type": "family"}
+                ],
+                "is_active": {"$ne": False}
+            },
             {"_id": 0}
         ).sort("created_at", -1).to_list(1000)
         
-        # تحويل التواريخ
+        # تحويل البيانات القديمة للصيغة الجديدة
+        result = []
         for donation in donations:
+            # تحويل التواريخ
             if isinstance(donation.get('created_at'), str):
                 donation['created_at'] = datetime.fromisoformat(donation['created_at'])
+            
+            # توحيد الحقول
+            normalized = {
+                'id': donation.get('id'),
+                'family_id': donation.get('family_id') or donation.get('target_id'),
+                'donor_id': donation.get('donor_id'),
+                'donor_name': donation.get('donor_name', 'متبرع'),
+                'donor_phone': donation.get('donor_phone'),
+                'donor_email': donation.get('donor_email'),
+                'donation_type': donation.get('donation_type') or donation.get('type', 'مالية'),
+                'amount': str(donation.get('amount', '')) if donation.get('amount') else donation.get('items', 'غير محدد'),
+                'description': donation.get('description') or donation.get('message', 'تبرع'),
+                'notes': donation.get('notes'),
+                'status': donation.get('status', 'pending'),
+                'created_at': donation.get('created_at'),
+                'created_by_user_id': donation.get('created_by_user_id'),
+                'is_active': donation.get('is_active', True)
+            }
+            result.append(normalized)
         
-        return donations
+        return result
     except Exception as e:
         print(f"Error fetching family donations: {e}")
         raise HTTPException(status_code=500, detail=str(e))
