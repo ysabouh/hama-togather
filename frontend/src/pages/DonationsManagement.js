@@ -339,6 +339,7 @@ const DonationsManagement = () => {
                     <option value="معلق">معلق</option>
                     <option value="قيد التنفيذ">قيد التنفيذ</option>
                     <option value="مكتمل">مكتمل</option>
+                    <option value="ملغي">ملغي</option>
                   </select>
                 </div>
 
