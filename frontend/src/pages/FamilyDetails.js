@@ -47,6 +47,18 @@ const FamilyDetails = () => {
   const [allNeeds, setAllNeeds] = useState([]);
   const [donationHistory, setDonationHistory] = useState([]);
 
+  // تحديث بيانات المتبرع من المستخدم الحالي
+  useEffect(() => {
+    if (user) {
+      setDonationForm(prev => ({
+        ...prev,
+        donor_name: user.name || user.full_name || '',
+        donor_phone: user.phone || '',
+        donor_email: user.email || ''
+      }));
+    }
+  }, [user]);
+
   useEffect(() => {
     if (!user) {
       navigate('/login?redirect=/families-public');
