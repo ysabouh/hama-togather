@@ -460,34 +460,114 @@ const FamilyDetails = () => {
                   </div>
                 )}
 
+                {/* Family Financial Summary */}
+                {(family?.total_needs_amount > 0 || family?.total_donations_amount > 0) && (
+                  <div className="bg-gradient-to-br from-slate-50 to-gray-100 rounded-2xl p-6 mb-6 border-2 border-gray-200 shadow-xl">
+                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <TrendingUp className="w-6 h-6 text-emerald-600" />
+                      الملخص المالي للعائلة
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {/* Total Needs */}
+                      <div className="bg-gradient-to-br from-red-500 to-pink-600 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-shadow">
+                        <div className="flex items-center justify-between mb-3">
+                          <Package className="w-8 h-8 opacity-80" />
+                          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                            <span className="text-2xl">📦</span>
+                          </div>
+                        </div>
+                        <p className="text-sm opacity-90 mb-1">إجمالي الاحتياجات</p>
+                        <p className="text-3xl font-bold">
+                          {new Intl.NumberFormat('ar-SY').format(family?.total_needs_amount || 0)}
+                        </p>
+                        <p className="text-xs opacity-80 mt-1">ليرة سورية</p>
+                      </div>
+
+                      {/* Total Donations */}
+                      <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl p-5 shadow-lg hover:shadow-xl transition-shadow">
+                        <div className="flex items-center justify-between mb-3">
+                          <Gift className="w-8 h-8 opacity-80" />
+                          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                            <span className="text-2xl">💰</span>
+                          </div>
+                        </div>
+                        <p className="text-sm opacity-90 mb-1">إجمالي التبرعات</p>
+                        <p className="text-3xl font-bold">
+                          {new Intl.NumberFormat('ar-SY').format(family?.total_donations_amount || 0)}
+                        </p>
+                        <p className="text-xs opacity-80 mt-1">ليرة سورية</p>
+                      </div>
+
+                      {/* Remaining */}
+                      <div className={`rounded-xl p-5 shadow-lg hover:shadow-xl transition-shadow ${
+                        (family?.total_needs_amount || 0) > (family?.total_donations_amount || 0)
+                          ? 'bg-gradient-to-br from-amber-500 to-orange-600'
+                          : 'bg-gradient-to-br from-green-500 to-emerald-600'
+                      } text-white`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <DollarSign className="w-8 h-8 opacity-80" />
+                          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                            <span className="text-2xl">
+                              {(family?.total_needs_amount || 0) > (family?.total_donations_amount || 0) ? '⚠️' : '✅'}
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-sm opacity-90 mb-1">
+                          {(family?.total_needs_amount || 0) > (family?.total_donations_amount || 0) 
+                            ? 'المبلغ المتبقي' 
+                            : 'المبلغ الزائد'}
+                        </p>
+                        <p className="text-3xl font-bold">
+                          {new Intl.NumberFormat('ar-SY').format(
+                            Math.abs((family?.total_needs_amount || 0) - (family?.total_donations_amount || 0))
+                          )}
+                        </p>
+                        <p className="text-xs opacity-80 mt-1">ليرة سورية</p>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    {family?.total_needs_amount > 0 && (
+                      <div className="mt-6">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-semibold text-gray-700">نسبة التغطية</span>
+                          <span className="text-sm font-bold text-emerald-600">
+                            {Math.min(100, Math.round(((family?.total_donations_amount || 0) / family.total_needs_amount) * 100))}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
+                          <div 
+                            className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+                            style={{ 
+                              width: `${Math.min(100, ((family?.total_donations_amount || 0) / family.total_needs_amount) * 100)}%` 
+                            }}
+                          >
+                            {((family?.total_donations_amount || 0) / family.total_needs_amount) * 100 >= 10 && (
+                              <span className="text-xs font-bold text-white">
+                                {Math.round(((family?.total_donations_amount || 0) / family.total_needs_amount) * 100)}%
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Family Needs */}
                 <div className="bg-white rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Package className="w-6 h-6 text-emerald-600" />
-                        <h2 className="text-2xl font-bold text-gray-900">احتياجات العائلة</h2>
-                        {user?.role === 'admin' && (
-                          <button
-                            onClick={() => setShowAddNeedModal(true)}
-                            className="mr-3 flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-semibold shadow-md hover:shadow-lg"
-                          >
-                            <Plus className="w-4 h-4" />
-                            <span>إضافة احتياج</span>
-                          </button>
-                        )}
-                      </div>
-                      {/* Total Amount */}
-                      {family?.total_needs_amount > 0 && (
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-5 py-3 rounded-xl shadow-lg">
-                          <DollarSign className="w-6 h-6" />
-                          <div>
-                            <p className="text-xs opacity-90">المبلغ الإجمالي للاحتياجات</p>
-                            <p className="text-2xl font-bold">
-                              {new Intl.NumberFormat('ar-SY').format(family.total_needs_amount)} ل.س
-                            </p>
-                          </div>
-                        </div>
+                    <div className="flex items-center gap-2">
+                      <Package className="w-6 h-6 text-emerald-600" />
+                      <h2 className="text-2xl font-bold text-gray-900">احتياجات العائلة</h2>
+                      {user?.role === 'admin' && (
+                        <button
+                          onClick={() => setShowAddNeedModal(true)}
+                          className="mr-3 flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-semibold shadow-md hover:shadow-lg"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span>إضافة احتياج</span>
+                        </button>
                       )}
                     </div>
                   </div>
