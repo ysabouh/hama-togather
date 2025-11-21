@@ -1437,6 +1437,9 @@ async def add_family_need(
     
     await db.family_needs.insert_one(doc)
     
+    # تحديث المبلغ الإجمالي للعائلة
+    await update_family_total_needs_amount(family_id)
+    
     return family_need
 
 @api_router.put("/families/{family_id}/needs/{need_record_id}")
