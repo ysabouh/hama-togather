@@ -1366,6 +1366,41 @@ async def get_family_needs(family_id: str, current_user: User = Depends(get_curr
     
     return result
 
+async def update_family_total_needs_amount(family_id: str):
+    """تحديث المبلغ الإجمالي لاحتياجات العائلة"""
+    try:
+        # جلب جميع احتياجات العائلة النشطة
+        family_needs = await db.family_needs.find({
+            "family_id": family_id,
+            "is_active": True
+        }, {"_id": 0}).to_list(1000)
+        
+        # حساب المجموع
+        total = 0.0
+        for need in family_needs:
+            amount_str = need.get("amount", "")
+            if amount_str:
+                # محاولة استخراج الرقم من النص
+                try:
+                    # إزالة أي نص وأخذ الأرقام فقط
+                    import re
+                    numbers = re.findall(r'\d+\.?\d*', str(amount_str))
+                    if numbers:
+                        total += float(numbers[0])
+                except:
+                    pass
+        
+        # تحديث العائلة
+        await db.families.update_one(
+            {"id": family_id},
+            {"$set": {"total_needs_amount": total}}
+        )
+        
+        return total
+    except Exception as e:
+        print(f"Error updating total needs amount: {e}")
+        return 0.0
+
 @api_router.post("/families/{family_id}/needs")
 async def add_family_need(
     family_id: str, 
