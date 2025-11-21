@@ -838,7 +838,7 @@ const FamilyDetails = () => {
 
             {/* Modal Body */}
             <form onSubmit={handleDonationSubmit} className="p-6 space-y-6">
-              {/* Donor Info */}
+              {/* Donor Info - Read Only */}
               <div className="space-y-4">
                 <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <User className="w-5 h-5 text-emerald-600" />
@@ -848,29 +848,25 @@ const FamilyDetails = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      الاسم الكامل <span className="text-red-500">*</span>
+                      الاسم الكامل
                     </label>
                     <input
                       type="text"
-                      required
                       value={donationForm.donor_name}
-                      onChange={(e) => setDonationForm({...donationForm, donor_name: e.target.value})}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
-                      placeholder="أدخل اسمك الكامل"
+                      readOnly
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      رقم الهاتف <span className="text-red-500">*</span>
+                      رقم الهاتف
                     </label>
                     <input
                       type="tel"
-                      required
-                      value={donationForm.donor_phone}
-                      onChange={(e) => setDonationForm({...donationForm, donor_phone: e.target.value})}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
-                      placeholder="05xxxxxxxx"
+                      value={donationForm.donor_phone || 'غير متوفر'}
+                      readOnly
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -881,10 +877,9 @@ const FamilyDetails = () => {
                   </label>
                   <input
                     type="email"
-                    value={donationForm.donor_email}
-                    onChange={(e) => setDonationForm({...donationForm, donor_email: e.target.value})}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
-                    placeholder="example@email.com"
+                    value={donationForm.donor_email || 'غير متوفر'}
+                    readOnly
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
                   />
                 </div>
               </div>
