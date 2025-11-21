@@ -306,8 +306,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Donations Management Page testing completed successfully"
-  stuck_tasks: []
+    - "Donation Confirmation Window - Scroll Testing"
+  stuck_tasks:
+    - "Donation Confirmation Window - Scroll Testing"
   test_all: false
   test_priority: "high_first"
 
