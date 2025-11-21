@@ -2376,6 +2376,24 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def startup_db():
+    # تحديث جميع العائلات بالحقول الجديدة إذا لم تكن موجودة
+    try:
+        families = await db.families.find({}, {"_id": 0}).to_list(10000)
+        updated_count = 0
+        
+        for family in families:
+            family_id = family.get('id')
+            if family_id:
+                # تحديث المبالغ
+                needs_total = await update_family_total_needs_amount(family_id)
+                donations_total = await update_family_total_donations_amount(family_id)
+                updated_count += 1
+        
+        if updated_count > 0:
+            logger.info(f"تم تحديث {updated_count} عائلة بالمبالغ الإجمالية")
+    except Exception as e:
+        logger.error(f"خطأ في تحديث العائلات: {e}")
+    
     # Create default positions if they don't exist
     default_positions = [
         "رئيس اللجنة",
