@@ -711,6 +711,24 @@ const DonationsManagement = () => {
                       <p className="text-sm text-gray-600 mt-1">تم تقديم المساعدة بنجاح</p>
                     </div>
                   </label>
+
+                  <label className="flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer hover:bg-red-50 transition-colors">
+                    <input
+                      type="radio"
+                      name="status"
+                      value="ملغي"
+                      checked={newStatus === 'ملغي'}
+                      onChange={(e) => setNewStatus(e.target.value)}
+                      className="w-5 h-5 text-red-600"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 font-bold text-gray-900">
+                        <X className="w-5 h-5 text-red-600" />
+                        ملغي
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">تم إلغاء التبرع لعدم الدفع</p>
+                    </div>
+                  </label>
                 </div>
               </div>
             </div>
