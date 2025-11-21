@@ -193,6 +193,69 @@ const FamilyDetails = () => {
     }
   };
 
+  const handleEditNeed = (need) => {
+    setEditingNeed(need);
+    setNeedForm({
+      need_id: need.need_id,
+      amount: need.amount || '',
+      notes: need.notes || ''
+    });
+    setShowEditNeedModal(true);
+  };
+
+  const handleUpdateNeedSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      await axios.put(`${API_URL}/families/${familyId}/needs/${editingNeed.id}`, needForm);
+      
+      toast.success('تم تحديث الاحتياج بنجاح! ✅');
+      setShowEditNeedModal(false);
+      setEditingNeed(null);
+      setNeedForm({
+        need_id: '',
+        amount: '',
+        notes: ''
+      });
+      
+      fetchFamilyDetails();
+    } catch (error) {
+      console.error('Error updating need:', error);
+      toast.error('حدث خطأ في تحديث الاحتياج');
+    }
+  };
+
+  const handleToggleNeedStatus = async (need) => {
+    try {
+      const newStatus = !need.is_active;
+      await axios.put(`${API_URL}/families/${familyId}/needs/${need.id}`, {
+        ...need,
+        is_active: newStatus
+      });
+      
+      toast.success(newStatus ? 'تم تفعيل الاحتياج ✅' : 'تم تعطيل الاحتياج');
+      fetchFamilyDetails();
+    } catch (error) {
+      console.error('Error toggling need status:', error);
+      toast.error('حدث خطأ في تغيير حالة الاحتياج');
+    }
+  };
+
+  const handleDeleteNeed = async (need) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذا الاحتياج؟')) {
+      return;
+    }
+    
+    try {
+      await axios.delete(`${API_URL}/families/${familyId}/needs/${need.id}`);
+      toast.success('تم حذف الاحتياج بنجاح');
+      fetchFamilyDetails();
+    } catch (error) {
+      console.error('Error deleting need:', error);
+      toast.error('حدث خطأ في حذف الاحتياج');
+    }
+  };
+
   // استخدام الصور الحقيقية من family model
   const familyImages = family?.images || [];
 
