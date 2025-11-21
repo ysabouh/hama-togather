@@ -401,7 +401,7 @@ const FamiliesPublic = () => {
                         {/* Family Fake Name with Number & Code */}
                         <div className="space-y-1">
                           <h3 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
-                            {family.fake_name || family.name}
+                            {family.fac_name || family.name}
                           </h3>
                           <div className="flex items-center gap-3 text-sm text-gray-600">
                             <span className="flex items-center gap-1">
