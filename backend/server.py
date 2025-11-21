@@ -1352,9 +1352,13 @@ async def get_family_needs(family_id: str, current_user: User = Depends(get_curr
     # بناء النتيجة
     result = []
     for fn in family_needs:
+        need_obj = needs_dict.get(fn["need_id"])
         result.append({
             **fn,
-            "need": needs_dict.get(fn["need_id"]),
+            "need_name": need_obj.get("name") if need_obj else None,
+            "need_description": need_obj.get("description") if need_obj else None,
+            "category": need_obj.get("category") if need_obj else None,
+            "need": need_obj,
             "created_by_user": users_dict.get(fn.get("created_by_user_id")),
             "updated_by_user": users_dict.get(fn.get("updated_by_user_id"))
         })
