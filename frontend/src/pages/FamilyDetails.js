@@ -542,6 +542,35 @@ const FamilyDetails = () => {
                   </div>
                 )}
 
+                {/* Need Assessment */}
+                {needAssessment && (
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5" style={{ color: needAssessment.color }} />
+                      تقييم الاحتياج
+                    </h3>
+                    <div 
+                      className="border-2 rounded-lg p-4 space-y-2"
+                      style={{
+                        backgroundColor: `${needAssessment.color}10`,
+                        borderColor: needAssessment.color
+                      }}
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <TrendingUp className="w-5 h-5" style={{ color: needAssessment.color }} />
+                        <p className="text-center text-lg font-bold" style={{ color: needAssessment.color }}>
+                          {needAssessment.name}
+                        </p>
+                      </div>
+                      {needAssessment.description && (
+                        <p className="text-center text-sm leading-relaxed" style={{ color: `${needAssessment.color}dd` }}>
+                          {needAssessment.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Contact Info */}
                 {(family.contact_phone || family.contact_email) && (
                   <div className="bg-white rounded-xl shadow-lg p-6">
