@@ -3966,9 +3966,9 @@ const AdminDashboard = () => {
                             </div>
                             
                             {/* معلومات إرشادية */}
-                            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md text-sm">
-                              <p className="font-semibold text-blue-900 mb-1">📌 معلومات مهمة:</p>
-                              <ul className="text-blue-800 space-y-1 mr-4">
+                            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md text-sm">
+                              <p className="font-semibold text-red-900 mb-1">📌 معلومات مهمة:</p>
+                              <ul className="text-red-800 space-y-1 mr-4">
                                 <li>• <strong>الأبعاد المثالية:</strong> 1920×1080 بكسل</li>
                                 <li>• <strong>الحجم الأقصى:</strong> 5 ميجابايت</li>
                                 <li>• <strong>ملاحظة:</strong> إذا لم تقم برفع صورة، سيتم استخدام الصورة الافتراضية</li>
