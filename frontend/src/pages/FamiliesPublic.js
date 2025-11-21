@@ -398,10 +398,27 @@ const FamiliesPublic = () => {
                           )}
                         </div>
 
-                        {/* Family Name */}
-                        <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors">
-                          {family.name}
-                        </h3>
+                        {/* Family Fake Name with Number & Code */}
+                        <div className="space-y-1">
+                          <h3 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                            {family.fake_name || family.name}
+                          </h3>
+                          <div className="flex items-center gap-3 text-sm text-gray-600">
+                            <span className="flex items-center gap-1">
+                              <span className="font-semibold">رقم العائلة:</span>
+                              <span className="font-mono">{family.family_number}</span>
+                            </span>
+                            {family.family_code && (
+                              <>
+                                <span className="text-gray-400">|</span>
+                                <span className="flex items-center gap-1">
+                                  <span className="font-semibold">الرمز:</span>
+                                  <span className="font-mono">{family.family_code}</span>
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       {/* Divider */}
