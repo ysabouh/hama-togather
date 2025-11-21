@@ -100,6 +100,7 @@ class Family(BaseModel):
     mother_present: Optional[bool] = None  # الأم موجودة
     female_children_count: Optional[int] = 0  # عدد الأطفال الإناث
     male_children_count: Optional[int] = 0  # عدد الأطفال الذكور
+    total_needs_amount: Optional[float] = 0.0  # المبلغ الإجمالي للاحتياجات
     is_active: bool = True  # للحذف الناعم
     created_by_user_id: Optional[str] = None  # معرف المستخدم الذي أضاف العائلة
     updated_by_user_id: Optional[str] = None  # معرف المستخدم الذي قام بآخر تعديل
