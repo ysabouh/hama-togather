@@ -1408,24 +1408,29 @@ async def update_family_total_needs_amount(family_id: str):
 
 async def update_family_total_donations_amount(family_id: str):
     """تحديث المبلغ الإجمالي لتبرعات العائلة"""
+    import re
     try:
-        # جلب جميع تبرعات العائلة
+        # جلب جميع تبرعات العائلة النشطة
         donations = await db.donations.find({
-            "family_id": family_id
+            "family_id": family_id,
+            "is_active": {"$ne": False}
         }, {"_id": 0}).to_list(10000)
         
-        # حساب المجموع
         total = 0.0
         for donation in donations:
             amount = donation.get("amount", "")
             if amount:
                 try:
-                    # محاولة تحويل المبلغ إلى رقم
-                    import re
-                    numbers = re.findall(r'\d+\.?\d*', str(amount))
+                    # إزالة الفواصل والمسافات
+                    clean_str = str(amount).replace(",", "").replace(" ", "")
+                    # استخراج جميع الأرقام (مع دعم الأرقام العشرية)
+                    numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
                     if numbers:
-                        total += float(numbers[0])
-                except:
+                        # جمع جميع الأرقام المستخرجة
+                        for num in numbers:
+                            total += float(num)
+                except Exception as e:
+                    print(f"خطأ في معالجة مبلغ التبرع '{amount}': {e}")
                     pass
         
         # تحديث العائلة
@@ -1434,9 +1439,10 @@ async def update_family_total_donations_amount(family_id: str):
             {"$set": {"total_donations_amount": total}}
         )
         
+        print(f"تم تحديث إجمالي تبرعات العائلة {family_id}: {total}")
         return total
     except Exception as e:
-        print(f"Error updating total donations amount: {e}")
+        print(f"خطأ في تحديث إجمالي التبرعات: {e}")
         return 0.0
 
 @api_router.post("/families/{family_id}/needs")
