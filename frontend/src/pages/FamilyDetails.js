@@ -227,13 +227,18 @@ const FamilyDetails = () => {
 
   const handleToggleNeedStatus = async (need) => {
     try {
-      const newStatus = !need.is_active;
+      // إذا كانت is_active غير محددة، اعتبرها true (نشط)
+      const currentStatus = need.is_active !== false;
+      const newStatus = !currentStatus;
+      
       await axios.put(`${API_URL}/families/${familyId}/needs/${need.id}`, {
-        ...need,
+        need_id: need.need_id,
+        amount: need.amount || '',
+        notes: need.notes || '',
         is_active: newStatus
       });
       
-      toast.success(newStatus ? 'تم تفعيل الاحتياج ✅' : 'تم تعطيل الاحتياج');
+      toast.success(newStatus ? 'تم تفعيل الاحتياج ✅' : 'تم تعطيل الاحتياج ⭕');
       fetchFamilyDetails();
     } catch (error) {
       console.error('Error toggling need status:', error);
