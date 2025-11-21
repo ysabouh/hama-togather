@@ -542,30 +542,17 @@ const FamilyDetails = () => {
                   </div>
                 )}
 
-                {/* Need Assessment */}
+                {/* Need Assessment - نفس الأسلوب تماماً */}
                 {needAssessment && (
                   <div className="bg-white rounded-xl shadow-lg p-6">
                     <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5" style={{ color: needAssessment.color }} />
+                      <TrendingUp className="w-5 h-5 text-purple-600" />
                       تقييم الاحتياج
                     </h3>
-                    <div 
-                      className="border-2 rounded-lg p-4 space-y-2"
-                      style={{
-                        backgroundColor: `${needAssessment.color}10`,
-                        borderColor: needAssessment.color
-                      }}
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <TrendingUp className="w-5 h-5" style={{ color: needAssessment.color }} />
-                        <p className="text-center text-lg font-bold" style={{ color: needAssessment.color }}>
-                          {needAssessment.name}
-                        </p>
-                      </div>
+                    <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4 space-y-2">
+                      <p className="text-center text-lg font-bold text-purple-900">{needAssessment.name}</p>
                       {needAssessment.description && (
-                        <p className="text-center text-sm leading-relaxed" style={{ color: `${needAssessment.color}dd` }}>
-                          {needAssessment.description}
-                        </p>
+                        <p className="text-center text-sm text-purple-700 leading-relaxed">{needAssessment.description}</p>
                       )}
                     </div>
                   </div>
