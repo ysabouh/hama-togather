@@ -75,6 +75,7 @@ const DonationsManagement = () => {
     const pending = donationsData.filter(d => d.status === 'معلق' || !d.status).length;
     const inProgress = donationsData.filter(d => d.status === 'قيد التنفيذ').length;
     const completed = donationsData.filter(d => d.status === 'مكتمل').length;
+    const cancelled = donationsData.filter(d => d.status === 'ملغي').length;
     
     const uniqueDonors = new Set(donationsData.map(d => d.donor_email || d.donor_name)).size;
 
@@ -84,6 +85,7 @@ const DonationsManagement = () => {
       pending,
       inProgress,
       completed,
+      cancelled,
       uniqueDonors
     });
   };
