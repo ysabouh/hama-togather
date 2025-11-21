@@ -7,7 +7,7 @@ import {
   Users, Heart, MapPin, DollarSign, TrendingUp, Calendar, 
   ArrowRight, Phone, Mail, Home, User, Baby, CheckCircle,
   Clock, Package, X, Image as ImageIcon, History, Gift, Plus,
-  Eye, ChevronLeft, ChevronRight, AlertCircle
+  Eye, ChevronLeft, ChevronRight, AlertCircle, Edit, Check, Trash2, Tag
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
