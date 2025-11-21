@@ -533,8 +533,11 @@ const FamilyDetails = () => {
                       <DollarSign className="w-5 h-5 text-amber-600" />
                       مستوى الدخل
                     </h3>
-                    <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
+                    <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 space-y-2">
                       <p className="text-center text-lg font-bold text-amber-900">{incomeLevel.name}</p>
+                      {incomeLevel.description && (
+                        <p className="text-center text-sm text-amber-700 leading-relaxed">{incomeLevel.description}</p>
+                      )}
                     </div>
                   </div>
                 )}
