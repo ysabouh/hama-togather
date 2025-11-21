@@ -473,26 +473,17 @@ const FamiliesPublic = () => {
                           </div>
                         )}
 
-                        {/* Need Assessment */}
+                        {/* Need Assessment - نفس الأسلوب تماماً */}
                         {needAssessment && (
-                          <div 
-                            className="flex items-center gap-3 rounded-lg p-3 border-2"
-                            style={{
-                              backgroundColor: `${needAssessment.color}10`,
-                              borderColor: `${needAssessment.color}40`
-                            }}
-                          >
-                            <div 
-                              className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                              style={{ backgroundColor: `${needAssessment.color}20` }}
-                            >
-                              <TrendingUp className="w-5 h-5" style={{ color: needAssessment.color }} />
+                          <div className="flex items-center gap-3 bg-purple-50 rounded-lg p-3 border border-purple-200">
+                            <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                              <TrendingUp className="w-5 h-5 text-purple-600" />
                             </div>
                             <div className="flex-1">
-                              <p className="text-xs mb-0.5" style={{ color: needAssessment.color }}>تقييم الاحتياج</p>
-                              <p className="text-sm font-bold" style={{ color: needAssessment.color }}>{needAssessment.name}</p>
+                              <p className="text-xs text-purple-700 mb-0.5">تقييم الاحتياج</p>
+                              <p className="text-sm font-bold text-purple-900">{needAssessment.name}</p>
                               {needAssessment.description && (
-                                <p className="text-xs mt-1 leading-relaxed" style={{ color: `${needAssessment.color}cc` }}>{needAssessment.description}</p>
+                                <p className="text-xs text-purple-600 mt-1 leading-relaxed">{needAssessment.description}</p>
                               )}
                             </div>
                           </div>
