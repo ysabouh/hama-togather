@@ -517,6 +517,7 @@ class FamilyNeed(BaseModel):
     need_id: str  # معرف الاحتياج
     amount: Optional[str] = None  # المبلغ أو الكمية (نص)
     estimated_amount: float = 0.0  # المبلغ التقديري
+    duration_type: str = "مرة واحدة"  # مرة واحدة أو شهري
     notes: Optional[str] = None  # ملاحظات
     status: str = "pending"  # pending, fulfilled, cancelled
     is_active: bool = True  # نشط أو متوقف
