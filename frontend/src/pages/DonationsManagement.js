@@ -860,7 +860,7 @@ const DonationsManagement = () => {
                 <div className="bg-green-50 rounded-xl p-5 border-2 border-green-200">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <Package className="w-5 h-5 text-green-600" />
-                    صور وصل الاستلام
+                    صور وصل الاستلام ({selectedDonation.completion_images.length})
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
                     {selectedDonation.completion_images.map((img, idx) => (
@@ -869,10 +869,13 @@ const DonationsManagement = () => {
                           src={img}
                           alt={`وصل ${idx + 1}`}
                           className="w-full h-32 object-cover rounded-lg border-2 border-green-300 cursor-pointer hover:border-green-500 transition-colors"
-                          onClick={() => window.open(img, '_blank')}
+                          onClick={() => openImageModal(selectedDonation.completion_images, idx)}
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-opacity flex items-center justify-center">
                           <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded text-xs font-bold">
+                          {idx + 1}/{selectedDonation.completion_images.length}
                         </div>
                       </div>
                     ))}
