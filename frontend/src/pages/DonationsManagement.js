@@ -198,9 +198,10 @@ const DonationsManagement = () => {
       // تحويل من العربية إلى الإنجليزية
       const statusMap = {
         'معلق': 'pending',
-        'قيد التنفيذ': 'approved',
+        'قيد التنفيذ': 'inprogress',
         'مكتمل': 'completed',
-        'ملغي': 'cancelled'
+        'ملغي': 'cancelled',
+        'مرفوض': 'rejected'
       };
       
       const statusEn = statusMap[newStatus] || newStatus;
