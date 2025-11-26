@@ -1997,6 +1997,149 @@ const FamilyDetails = () => {
         </div>
       )}
 
+      {/* Audit Log Details Modal */}
+      {showDetailsModal && selectedLogDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-fade-in">
+            {/* Header */}
+            <div className="bg-gradient-to-l from-blue-600 to-blue-500 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <History className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">تفاصيل الحركة</h3>
+                  <p className="text-sm text-blue-100">معلومات التغييرات المسجلة</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDetailsModal(false)}
+                className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-blue-600" />
+                    <span className="text-xs text-gray-600 font-semibold">المستخدم</span>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">{selectedLogDetails.user_name}</p>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Package className="w-4 h-4 text-emerald-600" />
+                    <span className="text-xs text-gray-600 font-semibold">الاحتياج</span>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">{selectedLogDetails.need_name}</p>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="w-4 h-4 text-gray-600" />
+                    <span className="text-xs text-gray-600 font-semibold">التاريخ</span>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">
+                    {formatDateTime(selectedLogDetails.timestamp).date}
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="w-4 h-4 text-gray-600" />
+                    <span className="text-xs text-gray-600 font-semibold">الوقت</span>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">
+                    {formatDateTime(selectedLogDetails.timestamp).time}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Type Badge */}
+              <div className="mb-6">
+                <label className="block text-xs text-gray-600 font-semibold mb-2">نوع العملية</label>
+                {(() => {
+                  const actionInfo = getActionTypeLabel(selectedLogDetails.action_type);
+                  const ActionIcon = actionInfo.icon;
+                  return (
+                    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border ${actionInfo.color}`}>
+                      <ActionIcon className="w-4 h-4" />
+                      {actionInfo.label}
+                    </span>
+                  );
+                })()}
+              </div>
+
+              {/* Changes Details */}
+              {selectedLogDetails.changes && Object.keys(selectedLogDetails.changes).length > 0 && (
+                <div>
+                  <h4 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <Edit className="w-4 h-4 text-blue-600" />
+                    التفاصيل والتغييرات
+                  </h4>
+                  <div className="space-y-3">
+                    {Object.entries(selectedLogDetails.changes).map(([field, value]) => (
+                      <div key={field} className="bg-gradient-to-l from-gray-50 to-white border-2 border-gray-200 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                          <span className="font-bold text-gray-900">{field}</span>
+                        </div>
+                        {value.old !== undefined && value.new !== undefined ? (
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                              <p className="text-xs text-red-600 font-semibold mb-1">القيمة القديمة</p>
+                              <p className="text-sm text-red-900 font-medium break-words">
+                                {value.old || 'فارغ'}
+                              </p>
+                            </div>
+                            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                              <p className="text-xs text-green-600 font-semibold mb-1">القيمة الجديدة</p>
+                              <p className="text-sm text-green-900 font-medium break-words">
+                                {value.new || 'فارغ'}
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <p className="text-sm text-blue-900 font-medium break-words">
+                              {JSON.stringify(value, null, 2)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* No Changes Message */}
+              {(!selectedLogDetails.changes || Object.keys(selectedLogDetails.changes).length === 0) && (
+                <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-6 text-center">
+                  <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">لا توجد تفاصيل تغييرات لهذه العملية</p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="bg-gray-50 px-6 py-4 flex justify-end border-t">
+              <button
+                onClick={() => setShowDetailsModal(false)}
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg"
+              >
+                إغلاق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
