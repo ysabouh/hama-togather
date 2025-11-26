@@ -306,13 +306,30 @@ const DonationsManagement = () => {
                 <p className="text-gray-600 font-semibold">إجمالي التبرعات</p>
               </div>
 
-              {/* Total Amount */}
-              <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-500">
+              {/* Total Amount with Breakdown */}
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl shadow-lg p-6 border-t-4 border-emerald-700">
                 <div className="flex items-center justify-between mb-3">
-                  <DollarSign className="w-10 h-10 text-blue-600" />
-                  <span className="text-3xl font-bold text-gray-900">{formatAmount(stats.totalAmount)}</span>
+                  <DollarSign className="w-10 h-10 opacity-80" />
+                  <span className="text-3xl font-bold">{formatAmount(stats.completedAmount)}</span>
                 </div>
-                <p className="text-gray-600 font-semibold">إجمالي المبلغ (ل.س)</p>
+                <p className="text-sm opacity-90 mb-1">المكتملة (المعتمد)</p>
+                <p className="text-xs opacity-80 mb-3">ليرة سورية</p>
+                
+                {/* تفصيل الحالات */}
+                <div className="border-t border-white/20 pt-3 space-y-1">
+                  <div className="flex justify-between text-xs opacity-90">
+                    <span>⏱ قيد التنفيذ:</span>
+                    <span className="font-semibold">{formatAmount(stats.approvedAmount)}</span>
+                  </div>
+                  <div className="flex justify-between text-xs opacity-90">
+                    <span>⏳ معلقة:</span>
+                    <span className="font-semibold">{formatAmount(stats.pendingAmount)}</span>
+                  </div>
+                  <div className="flex justify-between text-xs opacity-90">
+                    <span>✕ ملغاة:</span>
+                    <span className="font-semibold">{formatAmount(stats.cancelledAmount)}</span>
+                  </div>
+                </div>
               </div>
 
               {/* Unique Donors */}
