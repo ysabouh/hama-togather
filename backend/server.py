@@ -2244,6 +2244,23 @@ async def update_donation_status(
         print(f"Error updating donation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.get("/donations/{donation_id}/history")
+async def get_donation_history(
+    donation_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """الحصول على سجل تاريخ التبرع"""
+    try:
+        history = await db.donation_history.find(
+            {"donation_id": donation_id},
+            {"_id": 0}
+        ).sort("timestamp", -1).to_list(1000)
+        
+        return history
+    except Exception as e:
+        print(f"Error fetching donation history: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @api_router.post("/admin/recalculate-family-totals")
 async def recalculate_all_family_totals(current_user: User = Depends(get_current_user)):
     """إعادة حساب جميع المبالغ الإجمالية لجميع العائلات - للمشرفين فقط"""
