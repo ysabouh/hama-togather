@@ -989,6 +989,7 @@ const DonationsManagement = () => {
                       onChange={(e) => {
                         setNewStatus(e.target.value);
                         setCancellationReason('');
+                        setCustomCancellationText('');
                       }}
                       className="w-5 h-5 text-green-600"
                     />
