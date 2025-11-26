@@ -328,6 +328,7 @@ const FamilyDetails = () => {
       });
       
       fetchFamilyDetails();
+      fetchAuditLogs(auditLogsPagination.current_page);
     } catch (error) {
       console.error('Error updating need:', error);
       toast.error('حدث خطأ في تحديث الاحتياج');
