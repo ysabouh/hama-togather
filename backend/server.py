@@ -1465,7 +1465,7 @@ async def update_family_total_needs_amount(family_id: str):
         return 0.0
 
 async def update_family_total_donations_amount(family_id: str):
-    """تحديث المبلغ الإجمالي لتبرعات العائلة"""
+    """تحديث المبلغ الإجمالي لتبرعات العائلة حسب الحالة"""
     import re
     try:
         # جلب جميع تبرعات العائلة النشطة
@@ -1474,9 +1474,19 @@ async def update_family_total_donations_amount(family_id: str):
             "is_active": {"$ne": False}
         }, {"_id": 0}).to_list(10000)
         
-        total = 0.0
+        # تصنيف التبرعات حسب الحالة
+        totals = {
+            "completed": 0.0,      # مكتملة (المعتمد)
+            "approved": 0.0,       # معتمدة/قيد التنفيذ
+            "pending": 0.0,        # معلقة
+            "cancelled": 0.0,      # ملغاة
+            "rejected": 0.0        # مرفوضة
+        }
+        
         for donation in donations:
             amount = donation.get("amount", "")
+            status = donation.get("status", "pending")
+            
             if amount:
                 try:
                     # إزالة الفواصل والمسافات
@@ -1484,20 +1494,46 @@ async def update_family_total_donations_amount(family_id: str):
                     # استخراج جميع الأرقام (مع دعم الأرقام العشرية)
                     numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
                     if numbers:
+                        amount_value = 0.0
                         # جمع جميع الأرقام المستخرجة
                         for num in numbers:
-                            total += float(num)
+                            amount_value += float(num)
+                        
+                        # إضافة إلى الفئة المناسبة
+                        if status in totals:
+                            totals[status] += amount_value
+                        else:
+                            # افتراضياً معلق
+                            totals["pending"] += amount_value
                 except Exception as e:
                     print(f"خطأ في معالجة مبلغ التبرع '{amount}': {e}")
                     pass
         
+        # المجموع الكلي (للتوافق مع الكود القديم)
+        total = sum(totals.values())
+        
         # تحديث العائلة
         await db.families.update_one(
             {"id": family_id},
-            {"$set": {"total_donations_amount": total}}
+            {"$set": {
+                "total_donations_amount": total,  # المجموع الكلي
+                "donations_by_status": {
+                    "completed": totals["completed"],      # المكتملة (المعتمد)
+                    "approved": totals["approved"],        # قيد التنفيذ
+                    "pending": totals["pending"],          # المعلقة
+                    "cancelled": totals["cancelled"],      # الملغاة
+                    "rejected": totals["rejected"]         # المرفوضة
+                }
+            }}
         )
         
-        print(f"تم تحديث إجمالي تبرعات العائلة {family_id}: {total}")
+        print(f"تم تحديث تبرعات العائلة {family_id}:")
+        print(f"  - مكتملة (معتمد): {totals['completed']}")
+        print(f"  - قيد التنفيذ: {totals['approved']}")
+        print(f"  - معلقة: {totals['pending']}")
+        print(f"  - ملغاة: {totals['cancelled']}")
+        print(f"  - الإجمالي: {total}")
+        
         return total
     except Exception as e:
         print(f"خطأ في تحديث إجمالي التبرعات: {e}")
