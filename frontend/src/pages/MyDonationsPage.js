@@ -76,7 +76,7 @@ const MyDonationsPage = () => {
                           <h3 className="text-lg font-bold text-gray-900">{getDonationTypeLabel(donation.type)}</h3>
                           <div className="flex items-center gap-2 text-sm text-gray-500">
                             <Calendar className="w-4 h-4" />
-                            <span>{new Date(donation.created_at).toLocaleDateString('ar-SY')}</span>
+                            <span>{new Date(donation.created_at).toLocaleDateString('en-GB', {year: 'numeric', month: '2-digit', day: '2-digit'})}</span>
                           </div>
                         </div>
                       </div>
