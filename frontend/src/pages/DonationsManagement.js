@@ -893,7 +893,11 @@ const DonationsManagement = () => {
                       name="status"
                       value="معلق"
                       checked={newStatus === 'معلق'}
-                      onChange={(e) => setNewStatus(e.target.value)}
+                      onChange={(e) => {
+                        setNewStatus(e.target.value);
+                        setCompletionImages([]);
+                        setCancellationReason('');
+                      }}
                       className="w-5 h-5 text-yellow-600"
                     />
                     <div className="flex-1">
@@ -911,7 +915,11 @@ const DonationsManagement = () => {
                       name="status"
                       value="قيد التنفيذ"
                       checked={newStatus === 'قيد التنفيذ'}
-                      onChange={(e) => setNewStatus(e.target.value)}
+                      onChange={(e) => {
+                        setNewStatus(e.target.value);
+                        setCompletionImages([]);
+                        setCancellationReason('');
+                      }}
                       className="w-5 h-5 text-blue-600"
                     />
                     <div className="flex-1">
@@ -929,7 +937,10 @@ const DonationsManagement = () => {
                       name="status"
                       value="مكتمل"
                       checked={newStatus === 'مكتمل'}
-                      onChange={(e) => setNewStatus(e.target.value)}
+                      onChange={(e) => {
+                        setNewStatus(e.target.value);
+                        setCancellationReason('');
+                      }}
                       className="w-5 h-5 text-green-600"
                     />
                     <div className="flex-1">
@@ -947,7 +958,10 @@ const DonationsManagement = () => {
                       name="status"
                       value="ملغي"
                       checked={newStatus === 'ملغي'}
-                      onChange={(e) => setNewStatus(e.target.value)}
+                      onChange={(e) => {
+                        setNewStatus(e.target.value);
+                        setCompletionImages([]);
+                      }}
                       className="w-5 h-5 text-red-600"
                     />
                     <div className="flex-1">
@@ -955,11 +969,92 @@ const DonationsManagement = () => {
                         <X className="w-5 h-5 text-red-600" />
                         ملغي
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">تم إلغاء التبرع لعدم الدفع</p>
+                      <p className="text-sm text-gray-600 mt-1">تم إلغاء التبرع</p>
                     </div>
                   </label>
                 </div>
               </div>
+
+              {/* صور وصل الاستلام - يظهر عند اختيار مكتمل */}
+              {newStatus === 'مكتمل' && (
+                <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    صور وصل الاستلام (اختياري)
+                  </label>
+                  <p className="text-xs text-gray-600 mb-3">يمكنك رفع حتى 5 صور</p>
+                  
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="completion-images"
+                  />
+                  
+                  <label
+                    htmlFor="completion-images"
+                    className="flex items-center justify-center gap-2 w-full p-3 border-2 border-dashed border-green-300 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
+                  >
+                    <Package className="w-5 h-5 text-green-600" />
+                    <span className="text-sm font-semibold text-green-700">اختر الصور</span>
+                  </label>
+
+                  {/* معاينة الصور */}
+                  {completionImages.length > 0 && (
+                    <div className="mt-3 grid grid-cols-3 gap-2">
+                      {completionImages.map((img, idx) => (
+                        <div key={idx} className="relative group">
+                          <img
+                            src={img}
+                            alt={`صورة ${idx + 1}`}
+                            className="w-full h-20 object-cover rounded-lg border-2 border-green-200"
+                          />
+                          <button
+                            onClick={() => removeImage(idx)}
+                            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* سبب الإلغاء - يظهر عند اختيار ملغي */}
+              {newStatus === 'ملغي' && (
+                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    سبب الإلغاء <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={cancellationReason}
+                    onChange={(e) => setCancellationReason(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-red-300 rounded-lg focus:border-red-500 focus:outline-none mb-3"
+                    required
+                  >
+                    <option value="">-- اختر السبب --</option>
+                    <option value="المتبرع لم يدفع">المتبرع لم يدفع</option>
+                    <option value="الأسرة رفضت المساعدة">الأسرة رفضت المساعدة</option>
+                    <option value="خطأ في البيانات">خطأ في البيانات</option>
+                    <option value="تم التبرع من جهة أخرى">تم التبرع من جهة أخرى</option>
+                    <option value="تغيير في احتياجات الأسرة">تغيير في احتياجات الأسرة</option>
+                    <option value="أخرى">أخرى</option>
+                  </select>
+                  
+                  {cancellationReason === 'أخرى' && (
+                    <textarea
+                      placeholder="يرجى توضيح السبب..."
+                      value={cancellationReason === 'أخرى' ? '' : cancellationReason}
+                      onChange={(e) => setCancellationReason(e.target.value)}
+                      className="w-full px-4 py-3 border-2 border-red-300 rounded-lg focus:border-red-500 focus:outline-none resize-none"
+                      rows="3"
+                    />
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Footer */}
