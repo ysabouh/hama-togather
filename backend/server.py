@@ -144,7 +144,9 @@ class Donation(BaseModel):
     amount: str  # القيمة أو الكمية (نص حر مثل: "500 ريال" أو "سلة غذائية")
     description: str  # وصف المساعدة
     notes: Optional[str] = None  # ملاحظات إضافية
-    status: str = "pending"  # pending, approved, completed, rejected
+    status: str = "pending"  # pending, approved, completed, cancelled
+    donation_date: Optional[datetime] = None  # تاريخ ووقت المساعدة المتوقع (ميلادي)
+    delivery_status: str = "scheduled"  # scheduled, delivered, cancelled
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_by_user_id: Optional[str] = None  # من قام بتسجيل التبرع
     is_active: bool = True
@@ -159,6 +161,8 @@ class DonationCreate(BaseModel):
     description: str
     notes: Optional[str] = None
     message: Optional[str] = None
+    donation_date: Optional[str] = None  # تاريخ ووقت المساعدة بصيغة ISO
+    delivery_status: Optional[str] = "scheduled"  # scheduled, delivered, cancelled
 
 # Health Case Models
 class HealthCase(BaseModel):
