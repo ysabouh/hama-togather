@@ -236,6 +236,11 @@ const FamilyDetails = () => {
     return labels[actionType] || { label: actionType, icon: Tag, color: 'bg-gray-100 text-gray-700 border-gray-300' };
   };
 
+  const handleShowDetails = (log) => {
+    setSelectedLogDetails(log);
+    setShowDetailsModal(true);
+  };
+
   const handleDonationSubmit = (e) => {
     e.preventDefault();
     // عرض نافذة التأكيد بدلاً من الإرسال مباشرة
