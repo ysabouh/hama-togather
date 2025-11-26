@@ -2012,10 +2012,19 @@ async def create_donation(donation_input: DonationCreate, current_user: User = D
         donation_dict['donor_id'] = current_user.id
         donation_dict['created_by_user_id'] = current_user.id
     
+    # تحويل donation_date من string إلى datetime إذا كان موجود
+    if donation_dict.get('donation_date'):
+        try:
+            donation_dict['donation_date'] = datetime.fromisoformat(donation_dict['donation_date'].replace('Z', '+00:00'))
+        except:
+            donation_dict['donation_date'] = None
+    
     donation_obj = Donation(**donation_dict)
     
     doc = donation_obj.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('donation_date'):
+        doc['donation_date'] = doc['donation_date'].isoformat()
     
     await db.donations.insert_one(doc)
     
