@@ -148,6 +148,8 @@ class Donation(BaseModel):
     status: str = "pending"  # pending, inprogress, completed, cancelled, rejected
     donation_date: Optional[datetime] = None  # تاريخ ووقت المساعدة المتوقع (ميلادي)
     delivery_status: str = "scheduled"  # scheduled, delivered, cancelled
+    completion_images: Optional[List[str]] = []  # صور وصل الاستلام (base64)
+    cancellation_reason: Optional[str] = None  # سبب الإلغاء
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_by_user_id: Optional[str] = None  # من قام بتسجيل التبرع
     updated_at: Optional[datetime] = None  # تاريخ آخر تحديث
