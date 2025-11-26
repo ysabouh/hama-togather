@@ -1197,7 +1197,14 @@ const DonationsManagement = () => {
               <img
                 src={currentImages[selectedImageIndex]}
                 alt={`صورة ${selectedImageIndex + 1}`}
-                className="max-w-[95vw] max-h-[95vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
+                style={{
+                  maxWidth: '95vw',
+                  maxHeight: '95vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain'
+                }}
+                className="rounded-lg shadow-2xl"
               />
             </div>
 
