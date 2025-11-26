@@ -37,24 +37,29 @@ export const calculateAge = (dateOfBirth) => {
   return age;
 };
 
-// دالة لتنسيق التاريخ
+// دالة لتنسيق التاريخ (ميلادي)
 export const formatDate = (dateString) => {
   if (!dateString) return '-';
-  return new Date(dateString).toLocaleDateString('ar-SA', {
+  return new Date(dateString).toLocaleDateString('en-GB', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+    month: '2-digit',
+    day: '2-digit'
   });
 };
 
-// دالة لتنسيق الوقت
+// دالة لتنسيق التاريخ والوقت (ميلادي)
 export const formatDateTime = (dateString) => {
   if (!dateString) return '-';
-  return new Date(dateString).toLocaleString('ar-SA', {
+  const date = new Date(dateString);
+  const dateStr = date.toLocaleDateString('en-GB', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    month: '2-digit',
+    day: '2-digit'
   });
+  const timeStr = date.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+  return `${dateStr} ${timeStr}`;
 };
