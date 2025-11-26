@@ -2516,7 +2516,7 @@ const FamilyDetails = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  prevImage();
+                  prevDonationImage();
                 }}
                 className="absolute left-6 w-14 h-14 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors z-10"
               >
@@ -2548,7 +2548,7 @@ const FamilyDetails = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  nextImage();
+                  nextDonationImage();
                 }}
                 className="absolute right-6 w-14 h-14 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors z-10"
               >
