@@ -292,6 +292,7 @@ const FamilyDetails = () => {
       
       // إعادة تحميل البيانات
       fetchFamilyDetails();
+      fetchAuditLogs(auditLogsPagination.current_page);
     } catch (error) {
       console.error('Error adding need:', error);
       console.error('Error details:', error.response?.data);
