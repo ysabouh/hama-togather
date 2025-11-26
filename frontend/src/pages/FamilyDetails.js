@@ -48,6 +48,7 @@ const FamilyDetails = () => {
   });
   const [editingNeed, setEditingNeed] = useState(null);
   const [showEditNeedModal, setShowEditNeedModal] = useState(false);
+  const [activeNeedsTab, setActiveNeedsTab] = useState('active'); // 'active' or 'inactive'
   const [allNeeds, setAllNeeds] = useState([]);
   const [donationHistory, setDonationHistory] = useState([]);
 
