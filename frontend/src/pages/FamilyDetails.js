@@ -2360,43 +2360,14 @@ const FamilyDetails = () => {
 
             {/* Body */}
             <div className="p-6 overflow-y-auto flex-1 space-y-4">
-              {/* الحالة الحالية */}
-              <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">الحالة الحالية</h3>
-                <div className="flex items-center justify-between">
-                  <span className={`px-4 py-2 rounded-full text-sm font-bold text-white ${
-                    getStatusColor(selectedDonation.status).replace('text-', 'bg-')
-                  }`}>
-                    {getStatusLabel(selectedDonation.status)}
-                  </span>
-                  <div className="text-sm text-gray-600">
-                    <div className="font-semibold">آخر تحديث:</div>
-                    <div>{formatDate(selectedDonation.updated_at || selectedDonation.created_at)}</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* معلومات آخر تعديل */}
-              {selectedDonation.updated_by_user_name && (
-                <div className="bg-blue-50 rounded-xl p-4 border-2 border-blue-200">
-                  <h3 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    آخر تعديل
-                  </h3>
-                  <div className="text-sm text-blue-800">
-                    <span className="font-semibold">بواسطة:</span> {selectedDonation.updated_by_user_name}
-                  </div>
-                </div>
-              )}
-
-              {/* صور وصل الاستلام */}
-              {selectedDonation.status === 'completed' && selectedDonation.completion_images && selectedDonation.completion_images.length > 0 && (
-                <div className="bg-green-50 rounded-xl p-4 border-2 border-green-200">
-                  <h3 className="text-sm font-semibold text-green-900 mb-3 flex items-center gap-2">
-                    <Package className="w-4 h-4" />
+              {/* صور وصل الاستلام - فقط للمكتمل */}
+              {selectedDonation.status === 'completed' && selectedDonation.completion_images && selectedDonation.completion_images.length > 0 ? (
+                <div className="bg-green-50 rounded-xl p-5 border-2 border-green-200">
+                  <h3 className="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
+                    <Package className="w-5 h-5" />
                     صور وصل الاستلام ({selectedDonation.completion_images.length})
                   </h3>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-3">
                     {selectedDonation.completion_images.map((img, idx) => (
                       <div 
                         key={idx} 
@@ -2406,81 +2377,36 @@ const FamilyDetails = () => {
                         <img
                           src={img}
                           alt={`وصل ${idx + 1}`}
-                          className="w-full h-24 object-cover rounded-lg border-2 border-green-300 hover:border-green-500 transition-colors"
+                          className="w-full h-32 object-cover rounded-lg border-2 border-green-300 hover:border-green-500 transition-colors"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-opacity flex items-center justify-center pointer-events-none">
                           <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded text-xs font-bold pointer-events-none">
+                          {idx + 1}/{selectedDonation.completion_images.length}
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              )}
-
-              {/* سبب الإلغاء */}
-              {selectedDonation.status === 'cancelled' && selectedDonation.cancellation_reason && (
-                <div className="bg-red-50 rounded-xl p-4 border-2 border-red-200">
-                  <h3 className="text-sm font-semibold text-red-900 mb-2 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4" />
+              ) : selectedDonation.status === 'cancelled' && selectedDonation.cancellation_reason ? (
+                /* سبب الإلغاء - فقط للملغي */
+                <div className="bg-red-50 rounded-xl p-5 border-2 border-red-200">
+                  <h3 className="text-lg font-bold text-red-900 mb-4 flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5" />
                     سبب الإلغاء
                   </h3>
-                  <p className="text-red-800 font-semibold">{selectedDonation.cancellation_reason}</p>
+                  <p className="text-red-800 text-base font-semibold leading-relaxed">{selectedDonation.cancellation_reason}</p>
+                </div>
+              ) : (
+                /* رسالة في حالة عدم وجود معلومات إضافية */
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Gift className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="text-gray-500">لا توجد معلومات إضافية لعرضها</p>
                 </div>
               )}
-
-              {/* معلومات التبرع */}
-              <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">معلومات التبرع</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">النوع:</span>
-                    <span className="font-semibold">{selectedDonation.donation_type}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">المبلغ/الكمية:</span>
-                    <span className="font-semibold">{selectedDonation.amount}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">تاريخ التسجيل:</span>
-                    <span className="font-semibold">{formatDate(selectedDonation.created_at)}</span>
-                  </div>
-                  {selectedDonation.description && (
-                    <div className="pt-2 border-t">
-                      <span className="text-gray-600 block mb-1">الوصف:</span>
-                      <p className="font-semibold">{selectedDonation.description}</p>
-                    </div>
-                  )}
-                  {selectedDonation.notes && (
-                    <div className="pt-2 border-t">
-                      <span className="text-gray-600 block mb-1">ملاحظات:</span>
-                      <p className="font-semibold italic">{selectedDonation.notes}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* معلومات المتبرع */}
-              <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">معلومات المتبرع</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-500" />
-                    <span className="font-semibold">{selectedDonation.donor_name}</span>
-                  </div>
-                  {selectedDonation.donor_phone && (
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-gray-500" />
-                      <span>{selectedDonation.donor_phone}</span>
-                    </div>
-                  )}
-                  {selectedDonation.donor_email && (
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-gray-500" />
-                      <span>{selectedDonation.donor_email}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
 
             {/* Footer */}
