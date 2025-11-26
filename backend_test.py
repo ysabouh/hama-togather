@@ -9,7 +9,7 @@ import json
 import uuid
 
 # Configuration
-BACKEND_URL = "https://hama-helper.preview.emergentagent.com/api"
+BACKEND_URL = "https://together-build-1.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 
