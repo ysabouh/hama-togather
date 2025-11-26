@@ -43,6 +43,7 @@ const FamilyDetails = () => {
   const [needForm, setNeedForm] = useState({
     need_id: '',
     amount: '',
+    duration_type: 'مرة واحدة',
     notes: ''
   });
   const [editingNeed, setEditingNeed] = useState(null);
