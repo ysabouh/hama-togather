@@ -618,7 +618,7 @@ const DonationsManagement = () => {
                     </div>
                   )}
                 </div>
-              ) : null;
+              );
               })()}
             </div>
           </div>
