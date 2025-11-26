@@ -1690,6 +1690,66 @@ async def delete_family_need(
     
     return {"message": "Family need deleted successfully"}
 
+@api_router.get("/families/{family_id}/needs-audit-log")
+async def get_family_needs_audit_log(
+    family_id: str,
+    current_user: User = Depends(get_current_user),
+    page: int = 1,
+    per_page: int = 10,
+    action_type: Optional[str] = None,
+    user_id: Optional[str] = None,
+    search: Optional[str] = None
+):
+    """جلب سجل الحركات لاحتياجات عائلة مع pagination وبحث"""
+    
+    # بناء الفلتر
+    filter_query = {"family_id": family_id}
+    
+    if action_type:
+        filter_query["action_type"] = action_type
+    
+    if user_id:
+        filter_query["user_id"] = user_id
+    
+    if search:
+        # البحث في اسم الاحتياج أو اسم المستخدم
+        filter_query["$or"] = [
+            {"need_name": {"$regex": search, "$options": "i"}},
+            {"user_name": {"$regex": search, "$options": "i"}}
+        ]
+    
+    # حساب العدد الإجمالي
+    total_count = await db.family_needs_audit_log.count_documents(filter_query)
+    
+    # حساب عدد الصفحات
+    total_pages = (total_count + per_page - 1) // per_page
+    
+    # حساب skip
+    skip = (page - 1) * per_page
+    
+    # جلب السجلات مع الترتيب من الأحدث للأقدم
+    logs = await db.family_needs_audit_log.find(
+        filter_query,
+        {"_id": 0}
+    ).sort("timestamp", -1).skip(skip).limit(per_page).to_list(per_page)
+    
+    # تحويل التواريخ
+    for log in logs:
+        if isinstance(log.get('timestamp'), str):
+            log['timestamp'] = datetime.fromisoformat(log['timestamp'])
+    
+    return {
+        "logs": logs,
+        "pagination": {
+            "current_page": page,
+            "per_page": per_page,
+            "total_count": total_count,
+            "total_pages": total_pages,
+            "has_next": page < total_pages,
+            "has_prev": page > 1
+        }
+    }
+
 # ============= Health Cases Routes =============
 
 @api_router.get("/health-cases", response_model=List[HealthCase])
