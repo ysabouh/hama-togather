@@ -1011,6 +1011,7 @@ const DonationsManagement = () => {
                       onChange={(e) => {
                         setNewStatus(e.target.value);
                         setCompletionImages([]);
+                        setCustomCancellationText('');
                       }}
                       className="w-5 h-5 text-red-600"
                     />
