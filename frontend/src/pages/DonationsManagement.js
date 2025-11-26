@@ -477,6 +477,9 @@ const DonationsManagement = () => {
                   <table className="w-full">
                     <thead className="bg-gray-50 border-b-2 border-gray-200">
                       <tr>
+                        <th className="px-4 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
+                          #
+                        </th>
                         <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
                           المتبرع
                         </th>
@@ -498,7 +501,8 @@ const DonationsManagement = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {filteredDonations.map((donation, index) => {
+                      {currentItems.map((donation, index) => {
+                        const rowNumber = indexOfFirstItem + index + 1;
                         const family = getFamilyById(donation.family_id);
                         const status = donation.status || 'معلق';
 
