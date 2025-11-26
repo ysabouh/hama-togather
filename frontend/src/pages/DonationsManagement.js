@@ -1161,6 +1161,69 @@ const DonationsManagement = () => {
         </div>
       )}
 
+      {/* Image Viewer Modal */}
+      {showImageModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowImageModal(false)}
+        >
+          <div className="relative max-w-5xl w-full h-full flex items-center justify-center">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors z-10"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+
+            {/* Previous Button */}
+            {currentImages.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
+                className="absolute left-4 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+              >
+                <span className="text-white text-2xl">‹</span>
+              </button>
+            )}
+
+            {/* Image */}
+            <div 
+              className="flex items-center justify-center w-full h-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={currentImages[selectedImageIndex]}
+                alt={`صورة ${selectedImageIndex + 1}`}
+                className="max-w-full max-h-full object-contain rounded-lg"
+              />
+            </div>
+
+            {/* Next Button */}
+            {currentImages.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
+                className="absolute right-4 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+              >
+                <span className="text-white text-2xl">›</span>
+              </button>
+            )}
+
+            {/* Image Counter */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-lg">
+              <span className="font-bold">
+                {selectedImageIndex + 1} / {currentImages.length}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
