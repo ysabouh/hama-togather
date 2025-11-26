@@ -2123,10 +2123,10 @@ async def get_family_donations(family_id: str):
         print(f"Error fetching family donations: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@api_router.put("/donations/{donation_id}")
+@api_router.put("/donations/{donation_id}/status")
 async def update_donation_status(
     donation_id: str, 
-    status: str = None,
+    status: str,
     current_user: User = Depends(get_current_user)
 ):
     """تحديث حالة التبرع - متاح للمشرفين فقط"""
