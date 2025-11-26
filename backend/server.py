@@ -567,6 +567,18 @@ class FamilyNeedAuditLog(BaseModel):
     notes: Optional[str] = None  # ملاحظات إضافية
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class DonationHistory(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    donation_id: str  # معرف التبرع
+    action_type: str  # created, status_changed, updated, deleted
+    user_id: str  # معرف المستخدم
+    user_name: str  # اسم المستخدم
+    old_status: Optional[str] = None  # الحالة القديمة
+    new_status: Optional[str] = None  # الحالة الجديدة
+    changes: Optional[dict] = None  # التغييرات الأخرى
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
