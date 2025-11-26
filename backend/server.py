@@ -538,6 +538,7 @@ class FamilyNeedCreate(BaseModel):
 class FamilyNeedUpdate(BaseModel):
     need_id: Optional[str] = None
     amount: Optional[str] = None
+    duration_type: Optional[str] = None  # مرة واحدة أو شهري
     notes: Optional[str] = None
     is_active: Optional[bool] = None
     estimated_amount: Optional[float] = None
