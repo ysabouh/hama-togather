@@ -221,6 +221,26 @@ const DonationsManagement = () => {
     return labels[status] || status;
   };
 
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + completionImages.length > 5) {
+      toast.error('يمكنك رفع 5 صور كحد أقصى');
+      return;
+    }
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCompletionImages(prev => [...prev, reader.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeImage = (index) => {
+    setCompletionImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleUpdateStatus = async () => {
     if (!selectedDonation || !newStatus) return;
 
@@ -236,10 +256,22 @@ const DonationsManagement = () => {
       
       const statusEn = statusMap[newStatus] || newStatus;
       
+      // التحقق من سبب الإلغاء
+      if (statusEn === 'cancelled' && !cancellationReason) {
+        toast.error('يجب تحديد سبب الإلغاء');
+        return;
+      }
+      
       const token = localStorage.getItem('token');
+      const payload = {
+        status: statusEn,
+        completion_images: statusEn === 'completed' ? completionImages : [],
+        cancellation_reason: statusEn === 'cancelled' ? cancellationReason : null
+      };
+
       const response = await axios.put(
-        `${API_URL}/donations/${selectedDonation.id}/status?status=${statusEn}`,
-        {},
+        `${API_URL}/donations/${selectedDonation.id}/status`,
+        payload,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -249,10 +281,12 @@ const DonationsManagement = () => {
       setShowStatusModal(false);
       setSelectedDonation(null);
       setNewStatus('');
+      setCompletionImages([]);
+      setCancellationReason('');
       fetchData();
     } catch (error) {
       console.error('Error updating status:', error);
-      toast.error('حدث خطأ في تحديث الحالة');
+      toast.error(error.response?.data?.detail || 'حدث خطأ في تحديث الحالة');
     }
   };
 
