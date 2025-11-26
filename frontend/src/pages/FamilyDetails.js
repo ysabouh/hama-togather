@@ -219,6 +219,42 @@ const FamilyDetails = () => {
     }
   };
 
+  const openImageModal = (images, index) => {
+    setCurrentImages(images);
+    setSelectedImageIndex(index);
+    setShowImageModal(true);
+  };
+
+  const nextImage = () => {
+    setSelectedImageIndex((prev) => (prev + 1) % currentImages.length);
+  };
+
+  const prevImage = () => {
+    setSelectedImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
+  };
+
+  const getStatusLabel = (status) => {
+    const labels = {
+      'pending': 'معلق',
+      'inprogress': 'قيد التنفيذ',
+      'completed': 'مكتمل',
+      'cancelled': 'ملغي',
+      'rejected': 'مرفوض'
+    };
+    return labels[status] || status;
+  };
+
+  const getStatusColor = (status) => {
+    const colors = {
+      'pending': 'text-yellow-600',
+      'inprogress': 'text-blue-600',
+      'completed': 'text-green-600',
+      'cancelled': 'text-gray-600',
+      'rejected': 'text-red-600'
+    };
+    return colors[status] || 'text-gray-600';
+  };
+
   const formatDateWithTime = (dateString) => {
     if (!dateString) return 'غير محدد';
     try {
