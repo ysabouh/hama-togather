@@ -542,6 +542,21 @@ class FamilyNeedUpdate(BaseModel):
     estimated_amount: Optional[float] = None
     status: Optional[str] = None
 
+# Family Need Audit Log Models
+class FamilyNeedAuditLog(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    family_id: str  # مرجع لجدول العائلات
+    need_id: Optional[str] = None  # مرجع لجدول الاحتياجات (null عند الحذف)
+    need_record_id: Optional[str] = None  # معرف سجل الاحتياج في family_needs
+    need_name: str  # اسم الاحتياج (للحفظ التاريخي)
+    action_type: str  # created, updated, deleted, activated, deactivated
+    user_id: str  # معرف المستخدم الذي قام بالعملية
+    user_name: str  # اسم المستخدم (للحفظ التاريخي)
+    changes: Optional[dict] = None  # التغييرات التفصيلية
+    notes: Optional[str] = None  # ملاحظات إضافية
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Committee Member Models
 class CommitteeMember(BaseModel):
     model_config = ConfigDict(extra="ignore")
