@@ -72,25 +72,62 @@ const DonationsManagement = () => {
 
   const calculateStats = (donationsData) => {
     const total = donationsData.length;
-    const totalAmount = donationsData.reduce((sum, d) => {
-      const amount = parseFloat(d.amount) || 0;
-      return sum + amount;
-    }, 0);
     
-    const pending = donationsData.filter(d => d.status === 'معلق' || !d.status).length;
-    const inProgress = donationsData.filter(d => d.status === 'قيد التنفيذ').length;
-    const completed = donationsData.filter(d => d.status === 'مكتمل').length;
-    const cancelled = donationsData.filter(d => d.status === 'ملغي').length;
+    // حساب المبالغ حسب الحالة
+    let totalAmount = 0;
+    let completedAmount = 0;
+    let approvedAmount = 0;
+    let pendingAmount = 0;
+    let cancelledAmount = 0;
+    let rejectedAmount = 0;
+    
+    let completedCount = 0;
+    let approvedCount = 0;
+    let pendingCount = 0;
+    let cancelledCount = 0;
+    let rejectedCount = 0;
+    
+    donationsData.forEach(d => {
+      // استخراج المبلغ الرقمي
+      const amountStr = String(d.amount || '0').replace(/,/g, '').replace(/\s/g, '');
+      const amount = parseFloat(amountStr.match(/\d+(\.\d+)?/)?.[0] || 0);
+      totalAmount += amount;
+      
+      const status = d.status || 'pending';
+      
+      if (status === 'completed') {
+        completedAmount += amount;
+        completedCount++;
+      } else if (status === 'approved') {
+        approvedAmount += amount;
+        approvedCount++;
+      } else if (status === 'pending') {
+        pendingAmount += amount;
+        pendingCount++;
+      } else if (status === 'cancelled') {
+        cancelledAmount += amount;
+        cancelledCount++;
+      } else if (status === 'rejected') {
+        rejectedAmount += amount;
+        rejectedCount++;
+      }
+    });
     
     const uniqueDonors = new Set(donationsData.map(d => d.donor_email || d.donor_name)).size;
 
     setStats({
       total,
       totalAmount,
-      pending,
-      inProgress,
-      completed,
-      cancelled,
+      completedAmount,
+      approvedAmount,
+      pendingAmount,
+      cancelledAmount,
+      rejectedAmount,
+      completed: completedCount,
+      approved: approvedCount,
+      pending: pendingCount,
+      cancelled: cancelledCount,
+      rejected: rejectedCount,
       uniqueDonors
     });
   };
