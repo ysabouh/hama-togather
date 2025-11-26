@@ -366,6 +366,7 @@ const FamilyDetails = () => {
       await axios.delete(`${API_URL}/families/${familyId}/needs/${need.id}`);
       toast.success('تم حذف الاحتياج بنجاح');
       fetchFamilyDetails();
+      fetchAuditLogs(auditLogsPagination.current_page);
     } catch (error) {
       console.error('Error deleting need:', error);
       toast.error('حدث خطأ في حذف الاحتياج');
