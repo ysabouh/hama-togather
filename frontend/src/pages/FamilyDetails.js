@@ -1018,10 +1018,10 @@ const FamilyDetails = () => {
                                   <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
                                   {/* Delivery Status Badge */}
                                   {donation.delivery_status && (
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                      donation.delivery_status === 'delivered' ? 'bg-green-100 text-green-700' :
-                                      donation.delivery_status === 'cancelled' ? 'bg-red-100 text-red-700' :
-                                      'bg-blue-100 text-blue-700'
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                                      donation.delivery_status === 'delivered' ? 'bg-green-100 text-green-700 border-green-300' :
+                                      donation.delivery_status === 'cancelled' ? 'bg-red-100 text-red-700 border-red-300' :
+                                      'bg-blue-100 text-blue-700 border-blue-300'
                                     }`}>
                                       {donation.delivery_status === 'delivered' ? '✓ تم التسليم' :
                                        donation.delivery_status === 'cancelled' ? '✕ ملغية' :
@@ -1039,18 +1039,20 @@ const FamilyDetails = () => {
                                   </div>
                                   {/* Status Badge */}
                                   {donation.status && (
-                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
-                                      donation.status === 'completed' ? 'bg-green-100 text-green-700 border border-green-300' :
-                                      donation.status === 'approved' ? 'bg-blue-100 text-blue-700 border border-blue-300' :
-                                      donation.status === 'rejected' ? 'bg-red-100 text-red-700 border border-red-300' :
-                                      donation.status === 'cancelled' ? 'bg-gray-100 text-gray-700 border border-gray-300' :
-                                      'bg-amber-100 text-amber-700 border border-amber-300'
+                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold border ${
+                                      donation.status === 'completed' ? 'bg-green-100 text-green-700 border-green-300' :
+                                      donation.status === 'inprogress' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                                      donation.status === 'pending' ? 'bg-amber-100 text-amber-700 border-amber-300' :
+                                      donation.status === 'cancelled' ? 'bg-gray-100 text-gray-700 border-gray-300' :
+                                      donation.status === 'rejected' ? 'bg-red-100 text-red-700 border-red-300' :
+                                      'bg-amber-100 text-amber-700 border-amber-300'
                                     }`}>
                                       {donation.status === 'completed' ? '✓ مكتمل' :
-                                       donation.status === 'approved' ? '✓ موافق عليه' :
-                                       donation.status === 'rejected' ? '✕ مرفوض' :
+                                       donation.status === 'inprogress' ? '⏱ قيد التنفيذ' :
+                                       donation.status === 'pending' ? '⏳ معلق' :
                                        donation.status === 'cancelled' ? '✕ ملغي' :
-                                       '⏳ قيد الانتظار'}
+                                       donation.status === 'rejected' ? '✕ مرفوض' :
+                                       '⏳ معلق'}
                                     </span>
                                   )}
                                 </div>
