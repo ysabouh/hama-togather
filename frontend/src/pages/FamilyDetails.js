@@ -1130,9 +1130,15 @@ const FamilyDetails = () => {
                           const actionInfo = getActionTypeLabel(log.action_type);
                           const ActionIcon = actionInfo.icon;
                           const dateTime = formatDateTime(log.timestamp);
+                          const rowNumber = (auditLogsPagination.current_page - 1) * auditLogsPagination.per_page + index + 1;
                           
                           return (
-                            <div key={log.id || index} className="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                            <div key={log.id || index} className="bg-gray-50 rounded-lg p-4 border-2 border-gray-200 relative">
+                              {/* Row Number Badge */}
+                              <div className="absolute top-3 left-3 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+                                {rowNumber}
+                              </div>
+                              
                               <div className="flex items-start justify-between mb-3">
                                 <div className="flex items-center gap-2">
                                   <User className="w-4 h-4 text-blue-600" />
