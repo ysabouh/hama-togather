@@ -67,6 +67,8 @@ const FamilyDetails = () => {
     action_type: '',
     search: ''
   });
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedLogDetails, setSelectedLogDetails] = useState(null);
 
   // تحديث بيانات المتبرع من المستخدم الحالي
   useEffect(() => {
