@@ -245,6 +245,20 @@ const DonationsManagement = () => {
     setCompletionImages(prev => prev.filter((_, i) => i !== index));
   };
 
+  const openImageModal = (images, index) => {
+    setCurrentImages(images);
+    setSelectedImageIndex(index);
+    setShowImageModal(true);
+  };
+
+  const nextImage = () => {
+    setSelectedImageIndex((prev) => (prev + 1) % currentImages.length);
+  };
+
+  const prevImage = () => {
+    setSelectedImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
+  };
+
   const handleUpdateStatus = async () => {
     if (!selectedDonation || !newStatus) return;
 
