@@ -33,6 +33,9 @@ const DonationsManagement = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [currentImages, setCurrentImages] = useState([]);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [donationHistory, setDonationHistory] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
