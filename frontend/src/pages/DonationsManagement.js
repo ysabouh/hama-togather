@@ -82,7 +82,7 @@ const DonationsManagement = () => {
     let rejectedAmount = 0;
     
     let completedCount = 0;
-    let approvedCount = 0;
+    let inprogressCount = 0;
     let pendingCount = 0;
     let cancelledCount = 0;
     let rejectedCount = 0;
@@ -98,9 +98,9 @@ const DonationsManagement = () => {
       if (status === 'completed') {
         completedAmount += amount;
         completedCount++;
-      } else if (status === 'approved') {
+      } else if (status === 'inprogress') {
         approvedAmount += amount;
-        approvedCount++;
+        inprogressCount++;
       } else if (status === 'pending') {
         pendingAmount += amount;
         pendingCount++;
