@@ -1005,20 +1005,38 @@ const FamilyDetails = () => {
                                   )}
                                 </div>
                               </div>
-                              <div className="text-xs text-gray-500 text-left">
-                                <div className="flex items-center gap-1 whitespace-nowrap">
-                                  <Clock className="w-3 h-3" />
-                                  <span>تسجيل:</span>
-                                  {formatDate(donation.created_at)}
+                              <div className="text-xs text-left space-y-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <div className="flex items-center gap-1 whitespace-nowrap text-gray-500">
+                                    <Clock className="w-3 h-3" />
+                                    <span>تسجيل:</span>
+                                    <span className="font-semibold">{formatDate(donation.created_at)}</span>
+                                  </div>
+                                  {/* Status Badge */}
+                                  {donation.status && (
+                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
+                                      donation.status === 'completed' ? 'bg-green-100 text-green-700 border border-green-300' :
+                                      donation.status === 'approved' ? 'bg-blue-100 text-blue-700 border border-blue-300' :
+                                      donation.status === 'rejected' ? 'bg-red-100 text-red-700 border border-red-300' :
+                                      donation.status === 'cancelled' ? 'bg-gray-100 text-gray-700 border border-gray-300' :
+                                      'bg-amber-100 text-amber-700 border border-amber-300'
+                                    }`}>
+                                      {donation.status === 'completed' ? '✓ مكتمل' :
+                                       donation.status === 'approved' ? '✓ موافق عليه' :
+                                       donation.status === 'rejected' ? '✕ مرفوض' :
+                                       donation.status === 'cancelled' ? '✕ ملغي' :
+                                       '⏳ قيد الانتظار'}
+                                    </span>
+                                  )}
                                 </div>
                                 {donation.donation_date && (
-                                  <div className="flex items-center gap-1 whitespace-nowrap mt-1">
+                                  <div className="flex items-center gap-1 whitespace-nowrap text-gray-500">
                                     <Calendar className="w-3 h-3" />
                                     <span>موعد:</span>
-                                    {(() => {
+                                    <span className="font-semibold">{(() => {
                                       const dt = formatDateTime(donation.donation_date);
                                       return `${dt.date} ${dt.time}`;
-                                    })()}
+                                    })()}</span>
                                   </div>
                                 )}
                               </div>
