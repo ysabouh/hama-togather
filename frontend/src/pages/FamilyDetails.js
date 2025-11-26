@@ -568,7 +568,8 @@ const FamilyDetails = () => {
 
                 {/* Family Needs */}
                 <div className="bg-white rounded-xl shadow-lg p-6">
-                  <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
                     <div className="flex items-center gap-2">
                       <Package className="w-6 h-6 text-emerald-600" />
                       <h2 className="text-2xl font-bold text-gray-900">احتياجات العائلة</h2>
@@ -583,8 +584,54 @@ const FamilyDetails = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* Tabs */}
+                  <div className="flex gap-2 mb-6 bg-gray-100 p-1.5 rounded-xl">
+                    <button
+                      onClick={() => setActiveNeedsTab('active')}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-bold transition-all ${
+                        activeNeedsTab === 'active'
+                          ? 'bg-emerald-600 text-white shadow-lg transform scale-105'
+                          : 'bg-transparent text-gray-600 hover:bg-white hover:text-emerald-600'
+                      }`}
+                    >
+                      <CheckCircle className="w-5 h-5" />
+                      <span>الاحتياجات النشطة</span>
+                      <span className={`px-2.5 py-0.5 rounded-full text-sm font-bold ${
+                        activeNeedsTab === 'active'
+                          ? 'bg-white/20 text-white'
+                          : 'bg-emerald-100 text-emerald-700'
+                      }`}>
+                        {familyNeeds.filter(n => n.is_active !== false).length}
+                      </span>
+                    </button>
+                    
+                    <button
+                      onClick={() => setActiveNeedsTab('inactive')}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-bold transition-all ${
+                        activeNeedsTab === 'inactive'
+                          ? 'bg-gray-600 text-white shadow-lg transform scale-105'
+                          : 'bg-transparent text-gray-600 hover:bg-white hover:text-gray-700'
+                      }`}
+                    >
+                      <X className="w-5 h-5" />
+                      <span>الاحتياجات المتوقفة</span>
+                      <span className={`px-2.5 py-0.5 rounded-full text-sm font-bold ${
+                        activeNeedsTab === 'inactive'
+                          ? 'bg-white/20 text-white'
+                          : 'bg-gray-200 text-gray-700'
+                      }`}>
+                        {familyNeeds.filter(n => n.is_active === false).length}
+                      </span>
+                    </button>
+                  </div>
                   
-                  {familyNeeds.length === 0 ? (
+                  {(() => {
+                    const filteredNeeds = familyNeeds.filter(n => 
+                      activeNeedsTab === 'active' ? n.is_active !== false : n.is_active === false
+                    );
+                    
+                    return filteredNeeds.length === 0 ? (
                     <div className="text-center py-12 bg-gray-50 rounded-lg">
                       <Package className="w-16 h-16 text-gray-300 mx-auto mb-3" />
                       <p className="text-gray-600 font-semibold mb-2">لا توجد احتياجات مسجلة</p>
