@@ -1557,6 +1557,32 @@ async def update_family_total_donations_amount(family_id: str):
         print(f"خطأ في تحديث إجمالي التبرعات: {e}")
         return 0.0
 
+async def log_donation_history(
+    donation_id: str,
+    action_type: str,
+    user_id: str,
+    user_name: str,
+    old_status: Optional[str] = None,
+    new_status: Optional[str] = None,
+    changes: Optional[dict] = None
+):
+    """تسجيل التغييرات على التبرع"""
+    try:
+        history_log = DonationHistory(
+            donation_id=donation_id,
+            action_type=action_type,
+            user_id=user_id,
+            user_name=user_name,
+            old_status=old_status,
+            new_status=new_status,
+            changes=changes
+        )
+        
+        await db.donation_history.insert_one(history_log.model_dump())
+        print(f"تم تسجيل حركة التبرع: {action_type} - {donation_id}")
+    except Exception as e:
+        print(f"خطأ في تسجيل تاريخ التبرع: {e}")
+
 @api_router.post("/families/{family_id}/needs")
 async def add_family_need(
     family_id: str, 
