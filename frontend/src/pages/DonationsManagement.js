@@ -1345,8 +1345,8 @@ const DonationsManagement = () => {
                           <div className="flex items-center gap-2 bg-white rounded-lg p-3 border border-gray-200">
                             <div className="flex items-center gap-2 flex-1">
                               <span className="text-sm text-gray-600">من:</span>
-                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                getStatusColor(log.old_status).replace('text-', 'bg-').replace('600', '100') + ' ' + getStatusColor(log.old_status)
+                              <span className={`px-3 py-1 rounded-full text-sm font-bold text-white ${
+                                getStatusColor(log.old_status).replace('text-', 'bg-')
                               }`}>
                                 {getStatusLabel(log.old_status)}
                               </span>
@@ -1354,8 +1354,8 @@ const DonationsManagement = () => {
                             <span className="text-gray-400">←</span>
                             <div className="flex items-center gap-2 flex-1">
                               <span className="text-sm text-gray-600">إلى:</span>
-                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                getStatusColor(log.new_status).replace('text-', 'bg-').replace('600', '100') + ' ' + getStatusColor(log.new_status)
+                              <span className={`px-3 py-1 rounded-full text-sm font-bold text-white ${
+                                getStatusColor(log.new_status).replace('text-', 'bg-')
                               }`}>
                                 {getStatusLabel(log.new_status)}
                               </span>
