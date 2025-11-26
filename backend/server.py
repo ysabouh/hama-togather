@@ -1533,7 +1533,7 @@ async def update_family_total_donations_amount(family_id: str):
         
         print(f"تم تحديث تبرعات العائلة {family_id}:")
         print(f"  - مكتملة (معتمد): {totals['completed']}")
-        print(f"  - قيد التنفيذ: {totals['approved']}")
+        print(f"  - قيد التنفيذ: {totals['inprogress']}")
         print(f"  - معلقة: {totals['pending']}")
         print(f"  - ملغاة: {totals['cancelled']}")
         print(f"  - الإجمالي: {total}")
