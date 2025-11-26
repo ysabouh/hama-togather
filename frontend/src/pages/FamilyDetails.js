@@ -53,6 +53,11 @@ const FamilyDetails = () => {
   const [activeNeedsTab, setActiveNeedsTab] = useState('active'); // 'active' or 'inactive'
   const [allNeeds, setAllNeeds] = useState([]);
   const [donationHistory, setDonationHistory] = useState([]);
+  const [selectedDonation, setSelectedDonation] = useState(null);
+  const [showDonationDetailsModal, setShowDonationDetailsModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [currentImages, setCurrentImages] = useState([]);
   
   // Audit Log States
   const [auditLogs, setAuditLogs] = useState([]);
