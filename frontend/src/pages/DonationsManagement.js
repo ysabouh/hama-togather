@@ -1277,6 +1277,131 @@ const DonationsManagement = () => {
         </div>
       )}
 
+      {/* History Modal */}
+      {showHistoryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowHistoryModal(false)}>
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 rounded-t-2xl flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <History className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">السجل التاريخي</h2>
+                    <p className="text-purple-100 text-sm">جميع التغييرات على التبرع</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowHistoryModal(false)}
+                  className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-6 overflow-y-auto flex-1">
+              {loadingHistory ? (
+                <div className="flex items-center justify-center py-12">
+                  <RefreshCw className="w-8 h-8 text-purple-600 animate-spin" />
+                </div>
+              ) : donationHistory.length === 0 ? (
+                <div className="text-center py-12">
+                  <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 text-lg">لا يوجد سجل تاريخي بعد</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {donationHistory.map((log, idx) => (
+                    <div key={log.id || idx} className="border-r-4 border-purple-500 bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          {log.action_type === 'created' && <Gift className="w-5 h-5 text-green-600" />}
+                          {log.action_type === 'status_changed' && <Edit className="w-5 h-5 text-blue-600" />}
+                          {log.action_type === 'updated' && <RefreshCw className="w-5 h-5 text-orange-600" />}
+                          <span className="font-bold text-gray-900">
+                            {log.action_type === 'created' && 'إنشاء تبرع'}
+                            {log.action_type === 'status_changed' && 'تغيير الحالة'}
+                            {log.action_type === 'updated' && 'تحديث بيانات'}
+                            {log.action_type === 'deleted' && 'حذف'}
+                          </span>
+                        </div>
+                        <span className="text-sm text-gray-600">{formatDateTime(log.timestamp)}</span>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm">
+                          <Users className="w-4 h-4 text-gray-500" />
+                          <span className="text-gray-700">بواسطة: <span className="font-semibold">{log.user_name}</span></span>
+                        </div>
+                        
+                        {log.old_status && log.new_status && (
+                          <div className="flex items-center gap-2 bg-white rounded-lg p-3 border border-gray-200">
+                            <div className="flex items-center gap-2 flex-1">
+                              <span className="text-sm text-gray-600">من:</span>
+                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                getStatusColor(log.old_status).replace('text-', 'bg-').replace('600', '100') + ' ' + getStatusColor(log.old_status)
+                              }`}>
+                                {getStatusLabel(log.old_status)}
+                              </span>
+                            </div>
+                            <span className="text-gray-400">←</span>
+                            <div className="flex items-center gap-2 flex-1">
+                              <span className="text-sm text-gray-600">إلى:</span>
+                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                getStatusColor(log.new_status).replace('text-', 'bg-').replace('600', '100') + ' ' + getStatusColor(log.new_status)
+                              }`}>
+                                {getStatusLabel(log.new_status)}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {log.changes && Object.keys(log.changes).length > 0 && (
+                          <div className="bg-white rounded-lg p-3 border border-gray-200">
+                            <p className="text-sm font-semibold text-gray-700 mb-2">تفاصيل التغييرات:</p>
+                            <div className="space-y-1 text-sm text-gray-600">
+                              {log.changes.completion_images && (
+                                <div>• تم إضافة {log.changes.completion_images.count} صورة لوصل الاستلام</div>
+                              )}
+                              {log.changes.cancellation_reason && (
+                                <div>• سبب الإلغاء: {log.changes.cancellation_reason}</div>
+                              )}
+                              {log.changes.donor_name && (
+                                <div>• المتبرع: {log.changes.donor_name}</div>
+                              )}
+                              {log.changes.amount && (
+                                <div>• المبلغ: {log.changes.amount}</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 pb-6 pt-4 border-t border-gray-200 flex-shrink-0">
+              <button
+                onClick={() => setShowHistoryModal(false)}
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-700 transition-all"
+              >
+                إغلاق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
