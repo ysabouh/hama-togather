@@ -175,7 +175,13 @@ const FamilyDetails = () => {
   const handleAddNeedSubmit = async (e) => {
     e.preventDefault();
     
+    if (!needForm.need_id) {
+      toast.error('يرجى اختيار نوع الاحتياج');
+      return;
+    }
+    
     try {
+      console.log('Sending need data:', needForm);
       await axios.post(`${API_URL}/families/${familyId}/needs`, needForm);
       
       toast.success('تم إضافة الاحتياج بنجاح! ✅');
@@ -191,7 +197,8 @@ const FamilyDetails = () => {
       fetchFamilyDetails();
     } catch (error) {
       console.error('Error adding need:', error);
-      toast.error('حدث خطأ في إضافة الاحتياج');
+      console.error('Error details:', error.response?.data);
+      toast.error(error.response?.data?.detail || 'حدث خطأ في إضافة الاحتياج');
     }
   };
 
