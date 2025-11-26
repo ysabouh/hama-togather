@@ -1094,10 +1094,11 @@ const DonationsManagement = () => {
                   {cancellationReason === 'أخرى' && (
                     <textarea
                       placeholder="يرجى توضيح السبب..."
-                      value={cancellationReason === 'أخرى' ? '' : cancellationReason}
-                      onChange={(e) => setCancellationReason(e.target.value)}
+                      value={customCancellationText}
+                      onChange={(e) => setCustomCancellationText(e.target.value)}
                       className="w-full px-4 py-3 border-2 border-red-300 rounded-lg focus:border-red-500 focus:outline-none resize-none"
                       rows="3"
+                      required
                     />
                   )}
                 </div>
