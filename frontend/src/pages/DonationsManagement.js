@@ -717,6 +717,13 @@ const DonationsManagement = () => {
                                   <Eye className="w-5 h-5" />
                                 </button>
                                 <button
+                                  onClick={() => fetchDonationHistory(donation.id)}
+                                  className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                  title="السجل التاريخي"
+                                >
+                                  <History className="w-5 h-5" />
+                                </button>
+                                <button
                                   onClick={() => {
                                     setSelectedDonation(donation);
                                     setNewStatus(status);
