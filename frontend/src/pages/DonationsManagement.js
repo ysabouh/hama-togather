@@ -588,9 +588,9 @@ const DonationsManagement = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4">
-                              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(status)}`}>
-                                {getStatusIcon(status)}
-                                {status}
+                              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(donation.status)}`}>
+                                {getStatusIcon(donation.status)}
+                                {getStatusLabel(donation.status)}
                               </span>
                             </td>
                             <td className="px-6 py-4">
