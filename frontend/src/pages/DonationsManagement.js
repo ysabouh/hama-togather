@@ -508,6 +508,9 @@ const DonationsManagement = () => {
 
                         return (
                           <tr key={donation.id || index} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-4 py-4 text-center">
+                              <span className="font-bold text-gray-700">{rowNumber}</span>
+                            </td>
                             <td className="px-6 py-4">
                               <div>
                                 <p className="font-bold text-gray-900">{donation.donor_name}</p>
