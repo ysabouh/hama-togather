@@ -196,10 +196,11 @@ const FamilyDetails = () => {
     if (!dateString) return 'غير محدد';
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('ar-SA', {
+      // استخدام en-GB للحصول على التاريخ الميلادي
+      return date.toLocaleDateString('en-GB', {
         year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+        month: '2-digit',
+        day: '2-digit'
       });
     } catch {
       return 'غير محدد';
