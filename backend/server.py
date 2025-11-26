@@ -2012,12 +2012,14 @@ async def create_donation(donation_input: DonationCreate, current_user: User = D
         donation_dict['donor_id'] = current_user.id
         donation_dict['created_by_user_id'] = current_user.id
     
-    # تحويل donation_date من string إلى datetime إذا كان موجود
-    if donation_dict.get('donation_date'):
+    # تحويل donation_date من string إلى datetime إذا كان موجود وغير فارغ
+    if donation_dict.get('donation_date') and donation_dict['donation_date'].strip():
         try:
             donation_dict['donation_date'] = datetime.fromisoformat(donation_dict['donation_date'].replace('Z', '+00:00'))
         except:
             donation_dict['donation_date'] = None
+    else:
+        donation_dict['donation_date'] = None
     
     donation_obj = Donation(**donation_dict)
     
