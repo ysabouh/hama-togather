@@ -1167,22 +1167,13 @@ const FamilyDetails = () => {
                               
                               {log.changes && Object.keys(log.changes).length > 0 && (
                                 <div className="mt-3 pt-3 border-t border-gray-300">
-                                  <p className="text-xs font-semibold text-gray-700 mb-2">التفاصيل:</p>
-                                  <div className="space-y-2">
-                                    {Object.entries(log.changes).map(([field, value]) => (
-                                      <div key={field} className="text-xs bg-white rounded px-2 py-1.5">
-                                        <span className="font-semibold text-gray-700">{field}:</span>
-                                        {value.old !== undefined && value.new !== undefined ? (
-                                          <div className="mt-1">
-                                            <div className="text-red-600">قديم: {value.old || 'فارغ'}</div>
-                                            <div className="text-green-600">جديد: {value.new || 'فارغ'}</div>
-                                          </div>
-                                        ) : (
-                                          <span className="text-gray-600 mr-1">{JSON.stringify(value)}</span>
-                                        )}
-                                      </div>
-                                    ))}
-                                  </div>
+                                  <button
+                                    onClick={() => handleShowDetails(log)}
+                                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-semibold transition-colors border border-blue-200"
+                                  >
+                                    <Eye className="w-4 h-4" />
+                                    عرض التفاصيل الكاملة ({Object.keys(log.changes).length} تغيير)
+                                  </button>
                                 </div>
                               )}
                             </div>
