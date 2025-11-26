@@ -1279,6 +1279,21 @@ const FamilyDetails = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  مدة الاحتياج <span className="text-red-500">*</span>
+                </label>
+                <select
+                  required
+                  value={needForm.duration_type}
+                  onChange={(e) => setNeedForm({...needForm, duration_type: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                >
+                  <option value="مرة واحدة">مرة واحدة</option>
+                  <option value="شهري">شهري</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   ملاحظات
                 </label>
                 <textarea
