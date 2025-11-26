@@ -1128,8 +1128,7 @@ const FamilyDetails = () => {
                           <thead>
                             <tr className="bg-gradient-to-l from-blue-50 to-blue-100 border-b-2 border-blue-200">
                               <th className="px-4 py-3 text-center text-sm font-bold text-gray-700">#</th>
-                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">التاريخ</th>
-                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">الوقت</th>
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">التاريخ والوقت</th>
                               <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">المستخدم</th>
                               <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">العملية</th>
                               <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">الاحتياج</th>
@@ -1149,15 +1148,15 @@ const FamilyDetails = () => {
                                     {rowNumber}
                                   </td>
                                   <td className="px-4 py-4 text-sm text-gray-900">
-                                    <div className="flex items-center gap-2">
-                                      <Calendar className="w-4 h-4 text-gray-500" />
-                                      {dateTime.date}
-                                    </div>
-                                  </td>
-                                  <td className="px-4 py-4 text-sm text-gray-600">
-                                    <div className="flex items-center gap-2">
-                                      <Clock className="w-4 h-4 text-gray-500" />
-                                      {dateTime.time}
+                                    <div className="flex flex-col gap-1">
+                                      <div className="flex items-center gap-2">
+                                        <Calendar className="w-4 h-4 text-gray-500" />
+                                        <span className="font-semibold">{dateTime.date}</span>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                        <Clock className="w-4 h-4 text-gray-500" />
+                                        <span className="text-gray-600">{dateTime.time}</span>
+                                      </div>
                                     </div>
                                   </td>
                                   <td className="px-4 py-4 text-sm">
