@@ -643,10 +643,26 @@ const FamilyDetails = () => {
                           </div>
                         </div>
                         <p className="text-sm opacity-90 mb-1">إجمالي التبرعات</p>
-                        <p className="text-3xl font-bold">
-                          {new Intl.NumberFormat('ar-SY').format(family?.total_donations_amount || 0)}
+                        <p className="text-3xl font-bold mb-2">
+                          {new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.completed || 0)}
                         </p>
-                        <p className="text-xs opacity-80 mt-1">ليرة سورية</p>
+                        <p className="text-xs opacity-80 mb-3">المكتملة (المعتمد) - ليرة سورية</p>
+                        
+                        {/* تفصيل الحالات الأخرى */}
+                        <div className="border-t border-white/20 pt-2 mt-2 space-y-1">
+                          <div className="flex justify-between text-xs opacity-90">
+                            <span>⏱ قيد التنفيذ:</span>
+                            <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.approved || 0)}</span>
+                          </div>
+                          <div className="flex justify-between text-xs opacity-90">
+                            <span>⏳ معلقة:</span>
+                            <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.pending || 0)}</span>
+                          </div>
+                          <div className="flex justify-between text-xs opacity-90">
+                            <span>✕ ملغاة:</span>
+                            <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.cancelled || 0)}</span>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Remaining */}
