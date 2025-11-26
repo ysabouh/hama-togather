@@ -644,7 +644,7 @@ const FamilyDetails = () => {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {familyNeeds.map((need, index) => (
+                      {filteredNeeds.map((need, index) => (
                         <div
                           key={index}
                           className={`border-2 rounded-xl p-5 transition-all ${
