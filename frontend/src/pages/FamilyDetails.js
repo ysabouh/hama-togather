@@ -652,6 +652,26 @@ const FamilyDetails = () => {
                                 </div>
                               )}
 
+                              {/* Duration Type */}
+                              <div className="mb-3 bg-purple-50 border-l-4 border-purple-400 rounded-r-lg p-3">
+                                <div className="flex items-center justify-between">
+                                  <p className="text-sm font-semibold text-purple-900">
+                                    ⏰ مدة الاحتياج: <span className="text-purple-700 font-bold text-base">{need.duration_type || 'مرة واحدة'}</span>
+                                  </p>
+                                  {need.duration_type === 'شهري' && need.created_at && (
+                                    <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded-full font-bold">
+                                      {(() => {
+                                        const createdDate = new Date(need.created_at);
+                                        const today = new Date();
+                                        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                                        const daysLeft = Math.ceil((endOfMonth - today) / (1000 * 60 * 60 * 24));
+                                        return daysLeft > 0 ? `${daysLeft} يوم متبقي` : 'انتهى الشهر';
+                                      })()}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
                               {/* Notes */}
                               {need.notes && (
                                 <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-3">
