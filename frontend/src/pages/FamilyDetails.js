@@ -2401,7 +2401,7 @@ const FamilyDetails = () => {
                       <div 
                         key={idx} 
                         className="relative group cursor-pointer"
-                        onClick={() => openImageModal(selectedDonation.completion_images, idx)}
+                        onClick={() => openDonationImageModal(selectedDonation.completion_images, idx)}
                       >
                         <img
                           src={img}
