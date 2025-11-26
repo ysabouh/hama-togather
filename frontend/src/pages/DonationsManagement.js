@@ -579,8 +579,47 @@ const DonationsManagement = () => {
                       })}
                     </tbody>
                   </table>
+                  
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+                      <div className="text-sm text-gray-600">
+                        عرض {indexOfFirstItem + 1} - {Math.min(indexOfLastItem, filteredDonations.length)} من {filteredDonations.length}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                          disabled={currentPage === 1}
+                          className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                            currentPage === 1
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                              : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                          }`}
+                        >
+                          السابق
+                        </button>
+                        <div className="flex items-center gap-2 px-4">
+                          <span className="text-sm text-gray-600">
+                            صفحة {currentPage} من {totalPages}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                          disabled={currentPage === totalPages}
+                          className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                            currentPage === totalPages
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                              : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                          }`}
+                        >
+                          التالي
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              ) : null;
+              })()}
             </div>
           </div>
         </div>
