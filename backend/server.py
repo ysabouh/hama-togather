@@ -2141,7 +2141,9 @@ async def update_donation_status(
         if status:
             update_data["status"] = status
         
-        update_data["updated_at"] = datetime.now(timezone.utc)
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["updated_by_user_id"] = current_user.id
+        update_data["updated_by_user_name"] = current_user.full_name
         
         await db.donations.update_one(
             {"id": donation_id},
