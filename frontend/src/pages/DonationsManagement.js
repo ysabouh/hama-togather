@@ -750,6 +750,36 @@ const DonationsManagement = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Update Info */}
+              {(selectedDonation.updated_by_user_name || selectedDonation.updated_at) && (
+                <div className="bg-gray-50 rounded-xl p-5 border-2 border-gray-200">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-gray-600" />
+                    معلومات آخر تحديث
+                  </h3>
+                  <div className="space-y-3">
+                    {selectedDonation.updated_by_user_name && (
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">تم التحديث بواسطة</p>
+                        <p className="font-bold text-gray-900 flex items-center gap-2">
+                          <Users className="w-4 h-4 text-blue-600" />
+                          {selectedDonation.updated_by_user_name}
+                        </p>
+                      </div>
+                    )}
+                    {selectedDonation.updated_at && (
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">تاريخ ووقت التحديث (ميلادي)</p>
+                        <p className="font-semibold text-gray-900 flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-emerald-600" />
+                          {formatDate(selectedDonation.updated_at)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Footer */}
