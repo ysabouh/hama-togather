@@ -2125,10 +2125,15 @@ async def get_family_donations(family_id: str):
         print(f"Error fetching family donations: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+class UpdateDonationStatusRequest(BaseModel):
+    status: str
+    completion_images: Optional[List[str]] = []  # صور وصل الاستلام (base64)
+    cancellation_reason: Optional[str] = None  # سبب الإلغاء
+
 @api_router.put("/donations/{donation_id}/status")
 async def update_donation_status(
     donation_id: str, 
-    status: str,
+    request: UpdateDonationStatusRequest,
     current_user: User = Depends(get_current_user)
 ):
     """تحديث حالة التبرع - متاح للمشرفين فقط"""
@@ -2141,10 +2146,22 @@ async def update_donation_status(
         if not donation:
             raise HTTPException(status_code=404, detail="التبرع غير موجود")
         
+        # التحقق من سبب الإلغاء إذا كانت الحالة ملغاة
+        if request.status == 'cancelled' and not request.cancellation_reason:
+            raise HTTPException(status_code=400, detail="يجب تحديد سبب الإلغاء")
+        
         # تحديث الحالة
         update_data = {}
-        if status:
-            update_data["status"] = status
+        if request.status:
+            update_data["status"] = request.status
+        
+        # إضافة صور الاستلام إذا كانت الحالة مكتملة
+        if request.status == 'completed' and request.completion_images:
+            update_data["completion_images"] = request.completion_images
+        
+        # إضافة سبب الإلغاء إذا كانت الحالة ملغاة
+        if request.status == 'cancelled' and request.cancellation_reason:
+            update_data["cancellation_reason"] = request.cancellation_reason
         
         update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
         update_data["updated_by_user_id"] = current_user.id
