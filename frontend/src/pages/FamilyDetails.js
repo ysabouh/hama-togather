@@ -1121,6 +1121,20 @@ const FamilyDetails = () => {
                                 </p>
                               </div>
                             )}
+                            
+                            {/* زر التفاصيل */}
+                            <div className="mt-3 pt-3 border-t border-gray-200">
+                              <button
+                                onClick={() => {
+                                  setSelectedDonation(donation);
+                                  setShowDonationDetailsModal(true);
+                                }}
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all font-semibold"
+                              >
+                                <Eye className="w-4 h-4" />
+                                عرض التفاصيل الكاملة
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))}
