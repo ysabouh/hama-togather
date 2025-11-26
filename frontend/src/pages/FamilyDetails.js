@@ -219,17 +219,17 @@ const FamilyDetails = () => {
     }
   };
 
-  const openImageModal = (images, index) => {
+  const openDonationImageModal = (images, index) => {
     setCurrentImages(images);
     setSelectedImageIndex(index);
     setShowImageModal(true);
   };
 
-  const nextImage = () => {
+  const nextDonationImage = () => {
     setSelectedImageIndex((prev) => (prev + 1) % currentImages.length);
   };
 
-  const prevImage = () => {
+  const prevDonationImage = () => {
     setSelectedImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
   };
 
