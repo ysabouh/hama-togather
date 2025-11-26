@@ -279,6 +279,22 @@ const DonationsManagement = () => {
     }
   };
 
+  const formatDateTime = (dateString) => {
+    if (!dateString) return '--';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', '');
+    } catch {
+      return dateString;
+    }
+  };
+
   const handleUpdateStatus = async () => {
     if (!selectedDonation || !newStatus) return;
 
