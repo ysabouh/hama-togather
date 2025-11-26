@@ -99,10 +99,11 @@ const DonationsManagement = () => {
     if (!dateString) return 'غير محدد';
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('ar-SA', {
+      // التاريخ الميلادي بصيغة DD/MM/YYYY
+      return date.toLocaleDateString('en-GB', {
         year: 'numeric',
-        month: 'short',
-        day: 'numeric'
+        month: '2-digit',
+        day: '2-digit'
       });
     } catch {
       return 'غير محدد';
