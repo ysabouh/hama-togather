@@ -164,31 +164,59 @@ const DonationsManagement = () => {
   };
 
   const getStatusColor = (status) => {
+    // دعم العربي والإنجليزي
     switch (status) {
+      case 'completed':
       case 'مكتمل':
-        return 'bg-green-100 text-green-800 border-green-300';
+        return 'bg-green-100 text-green-700 border-green-300';
+      case 'inprogress':
       case 'قيد التنفيذ':
-        return 'bg-blue-100 text-blue-800 border-blue-300';
-      case 'ملغي':
-        return 'bg-red-100 text-red-800 border-red-300';
+        return 'bg-blue-100 text-blue-700 border-blue-300';
+      case 'pending':
       case 'معلق':
+        return 'bg-amber-100 text-amber-700 border-amber-300';
+      case 'cancelled':
+      case 'ملغي':
+        return 'bg-gray-100 text-gray-700 border-gray-300';
+      case 'rejected':
+      case 'مرفوض':
+        return 'bg-red-100 text-red-700 border-red-300';
       default:
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+        return 'bg-amber-100 text-amber-700 border-amber-300';
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
+      case 'completed':
       case 'مكتمل':
         return <Check className="w-4 h-4" />;
+      case 'inprogress':
       case 'قيد التنفيذ':
         return <Clock className="w-4 h-4" />;
+      case 'pending':
+      case 'معلق':
+        return <AlertCircle className="w-4 h-4" />;
+      case 'cancelled':
       case 'ملغي':
         return <X className="w-4 h-4" />;
-      case 'معلق':
+      case 'rejected':
+      case 'مرفوض':
+        return <X className="w-4 h-4" />;
       default:
         return <AlertCircle className="w-4 h-4" />;
     }
+  };
+
+  const getStatusLabel = (status) => {
+    const labels = {
+      'completed': 'مكتمل',
+      'inprogress': 'قيد التنفيذ',
+      'pending': 'معلق',
+      'cancelled': 'ملغي',
+      'rejected': 'مرفوض'
+    };
+    return labels[status] || status;
   };
 
   const handleUpdateStatus = async () => {
