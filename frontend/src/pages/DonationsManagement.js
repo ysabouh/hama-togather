@@ -1191,14 +1191,13 @@ const DonationsManagement = () => {
 
             {/* Image Container */}
             <div 
-              className="flex items-center justify-center w-full h-full p-4"
+              className="flex items-center justify-center w-full h-full"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={currentImages[selectedImageIndex]}
                 alt={`صورة ${selectedImageIndex + 1}`}
-                className="w-auto h-auto max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
-                style={{ minWidth: '60vw', minHeight: '60vh' }}
+                className="max-w-[95vw] max-h-[95vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
               />
             </div>
 
