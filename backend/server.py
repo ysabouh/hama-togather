@@ -150,6 +150,9 @@ class Donation(BaseModel):
     delivery_status: str = "scheduled"  # scheduled, delivered, cancelled
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_by_user_id: Optional[str] = None  # من قام بتسجيل التبرع
+    updated_at: Optional[datetime] = None  # تاريخ آخر تحديث
+    updated_by_user_id: Optional[str] = None  # من قام بآخر تحديث
+    updated_by_user_name: Optional[str] = None  # اسم من قام بآخر تحديث
     is_active: bool = True
 
 class DonationCreate(BaseModel):
