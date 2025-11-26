@@ -1543,6 +1543,23 @@ async def add_family_need(
         # تحديث المبلغ الإجمالي للعائلة
         await update_family_total_needs_amount(family_id)
         
+        # تسجيل الحركة
+        await log_need_action(
+            family_id=family_id,
+            need_record_id=family_need.id,
+            need_id=need_input.need_id,
+            need_name=need.get('name', 'غير محدد'),
+            action_type="created",
+            user_id=current_user.id,
+            user_name=current_user.full_name,
+            changes={
+                "amount": need_input.amount,
+                "duration_type": need_input.duration_type,
+                "estimated_amount": need_input.estimated_amount,
+                "notes": need_input.notes
+            }
+        )
+        
         return family_need
     except Exception as e:
         print(f"خطأ في إضافة الاحتياج: {e}")
