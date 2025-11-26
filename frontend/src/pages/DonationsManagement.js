@@ -29,6 +29,7 @@ const DonationsManagement = () => {
   const [newStatus, setNewStatus] = useState('');
   const [completionImages, setCompletionImages] = useState([]);
   const [cancellationReason, setCancellationReason] = useState('');
+  const [customCancellationText, setCustomCancellationText] = useState('');
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
