@@ -2190,22 +2190,30 @@ async def update_donation_status(
         if not donation:
             raise HTTPException(status_code=404, detail="التبرع غير موجود")
         
+        # حفظ الحالة القديمة
+        old_status = donation.get('status', 'pending')
+        
         # التحقق من سبب الإلغاء إذا كانت الحالة ملغاة
         if request.status == 'cancelled' and not request.cancellation_reason:
             raise HTTPException(status_code=400, detail="يجب تحديد سبب الإلغاء")
         
         # تحديث الحالة
         update_data = {}
+        changes = {}
+        
         if request.status:
             update_data["status"] = request.status
+            changes["status"] = {"from": old_status, "to": request.status}
         
         # إضافة صور الاستلام إذا كانت الحالة مكتملة
         if request.status == 'completed' and request.completion_images:
             update_data["completion_images"] = request.completion_images
+            changes["completion_images"] = {"count": len(request.completion_images)}
         
         # إضافة سبب الإلغاء إذا كانت الحالة ملغاة
         if request.status == 'cancelled' and request.cancellation_reason:
             update_data["cancellation_reason"] = request.cancellation_reason
+            changes["cancellation_reason"] = request.cancellation_reason
         
         update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
         update_data["updated_by_user_id"] = current_user.id
@@ -2214,6 +2222,17 @@ async def update_donation_status(
         await db.donations.update_one(
             {"id": donation_id},
             {"$set": update_data}
+        )
+        
+        # تسجيل في التاريخ
+        await log_donation_history(
+            donation_id=donation_id,
+            action_type="status_changed",
+            user_id=current_user.id,
+            user_name=current_user.full_name,
+            old_status=old_status,
+            new_status=request.status,
+            changes=changes
         )
         
         # جلب التبرع المحدث
