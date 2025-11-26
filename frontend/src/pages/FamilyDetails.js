@@ -202,6 +202,38 @@ const FamilyDetails = () => {
     }
   };
 
+  const formatDateTime = (dateString) => {
+    if (!dateString) return 'غير محدد';
+    try {
+      const date = new Date(dateString);
+      return {
+        date: date.toLocaleDateString('ar-SA', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
+        time: date.toLocaleTimeString('ar-SA', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        })
+      };
+    } catch {
+      return { date: 'غير محدد', time: '' };
+    }
+  };
+
+  const getActionTypeLabel = (actionType) => {
+    const labels = {
+      'created': { label: 'إضافة', icon: Plus, color: 'bg-green-100 text-green-700 border-green-300' },
+      'updated': { label: 'تعديل', icon: Edit, color: 'bg-blue-100 text-blue-700 border-blue-300' },
+      'deleted': { label: 'حذف', icon: Trash2, color: 'bg-red-100 text-red-700 border-red-300' },
+      'activated': { label: 'تفعيل', icon: CheckCircle, color: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+      'deactivated': { label: 'تعطيل', icon: X, color: 'bg-gray-100 text-gray-700 border-gray-300' }
+    };
+    return labels[actionType] || { label: actionType, icon: Tag, color: 'bg-gray-100 text-gray-700 border-gray-300' };
+  };
+
   const handleDonationSubmit = (e) => {
     e.preventDefault();
     // عرض نافذة التأكيد بدلاً من الإرسال مباشرة
