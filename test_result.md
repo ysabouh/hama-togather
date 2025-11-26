@@ -330,10 +330,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Donations Management Page - Cancelled Status Testing"
+    - "Family Needs Audit Log - Complete Testing"
   stuck_tasks:
     - "Donation Confirmation Window - Scroll Testing"
-    - "Family Needs Management - Enhanced Display and Admin Controls"
+    - "Family Needs Audit Log - Complete Testing"
   test_all: false
   test_priority: "high_first"
 
