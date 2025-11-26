@@ -263,11 +263,20 @@ const DonationsManagement = () => {
         return;
       }
       
+      // التحقق من النص المخصص عند اختيار "أخرى"
+      if (statusEn === 'cancelled' && cancellationReason === 'أخرى' && !customCancellationText.trim()) {
+        toast.error('يرجى كتابة سبب الإلغاء');
+        return;
+      }
+      
+      // استخدام النص المخصص إذا كان السبب "أخرى"
+      const finalCancellationReason = cancellationReason === 'أخرى' ? customCancellationText : cancellationReason;
+      
       const token = localStorage.getItem('token');
       const payload = {
         status: statusEn,
         completion_images: statusEn === 'completed' ? completionImages : [],
-        cancellation_reason: statusEn === 'cancelled' ? cancellationReason : null
+        cancellation_reason: statusEn === 'cancelled' ? finalCancellationReason : null
       };
 
       const response = await axios.put(
@@ -284,6 +293,7 @@ const DonationsManagement = () => {
       setNewStatus('');
       setCompletionImages([]);
       setCancellationReason('');
+      setCustomCancellationText('');
       fetchData();
     } catch (error) {
       console.error('Error updating status:', error);
