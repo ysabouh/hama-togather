@@ -200,6 +200,7 @@ const FamilyDetails = () => {
     setNeedForm({
       need_id: need.need_id,
       amount: need.amount || '',
+      duration_type: need.duration_type || 'مرة واحدة',
       notes: need.notes || ''
     });
     setShowEditNeedModal(true);
