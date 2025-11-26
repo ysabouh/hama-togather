@@ -977,6 +977,245 @@ const FamilyDetails = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Audit Log Section */}
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+                    <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <History className="w-6 h-6 text-blue-600" />
+                      سجل الحركات على الاحتياجات
+                      <span className="text-sm font-normal text-gray-500">
+                        ({auditLogsPagination.total_count})
+                      </span>
+                    </h2>
+                  </div>
+
+                  {/* Filters */}
+                  <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Filter by Action Type */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        تصفية حسب نوع العملية
+                      </label>
+                      <select
+                        value={auditLogsFilters.action_type}
+                        onChange={(e) => setAuditLogsFilters(prev => ({ ...prev, action_type: e.target.value }))}
+                        className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="">جميع العمليات</option>
+                        <option value="created">إضافة</option>
+                        <option value="updated">تعديل</option>
+                        <option value="activated">تفعيل</option>
+                        <option value="deactivated">تعطيل</option>
+                        <option value="deleted">حذف</option>
+                      </select>
+                    </div>
+
+                    {/* Search */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        بحث (اسم الاحتياج أو المستخدم)
+                      </label>
+                      <input
+                        type="text"
+                        value={auditLogsFilters.search}
+                        onChange={(e) => setAuditLogsFilters(prev => ({ ...prev, search: e.target.value }))}
+                        placeholder="ابحث..."
+                        className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Logs Table */}
+                  {auditLogsLoading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                      <p className="text-gray-600 mt-4">جاري التحميل...</p>
+                    </div>
+                  ) : auditLogs.length === 0 ? (
+                    <div className="text-center py-12 bg-gray-50 rounded-lg">
+                      <History className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-600 font-semibold mb-1">لا توجد حركات مسجلة</p>
+                      <p className="text-sm text-gray-400">لم يتم تسجيل أي حركات على الاحتياجات حتى الآن</p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Table for larger screens */}
+                      <div className="hidden md:block overflow-x-auto">
+                        <table className="w-full border-collapse">
+                          <thead>
+                            <tr className="bg-gradient-to-l from-blue-50 to-blue-100 border-b-2 border-blue-200">
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">التاريخ</th>
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">الوقت</th>
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">المستخدم</th>
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">العملية</th>
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">الاحتياج</th>
+                              <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">التفاصيل</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {auditLogs.map((log, index) => {
+                              const actionInfo = getActionTypeLabel(log.action_type);
+                              const ActionIcon = actionInfo.icon;
+                              const dateTime = formatDateTime(log.timestamp);
+                              
+                              return (
+                                <tr key={log.id || index} className="border-b border-gray-200 hover:bg-blue-50 transition-colors">
+                                  <td className="px-4 py-4 text-sm text-gray-900">
+                                    <div className="flex items-center gap-2">
+                                      <Calendar className="w-4 h-4 text-gray-500" />
+                                      {dateTime.date}
+                                    </div>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-gray-600">
+                                    <div className="flex items-center gap-2">
+                                      <Clock className="w-4 h-4 text-gray-500" />
+                                      {dateTime.time}
+                                    </div>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm">
+                                    <div className="flex items-center gap-2">
+                                      <User className="w-4 h-4 text-blue-600" />
+                                      <span className="font-semibold text-gray-900">{log.user_name}</span>
+                                    </div>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm">
+                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border ${actionInfo.color}`}>
+                                      <ActionIcon className="w-3.5 h-3.5" />
+                                      {actionInfo.label}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm">
+                                    <div className="flex items-center gap-2">
+                                      <Package className="w-4 h-4 text-emerald-600" />
+                                      <span className="font-semibold text-gray-900">{log.need_name}</span>
+                                    </div>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm">
+                                    {log.changes && Object.keys(log.changes).length > 0 ? (
+                                      <div className="space-y-1">
+                                        {Object.entries(log.changes).map(([field, value]) => (
+                                          <div key={field} className="text-xs bg-gray-50 rounded px-2 py-1">
+                                            <span className="font-semibold text-gray-700">{field}:</span>
+                                            {value.old !== undefined && value.new !== undefined ? (
+                                              <div className="mt-1">
+                                                <div className="text-red-600">قديم: {value.old || 'فارغ'}</div>
+                                                <div className="text-green-600">جديد: {value.new || 'فارغ'}</div>
+                                              </div>
+                                            ) : (
+                                              <span className="text-gray-600 mr-1">{JSON.stringify(value)}</span>
+                                            )}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <span className="text-gray-400 text-xs">-</span>
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Cards for mobile */}
+                      <div className="md:hidden space-y-4">
+                        {auditLogs.map((log, index) => {
+                          const actionInfo = getActionTypeLabel(log.action_type);
+                          const ActionIcon = actionInfo.icon;
+                          const dateTime = formatDateTime(log.timestamp);
+                          
+                          return (
+                            <div key={log.id || index} className="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                  <User className="w-4 h-4 text-blue-600" />
+                                  <span className="font-bold text-gray-900">{log.user_name}</span>
+                                </div>
+                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold border ${actionInfo.color}`}>
+                                  <ActionIcon className="w-3 h-3" />
+                                  {actionInfo.label}
+                                </span>
+                              </div>
+                              
+                              <div className="flex items-center gap-2 mb-2">
+                                <Package className="w-4 h-4 text-emerald-600" />
+                                <span className="font-semibold text-gray-900">{log.need_name}</span>
+                              </div>
+                              
+                              <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {dateTime.date}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {dateTime.time}
+                                </span>
+                              </div>
+                              
+                              {log.changes && Object.keys(log.changes).length > 0 && (
+                                <div className="mt-3 pt-3 border-t border-gray-300">
+                                  <p className="text-xs font-semibold text-gray-700 mb-2">التفاصيل:</p>
+                                  <div className="space-y-2">
+                                    {Object.entries(log.changes).map(([field, value]) => (
+                                      <div key={field} className="text-xs bg-white rounded px-2 py-1.5">
+                                        <span className="font-semibold text-gray-700">{field}:</span>
+                                        {value.old !== undefined && value.new !== undefined ? (
+                                          <div className="mt-1">
+                                            <div className="text-red-600">قديم: {value.old || 'فارغ'}</div>
+                                            <div className="text-green-600">جديد: {value.new || 'فارغ'}</div>
+                                          </div>
+                                        ) : (
+                                          <span className="text-gray-600 mr-1">{JSON.stringify(value)}</span>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Pagination */}
+                      {auditLogsPagination.total_pages > 1 && (
+                        <div className="mt-6 flex items-center justify-between border-t pt-4">
+                          <div className="text-sm text-gray-600">
+                            صفحة {auditLogsPagination.current_page} من {auditLogsPagination.total_pages}
+                            {' '}({auditLogsPagination.total_count} سجل)
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => fetchAuditLogs(auditLogsPagination.current_page - 1)}
+                              disabled={!auditLogsPagination.has_prev}
+                              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                                auditLogsPagination.has_prev
+                                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                              }`}
+                            >
+                              السابق
+                            </button>
+                            <button
+                              onClick={() => fetchAuditLogs(auditLogsPagination.current_page + 1)}
+                              disabled={!auditLogsPagination.has_next}
+                              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                                auditLogsPagination.has_next
+                                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                              }`}
+                            >
+                              التالي
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Sidebar - 1 column */}
