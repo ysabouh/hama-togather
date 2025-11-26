@@ -350,6 +350,7 @@ const FamilyDetails = () => {
       
       toast.success(newStatus ? 'تم تفعيل الاحتياج ✅' : 'تم تعطيل الاحتياج ⭕');
       fetchFamilyDetails();
+      fetchAuditLogs(auditLogsPagination.current_page);
     } catch (error) {
       console.error('Error toggling need status:', error);
       toast.error('حدث خطأ في تغيير حالة الاحتياج');
