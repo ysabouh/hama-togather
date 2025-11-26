@@ -37,14 +37,21 @@ export const calculateAge = (dateOfBirth) => {
   return age;
 };
 
-// دالة لتنسيق التاريخ (ميلادي)
+// دالة لتنسيق التاريخ مع الوقت (ميلادي)
 export const formatDate = (dateString) => {
   if (!dateString) return '-';
-  return new Date(dateString).toLocaleDateString('en-GB', {
+  const date = new Date(dateString);
+  const dateStr = date.toLocaleDateString('en-GB', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'
   });
+  const timeStr = date.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+  return `${dateStr} ${timeStr}`;
 };
 
 // دالة لتنسيق التاريخ والوقت (ميلادي)
