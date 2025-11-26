@@ -262,6 +262,23 @@ const DonationsManagement = () => {
     setSelectedImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
   };
 
+  const fetchDonationHistory = async (donationId) => {
+    setLoadingHistory(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/donations/${donationId}/history`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setDonationHistory(response.data);
+      setShowHistoryModal(true);
+    } catch (error) {
+      console.error('Error fetching history:', error);
+      toast.error('حدث خطأ في جلب السجل التاريخي');
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
   const handleUpdateStatus = async () => {
     if (!selectedDonation || !newStatus) return;
 
