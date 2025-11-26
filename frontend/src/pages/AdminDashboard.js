@@ -2462,16 +2462,16 @@ const AdminDashboard = () => {
                           </div>
                           
                           <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-                            <p className="text-sm text-gray-600 mb-2 font-medium">تاريخ الإنشاء</p>
+                            <p className="text-sm text-gray-600 mb-2 font-medium">تاريخ الإنشاء (ميلادي)</p>
                             <p className="text-lg font-medium text-gray-900">
-                              {selectedNeighborhood.created_at ? new Date(selectedNeighborhood.created_at).toLocaleDateString('ar-SY') : '-'}
+                              {selectedNeighborhood.created_at ? new Date(selectedNeighborhood.created_at).toLocaleDateString('en-GB', {year: 'numeric', month: '2-digit', day: '2-digit'}) : '-'}
                             </p>
                           </div>
                           
                           <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-                            <p className="text-sm text-gray-600 mb-2 font-medium">تاريخ التحديث</p>
+                            <p className="text-sm text-gray-600 mb-2 font-medium">تاريخ التحديث (ميلادي)</p>
                             <p className="text-lg font-medium text-gray-900">
-                              {selectedNeighborhood.updated_at ? new Date(selectedNeighborhood.updated_at).toLocaleDateString('ar-SY') : '-'}
+                              {selectedNeighborhood.updated_at ? new Date(selectedNeighborhood.updated_at).toLocaleDateString('en-GB', {year: 'numeric', month: '2-digit', day: '2-digit'}) : '-'}
                             </p>
                           </div>
                         </div>
