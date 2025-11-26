@@ -455,7 +455,14 @@ const DonationsManagement = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              {filteredDonations.length === 0 ? (
+              {(() => {
+                // Pagination logic
+                const indexOfLastItem = currentPage * itemsPerPage;
+                const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+                const currentItems = filteredDonations.slice(indexOfFirstItem, indexOfLastItem);
+                const totalPages = Math.ceil(filteredDonations.length / itemsPerPage);
+                
+                return filteredDonations.length === 0 ? (
                 <div className="text-center py-16">
                   <Gift className="w-20 h-20 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-gray-700 mb-2">لا توجد تبرعات</h3>
