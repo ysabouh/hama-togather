@@ -1045,6 +1045,7 @@ const FamilyDetails = () => {
                         <table className="w-full border-collapse">
                           <thead>
                             <tr className="bg-gradient-to-l from-blue-50 to-blue-100 border-b-2 border-blue-200">
+                              <th className="px-4 py-3 text-center text-sm font-bold text-gray-700">#</th>
                               <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">التاريخ</th>
                               <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">الوقت</th>
                               <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">المستخدم</th>
@@ -1058,9 +1059,13 @@ const FamilyDetails = () => {
                               const actionInfo = getActionTypeLabel(log.action_type);
                               const ActionIcon = actionInfo.icon;
                               const dateTime = formatDateTime(log.timestamp);
+                              const rowNumber = (auditLogsPagination.current_page - 1) * auditLogsPagination.per_page + index + 1;
                               
                               return (
                                 <tr key={log.id || index} className="border-b border-gray-200 hover:bg-blue-50 transition-colors">
+                                  <td className="px-4 py-4 text-center text-sm font-bold text-gray-700">
+                                    {rowNumber}
+                                  </td>
                                   <td className="px-4 py-4 text-sm text-gray-900">
                                     <div className="flex items-center gap-2">
                                       <Calendar className="w-4 h-4 text-gray-500" />
