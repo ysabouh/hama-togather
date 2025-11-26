@@ -515,9 +515,11 @@ class FamilyNeed(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     family_id: str  # معرف العائلة
     need_id: str  # معرف الاحتياج
+    amount: Optional[str] = None  # المبلغ أو الكمية (نص)
     estimated_amount: float = 0.0  # المبلغ التقديري
     notes: Optional[str] = None  # ملاحظات
     status: str = "pending"  # pending, fulfilled, cancelled
+    is_active: bool = True  # نشط أو متوقف
     created_by_user_id: Optional[str] = None  # المستخدم الذي أضاف
     updated_by_user_id: Optional[str] = None  # المستخدم الذي عدل
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -525,9 +527,11 @@ class FamilyNeed(BaseModel):
 
 class FamilyNeedCreate(BaseModel):
     need_id: str
+    amount: Optional[str] = None  # المبلغ أو الكمية
     estimated_amount: float = 0.0
     notes: Optional[str] = None
     status: str = "pending"
+    is_active: bool = True
 
 class FamilyNeedUpdate(BaseModel):
     need_id: Optional[str] = None
