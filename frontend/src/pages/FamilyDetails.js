@@ -956,17 +956,42 @@ const FamilyDetails = () => {
                             <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
                               <div className="flex-1">
                                 <h3 className="font-bold text-gray-900 text-lg">{donation.donor_name}</h3>
-                                <div className="flex items-center gap-2 mt-1">
+                                <div className="flex items-center gap-2 mt-1 flex-wrap">
                                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                                     {donation.donation_type}
                                   </span>
                                   <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
+                                  {/* Delivery Status Badge */}
+                                  {donation.delivery_status && (
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                                      donation.delivery_status === 'delivered' ? 'bg-green-100 text-green-700' :
+                                      donation.delivery_status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                                      'bg-blue-100 text-blue-700'
+                                    }`}>
+                                      {donation.delivery_status === 'delivered' ? '✓ تم التسليم' :
+                                       donation.delivery_status === 'cancelled' ? '✕ ملغية' :
+                                       '⏱ مجدولة'}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
-                              <span className="text-xs text-gray-500 flex items-center gap-1 whitespace-nowrap">
-                                <Clock className="w-3 h-3" />
-                                {formatDate(donation.created_at)}
-                              </span>
+                              <div className="text-xs text-gray-500 text-left">
+                                <div className="flex items-center gap-1 whitespace-nowrap">
+                                  <Clock className="w-3 h-3" />
+                                  <span>تسجيل:</span>
+                                  {formatDate(donation.created_at)}
+                                </div>
+                                {donation.donation_date && (
+                                  <div className="flex items-center gap-1 whitespace-nowrap mt-1">
+                                    <Calendar className="w-3 h-3" />
+                                    <span>موعد:</span>
+                                    {(() => {
+                                      const dt = formatDateTime(donation.donation_date);
+                                      return `${dt.date} ${dt.time}`;
+                                    })()}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                             <p className="text-sm text-gray-700 leading-relaxed">{donation.description}</p>
                             {donation.notes && (
