@@ -195,9 +195,19 @@ const DonationsManagement = () => {
     if (!selectedDonation || !newStatus) return;
 
     try {
+      // تحويل من العربية إلى الإنجليزية
+      const statusMap = {
+        'معلق': 'pending',
+        'قيد التنفيذ': 'approved',
+        'مكتمل': 'completed',
+        'ملغي': 'cancelled'
+      };
+      
+      const statusEn = statusMap[newStatus] || newStatus;
+      
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `${API_URL}/donations/${selectedDonation.id}/status?status=${newStatus}`,
+        `${API_URL}/donations/${selectedDonation.id}/status?status=${statusEn}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` }
