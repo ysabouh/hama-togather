@@ -140,6 +140,54 @@ const FamilyDetails = () => {
     }
   };
 
+  const fetchAuditLogs = async (page = 1) => {
+    setAuditLogsLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        per_page: auditLogsPagination.per_page.toString()
+      });
+      
+      if (auditLogsFilters.action_type) {
+        params.append('action_type', auditLogsFilters.action_type);
+      }
+      
+      if (auditLogsFilters.search) {
+        params.append('search', auditLogsFilters.search);
+      }
+      
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_URL}/families/${familyId}/needs-audit-log?${params.toString()}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      
+      setAuditLogs(response.data.logs || []);
+      setAuditLogsPagination(response.data.pagination || {
+        current_page: 1,
+        per_page: 10,
+        total_count: 0,
+        total_pages: 0,
+        has_next: false,
+        has_prev: false
+      });
+    } catch (error) {
+      console.error('Error fetching audit logs:', error);
+      toast.error('خطأ في جلب سجل الحركات');
+    } finally {
+      setAuditLogsLoading(false);
+    }
+  };
+
+  // جلب السجلات عند تحميل الصفحة أو تغيير الفلاتر
+  useEffect(() => {
+    if (user && familyId) {
+      fetchAuditLogs(1);
+    }
+  }, [familyId, user, auditLogsFilters]);
+
   const formatDate = (dateString) => {
     if (!dateString) return 'غير محدد';
     try {
