@@ -1476,20 +1476,28 @@ async def add_family_need(
         raise HTTPException(status_code=400, detail="هذا الاحتياج موجود بالفعل لهذه العائلة")
     
     # إنشاء السجل
-    family_need_dict = need_input.model_dump()
-    family_need_dict["family_id"] = family_id
-    family_need_dict["created_by_user_id"] = current_user.id
-    
-    family_need = FamilyNeed(**family_need_dict)
-    doc = family_need.model_dump()
-    doc['created_at'] = doc['created_at'].isoformat()
-    
-    await db.family_needs.insert_one(doc)
-    
-    # تحديث المبلغ الإجمالي للعائلة
-    await update_family_total_needs_amount(family_id)
-    
-    return family_need
+    try:
+        family_need_dict = need_input.model_dump()
+        family_need_dict["family_id"] = family_id
+        family_need_dict["created_by_user_id"] = current_user.id
+        
+        print(f"Creating family need with data: {family_need_dict}")
+        
+        family_need = FamilyNeed(**family_need_dict)
+        doc = family_need.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        
+        await db.family_needs.insert_one(doc)
+        
+        # تحديث المبلغ الإجمالي للعائلة
+        await update_family_total_needs_amount(family_id)
+        
+        return family_need
+    except Exception as e:
+        print(f"خطأ في إضافة الاحتياج: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"خطأ في إضافة الاحتياج: {str(e)}")
 
 @api_router.put("/families/{family_id}/needs/{need_record_id}")
 async def update_family_need(
