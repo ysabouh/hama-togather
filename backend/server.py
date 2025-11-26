@@ -649,6 +649,40 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Not authorized")
     return current_user
 
+async def log_need_action(
+    family_id: str,
+    need_record_id: Optional[str],
+    need_id: str,
+    need_name: str,
+    action_type: str,
+    user_id: str,
+    user_name: str,
+    changes: Optional[dict] = None,
+    notes: Optional[str] = None
+):
+    """تسجيل حركة على احتياج عائلة"""
+    try:
+        log_entry = FamilyNeedAuditLog(
+            family_id=family_id,
+            need_id=need_id,
+            need_record_id=need_record_id,
+            need_name=need_name,
+            action_type=action_type,
+            user_id=user_id,
+            user_name=user_name,
+            changes=changes,
+            notes=notes
+        )
+        
+        doc = log_entry.model_dump()
+        doc['timestamp'] = doc['timestamp'].isoformat()
+        
+        await db.family_needs_audit_log.insert_one(doc)
+        print(f"✅ تم تسجيل الحركة: {action_type} - {need_name} بواسطة {user_name}")
+    except Exception as e:
+        print(f"⚠️ خطأ في تسجيل الحركة: {e}")
+        # لا نرمي خطأ هنا لأننا لا نريد أن يفشل العملية الأساسية بسبب فشل التسجيل
+
 # ============= Auth Routes =============
 
 @api_router.post("/auth/register", response_model=Token)
