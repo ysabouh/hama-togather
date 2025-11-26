@@ -38,7 +38,9 @@ const FamilyDetails = () => {
     donation_type: 'مالية',
     amount: '',
     description: '',
-    notes: ''
+    notes: '',
+    donation_date: '',
+    delivery_status: 'scheduled'
   });
   const [needForm, setNeedForm] = useState({
     need_id: '',
