@@ -207,15 +207,15 @@ const FamilyDetails = () => {
     try {
       const date = new Date(dateString);
       return {
-        date: date.toLocaleDateString('ar-SA', {
+        date: date.toLocaleDateString('en-GB', {
           year: 'numeric',
           month: '2-digit',
           day: '2-digit'
         }),
-        time: date.toLocaleTimeString('ar-SA', {
+        time: date.toLocaleTimeString('en-GB', {
           hour: '2-digit',
           minute: '2-digit',
-          hour12: true
+          hour12: false
         })
       };
     } catch {
