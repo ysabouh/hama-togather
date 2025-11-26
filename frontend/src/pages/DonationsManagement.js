@@ -967,6 +967,7 @@ const DonationsManagement = () => {
                         setNewStatus(e.target.value);
                         setCompletionImages([]);
                         setCancellationReason('');
+                        setCustomCancellationText('');
                       }}
                       className="w-5 h-5 text-blue-600"
                     />
