@@ -394,7 +394,7 @@ const DonationsManagement = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">قيد التنفيذ:</span>
-                    <span className="font-bold text-blue-600">{stats.inProgress}</span>
+                    <span className="font-bold text-blue-600">{stats.inprogress}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">مكتملة:</span>
