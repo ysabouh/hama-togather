@@ -153,13 +153,18 @@ const FamilyNeedsManager = ({ familyId, isOpen, onClose }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString('ar-SA', {
+    const date = new Date(dateString);
+    const dateStr = date.toLocaleDateString('en-GB', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      month: '2-digit',
+      day: '2-digit'
     });
+    const timeStr = date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+    return `${dateStr} ${timeStr}`;
   };
 
   // تصفية الاحتياجات المتاحة (إزالة المضافة بالفعل)
