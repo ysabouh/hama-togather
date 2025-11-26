@@ -697,9 +697,9 @@ const FamilyDetails = () => {
                     {family?.total_needs_amount > 0 && (
                       <div className="mt-6">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-semibold text-gray-700">نسبة التغطية</span>
+                          <span className="text-sm font-semibold text-gray-700">نسبة التغطية (بناءً على المكتملة)</span>
                           <span className="text-sm font-bold text-emerald-600">
-                            {Math.min(100, Math.round(((family?.total_donations_amount || 0) / family.total_needs_amount) * 100))}%
+                            {Math.min(100, Math.round(((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100))}%
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
