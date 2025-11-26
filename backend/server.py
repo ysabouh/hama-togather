@@ -2116,6 +2116,16 @@ async def create_donation(donation_input: DonationCreate, current_user: User = D
     
     await db.donations.insert_one(doc)
     
+    # تسجيل في التاريخ
+    await log_donation_history(
+        donation_id=donation_obj.id,
+        action_type="created",
+        user_id=current_user.id if current_user else "system",
+        user_name=current_user.full_name if current_user else "النظام",
+        new_status=donation_obj.status,
+        changes={"donor_name": donation_obj.donor_name, "amount": donation_obj.amount}
+    )
+    
     # تحديث مجموع التبرعات للعائلة إذا كان التبرع مرتبط بعائلة
     if donation_dict.get('family_id'):
         await update_family_total_donations_amount(donation_dict['family_id'])
