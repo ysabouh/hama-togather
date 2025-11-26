@@ -706,12 +706,12 @@ const FamilyDetails = () => {
                           <div 
                             className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2"
                             style={{ 
-                              width: `${Math.min(100, ((family?.total_donations_amount || 0) / family.total_needs_amount) * 100)}%` 
+                              width: `${Math.min(100, ((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100)}%` 
                             }}
                           >
-                            {((family?.total_donations_amount || 0) / family.total_needs_amount) * 100 >= 10 && (
+                            {((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100 >= 10 && (
                               <span className="text-xs font-bold text-white">
-                                {Math.round(((family?.total_donations_amount || 0) / family.total_needs_amount) * 100)}%
+                                {Math.round(((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100)}%
                               </span>
                             )}
                           </div>
