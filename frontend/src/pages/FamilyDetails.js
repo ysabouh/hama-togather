@@ -1105,21 +1105,13 @@ const FamilyDetails = () => {
                                   </td>
                                   <td className="px-4 py-4 text-sm">
                                     {log.changes && Object.keys(log.changes).length > 0 ? (
-                                      <div className="space-y-1">
-                                        {Object.entries(log.changes).map(([field, value]) => (
-                                          <div key={field} className="text-xs bg-gray-50 rounded px-2 py-1">
-                                            <span className="font-semibold text-gray-700">{field}:</span>
-                                            {value.old !== undefined && value.new !== undefined ? (
-                                              <div className="mt-1">
-                                                <div className="text-red-600">قديم: {value.old || 'فارغ'}</div>
-                                                <div className="text-green-600">جديد: {value.new || 'فارغ'}</div>
-                                              </div>
-                                            ) : (
-                                              <span className="text-gray-600 mr-1">{JSON.stringify(value)}</span>
-                                            )}
-                                          </div>
-                                        ))}
-                                      </div>
+                                      <button
+                                        onClick={() => handleShowDetails(log)}
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold transition-colors border border-blue-200"
+                                      >
+                                        <Eye className="w-3.5 h-3.5" />
+                                        عرض التفاصيل ({Object.keys(log.changes).length})
+                                      </button>
                                     ) : (
                                       <span className="text-gray-400 text-xs">-</span>
                                     )}
