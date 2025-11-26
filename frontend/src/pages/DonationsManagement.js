@@ -314,8 +314,19 @@ const DonationsManagement = () => {
 
     // Status filter
     if (statusFilter !== 'all') {
-      const donationStatus = donation.status || 'معلق';
-      if (donationStatus !== statusFilter) return false;
+      // تحويل من العربية إلى الإنجليزية للمقارنة
+      const statusMapArToEn = {
+        'معلق': 'pending',
+        'قيد التنفيذ': 'inprogress',
+        'مكتمل': 'completed',
+        'ملغي': 'cancelled',
+        'مرفوض': 'rejected'
+      };
+      
+      const statusEnglish = statusMapArToEn[statusFilter] || statusFilter;
+      const donationStatus = donation.status || 'pending';
+      
+      if (donationStatus !== statusEnglish) return false;
     }
 
     // Date filter
