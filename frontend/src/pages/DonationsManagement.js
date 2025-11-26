@@ -124,7 +124,7 @@ const DonationsManagement = () => {
       cancelledAmount,
       rejectedAmount,
       completed: completedCount,
-      approved: approvedCount,
+      inprogress: inprogressCount,
       pending: pendingCount,
       cancelled: cancelledCount,
       rejected: rejectedCount,
