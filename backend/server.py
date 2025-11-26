@@ -1662,6 +1662,26 @@ async def delete_family_need(
     if not existing:
         raise HTTPException(status_code=404, detail="Family need record not found")
     
+    # الحصول على معلومات الاحتياج للسجل
+    need = await db.needs.find_one({"id": existing.get("need_id")}, {"_id": 0})
+    need_name = need.get('name', 'غير محدد') if need else 'غير محدد'
+    
+    # تسجيل الحركة قبل الحذف
+    await log_need_action(
+        family_id=family_id,
+        need_record_id=need_record_id,
+        need_id=existing.get("need_id"),
+        need_name=need_name,
+        action_type="deleted",
+        user_id=current_user.id,
+        user_name=current_user.full_name,
+        changes={
+            "amount": existing.get("amount"),
+            "duration_type": existing.get("duration_type"),
+            "estimated_amount": existing.get("estimated_amount")
+        }
+    )
+    
     # حذف السجل
     await db.family_needs.delete_one({"id": need_record_id})
     
