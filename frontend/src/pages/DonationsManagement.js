@@ -195,9 +195,14 @@ const DonationsManagement = () => {
     if (!selectedDonation || !newStatus) return;
 
     try {
-      await axios.put(`${API_URL}/donations/${selectedDonation.id}`, {
-        status: newStatus
-      });
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        `${API_URL}/donations/${selectedDonation.id}/status?status=${newStatus}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
 
       toast.success('تم تحديث حالة التبرع بنجاح');
       setShowStatusModal(false);
