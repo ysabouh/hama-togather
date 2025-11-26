@@ -782,7 +782,8 @@ const FamilyDetails = () => {
                         </div>
                       ))}
                     </div>
-                  )}
+                  );
+                  })()}
                 </div>
 
                 {/* Family Images */}
