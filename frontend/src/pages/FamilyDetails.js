@@ -652,7 +652,7 @@ const FamilyDetails = () => {
                         <div className="border-t border-white/20 pt-2 mt-2 space-y-1">
                           <div className="flex justify-between text-xs opacity-90">
                             <span>⏱ قيد التنفيذ:</span>
-                            <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.approved || 0)}</span>
+                            <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.inprogress || 0)}</span>
                           </div>
                           <div className="flex justify-between text-xs opacity-90">
                             <span>⏳ معلقة:</span>
