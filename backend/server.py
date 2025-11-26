@@ -2158,19 +2158,25 @@ async def update_donation_status(
         # إضافة صور الاستلام إذا كانت الحالة مكتملة
         if request.status == 'completed' and request.completion_images:
             update_data["completion_images"] = request.completion_images
+            print(f"DEBUG: Adding {len(request.completion_images)} completion images")
         
         # إضافة سبب الإلغاء إذا كانت الحالة ملغاة
         if request.status == 'cancelled' and request.cancellation_reason:
             update_data["cancellation_reason"] = request.cancellation_reason
+            print(f"DEBUG: Adding cancellation reason: {request.cancellation_reason}")
         
         update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
         update_data["updated_by_user_id"] = current_user.id
         update_data["updated_by_user_name"] = current_user.full_name
         
-        await db.donations.update_one(
+        print(f"DEBUG: Update data keys: {list(update_data.keys())}")
+        
+        result = await db.donations.update_one(
             {"id": donation_id},
             {"$set": update_data}
         )
+        
+        print(f"DEBUG: Update result - matched: {result.matched_count}, modified: {result.modified_count}")
         
         # جلب التبرع المحدث
         updated_donation = await db.donations.find_one({"id": donation_id}, {"_id": 0})
