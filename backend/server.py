@@ -2033,7 +2033,13 @@ async def get_donations(current_user: User = Depends(get_current_user)):
             'status': donation.get('status', 'pending'),
             'created_at': donation.get('created_at'),
             'created_by_user_id': donation.get('created_by_user_id'),
+            'updated_at': donation.get('updated_at'),
+            'updated_by_user_id': donation.get('updated_by_user_id'),
+            'updated_by_user_name': donation.get('updated_by_user_name'),
             'is_active': donation.get('is_active', True),
+            # الحقول الجديدة
+            'completion_images': donation.get('completion_images', []),
+            'cancellation_reason': donation.get('cancellation_reason'),
             # إضافة الحقول القديمة للتوافق
             'type': donation.get('type', 'family'),
             'target_id': donation.get('target_id') or donation.get('family_id'),
