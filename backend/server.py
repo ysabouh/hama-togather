@@ -1583,8 +1583,30 @@ async def update_family_need(
     if not existing:
         raise HTTPException(status_code=404, detail="Family need record not found")
     
-    # تحديث السجل
+    # الحصول على معلومات الاحتياج للسجل
+    need = await db.needs.find_one({"id": existing.get("need_id")}, {"_id": 0})
+    need_name = need.get('name', 'غير محدد') if need else 'غير محدد'
+    
+    # تسجيل التغييرات التفصيلية
+    changes = {}
     update_data = {k: v for k, v in need_update.model_dump().items() if v is not None}
+    
+    for key, new_value in update_data.items():
+        old_value = existing.get(key)
+        if old_value != new_value:
+            # تحديد الأسماء العربية للحقول
+            field_names = {
+                "need_id": "نوع الاحتياج",
+                "amount": "المبلغ",
+                "duration_type": "المدة",
+                "notes": "الملاحظات",
+                "estimated_amount": "المبلغ التقديري",
+                "status": "الحالة",
+                "is_active": "حالة التفعيل"
+            }
+            field_name = field_names.get(key, key)
+            changes[field_name] = {"old": old_value, "new": new_value}
+    
     update_data["updated_by_user_id"] = current_user.id
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     
@@ -1604,6 +1626,24 @@ async def update_family_need(
     
     # تحديث المبلغ الإجمالي للعائلة
     await update_family_total_needs_amount(family_id)
+    
+    # تسجيل الحركة
+    if changes:  # فقط إذا كان هناك تغييرات
+        action_type = "updated"
+        # تحديد نوع الإجراء الخاص
+        if "is_active" in update_data:
+            action_type = "activated" if update_data["is_active"] else "deactivated"
+        
+        await log_need_action(
+            family_id=family_id,
+            need_record_id=need_record_id,
+            need_id=existing.get("need_id"),
+            need_name=need_name,
+            action_type=action_type,
+            user_id=current_user.id,
+            user_name=current_user.full_name,
+            changes=changes
+        )
     
     return FamilyNeed(**updated_record)
 
