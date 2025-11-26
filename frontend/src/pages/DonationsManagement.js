@@ -1094,7 +1094,7 @@ const DonationsManagement = () => {
             </div>
 
             {/* Footer */}
-            <div className="px-6 pb-6">
+            <div className="px-6 pb-6 pt-4 border-t border-gray-200 flex-shrink-0">
               <div className="flex gap-3">
                 <button
                   onClick={handleUpdateStatus}
