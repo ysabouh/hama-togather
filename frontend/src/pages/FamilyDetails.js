@@ -1956,6 +1956,40 @@ const FamilyDetails = () => {
                       placeholder="أي ملاحظات أخرى..."
                     />
                   </div>
+
+                  {/* Donation Date and Status */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-amber-300">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        <Calendar className="w-4 h-4 inline ml-1" />
+                        تاريخ ووقت تقديم المساعدة (ميلادي)
+                      </label>
+                      <input
+                        type="datetime-local"
+                        value={donationForm.donation_date}
+                        onChange={(e) => setDonationForm({...donationForm, donation_date: e.target.value})}
+                        className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
+                      />
+                      <p className="text-xs text-gray-600 mt-1">اختياري - حدد موعد تقديم المساعدة</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        <CheckCircle className="w-4 h-4 inline ml-1" />
+                        حالة التسليم
+                      </label>
+                      <select
+                        value={donationForm.delivery_status}
+                        onChange={(e) => setDonationForm({...donationForm, delivery_status: e.target.value})}
+                        className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all font-semibold"
+                      >
+                        <option value="scheduled">مجدولة</option>
+                        <option value="delivered">تم التسليم</option>
+                        <option value="cancelled">ملغية</option>
+                      </select>
+                      <p className="text-xs text-gray-600 mt-1">الحالة الافتراضية: مجدولة</p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Info Message */}
