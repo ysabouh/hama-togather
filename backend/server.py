@@ -1457,6 +1457,8 @@ async def add_family_need(
     current_user: User = Depends(get_current_user)
 ):
     """إضافة احتياج جديد للعائلة"""
+    print(f"📥 Received need_input: {need_input.model_dump()}")
+    
     # التحقق من وجود العائلة
     family = await db.families.find_one({"id": family_id}, {"_id": 0})
     if not family:
