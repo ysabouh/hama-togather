@@ -196,12 +196,34 @@ const FamilyDetails = () => {
     if (!dateString) return 'غير محدد';
     try {
       const date = new Date(dateString);
-      // استخدام en-GB للحصول على التاريخ الميلادي
+      // استخدام en-GB للحصول على التاريخ الميلادي بصيغة DD/MM/YYYY
       return date.toLocaleDateString('en-GB', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit'
       });
+    } catch {
+      return 'غير محدد';
+    }
+  };
+
+  const formatDateWithTime = (dateString) => {
+    if (!dateString) return 'غير محدد';
+    try {
+      const date = new Date(dateString);
+      // التاريخ الميلادي بصيغة DD/MM/YYYY
+      const dateStr = date.toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      // الوقت بنظام 24 ساعة
+      const timeStr = date.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+      return `${dateStr} ${timeStr}`;
     } catch {
       return 'غير محدد';
     }
