@@ -1481,7 +1481,7 @@ async def update_family_total_donations_amount(family_id: str):
         # تصنيف التبرعات حسب الحالة
         totals = {
             "completed": 0.0,      # مكتملة (المعتمد)
-            "approved": 0.0,       # معتمدة/قيد التنفيذ
+            "inprogress": 0.0,     # قيد التنفيذ
             "pending": 0.0,        # معلقة
             "cancelled": 0.0,      # ملغاة
             "rejected": 0.0        # مرفوضة
