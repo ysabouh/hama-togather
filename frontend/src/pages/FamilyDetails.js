@@ -51,6 +51,22 @@ const FamilyDetails = () => {
   const [activeNeedsTab, setActiveNeedsTab] = useState('active'); // 'active' or 'inactive'
   const [allNeeds, setAllNeeds] = useState([]);
   const [donationHistory, setDonationHistory] = useState([]);
+  
+  // Audit Log States
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [auditLogsLoading, setAuditLogsLoading] = useState(false);
+  const [auditLogsPagination, setAuditLogsPagination] = useState({
+    current_page: 1,
+    per_page: 10,
+    total_count: 0,
+    total_pages: 0,
+    has_next: false,
+    has_prev: false
+  });
+  const [auditLogsFilters, setAuditLogsFilters] = useState({
+    action_type: '',
+    search: ''
+  });
 
   // تحديث بيانات المتبرع من المستخدم الحالي
   useEffect(() => {
