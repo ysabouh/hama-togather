@@ -183,6 +183,7 @@ const FamilyDetails = () => {
       setNeedForm({
         need_id: '',
         amount: '',
+        duration_type: 'مرة واحدة',
         notes: ''
       });
       
