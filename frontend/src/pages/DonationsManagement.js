@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { 
   DollarSign, Users, TrendingUp, Calendar, Search, 
   Filter, Eye, Edit, Check, Clock, AlertCircle, X,
-  Gift, Phone, Mail, Package, MapPin, Download, RefreshCw
+  Gift, Phone, Mail, Package, MapPin, Download, RefreshCw, History
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
