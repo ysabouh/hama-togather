@@ -822,15 +822,24 @@ const FamilyDetails = () => {
                                       {need.is_active !== false ? '🟢 نشط' : '⭕ متوقف'}
                                     </span>
                                     
-                                    {/* Date in Gregorian */}
+                                    {/* Date and Time in Gregorian */}
                                     {need.created_at && (
                                       <span className="flex items-center gap-1 text-xs text-gray-500">
                                         <Calendar className="w-3 h-3" />
-                                        {new Date(need.created_at).toLocaleDateString('en-GB', {
-                                          day: '2-digit',
-                                          month: '2-digit',
-                                          year: 'numeric'
-                                        })}
+                                        {(() => {
+                                          const date = new Date(need.created_at);
+                                          const dateStr = date.toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                          });
+                                          const timeStr = date.toLocaleTimeString('en-GB', {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: false
+                                          });
+                                          return `${dateStr} ${timeStr}`;
+                                        })()}
                                       </span>
                                     )}
                                   </div>
