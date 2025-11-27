@@ -696,9 +696,17 @@ const DonationsManagement = () => {
                             </td>
                             <td className="px-6 py-4">
                               {family ? (
-                                <div>
+                                <div className="space-y-1">
                                   <p className="font-semibold text-gray-900">{family.name}</p>
                                   <p className="text-xs text-gray-500 font-mono">{family.family_number}</p>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                                      {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || 'لا يوجد حي'}
+                                    </span>
+                                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                                      {categories.find(c => c.id === family.category_id)?.name || 'لا يوجد تصنيف'}
+                                    </span>
+                                  </div>
                                 </div>
                               ) : (
                                 <span className="text-gray-400">غير محدد</span>
