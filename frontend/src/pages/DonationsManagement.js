@@ -673,6 +673,11 @@ const DonationsManagement = () => {
                               <span className="font-bold text-gray-700">{rowNumber}</span>
                             </td>
                             <td className="px-6 py-4">
+                              <span className="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                                {donation.id ? donation.id.substring(0, 8) : 'N/A'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
                               <div>
                                 <p className="font-bold text-gray-900">{donation.donor_name}</p>
                                 {donation.donor_phone && (
