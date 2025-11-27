@@ -2268,8 +2268,10 @@ async def update_donation_status(
                 
                 # 2. إذا كان المبلغ >= مجموع الاحتياجات
                 if donation_amount >= total_needs and total_needs > 0:
+                    print(f"✅ DEBUG: Donation covers needs! Deactivating {len(active_needs)} needs")
+                    
                     # إيقاف جميع احتياجات العائلة
-                    await db.needs.update_many(
+                    result = await db.needs.update_many(
                         {"family_id": family_id, "is_active": {"$ne": False}},
                         {"$set": {
                             "is_active": False,
@@ -2279,13 +2281,18 @@ async def update_donation_status(
                         }}
                     )
                     
+                    print(f"✅ DEBUG: Updated {result.modified_count} needs")
+                    
                     # حساب المبلغ الزائد
                     excess_amount = donation_amount - total_needs
                     if excess_amount > 0:
                         additional_info["excess_amount"] = excess_amount
                         additional_info["message"] = f"تنبيه: يوجد مبلغ زائد قدره {excess_amount} ل.س"
+                        print(f"⚠️ DEBUG: Excess amount: {excess_amount}")
                     
                     additional_info["needs_deactivated"] = len(active_needs)
+                else:
+                    print(f"❌ DEBUG: Conditions not met - donation_amount: {donation_amount}, total_needs: {total_needs}")
                 
                 # 3. التعامل مع التبرعات الأخرى (pending أو inprogress)
                 other_donations = await db.donations.find(
