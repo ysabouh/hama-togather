@@ -2248,6 +2248,9 @@ async def update_donation_status(
         additional_info = {}
         if request.status == 'completed':
             family_id = donation.get('family_id') or donation.get('target_id')
+            print(f"🔍 DEBUG: Processing completed donation for family_id: {family_id}")
+            print(f"🔍 DEBUG: Donation data: {donation}")
+            
             if family_id:
                 # 1. حساب مجموع الاحتياجات النشطة
                 active_needs = await db.needs.find(
@@ -2255,8 +2258,13 @@ async def update_donation_status(
                     {"_id": 0}
                 ).to_list(1000)
                 
+                print(f"🔍 DEBUG: Found {len(active_needs)} active needs")
+                print(f"🔍 DEBUG: Active needs: {[{need.get('need_id'): need.get('amount')} for need in active_needs]}")
+                
                 total_needs = sum(float(need.get('amount', 0)) for need in active_needs)
                 donation_amount = float(donation.get('amount', 0))
+                
+                print(f"🔍 DEBUG: Total needs: {total_needs}, Donation amount: {donation_amount}")
                 
                 # 2. إذا كان المبلغ >= مجموع الاحتياجات
                 if donation_amount >= total_needs and total_needs > 0:
