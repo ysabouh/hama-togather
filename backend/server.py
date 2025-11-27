@@ -2305,9 +2305,12 @@ async def update_donation_status(
                     {"_id": 0}
                 ).to_list(1000)
                 
+                print(f"🔍 DEBUG: Found {len(other_donations)} other donations (pending/inprogress)")
+                
                 if other_donations:
+                    print(f"✅ DEBUG: Converting {len(other_donations)} donations to transferable")
                     # تحويلها إلى قابلة للنقل وتعطيلها
-                    await db.donations.update_many(
+                    result = await db.donations.update_many(
                         {
                             "family_id": family_id,
                             "id": {"$ne": donation_id},
@@ -2324,7 +2327,10 @@ async def update_donation_status(
                         }}
                     )
                     
+                    print(f"✅ DEBUG: Updated {result.modified_count} donations")
                     additional_info["other_donations_deactivated"] = len(other_donations)
+            else:
+                print(f"❌ DEBUG: No family_id found in donation!")
         
         # تسجيل في التاريخ
         await log_donation_history(
