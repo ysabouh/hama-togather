@@ -708,6 +708,32 @@ const DonationsManagement = () => {
                               </span>
                             </td>
                             <td className="px-6 py-4">
+                              <button
+                                onClick={async () => {
+                                  const newType = donation.transfer_type === 'fixed' ? 'transferable' : 'fixed';
+                                  try {
+                                    const token = localStorage.getItem('token');
+                                    await axios.put(
+                                      `${API_URL}/donations/${donation.id}/transfer-type?transfer_type=${newType}`,
+                                      {},
+                                      { headers: { Authorization: `Bearer ${token}` } }
+                                    );
+                                    toast.success('تم تحديث نوع التبرع');
+                                    fetchData();
+                                  } catch (error) {
+                                    toast.error('فشل تحديث النوع');
+                                  }
+                                }}
+                                className={`px-4 py-2 rounded-lg font-semibold text-xs transition-all ${
+                                  donation.transfer_type === 'fixed'
+                                    ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-300'
+                                    : 'bg-purple-100 text-purple-700 hover:bg-purple-200 border border-purple-300'
+                                }`}
+                              >
+                                {donation.transfer_type === 'fixed' ? '🔒 ثابت' : '🔄 قابل للنقل'}
+                              </button>
+                            </td>
+                            <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
                                 <button
                                   onClick={() => {
