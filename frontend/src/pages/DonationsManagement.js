@@ -19,6 +19,8 @@ const DonationsManagement = () => {
 
   const [donations, setDonations] = useState([]);
   const [families, setFamilies] = useState([]);
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
