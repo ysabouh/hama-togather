@@ -2993,7 +2993,14 @@ const AdminDashboard = () => {
                                     </span>
                                   </td>
                                   <td className="px-4 py-3 text-sm text-gray-900 text-center">{family.family_code || '-'}</td>
-                                  <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{family.fac_name || '-'}</td>
+                                  <td className="px-4 py-3 text-sm text-center">
+                                    <div className="flex flex-col items-center gap-1">
+                                      <span className="font-medium text-gray-900">{family.fac_name || '-'}</span>
+                                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                        {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
+                                      </span>
+                                    </div>
+                                  </td>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">{family.phone || '-'}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600 text-center">
                                     {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
