@@ -1087,12 +1087,7 @@ const FamilyDetails = () => {
                               </div>
                               <div className="text-xs text-left space-y-1">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <div className="flex items-center gap-1 whitespace-nowrap text-gray-500">
-                                    <Clock className="w-3 h-3" />
-                                    <span>تسجيل:</span>
-                                    <span className="font-semibold">{formatDate(donation.created_at)}</span>
-                                  </div>
-                                  {/* Status Badge */}
+                                  {/* Status Badge - نقلناها قبل التاريخ */}
                                   {donation.status && (
                                     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold border ${
                                       donation.status === 'completed' ? 'bg-green-100 text-green-700 border-green-300' :
@@ -1110,6 +1105,11 @@ const FamilyDetails = () => {
                                        '⏳ معلق'}
                                     </span>
                                   )}
+                                  <div className="flex items-center gap-1 whitespace-nowrap text-gray-500">
+                                    <Clock className="w-3 h-3" />
+                                    <span>تسجيل:</span>
+                                    <span className="font-semibold">{formatDate(donation.created_at)}</span>
+                                  </div>
                                 </div>
                                 {donation.donation_date && (
                                   <div className="flex items-center gap-1 whitespace-nowrap text-gray-500">
