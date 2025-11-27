@@ -1051,6 +1051,13 @@ const FamilyDetails = () => {
                           <div className="bg-gray-50 rounded-lg p-4 hover:bg-emerald-50 transition-colors">
                             <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
                               <div className="flex-1">
+                                {/* رقم التبرع */}
+                                <div className="mb-2">
+                                  <span className="text-xs text-gray-500">رقم التبرع: </span>
+                                  <span className="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                                    {donation.id ? donation.id.substring(0, 8) : 'N/A'}
+                                  </span>
+                                </div>
                                 <h3 className="font-bold text-gray-900 text-lg">{donation.donor_name}</h3>
                                 <div className="flex items-center gap-2 mt-1 flex-wrap">
                                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
