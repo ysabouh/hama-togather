@@ -1056,7 +1056,6 @@ const FamilyDetails = () => {
                                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                                     {donation.donation_type}
                                   </span>
-                                  <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
                                   {/* Delivery Status Badge */}
                                   {donation.delivery_status && (
                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
@@ -1070,14 +1069,18 @@ const FamilyDetails = () => {
                                     </span>
                                   )}
                                 </div>
-                                {/* Transfer Type Badge - نقلناها تحت المبلغ المالي */}
+                                {/* المبلغ المالي في سطر منفصل */}
                                 <div className="mt-2">
+                                  <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
+                                </div>
+                                {/* Transfer Type Badge - أسفل المبلغ المالي */}
+                                <div className="mt-1">
                                   <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${
-                                    donation.transfer_type === 'transferable' 
-                                      ? 'bg-purple-100 text-purple-700 border-purple-300' 
-                                      : 'bg-blue-100 text-blue-700 border-blue-300'
+                                    donation.transfer_type === 'fixed' 
+                                      ? 'bg-blue-100 text-blue-700 border-blue-300' 
+                                      : 'bg-purple-100 text-purple-700 border-purple-300'
                                   }`}>
-                                    {donation.transfer_type === 'transferable' ? '🔄 قابل للنقل' : '🔒 ثابت'}
+                                    {donation.transfer_type === 'fixed' ? '🔒 ثابت' : '🔄 قابل للنقل'}
                                   </span>
                                 </div>
                               </div>
