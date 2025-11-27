@@ -650,6 +650,9 @@ const DonationsManagement = () => {
                         <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
                           الحالة
                         </th>
+                        <th className="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
+                          النوع
+                        </th>
                         <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
                           الإجراءات
                         </th>
