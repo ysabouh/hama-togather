@@ -2079,6 +2079,7 @@ async def get_donations(current_user: User = Depends(get_current_user)):
             # الحقول الجديدة
             'completion_images': donation.get('completion_images', []),
             'cancellation_reason': donation.get('cancellation_reason'),
+            'transfer_type': donation.get('transfer_type', 'fixed'),
             # إضافة الحقول القديمة للتوافق
             'type': donation.get('type', 'family'),
             'target_id': donation.get('target_id') or donation.get('family_id'),
