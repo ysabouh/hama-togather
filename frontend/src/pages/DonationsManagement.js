@@ -65,13 +65,17 @@ const DonationsManagement = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [donationsRes, familiesRes] = await Promise.all([
+      const [donationsRes, familiesRes, neighborhoodsRes, categoriesRes] = await Promise.all([
         axios.get(`${API_URL}/donations`),
-        axios.get(`${API_URL}/families`)
+        axios.get(`${API_URL}/families`),
+        axios.get(`${API_URL}/neighborhoods`),
+        axios.get(`${API_URL}/family-categories`)
       ]);
 
       setDonations(donationsRes.data || []);
       setFamilies(familiesRes.data || []);
+      setNeighborhoods(neighborhoodsRes.data?.items || neighborhoodsRes.data || []);
+      setCategories(categoriesRes.data?.items || categoriesRes.data || []);
       calculateStats(donationsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
