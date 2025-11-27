@@ -1056,6 +1056,14 @@ const FamilyDetails = () => {
                                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                                     {donation.donation_type}
                                   </span>
+                                  {/* Transfer Type Badge */}
+                                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${
+                                    donation.transfer_type === 'fixed' 
+                                      ? 'bg-blue-100 text-blue-700 border-blue-300' 
+                                      : 'bg-purple-100 text-purple-700 border-purple-300'
+                                  }`}>
+                                    {donation.transfer_type === 'fixed' ? '🔒 ثابت' : '🔄 قابل للنقل'}
+                                  </span>
                                   <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
                                   {/* Delivery Status Badge */}
                                   {donation.delivery_status && (
