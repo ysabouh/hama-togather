@@ -2362,8 +2362,44 @@ const FamilyDetails = () => {
 
             {/* Body */}
             <div className="p-6 overflow-y-auto flex-1 space-y-4">
-              {/* صور وصل الاستلام - فقط للمكتمل */}
-              {selectedDonation.status === 'completed' && selectedDonation.completion_images && selectedDonation.completion_images.length > 0 ? (
+              {/* الحالة الحالية */}
+              <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-5 border-2 border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">حالة التبرع</h3>
+                <div className="flex items-center justify-center">
+                  <span className={`px-6 py-3 rounded-full text-base font-bold text-white ${
+                    getStatusColor(selectedDonation.status).replace('text-', 'bg-')
+                  }`}>
+                    {getStatusLabel(selectedDonation.status)}
+                  </span>
+                </div>
+              </div>
+
+              {/* معلومات آخر تعديل */}
+              <div className="bg-blue-50 rounded-xl p-5 border-2 border-blue-200">
+                <h3 className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  معلومات التحديث
+                </h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start gap-2">
+                    <Users className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-blue-700 font-semibold">تم التحديث بواسطة:</span>
+                      <p className="text-blue-900 font-bold">{selectedDonation.updated_by_user_name || 'النظام'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Calendar className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-blue-700 font-semibold">تاريخ آخر تعديل:</span>
+                      <p className="text-blue-900 font-bold">{formatDate(selectedDonation.updated_at || selectedDonation.created_at)}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* صور وصل الاستلام - للمكتمل */}
+              {selectedDonation.status === 'completed' && selectedDonation.completion_images && selectedDonation.completion_images.length > 0 && (
                 <div className="bg-green-50 rounded-xl p-5 border-2 border-green-200">
                   <h3 className="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
                     <Package className="w-5 h-5" />
@@ -2391,22 +2427,16 @@ const FamilyDetails = () => {
                     ))}
                   </div>
                 </div>
-              ) : selectedDonation.status === 'cancelled' && selectedDonation.cancellation_reason ? (
-                /* سبب الإلغاء - فقط للملغي */
+              )}
+
+              {/* سبب الإلغاء - للملغي */}
+              {selectedDonation.status === 'cancelled' && selectedDonation.cancellation_reason && (
                 <div className="bg-red-50 rounded-xl p-5 border-2 border-red-200">
                   <h3 className="text-lg font-bold text-red-900 mb-4 flex items-center gap-2">
                     <AlertCircle className="w-5 h-5" />
                     سبب الإلغاء
                   </h3>
                   <p className="text-red-800 text-base font-semibold leading-relaxed">{selectedDonation.cancellation_reason}</p>
-                </div>
-              ) : (
-                /* رسالة في حالة عدم وجود معلومات إضافية */
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Gift className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <p className="text-gray-500">لا توجد معلومات إضافية لعرضها</p>
                 </div>
               )}
             </div>
