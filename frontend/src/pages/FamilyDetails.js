@@ -1069,9 +1069,10 @@ const FamilyDetails = () => {
                                     </span>
                                   )}
                                 </div>
-                                {/* المبلغ المالي في سطر منفصل */}
+                                {/* المبلغ المالي مع العملة السورية */}
                                 <div className="mt-2">
-                                  <span className="text-sm font-bold text-gray-900">{donation.amount}</span>
+                                  <span className="text-sm text-gray-600">المالية: </span>
+                                  <span className="text-sm font-bold text-gray-900">{donation.amount} ل.س</span>
                                 </div>
                                 {/* Transfer Type Badge - أسفل المبلغ المالي */}
                                 <div className="mt-1">
