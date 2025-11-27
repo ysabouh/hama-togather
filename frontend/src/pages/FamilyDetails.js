@@ -2355,111 +2355,81 @@ const FamilyDetails = () => {
 
       {/* Donation Details Modal */}
       {showDonationDetailsModal && selectedDonation && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" onClick={() => setShowDonationDetailsModal(false)}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowDonationDetailsModal(false)}>
           <div 
-            className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
+            className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header with Status Badge */}
-            <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white p-8">
-              <div className="absolute top-4 right-4">
-                <button
-                  onClick={() => setShowDonationDetailsModal(false)}
-                  className="w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition-all"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+            {/* Header */}
+            <div className="bg-emerald-600 text-white px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Gift className="w-6 h-6" />
+                <h2 className="text-xl font-bold">تفاصيل التبرع</h2>
               </div>
-              
-              <div className="flex items-start gap-4">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
-                  <Gift className="w-8 h-8" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-3xl font-bold mb-2">تفاصيل التبرع</h2>
-                  <p className="text-white/90 text-lg">{selectedDonation.donor_name}</p>
-                  
-                  {/* Status Badge */}
-                  <div className="mt-4 inline-flex">
-                    <span className={`px-5 py-2.5 rounded-full text-sm font-bold backdrop-blur-sm ${
-                      selectedDonation.status === 'completed' ? 'bg-green-500/90 text-white' :
-                      selectedDonation.status === 'cancelled' ? 'bg-red-500/90 text-white' :
-                      selectedDonation.status === 'inprogress' ? 'bg-blue-500/90 text-white' :
-                      selectedDonation.status === 'pending' ? 'bg-yellow-500/90 text-white' :
-                      'bg-gray-500/90 text-white'
-                    }`}>
-                      ⭐ {getStatusLabel(selectedDonation.status)}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <button
+                onClick={() => setShowDonationDetailsModal(false)}
+                className="w-8 h-8 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Body */}
-            <div className="p-6 overflow-y-auto flex-1 bg-gray-50">
-              <div className="max-w-3xl mx-auto space-y-5">
-                {/* معلومات التحديث */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-indigo-600" />
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900">آخر تحديث</h3>
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="space-y-4">
+                {/* الحالة */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm text-gray-600 mb-2">الحالة:</p>
+                  <span className={`inline-flex px-4 py-2 rounded-lg text-sm font-bold ${
+                    selectedDonation.status === 'completed' ? 'bg-green-100 text-green-700' :
+                    selectedDonation.status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                    selectedDonation.status === 'inprogress' ? 'bg-blue-100 text-blue-700' :
+                    selectedDonation.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {getStatusLabel(selectedDonation.status)}
+                  </span>
+                </div>
+
+                {/* تاريخ آخر تحديث */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                    <Calendar className="w-4 h-4" />
+                    <p className="text-sm">تاريخ آخر تحديث:</p>
                   </div>
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                      <Users className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                      <div>
-                        <p className="text-xs text-gray-500 mb-0.5">تم بواسطة</p>
-                        <p className="text-base font-bold text-gray-900">{selectedDonation.updated_by_user_name || 'النظام'}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                      <Calendar className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                      <div>
-                        <p className="text-xs text-gray-500 mb-0.5">التاريخ والوقت</p>
-                        <p className="text-base font-bold text-gray-900">{formatDate(selectedDonation.updated_at || selectedDonation.created_at)}</p>
-                      </div>
-                    </div>
+                  <p className="font-bold text-gray-900">{formatDate(selectedDonation.updated_at || selectedDonation.created_at)}</p>
+                </div>
+
+                {/* من قام بالتحديث */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                    <Users className="w-4 h-4" />
+                    <p className="text-sm">تم التحديث بواسطة:</p>
                   </div>
+                  <p className="font-bold text-gray-900">{selectedDonation.updated_by_user_name || 'النظام'}</p>
                 </div>
 
                 {/* صور وصل الاستلام - للمكتمل */}
                 {selectedDonation.status === 'completed' && selectedDonation.completion_images && selectedDonation.completion_images.length > 0 && (
-                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 shadow-sm border border-green-200">
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
-                        <Package className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-green-900">صور وصل الاستلام</h3>
-                        <p className="text-sm text-green-700">{selectedDonation.completion_images.length} صورة</p>
-                      </div>
+                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                    <div className="flex items-center gap-2 text-green-700 mb-3">
+                      <Package className="w-4 h-4" />
+                      <p className="text-sm font-bold">صور وصل الاستلام ({selectedDonation.completion_images.length})</p>
                     </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                       {selectedDonation.completion_images.map((img, idx) => (
                         <div 
                           key={idx} 
-                          className="relative group cursor-pointer transform hover:scale-105 transition-transform"
+                          className="relative cursor-pointer group"
                           onClick={() => openDonationImageModal(selectedDonation.completion_images, idx)}
                         >
-                          <div className="aspect-square rounded-xl overflow-hidden border-3 border-white shadow-lg">
-                            <img
-                              src={img}
-                              alt={`وصل ${idx + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <div className="bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full">
-                              <Eye className="w-5 h-5 text-gray-900" />
-                            </div>
-                          </div>
-                          <div className="absolute top-2 right-2 bg-green-500 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-lg">
-                            {idx + 1}/{selectedDonation.completion_images.length}
+                          <img
+                            src={img}
+                            alt={`وصل ${idx + 1}`}
+                            className="w-full h-32 object-cover rounded-lg border-2 border-white shadow"
+                          />
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                            <Eye className="w-6 h-6 text-white" />
                           </div>
                         </div>
                       ))}
@@ -2469,37 +2439,31 @@ const FamilyDetails = () => {
 
                 {/* سبب الإلغاء - للملغي */}
                 {selectedDonation.status === 'cancelled' && selectedDonation.cancellation_reason && (
-                  <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-6 shadow-sm border border-red-200">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
-                        <AlertCircle className="w-5 h-5 text-white" />
-                      </div>
-                      <h3 className="text-lg font-bold text-red-900">سبب الإلغاء</h3>
+                  <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+                    <div className="flex items-center gap-2 text-red-700 mb-3">
+                      <AlertCircle className="w-4 h-4" />
+                      <p className="text-sm font-bold">سبب الإلغاء:</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border-r-4 border-red-500">
-                      <p className="text-gray-900 text-base font-semibold leading-relaxed">{selectedDonation.cancellation_reason}</p>
-                    </div>
+                    <p className="text-gray-900 leading-relaxed">{selectedDonation.cancellation_reason}</p>
                   </div>
                 )}
 
                 {/* رسالة في حالة عدم وجود معلومات إضافية */}
                 {selectedDonation.status !== 'completed' && selectedDonation.status !== 'cancelled' && (
-                  <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-200">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <Gift className="w-10 h-10 text-gray-400" />
-                    </div>
-                    <p className="text-gray-600 text-lg font-medium">التبرع قيد المعالجة</p>
-                    <p className="text-gray-400 text-sm mt-2">سيتم تحديث التفاصيل عند اكتمال التبرع</p>
+                  <div className="bg-blue-50 rounded-lg p-6 text-center border border-blue-200">
+                    <Gift className="w-12 h-12 text-blue-400 mx-auto mb-3" />
+                    <p className="text-gray-700 font-medium">التبرع قيد المعالجة</p>
+                    <p className="text-gray-500 text-sm mt-1">سيتم تحديث التفاصيل لاحقاً</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 bg-white border-t border-gray-200 flex-shrink-0">
+            <div className="px-6 py-4 bg-gray-50 border-t">
               <button
                 onClick={() => setShowDonationDetailsModal(false)}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3.5 rounded-xl font-bold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="w-full bg-emerald-600 text-white py-2.5 rounded-lg font-bold hover:bg-emerald-700 transition-colors"
               >
                 إغلاق
               </button>
