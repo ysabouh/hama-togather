@@ -2244,6 +2244,73 @@ async def update_donation_status(
             {"$set": update_data}
         )
         
+        # معالجة خاصة عند إكمال التبرع
+        additional_info = {}
+        if request.status == 'completed':
+            family_id = donation.get('family_id') or donation.get('target_id')
+            if family_id:
+                # 1. حساب مجموع الاحتياجات النشطة
+                active_needs = await db.needs.find(
+                    {"family_id": family_id, "is_active": {"$ne": False}},
+                    {"_id": 0}
+                ).to_list(1000)
+                
+                total_needs = sum(float(need.get('amount', 0)) for need in active_needs)
+                donation_amount = float(donation.get('amount', 0))
+                
+                # 2. إذا كان المبلغ >= مجموع الاحتياجات
+                if donation_amount >= total_needs and total_needs > 0:
+                    # إيقاف جميع احتياجات العائلة
+                    await db.needs.update_many(
+                        {"family_id": family_id, "is_active": {"$ne": False}},
+                        {"$set": {
+                            "is_active": False,
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                            "updated_by": current_user.full_name,
+                            "deactivation_reason": "تم تغطية الاحتياجات بالكامل من التبرع"
+                        }}
+                    )
+                    
+                    # حساب المبلغ الزائد
+                    excess_amount = donation_amount - total_needs
+                    if excess_amount > 0:
+                        additional_info["excess_amount"] = excess_amount
+                        additional_info["message"] = f"تنبيه: يوجد مبلغ زائد قدره {excess_amount} ل.س"
+                    
+                    additional_info["needs_deactivated"] = len(active_needs)
+                
+                # 3. التعامل مع التبرعات الأخرى (pending أو inprogress)
+                other_donations = await db.donations.find(
+                    {
+                        "family_id": family_id,
+                        "id": {"$ne": donation_id},
+                        "status": {"$in": ["pending", "inprogress"]},
+                        "is_active": {"$ne": False}
+                    },
+                    {"_id": 0}
+                ).to_list(1000)
+                
+                if other_donations:
+                    # تحويلها إلى قابلة للنقل وتعطيلها
+                    await db.donations.update_many(
+                        {
+                            "family_id": family_id,
+                            "id": {"$ne": donation_id},
+                            "status": {"$in": ["pending", "inprogress"]},
+                            "is_active": {"$ne": False}
+                        },
+                        {"$set": {
+                            "transfer_type": "transferable",
+                            "is_active": False,
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                            "updated_by_user_id": current_user.id,
+                            "updated_by_user_name": current_user.full_name,
+                            "deactivation_reason": "تم تغطية احتياجات العائلة - التبرع قابل للنقل لعائلة أخرى"
+                        }}
+                    )
+                    
+                    additional_info["other_donations_deactivated"] = len(other_donations)
+        
         # تسجيل في التاريخ
         await log_donation_history(
             donation_id=donation_id,
@@ -2257,6 +2324,11 @@ async def update_donation_status(
         
         # جلب التبرع المحدث
         updated_donation = await db.donations.find_one({"id": donation_id}, {"_id": 0})
+        
+        # إضافة معلومات إضافية إلى الاستجابة
+        if additional_info:
+            updated_donation["additional_info"] = additional_info
+        
         return updated_donation
     except HTTPException:
         raise
