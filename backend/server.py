@@ -2255,10 +2255,10 @@ async def update_donation_status(
         print(f"Error updating donation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@api_router.put("/donations/{donation_id}/type")
-async def update_donation_type(
+@api_router.put("/donations/{donation_id}/transfer-type")
+async def update_donation_transfer_type(
     donation_id: str,
-    type: str,
+    transfer_type: str,
     current_user: User = Depends(get_current_user)
 ):
     """تحديث نوع التبرع (ثابت أو قابل للنقل) - للمدير فقط"""
@@ -2271,13 +2271,13 @@ async def update_donation_type(
         if not donation:
             raise HTTPException(status_code=404, detail="التبرع غير موجود")
         
-        old_type = donation.get('type', 'fixed')
+        old_transfer_type = donation.get('transfer_type', 'fixed')
         
         # تحديث النوع
         await db.donations.update_one(
             {"id": donation_id},
             {"$set": {
-                "type": type,
+                "transfer_type": transfer_type,
                 "updated_at": datetime.now(timezone.utc).isoformat(),
                 "updated_by_user_id": current_user.id,
                 "updated_by_user_name": current_user.full_name
@@ -2287,10 +2287,10 @@ async def update_donation_type(
         # تسجيل في التاريخ
         await log_donation_history(
             donation_id=donation_id,
-            action_type="type_changed",
+            action_type="transfer_type_changed",
             user_id=current_user.id,
             user_name=current_user.full_name,
-            changes={"type": {"from": old_type, "to": type}}
+            changes={"transfer_type": {"from": old_transfer_type, "to": transfer_type}}
         )
         
         # جلب التبرع المحدث
@@ -2299,7 +2299,7 @@ async def update_donation_type(
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error updating donation type: {e}")
+        print(f"Error updating donation transfer type: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/donations/{donation_id}/history")
