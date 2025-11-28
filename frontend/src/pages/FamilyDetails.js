@@ -46,7 +46,7 @@ const FamilyDetails = () => {
     need_id: '',
     amount: '',
     duration_type: 'مرة واحدة',
-    month: '',
+    month: 'NOV-2025', // القيمة الافتراضية: الشهر الحالي
     notes: ''
   });
   const [editingNeed, setEditingNeed] = useState(null);
