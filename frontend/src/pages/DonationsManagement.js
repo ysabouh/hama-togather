@@ -64,6 +64,13 @@ const DonationsManagement = () => {
     fetchData();
   }, [user]);
 
+  // إعادة جلب البيانات عند تغيير الفرز
+  useEffect(() => {
+    if (user) {
+      fetchData();
+    }
+  }, [sortBy, sortOrder]);
+
   const fetchData = async () => {
     setLoading(true);
     try {
