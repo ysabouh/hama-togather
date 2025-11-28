@@ -68,7 +68,7 @@ const DonationsManagement = () => {
     setLoading(true);
     try {
       const [donationsRes, familiesRes, neighborhoodsRes, categoriesRes] = await Promise.all([
-        axios.get(`${API_URL}/donations`),
+        axios.get(`${API_URL}/donations?sort_by=${sortBy}&sort_order=${sortOrder}`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/neighborhoods`),
         axios.get(`${API_URL}/family-categories`)
