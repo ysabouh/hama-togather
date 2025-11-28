@@ -2176,6 +2176,7 @@ async def get_family_donations(family_id: str):
                 'completion_images': donation.get('completion_images', []),
                 'cancellation_reason': donation.get('cancellation_reason'),
                 'updated_at': donation.get('updated_at'),
+                'is_active': donation.get('is_active', True),
                 'updated_by_user_id': donation.get('updated_by_user_id'),
                 'updated_by_user_name': donation.get('updated_by_user_name'),
                 'created_at': donation.get('created_at'),
