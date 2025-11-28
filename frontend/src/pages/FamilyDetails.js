@@ -1033,15 +1033,49 @@ const FamilyDetails = () => {
                     <span className="text-sm font-normal text-gray-500">({donationHistory.length})</span>
                   </h2>
                   
-                  {donationHistory.length === 0 ? (
-                    <div className="text-center py-12 bg-gray-50 rounded-lg">
-                      <Gift className="w-16 h-16 text-gray-300 mx-auto mb-3" />
-                      <p className="text-gray-600 font-semibold mb-1">لا توجد مساعدات مسجلة حتى الآن</p>
-                      <p className="text-sm text-gray-400">كن أول من يساعد هذه العائلة!</p>
-                    </div>
-                  ) : (
+                  {/* Tabs */}
+                  <div className="flex gap-2 mb-4 border-b">
+                    <button
+                      onClick={() => setActiveDonationsTab('active')}
+                      className={`px-4 py-2 font-semibold transition-colors ${
+                        activeDonationsTab === 'active'
+                          ? 'text-emerald-600 border-b-2 border-emerald-600'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      التبرعات النشطة ({donationHistory.filter(d => d.is_active !== false).length})
+                    </button>
+                    <button
+                      onClick={() => setActiveDonationsTab('inactive')}
+                      className={`px-4 py-2 font-semibold transition-colors ${
+                        activeDonationsTab === 'inactive'
+                          ? 'text-gray-600 border-b-2 border-gray-600'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      التبرعات المعطلة ({donationHistory.filter(d => d.is_active === false).length})
+                    </button>
+                  </div>
+                  
+                  {(() => {
+                    const filteredDonations = donationHistory.filter(d => 
+                      activeDonationsTab === 'active' ? d.is_active !== false : d.is_active === false
+                    );
+                    
+                    if (filteredDonations.length === 0) {
+                      return (
+                        <div className="text-center py-12 bg-gray-50 rounded-lg">
+                          <Gift className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                          <p className="text-gray-600 font-semibold mb-1">
+                            {activeDonationsTab === 'active' ? 'لا توجد مساعدات نشطة' : 'لا توجد مساعدات معطلة'}
+                          </p>
+                        </div>
+                      );
+                    }
+                    
+                    return (
                     <div className="space-y-4">
-                      {donationHistory.map((donation, idx) => (
+                      {filteredDonations.map((donation, idx) => (
                         <div
                           key={donation.id || idx}
                           className={`relative border-r-4 ${donation.is_active === false ? 'border-gray-400' : 'border-emerald-500'} pr-6 pb-4 last:pb-0`}
