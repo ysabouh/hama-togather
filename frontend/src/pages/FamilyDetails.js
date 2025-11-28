@@ -951,6 +951,30 @@ const FamilyDetails = () => {
                                       {need.is_active !== false ? '🟢 نشط' : '⭕ متوقف'}
                                     </span>
                                     
+                                    {/* Month Badge */}
+                                    {need.month && (
+                                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-300">
+                                        📅 {(() => {
+                                          const monthNames = {
+                                            'JAN': 'يناير',
+                                            'FEB': 'فبراير',
+                                            'MAR': 'مارس',
+                                            'APR': 'أبريل',
+                                            'MAY': 'مايو',
+                                            'JUN': 'يونيو',
+                                            'JUL': 'يوليو',
+                                            'AUG': 'أغسطس',
+                                            'SEP': 'سبتمبر',
+                                            'OCT': 'أكتوبر',
+                                            'NOV': 'نوفمبر',
+                                            'DEC': 'ديسمبر'
+                                          };
+                                          const [month, year] = need.month.split('-');
+                                          return `${monthNames[month] || month} ${year}`;
+                                        })()}
+                                      </span>
+                                    )}
+                                    
                                     {/* Date and Time in Gregorian */}
                                     {need.created_at && (
                                       <span className="flex items-center gap-1 text-xs text-gray-500">
