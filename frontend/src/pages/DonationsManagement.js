@@ -847,6 +847,19 @@ const DonationsManagement = () => {
                                 >
                                   <History className="w-5 h-5" />
                                 </button>
+                                {donation.transfer_type === 'transferable' && (
+                                  <button
+                                    onClick={() => {
+                                      setSelectedDonation(donation);
+                                      setSelectedFamilyForTransfer(donation.family_id || '');
+                                      setShowTransferModal(true);
+                                    }}
+                                    className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                                    title="نقل التبرع"
+                                  >
+                                    <RefreshCw className="w-5 h-5" />
+                                  </button>
+                                )}
                                 <button
                                   onClick={() => {
                                     setSelectedDonation(donation);
