@@ -3080,6 +3080,86 @@ const AdminDashboard = () => {
                                 )}
                               </div>
 
+                              {/* Financial Summary */}
+                              {(family.total_needs_amount > 0 || family.donations_by_status?.completed > 0) && (
+                                <div className="px-6 pb-4">
+                                  <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                                    <div className="grid grid-cols-3 gap-3 mb-3">
+                                      {/* Total Needs */}
+                                      <div className="text-center">
+                                        <div className="flex items-center justify-center w-10 h-10 bg-red-100 rounded-full mx-auto mb-2">
+                                          <span className="text-lg">📦</span>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-1">الاحتياجات</p>
+                                        <p className="text-sm font-bold text-red-700">
+                                          {new Intl.NumberFormat('ar-SY', { notation: 'compact' }).format(family.total_needs_amount || 0)}
+                                        </p>
+                                      </div>
+
+                                      {/* Total Completed Donations */}
+                                      <div className="text-center">
+                                        <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full mx-auto mb-2">
+                                          <span className="text-lg">💰</span>
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-1">المعتمد</p>
+                                        <p className="text-sm font-bold text-green-700">
+                                          {new Intl.NumberFormat('ar-SY', { notation: 'compact' }).format(family.donations_by_status?.completed || 0)}
+                                        </p>
+                                      </div>
+
+                                      {/* Difference */}
+                                      <div className="text-center">
+                                        {(() => {
+                                          const needs = family.total_needs_amount || 0;
+                                          const completed = family.donations_by_status?.completed || 0;
+                                          const diff = completed - needs;
+                                          const isExcess = diff > 0;
+                                          const isBalanced = diff === 0;
+
+                                          return (
+                                            <>
+                                              <div className={`flex items-center justify-center w-10 h-10 rounded-full mx-auto mb-2 ${
+                                                isBalanced ? 'bg-blue-100' : isExcess ? 'bg-amber-100' : 'bg-orange-100'
+                                              }`}>
+                                                <span className="text-lg">{isBalanced ? '✅' : isExcess ? '💎' : '⚠️'}</span>
+                                              </div>
+                                              <p className="text-xs text-gray-600 mb-1">
+                                                {isBalanced ? 'متوازن' : isExcess ? 'زائد' : 'متبقي'}
+                                              </p>
+                                              <p className={`text-sm font-bold ${
+                                                isBalanced ? 'text-blue-700' : isExcess ? 'text-amber-700' : 'text-orange-700'
+                                              }`}>
+                                                {isBalanced ? '0' : new Intl.NumberFormat('ar-SY', { notation: 'compact' }).format(Math.abs(diff))}
+                                              </p>
+                                            </>
+                                          );
+                                        })()}
+                                      </div>
+                                    </div>
+
+                                    {/* Progress Bar */}
+                                    {family.total_needs_amount > 0 && (
+                                      <div className="mt-3">
+                                        <div className="flex items-center justify-between mb-1">
+                                          <span className="text-xs text-gray-600">نسبة التغطية</span>
+                                          <span className="text-xs font-bold text-emerald-600">
+                                            {Math.min(100, Math.round(((family.donations_by_status?.completed || 0) / family.total_needs_amount) * 100))}%
+                                          </span>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                          <div 
+                                            className="bg-gradient-to-r from-emerald-500 to-teal-600 h-2 rounded-full transition-all duration-500"
+                                            style={{ 
+                                              width: `${Math.min(100, ((family.donations_by_status?.completed || 0) / family.total_needs_amount) * 100)}%` 
+                                            }}
+                                          ></div>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+
                               {/* Actions */}
                               <div className="px-6 pb-5">
                                 <div className="flex gap-2 flex-wrap">
