@@ -1446,13 +1446,12 @@ async def get_family_needs(family_id: str, current_user: User = Depends(get_curr
     return result
 
 async def update_family_total_needs_amount(family_id: str):
-    """تحديث المبلغ الإجمالي لاحتياجات العائلة"""
+    """تحديث المبلغ الإجمالي لاحتياجات العائلة (كل الاحتياجات - نشطة ومتوقفة)"""
     import re
     try:
-        # جلب جميع احتياجات العائلة النشطة فقط
+        # جلب جميع احتياجات العائلة (النشطة والمتوقفة)
         family_needs = await db.family_needs.find({
-            "family_id": family_id,
-            "is_active": {"$ne": False}  # نشط أو غير محدد
+            "family_id": family_id
         }, {"_id": 0}).to_list(1000)
         
         total = 0.0
