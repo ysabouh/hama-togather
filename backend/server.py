@@ -542,6 +542,7 @@ class FamilyNeedCreate(BaseModel):
     need_id: str
     amount: Optional[str] = None  # المبلغ أو الكمية
     duration_type: Optional[str] = "مرة واحدة"  # مرة واحدة أو شهري
+    month: Optional[str] = None  # الشهر للاحتياجات الشهرية (مثل: NOV-2025)
     estimated_amount: Optional[float] = 0.0
     notes: Optional[str] = None
 
