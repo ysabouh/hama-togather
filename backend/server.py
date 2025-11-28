@@ -2106,6 +2106,31 @@ async def get_donations(
     else:
         donations = await db.donations.find({"donor_id": current_user.id}, {"_id": 0}).sort(sort_field, sort_direction).to_list(1000)
     
+    # جلب معلومات العائلات والأحياء والتصنيفات
+    family_ids = list(set([d.get('family_id') or d.get('target_id') for d in donations if d.get('family_id') or d.get('target_id')]))
+    families_dict = {}
+    neighborhoods_dict = {}
+    categories_dict = {}
+    
+    if family_ids:
+        families = await db.families.find({"id": {"$in": family_ids}}, {"_id": 0}).to_list(1000)
+        for family in families:
+            families_dict[family['id']] = family
+            
+        # جلب الأحياء
+        neighborhood_ids = list(set([f.get('neighborhood_id') for f in families if f.get('neighborhood_id')]))
+        if neighborhood_ids:
+            neighborhoods = await db.neighborhoods.find({"id": {"$in": neighborhood_ids}}, {"_id": 0}).to_list(1000)
+            for neighborhood in neighborhoods:
+                neighborhoods_dict[neighborhood['id']] = neighborhood
+        
+        # جلب التصنيفات
+        category_ids = list(set([f.get('category_id') for f in families if f.get('category_id')]))
+        if category_ids:
+            categories = await db.family_categories.find({"id": {"$in": category_ids}}, {"_id": 0}).to_list(1000)
+            for category in categories:
+                categories_dict[category['id']] = category
+    
     # تحويل البيانات للصيغة الموحدة
     result = []
     for donation in donations:
@@ -2113,10 +2138,16 @@ async def get_donations(
         if isinstance(donation.get('created_at'), str):
             donation['created_at'] = datetime.fromisoformat(donation['created_at'])
         
+        # الحصول على معلومات العائلة
+        family_id = donation.get('family_id') or donation.get('target_id')
+        family = families_dict.get(family_id, {})
+        neighborhood = neighborhoods_dict.get(family.get('neighborhood_id'), {}) if family else {}
+        category = categories_dict.get(family.get('category_id'), {}) if family else {}
+        
         # توحيد الحقول بين القديم والجديد
         normalized = {
             'id': donation.get('id'),
-            'family_id': donation.get('family_id') or donation.get('target_id', ''),
+            'family_id': family_id,
             'donor_id': donation.get('donor_id'),
             'donor_name': donation.get('donor_name', 'متبرع'),
             'donor_phone': donation.get('donor_phone'),
@@ -2139,6 +2170,11 @@ async def get_donations(
             'transfer_type': donation.get('transfer_type', 'fixed'),
             'delivery_status': donation.get('delivery_status'),
             'donation_date': donation.get('donation_date'),
+            # معلومات العائلة
+            'family_name': family.get('fac_name') or family.get('name'),
+            'family_number': family.get('family_number'),
+            'family_category': category.get('name'),
+            'neighborhood_name': neighborhood.get('name'),
             # إضافة الحقول القديمة للتوافق
             'type': donation.get('type', 'family'),
             'target_id': donation.get('target_id') or donation.get('family_id'),
