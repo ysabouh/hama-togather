@@ -2289,17 +2289,48 @@ async def update_donation_status(
             print(f"🔍 DEBUG: Donation data: {donation}")
             
             if family_id:
-                # 1. حساب مجموع الاحتياجات النشطة
-                active_needs = await db.needs.find(
+                # 1. حساب مجموع الاحتياجات النشطة (من family_needs وليس needs)
+                active_needs = await db.family_needs.find(
                     {"family_id": family_id, "is_active": {"$ne": False}},
                     {"_id": 0}
                 ).to_list(1000)
                 
-                print(f"🔍 DEBUG: Found {len(active_needs)} active needs")
+                print(f"🔍 DEBUG: Found {len(active_needs)} active family needs")
                 print(f"🔍 DEBUG: Active needs: {[{need.get('need_id'): need.get('amount')} for need in active_needs]}")
                 
-                total_needs = sum(float(need.get('amount', 0)) for need in active_needs)
-                donation_amount = float(donation.get('amount', 0))
+                # حساب المجموع باستخدام estimated_amount أو parsing amount string
+                total_needs = 0.0
+                for need in active_needs:
+                    estimated = need.get('estimated_amount', 0.0)
+                    if estimated and estimated > 0:
+                        total_needs += estimated
+                    else:
+                        # Parse amount string if estimated_amount not available
+                        amount_str = need.get('amount', '')
+                        if amount_str:
+                            try:
+                                import re
+                                clean_str = str(amount_str).replace(",", "").replace(" ", "").replace("ل.س", "")
+                                numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
+                                if numbers:
+                                    for num in numbers:
+                                        total_needs += float(num)
+                            except Exception as e:
+                                print(f"خطأ في معالجة مبلغ الاحتياج '{amount_str}': {e}")
+                
+                # Parse donation amount
+                donation_amount = 0.0
+                amount_str = donation.get('amount', '')
+                if amount_str:
+                    try:
+                        import re
+                        clean_str = str(amount_str).replace(",", "").replace(" ", "").replace("ل.س", "")
+                        numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
+                        if numbers:
+                            for num in numbers:
+                                donation_amount += float(num)
+                    except Exception as e:
+                        print(f"خطأ في معالجة مبلغ التبرع '{amount_str}': {e}")
                 
                 print(f"🔍 DEBUG: Total needs: {total_needs}, Donation amount: {donation_amount}")
                 
