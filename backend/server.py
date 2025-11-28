@@ -1510,14 +1510,15 @@ async def update_family_total_donations_amount(family_id: str):
             "rejected": 0.0
         }
         
-        for donation in donations:
+        for donation in all_donations:
             amount = donation.get("amount", "")
             status = donation.get("status", "pending")
+            is_active = donation.get("is_active", True)
             
             if amount:
                 try:
                     # إزالة الفواصل والمسافات
-                    clean_str = str(amount).replace(",", "").replace(" ", "")
+                    clean_str = str(amount).replace(",", "").replace(" ", "").replace("ل.س", "")
                     # استخراج جميع الأرقام (مع دعم الأرقام العشرية)
                     numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
                     if numbers:
@@ -1527,11 +1528,12 @@ async def update_family_total_donations_amount(family_id: str):
                             amount_value += float(num)
                         
                         # إضافة إلى الفئة المناسبة
-                        if status in totals:
-                            totals[status] += amount_value
+                        target_dict = totals if is_active else inactive_totals
+                        if status in target_dict:
+                            target_dict[status] += amount_value
                         else:
                             # افتراضياً معلق
-                            totals["pending"] += amount_value
+                            target_dict["pending"] += amount_value
                 except Exception as e:
                     print(f"خطأ في معالجة مبلغ التبرع '{amount}': {e}")
                     pass
