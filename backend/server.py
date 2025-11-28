@@ -2336,15 +2336,16 @@ async def update_donation_status(
                 
                 # 2. إذا كان المبلغ >= مجموع الاحتياجات
                 if donation_amount >= total_needs and total_needs > 0:
-                    print(f"✅ DEBUG: Donation covers needs! Deactivating {len(active_needs)} needs")
+                    print(f"✅ DEBUG: Donation covers needs! Deactivating {len(active_needs)} family needs")
                     
-                    # إيقاف جميع احتياجات العائلة
-                    result = await db.needs.update_many(
+                    # إيقاف جميع احتياجات العائلة (في family_needs وليس needs)
+                    result = await db.family_needs.update_many(
                         {"family_id": family_id, "is_active": {"$ne": False}},
                         {"$set": {
                             "is_active": False,
                             "updated_at": datetime.now(timezone.utc).isoformat(),
-                            "updated_by": current_user.full_name,
+                            "updated_by_user_id": current_user.id,
+                            "updated_by_user_name": current_user.full_name,
                             "deactivation_reason": "تم تغطية الاحتياجات بالكامل من التبرع"
                         }}
                     )
