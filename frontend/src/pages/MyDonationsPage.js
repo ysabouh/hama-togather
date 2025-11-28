@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import LoadingLogo from '../components/LoadingLogo';
 import { toast } from 'sonner';
-import { Heart, Calendar } from 'lucide-react';
+import { Heart, Calendar, Clock, Phone, Gift, Eye } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
