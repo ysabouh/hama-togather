@@ -171,7 +171,7 @@ const AdminDashboard = () => {
     setLoadingNeeds(true);
     
     try {
-      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes, familyCategoriesRes, incomeLevelsRes, needAssessmentsRes, needsRes] = await Promise.all([
+      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes, familyCategoriesRes, incomeLevelsRes, needAssessmentsRes, needsRes, familyNeedsRes] = await Promise.all([
         axios.get(`${API_URL}/stats`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/health-cases`),
@@ -192,7 +192,8 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/family-categories`),
         axios.get(`${API_URL}/income-levels`),
         axios.get(`${API_URL}/need-assessments`),
-        axios.get(`${API_URL}/needs`)
+        axios.get(`${API_URL}/needs`),
+        axios.get(`${API_URL}/family-needs`)
       ]);
 
       setStats(statsRes.data);
