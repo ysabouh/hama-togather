@@ -276,6 +276,53 @@ const MyDonationsPage = () => {
                               </p>
                             </div>
                           )}
+                          
+                          {/* Cancellation Reason */}
+                          {donation.status === 'cancelled' && donation.cancellation_reason && (
+                            <div className="mt-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                              <div className="flex items-start gap-3">
+                                <div className="flex-shrink-0">
+                                  <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                    <AlertTriangle className="w-5 h-5 text-red-600" />
+                                  </div>
+                                </div>
+                                <div className="flex-1">
+                                  <h4 className="text-sm font-bold text-red-800 mb-1">سبب الإلغاء</h4>
+                                  <p className="text-sm text-red-700 leading-relaxed">{donation.cancellation_reason}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Delivery Images */}
+                          {donation.status === 'completed' && donation.delivery_images && donation.delivery_images.length > 0 && (
+                            <div className="mt-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                              <div className="flex items-center gap-2 mb-3">
+                                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                  <ImageIcon className="w-4 h-4 text-green-600" />
+                                </div>
+                                <h4 className="text-sm font-bold text-green-800">صور الاستلام ({donation.delivery_images.length})</h4>
+                              </div>
+                              <div className="grid grid-cols-4 gap-2">
+                                {donation.delivery_images.map((image, idx) => (
+                                  <div
+                                    key={idx}
+                                    onClick={() => openImageModal(donation.delivery_images, idx)}
+                                    className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group border-2 border-green-200 hover:border-green-400 transition-all"
+                                  >
+                                    <img
+                                      src={image}
+                                      alt={`صورة استلام ${idx + 1}`}
+                                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                                    />
+                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
+                                      <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
