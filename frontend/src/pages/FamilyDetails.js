@@ -1236,7 +1236,8 @@ const FamilyDetails = () => {
                   })()}
                 </div>
 
-                {/* Audit Log Section */}
+                {/* Audit Log Section - Admin and Super Admin Only */}
+                {(user?.role === 'admin' || user?.role === 'super_admin') && (
                 <div className="bg-white rounded-xl shadow-lg p-6">
                   <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
                     <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
