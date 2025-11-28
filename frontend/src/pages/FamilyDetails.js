@@ -369,6 +369,7 @@ const FamilyDetails = () => {
         need_id: '',
         amount: '',
         duration_type: 'مرة واحدة',
+        month: '',
         notes: ''
       });
       
