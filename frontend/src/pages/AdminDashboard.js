@@ -3120,6 +3120,7 @@ const AdminDashboard = () => {
                       </div>
                     )}
                   </div>
+                  )}
 
                   {/* Pagination */}
                   {!loading && (() => {
