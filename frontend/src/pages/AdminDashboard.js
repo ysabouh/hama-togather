@@ -2994,6 +2994,57 @@ const AdminDashboard = () => {
 
                               {/* Header */}
                               <div className="relative pt-6 px-6 pb-4">
+                                {/* Active Needs Indicator - Floating Badge */}
+                                {(() => {
+                                  const activeNeedsCount = needs.filter(n => 
+                                    n.family_id === family.id && n.is_active !== false
+                                  ).length;
+                                  
+                                  if (activeNeedsCount > 0) {
+                                    return (
+                                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                                        <div className="relative">
+                                          {/* Pulsing Animation Background */}
+                                          <div className="absolute inset-0 bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 rounded-full animate-pulse opacity-75"></div>
+                                          
+                                          {/* Main Badge */}
+                                          <div className="relative bg-gradient-to-br from-rose-500 via-pink-600 to-red-600 text-white px-4 py-2 rounded-full shadow-2xl border-2 border-white">
+                                            <div className="flex items-center gap-2">
+                                              {/* Alert Icon */}
+                                              <div className="relative">
+                                                <AlertCircle className="w-5 h-5 animate-bounce" />
+                                                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-300"></span>
+                                                </span>
+                                              </div>
+                                              
+                                              {/* Text */}
+                                              <div className="flex items-center gap-1.5">
+                                                <span className="text-xs font-black tracking-wide">احتياج عاجل</span>
+                                                <div className="bg-white/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                                                  <span className="text-xs font-black">{activeNeedsCount}</span>
+                                                </div>
+                                              </div>
+                                              
+                                              {/* Star Icon */}
+                                              <div className="animate-spin-slow">
+                                                <span className="text-yellow-300 text-sm">⭐</span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          {/* Bottom Arrow */}
+                                          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                                            <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-red-600"></div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })()}
+
                                 <div className="flex items-start justify-between mb-3">
                                   {/* Family Number Badge */}
                                   <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-full shadow-lg">
