@@ -117,6 +117,7 @@ const AdminDashboard = () => {
   const [needs, setNeeds] = useState([]);
   const [loadingNeeds, setLoadingNeeds] = useState(false);
   const [showInactiveNeeds, setShowInactiveNeeds] = useState(false);
+  const [familyNeeds, setFamilyNeeds] = useState([]);
   const [showInactiveFamilies, setShowInactiveFamilies] = useState(false);
   const [selectedFamily, setSelectedFamily] = useState(null);
   const [showFamilyDetails, setShowFamilyDetails] = useState(false);
