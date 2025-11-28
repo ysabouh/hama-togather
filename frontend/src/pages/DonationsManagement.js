@@ -575,7 +575,7 @@ const DonationsManagement = () => {
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="ابحث بالاسم، البريد، الهاتف..."
+                      placeholder="ابحث بالمتبرع، العائلة، الحي، التصنيف، الهاتف، المبلغ، الحالة..."
                       className="w-full pr-10 pl-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none"
                     />
                   </div>
