@@ -11,6 +11,7 @@ const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const MyDonationsPage = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeDonationsTab, setActiveDonationsTab] = useState('active');
 
   useEffect(() => {
     fetchDonations();
@@ -25,6 +26,21 @@ const MyDonationsPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'غير محدد';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ar-SY', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  };
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return { date: 'غير محدد', time: '' };
+    const date = new Date(dateString);
+    return {
+      date: date.toLocaleDateString('ar-SY', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+      time: date.toLocaleTimeString('ar-SY', { hour: '2-digit', minute: '2-digit', hour12: false })
+    };
   };
 
   if (loading) {
