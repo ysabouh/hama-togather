@@ -1487,19 +1487,27 @@ async def update_family_total_donations_amount(family_id: str):
     """تحديث المبلغ الإجمالي لتبرعات العائلة حسب الحالة"""
     import re
     try:
-        # جلب جميع تبرعات العائلة النشطة
-        donations = await db.donations.find({
-            "family_id": family_id,
-            "is_active": {"$ne": False}
+        # جلب جميع تبرعات العائلة (النشطة وغير النشطة)
+        all_donations = await db.donations.find({
+            "family_id": family_id
         }, {"_id": 0}).to_list(10000)
         
-        # تصنيف التبرعات حسب الحالة
+        # تصنيف التبرعات حسب الحالة (نشطة)
         totals = {
             "completed": 0.0,      # مكتملة (المعتمد)
             "inprogress": 0.0,     # قيد التنفيذ
             "pending": 0.0,        # معلقة
             "cancelled": 0.0,      # ملغاة
             "rejected": 0.0        # مرفوضة
+        }
+        
+        # تصنيف التبرعات غير النشطة حسب الحالة
+        inactive_totals = {
+            "completed": 0.0,
+            "inprogress": 0.0,
+            "pending": 0.0,
+            "cancelled": 0.0,
+            "rejected": 0.0
         }
         
         for donation in donations:
