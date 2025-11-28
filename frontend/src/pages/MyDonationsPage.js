@@ -133,9 +133,16 @@ const MyDonationsPage = () => {
                   );
                 }
                 
+                // حساب التبرعات للصفحة الحالية
+                const totalPages = Math.ceil(filteredDonations.length / donationsPerPage);
+                const startIndex = (currentPage - 1) * donationsPerPage;
+                const endIndex = startIndex + donationsPerPage;
+                const currentDonations = filteredDonations.slice(startIndex, endIndex);
+                
                 return (
-                  <div className="space-y-4">
-                    {filteredDonations.map((donation, idx) => (
+                  <>
+                    <div className="space-y-4">
+                      {currentDonations.map((donation, idx) => (
                       <div
                         key={donation.id || idx}
                         className={`relative border-r-4 ${donation.is_active === false ? 'border-gray-400' : 'border-emerald-500'} pr-6 pb-4 last:pb-0`}
