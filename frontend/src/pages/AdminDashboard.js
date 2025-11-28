@@ -157,6 +157,7 @@ const AdminDashboard = () => {
 
   const fetchAllData = async () => {
     // تعيين جميع حالات التحميل إلى true
+    setLoading(true);
     setLoadingUsers(true);
     setLoadingNeighborhoods(true);
     setLoadingCommittees(true);
