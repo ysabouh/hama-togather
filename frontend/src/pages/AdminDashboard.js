@@ -3028,7 +3028,7 @@ const AdminDashboard = () => {
                                               </div>
                                               
                                               {/* Star Icon */}
-                                              <div className="animate-spin-slow">
+                                              <div className="animate-pulse">
                                                 <span className="text-yellow-300 text-sm">⭐</span>
                                               </div>
                                             </div>
