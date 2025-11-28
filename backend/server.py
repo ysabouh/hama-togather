@@ -103,6 +103,7 @@ class Family(BaseModel):
     total_needs_amount: Optional[float] = 0.0  # المبلغ الإجمالي للاحتياجات
     total_donations_amount: Optional[float] = 0.0  # المبلغ الإجمالي للتبرعات
     donations_by_status: Optional[dict] = None  # تفصيل التبرعات حسب الحالة
+    inactive_donations_by_status: Optional[dict] = None  # تفصيل التبرعات المعطلة حسب الحالة
     is_active: bool = True  # للحذف الناعم
     created_by_user_id: Optional[str] = None  # معرف المستخدم الذي أضاف العائلة
     updated_by_user_id: Optional[str] = None  # معرف المستخدم الذي قام بآخر تعديل
