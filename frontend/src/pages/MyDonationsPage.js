@@ -13,6 +13,10 @@ const MyDonationsPage = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeDonationsTab, setActiveDonationsTab] = useState('active');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImages, setCurrentImages] = useState([]);
 
   useEffect(() => {
     fetchDonations();
