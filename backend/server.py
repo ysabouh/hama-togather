@@ -2062,12 +2062,29 @@ async def delete_story(story_id: str, admin: User = Depends(get_admin_user)):
 # ============= Donations Routes =============
 
 @api_router.get("/donations")
-async def get_donations(current_user: User = Depends(get_current_user)):
-    """جلب جميع التبرعات - بدون response_model للتوافق مع البيانات القديمة"""
+async def get_donations(
+    sort_by: str = "created_at", 
+    sort_order: str = "desc",
+    current_user: User = Depends(get_current_user)
+):
+    """جلب جميع التبرعات مع الفرز - بدون response_model للتوافق مع البيانات القديمة
+    
+    Parameters:
+    - sort_by: الحقل المراد الفرز عليه (created_at, family_id, amount)
+    - sort_order: اتجاه الفرز (asc, desc)
+    """
+    # تحديد اتجاه الفرز
+    sort_direction = -1 if sort_order == "desc" else 1
+    
+    # تحديد حقل الفرز
+    sort_field = sort_by
+    if sort_by == "family_name":
+        sort_field = "family_id"  # سنفرز على family_id ثم نرتب في الكود
+    
     if current_user.role == "admin":
-        donations = await db.donations.find({}, {"_id": 0}).to_list(1000)
+        donations = await db.donations.find({}, {"_id": 0}).sort(sort_field, sort_direction).to_list(1000)
     else:
-        donations = await db.donations.find({"donor_id": current_user.id}, {"_id": 0}).to_list(1000)
+        donations = await db.donations.find({"donor_id": current_user.id}, {"_id": 0}).sort(sort_field, sort_direction).to_list(1000)
     
     # تحويل البيانات للصيغة الموحدة
     result = []
