@@ -164,7 +164,37 @@ const MyDonationsPage = () => {
                               
                               <h3 className="font-bold text-gray-900 text-lg">{donation.donor_name || 'متبرع'}</h3>
                               
-                              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                              {/* معلومات العائلة */}
+                              {donation.family_name && (
+                                <div className="mt-2 p-3 bg-white border border-gray-200 rounded-lg">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                      <span className="text-xs text-gray-500">العائلة: </span>
+                                      <span className="text-sm font-bold text-gray-900">{donation.family_name}</span>
+                                    </div>
+                                    {donation.family_number && (
+                                      <div>
+                                        <span className="text-xs text-gray-500">رقم العائلة: </span>
+                                        <span className="text-sm font-mono font-bold text-gray-900">{donation.family_number}</span>
+                                      </div>
+                                    )}
+                                    {donation.family_category && (
+                                      <div>
+                                        <span className="text-xs text-gray-500">التصنيف: </span>
+                                        <span className="text-sm font-semibold text-blue-700">{donation.family_category}</span>
+                                      </div>
+                                    )}
+                                    {donation.neighborhood_name && (
+                                      <div>
+                                        <span className="text-xs text-gray-500">الحي: </span>
+                                        <span className="text-sm font-semibold text-emerald-700">{donation.neighborhood_name}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                              
+                              <div className="flex items-center gap-2 mt-2 flex-wrap">
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
                                   {donation.donation_type || getDonationTypeLabel(donation.type)}
                                 </span>
