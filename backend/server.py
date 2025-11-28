@@ -2362,13 +2362,15 @@ async def update_donation_status(
                     print(f"✅ DEBUG: Updated {result.modified_count} needs")
                     
                     # حساب المبلغ الزائد
-                    excess_amount = donation_amount - total_needs
+                    excess_amount = total_completed_amount - total_needs
                     if excess_amount > 0:
                         additional_info["excess_amount"] = excess_amount
-                        additional_info["message"] = f"تنبيه: يوجد مبلغ زائد قدره {excess_amount} ل.س"
+                        additional_info["message"] = f"تنبيه: يوجد مبلغ زائد قدره {excess_amount:,.0f} ل.س"
                         print(f"⚠️ DEBUG: Excess amount: {excess_amount}")
                     
-                    additional_info["needs_deactivated"] = len(active_needs)
+                    additional_info["needs_deactivated"] = result.modified_count
+                    additional_info["total_needs"] = total_needs
+                    additional_info["total_completed_donations"] = total_completed_amount
                     
                     # 3. التعامل مع التبرعات الأخرى (pending أو inprogress)
                     other_donations = await db.donations.find(
