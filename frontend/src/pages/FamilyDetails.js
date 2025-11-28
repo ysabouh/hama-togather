@@ -542,6 +542,12 @@ const FamilyDetails = () => {
   const inactiveNeedsAmount = familyNeeds
     .filter(n => n.is_active === false)
     .reduce((sum, need) => sum + (need.estimated_amount || 0), 0);
+  
+  // إذا لم تكن الاحتياجات تحتوي على مبالغ، استخدم البيانات من family
+  // family.total_needs_amount قد يحتوي على فقط النشطة أو الكل حسب حساب البكند
+  const totalNeedsDisplay = (activeNeedsAmount + inactiveNeedsAmount) > 0 
+    ? (activeNeedsAmount + inactiveNeedsAmount) 
+    : (family?.total_needs_amount || 0);
 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
