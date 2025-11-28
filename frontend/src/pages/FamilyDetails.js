@@ -1085,10 +1085,10 @@ const FamilyDetails = () => {
                                 <div className="mt-1">
                                   <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border ${
                                     donation.transfer_type === 'fixed' 
-                                      ? 'bg-purple-100 text-purple-700 border-purple-300' 
-                                      : 'bg-blue-100 text-blue-700 border-blue-300'
+                                      ? 'bg-blue-100 text-blue-700 border-blue-300' 
+                                      : 'bg-purple-100 text-purple-700 border-purple-300'
                                   }`}>
-                                    {donation.transfer_type === 'fixed' ? '🔄 قابل للنقل' : '🔒 ثابت'}
+                                    {donation.transfer_type === 'fixed' ? '🔒 ثابت' : '🔄 قابل للنقل'}
                                   </span>
                                 </div>
                               </div>
