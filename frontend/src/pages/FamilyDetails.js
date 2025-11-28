@@ -534,6 +534,15 @@ const FamilyDetails = () => {
   const totalMembers = family.members_count || 
     ((family.male_children_count || 0) + (family.female_children_count || 0) + 2);
 
+  // حساب مبالغ الاحتياجات النشطة وغير النشطة
+  const activeNeedsAmount = familyNeeds
+    .filter(n => n.is_active !== false)
+    .reduce((sum, need) => sum + (need.estimated_amount || 0), 0);
+  
+  const inactiveNeedsAmount = familyNeeds
+    .filter(n => n.is_active === false)
+    .reduce((sum, need) => sum + (need.estimated_amount || 0), 0);
+
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
       <Navbar />
