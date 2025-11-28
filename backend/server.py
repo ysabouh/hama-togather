@@ -2139,13 +2139,13 @@ async def get_family_donations(family_id: str):
     """جلب جميع التبرعات لعائلة معينة"""
     try:
         # البحث بكلا الحقلين: family_id (الجديد) و target_id (القديم)
+        # جلب جميع التبرعات (النشطة وغير النشطة)
         donations = await db.donations.find(
             {
                 "$or": [
                     {"family_id": family_id},
                     {"target_id": family_id, "type": "family"}
-                ],
-                "is_active": {"$ne": False}
+                ]
             },
             {"_id": 0}
         ).sort("created_at", -1).to_list(1000)
