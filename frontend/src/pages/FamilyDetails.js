@@ -388,6 +388,7 @@ const FamilyDetails = () => {
       need_id: need.need_id,
       amount: need.amount || '',
       duration_type: need.duration_type || 'مرة واحدة',
+      month: need.month || '',
       notes: need.notes || ''
     });
     setShowEditNeedModal(true);
