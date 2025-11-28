@@ -2408,7 +2408,7 @@ async def update_donation_status(
                         print(f"✅ DEBUG: Updated {result.modified_count} donations")
                         additional_info["other_donations_deactivated"] = len(other_donations)
                 else:
-                    print(f"❌ DEBUG: Conditions not met - donation_amount: {donation_amount}, total_needs: {total_needs}")
+                    print(f"❌ DEBUG: Conditions not met - total_completed: {total_completed_amount}, total_needs: {total_needs}")
             else:
                 print(f"❌ DEBUG: No family_id found in donation!")
         
