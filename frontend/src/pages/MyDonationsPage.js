@@ -324,35 +324,46 @@ const MyDonationsPage = () => {
                             </div>
                           )}
                           
-                          {/* Delivery Images */}
-                          {donation.status === 'completed' && donation.delivery_images && donation.delivery_images.length > 0 && (
-                            <div className="mt-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                              <div className="flex items-center gap-2 mb-3">
-                                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                  <ImageIcon className="w-4 h-4 text-green-600" />
-                                </div>
-                                <h4 className="text-sm font-bold text-green-800">صور الاستلام ({donation.delivery_images.length})</h4>
-                              </div>
-                              <div className="grid grid-cols-4 gap-2">
-                                {donation.delivery_images.map((image, idx) => (
-                                  <div
-                                    key={idx}
-                                    onClick={() => openImageModal(donation.delivery_images, idx)}
-                                    className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group border-2 border-green-200 hover:border-green-400 transition-all"
-                                  >
-                                    <img
-                                      src={image}
-                                      alt={`صورة استلام ${idx + 1}`}
-                                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                                    />
-                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
-                                      <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </div>
+                          {/* Delivery/Completion Images */}
+                          {donation.status === 'completed' && (() => {
+                            // استخدم completion_images أولاً، ثم delivery_images
+                            const images = (donation.completion_images && donation.completion_images.length > 0) 
+                              ? donation.completion_images 
+                              : (donation.delivery_images && donation.delivery_images.length > 0) 
+                                ? donation.delivery_images 
+                                : null;
+                            
+                            if (!images) return null;
+                            
+                            return (
+                              <div className="mt-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <ImageIcon className="w-4 h-4 text-green-600" />
                                   </div>
-                                ))}
+                                  <h4 className="text-sm font-bold text-green-800">صور الاستلام ({images.length})</h4>
+                                </div>
+                                <div className="grid grid-cols-4 gap-2">
+                                  {images.map((image, idx) => (
+                                    <div
+                                      key={idx}
+                                      onClick={() => openImageModal(images, idx)}
+                                      className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group border-2 border-green-200 hover:border-green-400 transition-all"
+                                    >
+                                      <img
+                                        src={image}
+                                        alt={`صورة استلام ${idx + 1}`}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                                      />
+                                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
+                                        <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            );
+                          })()}
                         </div>
                       </div>
                     ))}
