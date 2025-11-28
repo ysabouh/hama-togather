@@ -2999,7 +2999,7 @@ const AdminDashboard = () => {
                               <div className="relative pt-6 px-6 pb-4">
                                 {/* Active Needs Indicator - Floating Badge */}
                                 {(() => {
-                                  const activeNeedsCount = needs.filter(n => 
+                                  const activeNeedsCount = familyNeeds.filter(n => 
                                     n.family_id === family.id && n.is_active !== false
                                   ).length;
                                   
