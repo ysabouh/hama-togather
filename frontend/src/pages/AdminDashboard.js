@@ -220,6 +220,7 @@ const AdminDashboard = () => {
       setIncomeLevels(incomeLevelsRes.data);
       setNeedAssessments(needAssessmentsRes.data);
       setNeeds(needsRes.data);
+      setFamilyNeeds(familyNeedsRes.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     } finally {
