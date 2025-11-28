@@ -1397,6 +1397,12 @@ async def toggle_need_status(
 
 # ============= Family Needs Routes (احتياجات العائلات) =============
 
+@api_router.get("/family-needs")
+async def get_all_family_needs(current_user: User = Depends(get_current_user)):
+    """الحصول على جميع احتياجات العائلات (لجميع العائلات)"""
+    family_needs = await db.family_needs.find({}, {"_id": 0}).to_list(10000)
+    return family_needs
+
 @api_router.get("/families/{family_id}/needs")
 async def get_family_needs(family_id: str, current_user: User = Depends(get_current_user)):
     """الحصول على جميع احتياجات عائلة معينة - محسّن للأداء"""
