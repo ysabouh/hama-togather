@@ -3142,8 +3142,7 @@ const AdminDashboard = () => {
                           );
                         });
                       })()}
-                      </tbody>
-                    </table>
+                    </div>
                     {families.filter(f => showInactiveFamilies || f.is_active !== false).filter(f => {
                       if (!familiesSearchQuery) return true;
                       const query = familiesSearchQuery.toLowerCase();
