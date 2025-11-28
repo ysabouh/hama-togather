@@ -389,7 +389,7 @@ const FamilyDetails = () => {
       need_id: need.need_id,
       amount: need.amount || '',
       duration_type: need.duration_type || 'مرة واحدة',
-      month: need.month || '',
+      month: need.month || 'NOV-2025', // القيمة الافتراضية: الشهر الحالي
       notes: need.notes || ''
     });
     setShowEditNeedModal(true);
