@@ -334,6 +334,72 @@ const MyDonationsPage = () => {
         </div>
       </div>
 
+      {/* Image Modal */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-4xl p-0 bg-black">
+          <div className="relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 z-50 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            >
+              <X className="w-6 h-6 text-gray-800" />
+            </button>
+
+            {/* Image Counter */}
+            <div className="absolute top-4 left-4 z-50 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              {currentImageIndex + 1} / {currentImages.length}
+            </div>
+
+            {/* Main Image */}
+            <div className="relative w-full h-[70vh] flex items-center justify-center bg-black">
+              {currentImages.length > 0 && (
+                <img
+                  src={currentImages[currentImageIndex]}
+                  alt={`صورة ${currentImageIndex + 1}`}
+                  className="max-w-full max-h-full object-contain"
+                />
+              )}
+            </div>
+
+            {/* Navigation Buttons */}
+            {currentImages.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full flex items-center justify-center transition-all shadow-lg"
+                >
+                  <ChevronLeft className="w-6 h-6 text-gray-800" />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full flex items-center justify-center transition-all shadow-lg"
+                >
+                  <ChevronRight className="w-6 h-6 text-gray-800" />
+                </button>
+              </>
+            )}
+
+            {/* Thumbnails */}
+            {currentImages.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black bg-opacity-70 p-2 rounded-lg">
+                {currentImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`w-16 h-16 rounded overflow-hidden border-2 transition-all ${
+                      idx === currentImageIndex ? 'border-white scale-110' : 'border-transparent opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
