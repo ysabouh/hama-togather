@@ -690,17 +690,22 @@ const FamilyDetails = () => {
                             <span>✅ احتياجات نشطة:</span>
                             <span className="font-semibold">
                               {familyNeeds.filter(n => n.is_active !== false).length} احتياج
+                              {activeNeedsAmount > 0 && ` (${new Intl.NumberFormat('ar-SY').format(activeNeedsAmount)} ل.س)`}
                             </span>
                           </div>
                           <div className="flex justify-between text-xs opacity-90">
                             <span>❌ احتياجات متوقفة:</span>
                             <span className="font-semibold">
                               {familyNeeds.filter(n => n.is_active === false).length} احتياج
+                              {inactiveNeedsAmount > 0 && ` (${new Intl.NumberFormat('ar-SY').format(inactiveNeedsAmount)} ل.س)`}
                             </span>
                           </div>
                           <div className="flex justify-between text-xs opacity-90 font-bold border-t border-white/20 pt-1 mt-1">
                             <span>📊 الإجمالي:</span>
-                            <span>{familyNeeds.length} احتياج</span>
+                            <span>
+                              {familyNeeds.length} احتياج
+                              {(activeNeedsAmount + inactiveNeedsAmount) > 0 && ` (${new Intl.NumberFormat('ar-SY').format(activeNeedsAmount + inactiveNeedsAmount)} ل.س)`}
+                            </span>
                           </div>
                         </div>
                       </div>
