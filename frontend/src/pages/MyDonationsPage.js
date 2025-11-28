@@ -17,6 +17,8 @@ const MyDonationsPage = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentImages, setCurrentImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const donationsPerPage = 10;
 
   useEffect(() => {
     fetchDonations();
