@@ -48,6 +48,20 @@ const MyDonationsPage = () => {
     };
   };
 
+  const openImageModal = (images, index) => {
+    setCurrentImages(images);
+    setCurrentImageIndex(index);
+    setShowImageModal(true);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % currentImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
+  };
+
   if (loading) {
     return <LoadingLogo />;
   }
