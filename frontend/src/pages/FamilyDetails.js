@@ -776,7 +776,7 @@ const FamilyDetails = () => {
 
                       {/* Remaining */}
                       <div className={`rounded-xl p-5 shadow-lg hover:shadow-xl transition-shadow ${
-                        (activeNeedsAmount + inactiveNeedsAmount) > (family?.donations_by_status?.completed || 0)
+                        totalNeedsDisplay > (family?.donations_by_status?.completed || 0)
                           ? 'bg-gradient-to-br from-amber-500 to-orange-600'
                           : 'bg-gradient-to-br from-green-500 to-emerald-600'
                       } text-white`}>
@@ -784,18 +784,18 @@ const FamilyDetails = () => {
                           <DollarSign className="w-8 h-8 opacity-80" />
                           <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                             <span className="text-2xl">
-                              {(activeNeedsAmount + inactiveNeedsAmount) > (family?.donations_by_status?.completed || 0) ? '⚠️' : '✅'}
+                              {totalNeedsDisplay > (family?.donations_by_status?.completed || 0) ? '⚠️' : '✅'}
                             </span>
                           </div>
                         </div>
                         <p className="text-sm opacity-90 mb-1">
-                          {(activeNeedsAmount + inactiveNeedsAmount) > (family?.donations_by_status?.completed || 0) 
+                          {totalNeedsDisplay > (family?.donations_by_status?.completed || 0) 
                             ? 'المبلغ المتبقي' 
                             : 'المبلغ الزائد'}
                         </p>
                         <p className="text-3xl font-bold">
                           {new Intl.NumberFormat('ar-SY').format(
-                            Math.abs((activeNeedsAmount + inactiveNeedsAmount) - (family?.donations_by_status?.completed || 0))
+                            Math.abs(totalNeedsDisplay - (family?.donations_by_status?.completed || 0))
                           )}
                         </p>
                         <p className="text-xs opacity-80 mt-1">ليرة سورية (بناءً على المكتملة)</p>
