@@ -686,7 +686,7 @@ const FamilyDetails = () => {
                         </div>
                         <p className="text-sm opacity-90 mb-1">إجمالي الاحتياجات</p>
                         <p className="text-3xl font-bold">
-                          {new Intl.NumberFormat('ar-SY').format(activeNeedsAmount + inactiveNeedsAmount)}
+                          {new Intl.NumberFormat('ar-SY').format(totalNeedsDisplay)}
                         </p>
                         <p className="text-xs opacity-80 mt-1">ليرة سورية (كل الاحتياجات)</p>
                         
