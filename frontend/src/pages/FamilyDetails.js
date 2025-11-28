@@ -678,11 +678,11 @@ const FamilyDetails = () => {
                             <span className="text-2xl">📦</span>
                           </div>
                         </div>
-                        <p className="text-sm opacity-90 mb-1">إجمالي الاحتياجات النشطة</p>
+                        <p className="text-sm opacity-90 mb-1">إجمالي الاحتياجات</p>
                         <p className="text-3xl font-bold">
-                          {new Intl.NumberFormat('ar-SY').format(family?.total_needs_amount || 0)}
+                          {new Intl.NumberFormat('ar-SY').format(activeNeedsAmount + inactiveNeedsAmount)}
                         </p>
-                        <p className="text-xs opacity-80 mt-1">ليرة سورية</p>
+                        <p className="text-xs opacity-80 mt-1">ليرة سورية (كل الاحتياجات)</p>
                         
                         {/* تفصيل الاحتياجات */}
                         <div className="border-t border-white/20 pt-2 mt-3 space-y-1">
