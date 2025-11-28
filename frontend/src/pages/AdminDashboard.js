@@ -2949,8 +2949,9 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
+                  <div>
+                    {/* Cards Grid View */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       <thead className="bg-gray-50">
                         <tr>
                           <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
