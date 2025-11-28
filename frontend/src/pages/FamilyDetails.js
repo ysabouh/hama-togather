@@ -1043,12 +1043,20 @@ const FamilyDetails = () => {
                       {donationHistory.map((donation, idx) => (
                         <div
                           key={donation.id || idx}
-                          className="relative border-r-4 border-emerald-500 pr-6 pb-4 last:pb-0"
+                          className={`relative border-r-4 ${donation.is_active === false ? 'border-gray-400' : 'border-emerald-500'} pr-6 pb-4 last:pb-0`}
                         >
                           {/* Timeline Dot */}
-                          <div className="absolute right-0 top-0 w-4 h-4 bg-emerald-500 rounded-full transform translate-x-1/2 ring-4 ring-white"></div>
+                          <div className={`absolute right-0 top-0 w-4 h-4 ${donation.is_active === false ? 'bg-gray-400' : 'bg-emerald-500'} rounded-full transform translate-x-1/2 ring-4 ring-white`}></div>
                           
-                          <div className="bg-gray-50 rounded-lg p-4 hover:bg-emerald-50 transition-colors">
+                          <div className={`rounded-lg p-4 ${donation.is_active === false ? 'bg-gray-100 opacity-75' : 'bg-gray-50 hover:bg-emerald-50'} transition-colors`}>
+                            {/* شارة غير نشط */}
+                            {donation.is_active === false && (
+                              <div className="mb-2">
+                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-gray-500 text-white">
+                                  ⚠️ معطل - قابل للنقل
+                                </span>
+                              </div>
+                            )}
                             <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
                               <div className="flex-1">
                                 {/* رقم التبرع */}
