@@ -2997,13 +2997,13 @@ const AdminDashboard = () => {
 
                               {/* Header */}
                               <div className="relative pt-6 px-6 pb-4">
-                                {/* Active Needs Indicator - Floating Badge */}
+                                {/* Monthly Needs Indicator - Floating Badge */}
                                 {(() => {
-                                  const activeNeedsCount = familyNeeds.filter(n => 
-                                    n.family_id === family.id && n.is_active !== false
+                                  const monthlyNeedsCount = familyNeeds.filter(n => 
+                                    n.family_id === family.id && n.is_active !== false && n.duration_type === 'شهري'
                                   ).length;
                                   
-                                  if (activeNeedsCount > 0) {
+                                  if (monthlyNeedsCount > 0) {
                                     return (
                                       <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
                                         <div className="relative">
@@ -3024,9 +3024,9 @@ const AdminDashboard = () => {
                                               
                                               {/* Text */}
                                               <div className="flex items-center gap-1.5">
-                                                <span className="text-xs font-black tracking-wide">احتياج عاجل</span>
+                                                <span className="text-xs font-black tracking-wide">احتياج شهري</span>
                                                 <div className="bg-white/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                                                  <span className="text-xs font-black">{activeNeedsCount}</span>
+                                                  <span className="text-xs font-black">{monthlyNeedsCount}</span>
                                                 </div>
                                               </div>
                                               
