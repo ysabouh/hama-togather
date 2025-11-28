@@ -9,7 +9,7 @@ import json
 import sys
 
 # Configuration - using the same URL from existing backend_test.py
-BACKEND_URL = "https://together-we-build-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://communityhelp-3.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@test.com"
 ADMIN_PASSWORD = "admin123"
 
