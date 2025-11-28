@@ -345,7 +345,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Family Needs Audit Log - Complete Testing"
+    - "Donation Completion Logic Fix - Critical Bug Fix"
   stuck_tasks:
     - "Family Needs Audit Log - Complete Testing"
   test_all: false
