@@ -3196,7 +3196,6 @@ const AdminDashboard = () => {
                     }
                     return null;
                   })()}
-                  )}
                 </div>
               ) : (
                 <>
