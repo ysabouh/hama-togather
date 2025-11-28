@@ -1468,6 +1468,7 @@ const FamilyDetails = () => {
                     </>
                   )}
                 </div>
+                )}
               </div>
 
               {/* Sidebar - 1 column */}
