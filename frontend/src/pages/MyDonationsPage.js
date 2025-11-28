@@ -24,6 +24,11 @@ const MyDonationsPage = () => {
     fetchDonations();
   }, []);
 
+  // إعادة تعيين الصفحة عند تغيير التبويب
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeDonationsTab]);
+
   const fetchDonations = async () => {
     try {
       const response = await axios.get(`${API_URL}/donations`);
