@@ -2423,6 +2423,11 @@ async def update_donation_status(
             changes=changes
         )
         
+        # تحديث الملخص المالي للعائلة
+        if family_id:
+            await update_family_total_donations_amount(family_id)
+            await update_family_total_needs_amount(family_id)
+        
         # جلب التبرع المحدث
         updated_donation = await db.donations.find_one({"id": donation_id}, {"_id": 0})
         
