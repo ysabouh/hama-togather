@@ -1552,16 +1552,24 @@ async def update_family_total_donations_amount(family_id: str):
                     "pending": totals["pending"],          # المعلقة
                     "cancelled": totals["cancelled"],      # الملغاة
                     "rejected": totals["rejected"]         # المرفوضة
+                },
+                "inactive_donations_by_status": {
+                    "completed": inactive_totals["completed"],
+                    "inprogress": inactive_totals["inprogress"],
+                    "pending": inactive_totals["pending"],
+                    "cancelled": inactive_totals["cancelled"],
+                    "rejected": inactive_totals["rejected"]
                 }
             }}
         )
         
         print(f"تم تحديث تبرعات العائلة {family_id}:")
-        print(f"  - مكتملة (معتمد): {totals['completed']}")
-        print(f"  - قيد التنفيذ: {totals['inprogress']}")
-        print(f"  - معلقة: {totals['pending']}")
-        print(f"  - ملغاة: {totals['cancelled']}")
-        print(f"  - الإجمالي: {total}")
+        print(f"  - النشطة - مكتملة: {totals['completed']}")
+        print(f"  - النشطة - قيد التنفيذ: {totals['inprogress']}")
+        print(f"  - النشطة - معلقة: {totals['pending']}")
+        print(f"  - غير النشطة - مكتملة: {inactive_totals['completed']}")
+        print(f"  - غير النشطة - معلقة: {inactive_totals['pending']}")
+        print(f"  - الإجمالي النشط: {total}")
         
         return total
     except Exception as e:
