@@ -990,7 +990,7 @@ const FamilyDetails = () => {
                                   <p className="text-sm font-semibold text-purple-900">
                                     ⏰ مدة الاحتياج: <span className="text-purple-700 font-bold text-base">{need.duration_type || 'مرة واحدة'}</span>
                                   </p>
-                                  {need.duration_type === 'شهري' && need.month && (
+                                  {need.month && (
                                     <span className="text-xs bg-purple-200 text-purple-800 px-3 py-1 rounded-full font-bold">
                                       📅 {(() => {
                                         const monthNames = {
