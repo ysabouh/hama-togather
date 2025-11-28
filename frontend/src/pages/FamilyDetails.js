@@ -797,24 +797,24 @@ const FamilyDetails = () => {
                     </div>
 
                     {/* Progress Bar */}
-                    {family?.total_needs_amount > 0 && (
+                    {(activeNeedsAmount + inactiveNeedsAmount) > 0 && (
                       <div className="mt-6">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-semibold text-gray-700">نسبة التغطية (بناءً على المكتملة)</span>
                           <span className="text-sm font-bold text-emerald-600">
-                            {Math.min(100, Math.round(((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100))}%
+                            {Math.min(100, Math.round(((family?.donations_by_status?.completed || 0) / (activeNeedsAmount + inactiveNeedsAmount)) * 100))}%
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
                           <div 
                             className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2"
                             style={{ 
-                              width: `${Math.min(100, ((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100)}%` 
+                              width: `${Math.min(100, ((family?.donations_by_status?.completed || 0) / (activeNeedsAmount + inactiveNeedsAmount)) * 100)}%` 
                             }}
                           >
-                            {((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100 >= 10 && (
+                            {((family?.donations_by_status?.completed || 0) / (activeNeedsAmount + inactiveNeedsAmount)) * 100 >= 10 && (
                               <span className="text-xs font-bold text-white">
-                                {Math.round(((family?.donations_by_status?.completed || 0) / family.total_needs_amount) * 100)}%
+                                {Math.round(((family?.donations_by_status?.completed || 0) / (activeNeedsAmount + inactiveNeedsAmount)) * 100)}%
                               </span>
                             )}
                           </div>
