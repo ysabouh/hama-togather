@@ -233,6 +233,7 @@ const AdminDashboard = () => {
       setLoadingIncomeLevels(false);
       setLoadingNeedAssessments(false);
       setLoadingNeeds(false);
+      setLoading(false);
     }
   };
 
