@@ -684,13 +684,13 @@ const FamilyDetails = () => {
                             <span className="text-2xl">💰</span>
                           </div>
                         </div>
-                        <p className="text-sm opacity-90 mb-1">إجمالي التبرعات</p>
+                        <p className="text-sm opacity-90 mb-1">إجمالي التبرعات النشطة</p>
                         <p className="text-3xl font-bold mb-2">
                           {new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.completed || 0)}
                         </p>
                         <p className="text-xs opacity-80 mb-3">المكتملة (المعتمد) - ليرة سورية</p>
                         
-                        {/* تفصيل الحالات الأخرى */}
+                        {/* تفصيل الحالات الأخرى النشطة */}
                         <div className="border-t border-white/20 pt-2 mt-2 space-y-1">
                           <div className="flex justify-between text-xs opacity-90">
                             <span>⏱ قيد التنفيذ:</span>
@@ -705,6 +705,33 @@ const FamilyDetails = () => {
                             <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family?.donations_by_status?.cancelled || 0)}</span>
                           </div>
                         </div>
+                        
+                        {/* التبرعات غير النشطة */}
+                        {family?.inactive_donations_by_status && (
+                          <div className="border-t-2 border-white/30 pt-3 mt-3">
+                            <p className="text-xs opacity-80 mb-2 font-bold">التبرعات المعطلة (قابلة للنقل):</p>
+                            <div className="space-y-1">
+                              {family.inactive_donations_by_status.completed > 0 && (
+                                <div className="flex justify-between text-xs opacity-90">
+                                  <span>✓ مكتملة:</span>
+                                  <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family.inactive_donations_by_status.completed)}</span>
+                                </div>
+                              )}
+                              {family.inactive_donations_by_status.inprogress > 0 && (
+                                <div className="flex justify-between text-xs opacity-90">
+                                  <span>⏱ قيد التنفيذ:</span>
+                                  <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family.inactive_donations_by_status.inprogress)}</span>
+                                </div>
+                              )}
+                              {family.inactive_donations_by_status.pending > 0 && (
+                                <div className="flex justify-between text-xs opacity-90">
+                                  <span>⏳ معلقة:</span>
+                                  <span className="font-semibold">{new Intl.NumberFormat('ar-SY').format(family.inactive_donations_by_status.pending)}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       {/* Remaining */}
