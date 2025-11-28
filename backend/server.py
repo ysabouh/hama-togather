@@ -2502,6 +2502,71 @@ async def update_donation_status(
         print(f"Error updating donation: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.put("/donations/{donation_id}/transfer")
+async def transfer_donation_to_family(
+    donation_id: str,
+    new_family_id: str = Body(..., embed=True),
+    current_user: User = Depends(get_current_user)
+):
+    """نقل التبرع لعائلة أخرى وتحويله لثابت - للمدير فقط"""
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=403, detail="غير مصرح لك بهذا الإجراء")
+    
+    try:
+        # التحقق من وجود التبرع
+        donation = await db.donations.find_one({"id": donation_id}, {"_id": 0})
+        if not donation:
+            raise HTTPException(status_code=404, detail="التبرع غير موجود")
+        
+        # التحقق من أن التبرع قابل للنقل
+        if donation.get('transfer_type') != 'transferable':
+            raise HTTPException(status_code=400, detail="هذا التبرع غير قابل للنقل")
+        
+        # التحقق من وجود العائلة الجديدة
+        new_family = await db.families.find_one({"id": new_family_id}, {"_id": 0})
+        if not new_family:
+            raise HTTPException(status_code=404, detail="العائلة الجديدة غير موجودة")
+        
+        old_family_id = donation.get('family_id')
+        old_family = await db.families.find_one({"id": old_family_id}, {"_id": 0}) if old_family_id else None
+        
+        # تحديث التبرع
+        await db.donations.update_one(
+            {"id": donation_id},
+            {"$set": {
+                "family_id": new_family_id,
+                "transfer_type": "fixed",  # تحويل لثابت
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+                "updated_by_user_id": current_user.id,
+                "updated_by_user_name": current_user.full_name
+            }}
+        )
+        
+        # تسجيل في التاريخ
+        await log_donation_history(
+            donation_id=donation_id,
+            action_type="transferred_to_family",
+            user_id=current_user.id,
+            user_name=current_user.full_name,
+            changes={
+                "old_family": old_family.get('fac_name') or old_family.get('name') if old_family else "غير محدد",
+                "new_family": new_family.get('fac_name') or new_family.get('name'),
+                "transfer_type": {"from": "transferable", "to": "fixed"}
+            }
+        )
+        
+        # تحديث المبالغ للعائلتين
+        if old_family_id:
+            await update_family_total_donations_amount(old_family_id)
+        await update_family_total_donations_amount(new_family_id)
+        
+        return {"message": "تم نقل التبرع بنجاح"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"خطأ في نقل التبرع: {str(e)}")
+
 @api_router.put("/donations/{donation_id}/transfer-type")
 async def update_donation_transfer_type(
     donation_id: str,
