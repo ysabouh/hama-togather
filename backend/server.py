@@ -2288,23 +2288,23 @@ async def update_donation_status(
             print(f"🔍 DEBUG: Donation data: {donation}")
             
             if family_id:
-                # 1. حساب مجموع الاحتياجات النشطة (من family_needs وليس needs)
-                active_needs = await db.family_needs.find(
-                    {"family_id": family_id, "is_active": {"$ne": False}},
+                # 1. حساب مجموع كل الاحتياجات (النشطة والمتوقفة)
+                all_needs = await db.family_needs.find(
+                    {"family_id": family_id},
                     {"_id": 0}
                 ).to_list(1000)
                 
-                print(f"🔍 DEBUG: Found {len(active_needs)} active family needs")
-                print(f"🔍 DEBUG: Active needs: {[{need.get('need_id'): need.get('amount')} for need in active_needs]}")
+                active_needs = [n for n in all_needs if n.get('is_active', True) != False]
                 
-                # حساب المجموع باستخدام estimated_amount أو parsing amount string
+                print(f"🔍 DEBUG: Found {len(all_needs)} total needs, {len(active_needs)} active")
+                
+                # حساب إجمالي كل الاحتياجات
                 total_needs = 0.0
-                for need in active_needs:
+                for need in all_needs:
                     estimated = need.get('estimated_amount', 0.0)
                     if estimated and estimated > 0:
                         total_needs += estimated
                     else:
-                        # Parse amount string if estimated_amount not available
                         amount_str = need.get('amount', '')
                         if amount_str:
                             try:
@@ -2317,24 +2317,34 @@ async def update_donation_status(
                             except Exception as e:
                                 print(f"خطأ في معالجة مبلغ الاحتياج '{amount_str}': {e}")
                 
-                # Parse donation amount
-                donation_amount = 0.0
-                amount_str = donation.get('amount', '')
-                if amount_str:
-                    try:
-                        import re
-                        clean_str = str(amount_str).replace(",", "").replace(" ", "").replace("ل.س", "")
-                        numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
-                        if numbers:
-                            for num in numbers:
-                                donation_amount += float(num)
-                    except Exception as e:
-                        print(f"خطأ في معالجة مبلغ التبرع '{amount_str}': {e}")
+                # حساب مجموع كل التبرعات المكتملة (بما فيها هذا التبرع)
+                all_completed_donations = await db.donations.find(
+                    {
+                        "family_id": family_id,
+                        "status": "completed",
+                        "is_active": True
+                    },
+                    {"_id": 0}
+                ).to_list(1000)
                 
-                print(f"🔍 DEBUG: Total needs: {total_needs}, Donation amount: {donation_amount}")
+                total_completed_amount = 0.0
+                for don in all_completed_donations:
+                    amount_str = don.get('amount', '')
+                    if amount_str:
+                        try:
+                            import re
+                            clean_str = str(amount_str).replace(",", "").replace(" ", "").replace("ل.س", "")
+                            numbers = re.findall(r'\d+(?:\.\d+)?', clean_str)
+                            if numbers:
+                                for num in numbers:
+                                    total_completed_amount += float(num)
+                        except Exception as e:
+                            print(f"خطأ في معالجة مبلغ التبرع '{amount_str}': {e}")
                 
-                # 2. إذا كان المبلغ >= مجموع الاحتياجات
-                if donation_amount >= total_needs and total_needs > 0:
+                print(f"🔍 DEBUG: Total needs (all): {total_needs}, Total completed donations: {total_completed_amount}")
+                
+                # 2. إذا كان مجموع التبرعات المكتملة >= مجموع الاحتياجات
+                if total_completed_amount >= total_needs and total_needs > 0:
                     print(f"✅ DEBUG: Donation covers needs! Deactivating {len(active_needs)} family needs")
                     
                     # إيقاف جميع احتياجات العائلة (في family_needs وليس needs)
