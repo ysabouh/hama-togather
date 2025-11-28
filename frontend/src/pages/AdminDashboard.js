@@ -2952,152 +2952,196 @@ const AdminDashboard = () => {
                   <div>
                     {/* Cards Grid View */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">#</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم العائلة</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رمز العائلة</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">اسم الفاك</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">رقم الهاتف</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحي</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">التصنيف</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">تقييم الاحتياج</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الحالة</th>
-                          <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">الإجراءات</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {(() => {
-                          const filteredFamilies = families
-                            .filter(f => showInactiveFamilies || f.is_active !== false)
-                            .filter(f => {
-                              if (!familiesSearchQuery) return true;
-                              const query = familiesSearchQuery.toLowerCase();
-                              const neighborhood = neighborhoods.find(n => n.id === f.neighborhood_id)?.name || '';
-                              const category = familyCategories.find(c => c.id === f.category_id)?.name || '';
-                              
-                              return (f.name || '').toLowerCase().includes(query) ||
-                                     (f.family_number || '').toLowerCase().includes(query) ||
-                                     (f.family_code || '').toLowerCase().includes(query) ||
-                                     (f.fac_name || '').toLowerCase().includes(query) ||
-                                     (f.phone || '').toLowerCase().includes(query) ||
-                                     (f.provider_first_name || '').toLowerCase().includes(query) ||
-                                     (f.provider_father_name || '').toLowerCase().includes(query) ||
-                                     (f.provider_surname || '').toLowerCase().includes(query) ||
-                                     (f.need_assessment || '').toLowerCase().includes(query) ||
-                                     neighborhood.toLowerCase().includes(query) ||
-                                     category.toLowerCase().includes(query);
-                            });
-                          
-                          const totalPages = Math.ceil(filteredFamilies.length / familiesPerPage);
-                          const startIndex = (familiesPage - 1) * familiesPerPage;
-                          const paginatedFamilies = filteredFamilies.slice(startIndex, startIndex + familiesPerPage);
+                      {(() => {
+                        const filteredFamilies = families
+                          .filter(f => showInactiveFamilies || f.is_active !== false)
+                          .filter(f => {
+                            if (!familiesSearchQuery) return true;
+                            const query = familiesSearchQuery.toLowerCase();
+                            const neighborhood = neighborhoods.find(n => n.id === f.neighborhood_id)?.name || '';
+                            const category = familyCategories.find(c => c.id === f.category_id)?.name || '';
+                            
+                            return (f.name || '').toLowerCase().includes(query) ||
+                                   (f.family_number || '').toLowerCase().includes(query) ||
+                                   (f.family_code || '').toLowerCase().includes(query) ||
+                                   (f.fac_name || '').toLowerCase().includes(query) ||
+                                   (f.phone || '').toLowerCase().includes(query) ||
+                                   (f.provider_first_name || '').toLowerCase().includes(query) ||
+                                   (f.provider_father_name || '').toLowerCase().includes(query) ||
+                                   (f.provider_surname || '').toLowerCase().includes(query) ||
+                                   (f.need_assessment || '').toLowerCase().includes(query) ||
+                                   neighborhood.toLowerCase().includes(query) ||
+                                   category.toLowerCase().includes(query);
+                          });
+                        
+                        const totalPages = Math.ceil(filteredFamilies.length / familiesPerPage);
+                        const startIndex = (familiesPage - 1) * familiesPerPage;
+                        const paginatedFamilies = filteredFamilies.slice(startIndex, startIndex + familiesPerPage);
+
+                        return paginatedFamilies.map((family) => {
+                          const neighborhood = neighborhoods.find(n => n.id === family.neighborhood_id);
+                          const category = familyCategories.find(c => c.id === family.category_id);
+                          const membersCount = family.members_count || ((family.male_children_count || 0) + (family.female_children_count || 0) + 2);
 
                           return (
-                            <>
-                              {paginatedFamilies.map((family, index) => (
-                                <tr key={family.id} className="hover:bg-gray-50" data-testid={`family-item-${family.id}`}>
-                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">{startIndex + index + 1}</td>
-                                  <td className="px-4 py-3 text-sm text-center">
-                                    <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded">
-                                      {family.family_number || '-'}
-                                    </span>
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-gray-900 text-center">{family.family_code || '-'}</td>
-                                  <td className="px-4 py-3 text-sm text-center">
-                                    <div className="flex flex-col items-center gap-1">
-                                      <span className="font-medium text-gray-900">{family.fac_name || '-'}</span>
-                                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                        {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
-                                      </span>
+                            <div
+                              key={family.id}
+                              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-emerald-400"
+                              data-testid={`family-item-${family.id}`}
+                            >
+                              {/* Top Border */}
+                              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500"></div>
+
+                              {/* Header */}
+                              <div className="relative pt-6 px-6 pb-4">
+                                <div className="flex items-start justify-between mb-3">
+                                  {/* Family Number Badge */}
+                                  <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-full shadow-lg">
+                                    <span className="text-sm font-bold font-mono">{family.family_number || '-'}</span>
+                                  </div>
+                                  
+                                  {/* Status Badge */}
+                                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${family.is_active !== false ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-red-100 text-red-700 border border-red-300'}`}>
+                                    {family.is_active !== false ? '🟢 نشط' : '⭕ غير نشط'}
+                                  </span>
+                                </div>
+
+                                {/* Family Name */}
+                                <h3 className="text-xl font-bold text-gray-900 mb-1">{family.fac_name || family.name || '-'}</h3>
+                                
+                                {/* Family Code */}
+                                {family.family_code && (
+                                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <span className="font-semibold">الرمز:</span>
+                                    <span className="font-mono bg-gray-100 px-2 py-0.5 rounded">{family.family_code}</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Divider */}
+                              <div className="px-6">
+                                <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                              </div>
+
+                              {/* Body */}
+                              <div className="px-6 py-5 space-y-3">
+                                {/* Neighborhood & Members */}
+                                <div className="grid grid-cols-2 gap-3">
+                                  {neighborhood && (
+                                    <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-2">
+                                      <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <MapPin className="w-4 h-4 text-emerald-600" />
+                                      </div>
+                                      <div className="min-w-0">
+                                        <p className="text-xs text-gray-500">الحي</p>
+                                        <p className="text-sm font-bold text-gray-900 truncate">{neighborhood.name}</p>
+                                      </div>
                                     </div>
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">{family.phone || '-'}</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">
-                                    {neighborhoods.find(n => n.id === family.neighborhood_id)?.name || '-'}
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-gray-600 text-center">
-                                    {familyCategories.find(c => c.id === family.category_id)?.name || '-'}
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-center">
-                                    {family.need_assessment ? (
-                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                        family.need_assessment === 'منخفض' ? 'bg-green-100 text-green-800' :
-                                        family.need_assessment === 'متوسط' ? 'bg-yellow-100 text-yellow-800' :
-                                        family.need_assessment === 'مرتفع' ? 'bg-orange-100 text-orange-800' :
-                                        family.need_assessment === 'حرج/عاجل' ? 'bg-red-100 text-red-800' :
-                                        'bg-gray-100 text-gray-800'
-                                      }`}>
-                                        {family.need_assessment}
-                                      </span>
-                                    ) : '-'}
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-center">
-                                    <span className={`px-2 py-1 rounded-full text-xs ${family.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                      {family.is_active !== false ? 'نشط' : 'غير نشط'}
-                                    </span>
-                                  </td>
-                                  <td className="px-4 py-3 text-sm text-center">
-                                    <div className="flex gap-2 justify-center">
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm" 
-                                        onClick={() => {
-                                          setSelectedFamily(family);
-                                          setShowFamilyDetails(true);
-                                        }}
-                                        className="text-blue-600 hover:bg-blue-50"
-                                        title="عرض التفاصيل"
-                                      >
-                                        <Eye className="w-4 h-4" />
-                                      </Button>
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm" 
-                                        onClick={() => openEditDialog('families', family)} 
-                                        data-testid={`edit-family-${family.id}`}
-                                        className="text-green-600 hover:bg-green-50"
-                                      >
-                                        <Edit className="w-4 h-4" />
-                                      </Button>
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm" 
-                                        onClick={() => {
-                                          setSelectedFamilyForImages(family);
-                                          setShowFamilyImagesDialog(true);
-                                        }}
-                                        className="text-purple-600 hover:bg-purple-50"
-                                        title="إدارة الصور"
-                                      >
-                                        <ImageIcon className="w-4 h-4" />
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={async () => {
-                                          const action = family.is_active !== false ? 'إيقاف' : 'تفعيل';
-                                          if (!window.confirm(`هل تريد ${action} هذه العائلة؟`)) return;
-                                          try {
-                                            await axios.put(`${API_URL}/families/${family.id}/toggle-status`, { is_active: !family.is_active });
-                                            toast.success(`تم ${action} العائلة بنجاح`);
-                                            fetchAllData();
-                                          } catch (error) {
-                                            toast.error(error.response?.data?.detail || `فشل ${action} العائلة`);
-                                          }
-                                        }}
-                                        className={family.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
-                                        title={family.is_active !== false ? "إيقاف" : "تفعيل"}
-                                      >
-                                        {family.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
-                                      </Button>
+                                  )}
+
+                                  <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-2">
+                                    <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                      <Users className="w-4 h-4 text-teal-600" />
                                     </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </>
+                                    <div className="min-w-0">
+                                      <p className="text-xs text-gray-500">الأفراد</p>
+                                      <p className="text-sm font-bold text-gray-900">{membersCount}</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Category & Need Assessment */}
+                                {(category || family.need_assessment) && (
+                                  <div className="space-y-2">
+                                    {category && (
+                                      <div className="flex items-center gap-2 bg-blue-50 rounded-lg p-2 border border-blue-200">
+                                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                          <Home className="w-4 h-4 text-blue-600" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-xs text-blue-700">التصنيف</p>
+                                          <p className="text-sm font-bold text-blue-900 truncate">{category.name}</p>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {family.need_assessment && (
+                                      <div className="flex items-center gap-2 bg-purple-50 rounded-lg p-2 border border-purple-200">
+                                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                          <TrendingUp className="w-4 h-4 text-purple-600" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-xs text-purple-700">تقييم الاحتياج</p>
+                                          <p className="text-sm font-bold text-purple-900">{family.need_assessment}</p>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Actions */}
+                              <div className="px-6 pb-5">
+                                <div className="flex gap-2 flex-wrap">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    onClick={() => {
+                                      setSelectedFamily(family);
+                                      setShowFamilyDetails(true);
+                                    }}
+                                    className="flex-1 text-blue-600 hover:bg-blue-50"
+                                    title="عرض التفاصيل"
+                                  >
+                                    <Eye className="w-4 h-4 ml-1" />
+                                    التفاصيل
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    onClick={() => openEditDialog('families', family)} 
+                                    className="flex-1 text-green-600 hover:bg-green-50"
+                                  >
+                                    <Edit className="w-4 h-4 ml-1" />
+                                    تعديل
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    onClick={() => {
+                                      setSelectedFamilyForImages(family);
+                                      setShowFamilyImagesDialog(true);
+                                    }}
+                                    className="text-purple-600 hover:bg-purple-50"
+                                    title="إدارة الصور"
+                                  >
+                                    <ImageIcon className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={async () => {
+                                      const action = family.is_active !== false ? 'إيقاف' : 'تفعيل';
+                                      if (!window.confirm(`هل تريد ${action} هذه العائلة؟`)) return;
+                                      try {
+                                        await axios.put(`${API_URL}/families/${family.id}/toggle-status`, { is_active: !family.is_active });
+                                        toast.success(`تم ${action} العائلة بنجاح`);
+                                        fetchAllData();
+                                      } catch (error) {
+                                        toast.error(error.response?.data?.detail || `فشل ${action} العائلة`);
+                                      }
+                                    }}
+                                    className={family.is_active !== false ? "text-orange-600 hover:bg-orange-50" : "text-green-600 hover:bg-green-50"}
+                                    title={family.is_active !== false ? "إيقاف" : "تفعيل"}
+                                  >
+                                    {family.is_active !== false ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
                           );
-                        })()}
+                        });
+                      })()}
                       </tbody>
                     </table>
                     {families.filter(f => showInactiveFamilies || f.is_active !== false).filter(f => {
