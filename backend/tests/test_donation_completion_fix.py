@@ -412,11 +412,15 @@ class DonationCompletionTester:
         print(f"   Active needs: {len(active_needs)}")
         print(f"   Inactive needs: {len(inactive_needs)}")
         
-        # Check donations status
-        completed_donations = [d for d in final_donations if d.get('status') == 'completed']
-        transferable_donations = [d for d in final_donations if d.get('transfer_type') == 'transferable']
-        inactive_donations = [d for d in final_donations if not d.get('is_active', True)]
+        # Filter donations for this family only
+        family_donations = [d for d in final_donations if d.get('family_id') == self.test_family_id]
         
+        # Check donations status (family-specific)
+        completed_donations = [d for d in family_donations if d.get('status') == 'completed']
+        transferable_donations = [d for d in family_donations if d.get('transfer_type') == 'transferable']
+        inactive_donations = [d for d in family_donations if not d.get('is_active', True)]
+        
+        print(f"   Family donations total: {len(family_donations)}")
         print(f"   Completed donations: {len(completed_donations)}")
         print(f"   Transferable donations: {len(transferable_donations)}")
         print(f"   Inactive donations: {len(inactive_donations)}")
@@ -437,10 +441,10 @@ class DonationCompletionTester:
             print("✅ PASS: All family needs are DEACTIVATED")
         
         if len(completed_donations) < 2:  # Both donations should be completed now
-            print("❌ FAIL: Both donations should be completed")
+            print(f"❌ FAIL: Both family donations should be completed - got {len(completed_donations)}")
             success = False
         else:
-            print("✅ PASS: Both donations are completed")
+            print("✅ PASS: Both family donations are completed")
         
         # Check if other pending/inprogress donations were converted to transferable
         # (In this test, we only have 2 donations, so this is mainly for future cases)
