@@ -3005,7 +3005,7 @@ const AdminDashboard = () => {
                                   
                                   if (activeNeedsCount > 0) {
                                     return (
-                                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
                                         <div className="relative">
                                           {/* Pulsing Animation Background */}
                                           <div className="absolute inset-0 bg-gradient-to-r from-rose-500 via-pink-500 to-red-500 rounded-full animate-pulse opacity-75"></div>
