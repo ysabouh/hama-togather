@@ -2134,8 +2134,11 @@ async def get_donations(
             'is_active': donation.get('is_active', True),
             # الحقول الجديدة
             'completion_images': donation.get('completion_images', []),
+            'delivery_images': donation.get('delivery_images', []),
             'cancellation_reason': donation.get('cancellation_reason'),
             'transfer_type': donation.get('transfer_type', 'fixed'),
+            'delivery_status': donation.get('delivery_status'),
+            'donation_date': donation.get('donation_date'),
             # إضافة الحقول القديمة للتوافق
             'type': donation.get('type', 'family'),
             'target_id': donation.get('target_id') or donation.get('family_id'),
