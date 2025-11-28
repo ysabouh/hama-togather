@@ -2939,6 +2939,14 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
+                  {loading ? (
+                    <div className="flex items-center justify-center py-20">
+                      <div className="text-center">
+                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mb-4"></div>
+                        <p className="text-gray-600">جاري تحميل العائلات...</p>
+                      </div>
+                    </div>
+                  ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-gray-50">
