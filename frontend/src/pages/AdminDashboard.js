@@ -3157,7 +3157,7 @@ const AdminDashboard = () => {
                                     )}
                                   </div>
                                 </div>
-                              )}
+                              </div>
 
                               {/* Actions */}
                               <div className="px-6 pb-5">
