@@ -46,6 +46,7 @@ const FamilyDetails = () => {
     need_id: '',
     amount: '',
     duration_type: 'مرة واحدة',
+    month: '',
     notes: ''
   });
   const [editingNeed, setEditingNeed] = useState(null);
