@@ -142,7 +142,7 @@ class Donation(BaseModel):
     donor_phone: Optional[str] = None  # رقم هاتف المتبرع
     donor_email: Optional[str] = None  # بريد المتبرع
     donation_type: str  # مالية، عينية، خدمية، أخرى
-    transfer_type: str = "transferable"  # fixed (ثابت) or transferable (قابل للنقل) - القيمة الافتراضية transferable لتظهر كـ "ثابت" في الواجهة
+    transfer_type: str = "fixed"  # fixed (ثابت) or transferable (قابل للنقل)
     amount: str  # القيمة أو الكمية (نص حر مثل: "500 ريال" أو "سلة غذائية")
     description: str  # وصف المساعدة
     notes: Optional[str] = None  # ملاحظات إضافية
