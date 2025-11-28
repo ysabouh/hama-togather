@@ -1912,16 +1912,6 @@ const FamilyDetails = () => {
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none transition-colors"
                   >
                     <option value="">اختر الشهر</option>
-                    <option value="JAN-2025">يناير 2025</option>
-                    <option value="FEB-2025">فبراير 2025</option>
-                    <option value="MAR-2025">مارس 2025</option>
-                    <option value="APR-2025">أبريل 2025</option>
-                    <option value="MAY-2025">مايو 2025</option>
-                    <option value="JUN-2025">يونيو 2025</option>
-                    <option value="JUL-2025">يوليو 2025</option>
-                    <option value="AUG-2025">أغسطس 2025</option>
-                    <option value="SEP-2025">سبتمبر 2025</option>
-                    <option value="OCT-2025">أكتوبر 2025</option>
                     <option value="NOV-2025">نوفمبر 2025</option>
                     <option value="DEC-2025">ديسمبر 2025</option>
                     <option value="JAN-2026">يناير 2026</option>
