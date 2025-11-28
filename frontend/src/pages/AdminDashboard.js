@@ -3080,9 +3080,8 @@ const AdminDashboard = () => {
                                 )}
                               </div>
 
-                              {/* Financial Summary */}
-                              {(family.total_needs_amount > 0 || family.donations_by_status?.completed > 0) && (
-                                <div className="px-6 pb-4">
+                              {/* Financial Summary - Always Show */}
+                              <div className="px-6 pb-4">
                                   <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-xl p-4 border-2 border-gray-200">
                                     <div className="grid grid-cols-3 gap-3 mb-3">
                                       {/* Total Needs */}
