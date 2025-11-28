@@ -1205,7 +1205,8 @@ const FamilyDetails = () => {
                         </div>
                       ))}
                     </div>
-                  )}
+                    );
+                  })()}
                 </div>
 
                 {/* Audit Log Section */}
