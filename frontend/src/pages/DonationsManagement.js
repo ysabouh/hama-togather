@@ -362,43 +362,45 @@ const DonationsManagement = () => {
 
   const filteredDonations = donations.filter(donation => {
     // Search filter
-    const searchLower = searchTerm.toLowerCase();
-    
-    // العثور على العائلة
-    const family = families.find(f => f.id === donation.family_id);
-    
-    // العثور على الحي
-    const neighborhood = neighborhoods.find(n => n.id === family?.neighborhood_id);
-    
-    // العثور على التصنيف
-    const category = categories.find(c => c.id === family?.category_id);
-    
-    // البحث في حالة التبرع
-    const statusMap = {
-      'pending': 'معلق',
-      'inprogress': 'قيد التنفيذ',
-      'completed': 'مكتمل',
-      'cancelled': 'ملغي',
-      'rejected': 'مرفوض'
-    };
-    const statusArabic = statusMap[donation.status] || '';
-    
-    const matchesSearch = 
-      donation.donor_name?.toLowerCase().includes(searchLower) ||
-      donation.donor_email?.toLowerCase().includes(searchLower) ||
-      donation.donor_phone?.includes(searchTerm) ||
-      donation.description?.toLowerCase().includes(searchLower) ||
-      family?.name?.toLowerCase().includes(searchLower) ||
-      family?.fac_name?.toLowerCase().includes(searchLower) ||
-      family?.family_number?.toLowerCase().includes(searchLower) ||
-      family?.phone?.includes(searchTerm) ||
-      neighborhood?.name?.toLowerCase().includes(searchLower) ||
-      category?.name?.toLowerCase().includes(searchLower) ||
-      donation.amount?.toString().includes(searchTerm) ||
-      statusArabic.toLowerCase().includes(searchLower) ||
-      donation.status?.toLowerCase().includes(searchLower);
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      
+      // العثور على العائلة
+      const family = families.find(f => f.id === donation.family_id);
+      
+      // العثور على الحي
+      const neighborhood = family ? neighborhoods.find(n => n.id === family.neighborhood_id) : null;
+      
+      // العثور على التصنيف
+      const category = family ? categories.find(c => c.id === family.category_id) : null;
+      
+      // البحث في حالة التبرع
+      const statusMap = {
+        'pending': 'معلق',
+        'inprogress': 'قيد التنفيذ',
+        'completed': 'مكتمل',
+        'cancelled': 'ملغي',
+        'rejected': 'مرفوض'
+      };
+      const statusArabic = statusMap[donation.status] || '';
+      
+      const matchesSearch = 
+        (donation.donor_name && donation.donor_name.toLowerCase().includes(searchLower)) ||
+        (donation.donor_email && donation.donor_email.toLowerCase().includes(searchLower)) ||
+        (donation.donor_phone && donation.donor_phone.includes(searchTerm)) ||
+        (donation.description && donation.description.toLowerCase().includes(searchLower)) ||
+        (family && family.name && family.name.toLowerCase().includes(searchLower)) ||
+        (family && family.fac_name && family.fac_name.toLowerCase().includes(searchLower)) ||
+        (family && family.family_number && family.family_number.toLowerCase().includes(searchLower)) ||
+        (family && family.phone && family.phone.includes(searchTerm)) ||
+        (neighborhood && neighborhood.name && neighborhood.name.toLowerCase().includes(searchLower)) ||
+        (category && category.name && category.name.toLowerCase().includes(searchLower)) ||
+        (donation.amount && donation.amount.toString().includes(searchTerm)) ||
+        (statusArabic && statusArabic.toLowerCase().includes(searchLower)) ||
+        (donation.status && donation.status.toLowerCase().includes(searchLower));
 
-    if (searchTerm && !matchesSearch) return false;
+      if (!matchesSearch) return false;
+    }
 
     // Status filter
     if (statusFilter !== 'all') {
