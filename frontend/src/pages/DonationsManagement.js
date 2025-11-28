@@ -628,6 +628,37 @@ const DonationsManagement = () => {
                 </div>
               </div>
 
+              {/* الفرز */}
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    ترتيب حسب
+                  </label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none"
+                  >
+                    <option value="created_at">التاريخ</option>
+                    <option value="amount">المبلغ</option>
+                    <option value="family_id">العائلة</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    الاتجاه
+                  </label>
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:outline-none"
+                  >
+                    <option value="desc">تنازلي (الأحدث أولاً)</option>
+                    <option value="asc">تصاعدي (الأقدم أولاً)</option>
+                  </select>
+                </div>
+              </div>
+
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-sm text-gray-600">
                   عرض <span className="font-bold text-emerald-600">{filteredDonations.length}</span> من أصل <span className="font-bold">{donations.length}</span> تبرع
