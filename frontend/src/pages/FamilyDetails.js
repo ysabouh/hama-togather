@@ -654,7 +654,7 @@ const FamilyDetails = () => {
                 )}
 
                 {/* Family Financial Summary */}
-                {(family?.total_needs_amount > 0 || family?.total_donations_amount > 0) && (
+                {(family?.total_needs_amount > 0 || family?.total_donations_amount > 0 || familyNeeds.length > 0) && (
                   <div className="bg-gradient-to-br from-slate-50 to-gray-100 rounded-2xl p-6 mb-6 border-2 border-gray-200 shadow-xl">
                     <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                       <TrendingUp className="w-6 h-6 text-emerald-600" />
@@ -669,11 +669,31 @@ const FamilyDetails = () => {
                             <span className="text-2xl">📦</span>
                           </div>
                         </div>
-                        <p className="text-sm opacity-90 mb-1">إجمالي الاحتياجات</p>
+                        <p className="text-sm opacity-90 mb-1">إجمالي الاحتياجات النشطة</p>
                         <p className="text-3xl font-bold">
                           {new Intl.NumberFormat('ar-SY').format(family?.total_needs_amount || 0)}
                         </p>
                         <p className="text-xs opacity-80 mt-1">ليرة سورية</p>
+                        
+                        {/* تفصيل الاحتياجات */}
+                        <div className="border-t border-white/20 pt-2 mt-3 space-y-1">
+                          <div className="flex justify-between text-xs opacity-90">
+                            <span>✅ احتياجات نشطة:</span>
+                            <span className="font-semibold">
+                              {familyNeeds.filter(n => n.is_active !== false).length} احتياج
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-xs opacity-90">
+                            <span>❌ احتياجات متوقفة:</span>
+                            <span className="font-semibold">
+                              {familyNeeds.filter(n => n.is_active === false).length} احتياج
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-xs opacity-90 font-bold border-t border-white/20 pt-1 mt-1">
+                            <span>📊 الإجمالي:</span>
+                            <span>{familyNeeds.length} احتياج</span>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Total Donations */}
