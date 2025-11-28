@@ -983,18 +983,29 @@ const FamilyDetails = () => {
 
                               {/* Duration Type */}
                               <div className="mb-3 bg-purple-50 border-l-4 border-purple-400 rounded-r-lg p-3">
-                                <div className="flex items-center justify-between">
+                                <div className="flex items-center justify-between flex-wrap gap-2">
                                   <p className="text-sm font-semibold text-purple-900">
                                     ⏰ مدة الاحتياج: <span className="text-purple-700 font-bold text-base">{need.duration_type || 'مرة واحدة'}</span>
                                   </p>
-                                  {need.duration_type === 'شهري' && need.created_at && (
-                                    <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded-full font-bold">
-                                      {(() => {
-                                        const createdDate = new Date(need.created_at);
-                                        const today = new Date();
-                                        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                                        const daysLeft = Math.ceil((endOfMonth - today) / (1000 * 60 * 60 * 24));
-                                        return daysLeft > 0 ? `${daysLeft} يوم متبقي` : 'انتهى الشهر';
+                                  {need.duration_type === 'شهري' && need.month && (
+                                    <span className="text-xs bg-purple-200 text-purple-800 px-3 py-1 rounded-full font-bold">
+                                      📅 {(() => {
+                                        const monthNames = {
+                                          'JAN': 'يناير',
+                                          'FEB': 'فبراير',
+                                          'MAR': 'مارس',
+                                          'APR': 'أبريل',
+                                          'MAY': 'مايو',
+                                          'JUN': 'يونيو',
+                                          'JUL': 'يوليو',
+                                          'AUG': 'أغسطس',
+                                          'SEP': 'سبتمبر',
+                                          'OCT': 'أكتوبر',
+                                          'NOV': 'نوفمبر',
+                                          'DEC': 'ديسمبر'
+                                        };
+                                        const [month, year] = need.month.split('-');
+                                        return `${monthNames[month] || month} ${year}`;
                                       })()}
                                     </span>
                                   )}
