@@ -3122,7 +3122,7 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* Pagination */}
-                  {(() => {
+                  {!loading && (() => {
                     const filteredFamilies = families
                       .filter(f => showInactiveFamilies || f.is_active !== false)
                       .filter(f => {
