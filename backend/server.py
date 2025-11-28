@@ -1623,13 +1623,26 @@ async def add_family_need(
     if not need:
         raise HTTPException(status_code=404, detail="Need not found")
     
-    # التحقق من عدم تكرار الاحتياج
+    # التحقق من عدم تكرار الاحتياج في نفس الشهر
     existing = await db.family_needs.find_one({
         "family_id": family_id,
-        "need_id": need_input.need_id
+        "need_id": need_input.need_id,
+        "month": need_input.month  # التحقق من الشهر أيضاً
     })
     if existing:
-        raise HTTPException(status_code=400, detail="هذا الاحتياج موجود بالفعل لهذه العائلة")
+        # تحويل الشهر إلى اسم عربي للرسالة
+        month_names = {
+            'JAN': 'يناير', 'FEB': 'فبراير', 'MAR': 'مارس', 'APR': 'أبريل',
+            'MAY': 'مايو', 'JUN': 'يونيو', 'JUL': 'يوليو', 'AUG': 'أغسطس',
+            'SEP': 'سبتمبر', 'OCT': 'أكتوبر', 'NOV': 'نوفمبر', 'DEC': 'ديسمبر'
+        }
+        month_display = need_input.month
+        if need_input.month:
+            month_parts = need_input.month.split('-')
+            if len(month_parts) == 2:
+                month_display = f"{month_names.get(month_parts[0], month_parts[0])} {month_parts[1]}"
+        
+        raise HTTPException(status_code=400, detail=f"هذا الاحتياج موجود بالفعل لهذه العائلة في شهر {month_display}")
     
     # إنشاء السجل
     try:
