@@ -2328,44 +2328,44 @@ async def update_donation_status(
                         print(f"⚠️ DEBUG: Excess amount: {excess_amount}")
                     
                     additional_info["needs_deactivated"] = len(active_needs)
-                else:
-                    print(f"❌ DEBUG: Conditions not met - donation_amount: {donation_amount}, total_needs: {total_needs}")
-                
-                # 3. التعامل مع التبرعات الأخرى (pending أو inprogress)
-                other_donations = await db.donations.find(
-                    {
-                        "family_id": family_id,
-                        "id": {"$ne": donation_id},
-                        "status": {"$in": ["pending", "inprogress"]},
-                        "is_active": {"$ne": False}
-                    },
-                    {"_id": 0}
-                ).to_list(1000)
-                
-                print(f"🔍 DEBUG: Found {len(other_donations)} other donations (pending/inprogress)")
-                
-                if other_donations:
-                    print(f"✅ DEBUG: Converting {len(other_donations)} donations to transferable")
-                    # تحويلها إلى قابلة للنقل وتعطيلها
-                    result = await db.donations.update_many(
+                    
+                    # 3. التعامل مع التبرعات الأخرى (pending أو inprogress)
+                    other_donations = await db.donations.find(
                         {
                             "family_id": family_id,
                             "id": {"$ne": donation_id},
                             "status": {"$in": ["pending", "inprogress"]},
                             "is_active": {"$ne": False}
                         },
-                        {"$set": {
-                            "transfer_type": "transferable",
-                            "is_active": False,
-                            "updated_at": datetime.now(timezone.utc).isoformat(),
-                            "updated_by_user_id": current_user.id,
-                            "updated_by_user_name": current_user.full_name,
-                            "deactivation_reason": "تم تغطية احتياجات العائلة - التبرع قابل للنقل لعائلة أخرى"
-                        }}
-                    )
+                        {"_id": 0}
+                    ).to_list(1000)
                     
-                    print(f"✅ DEBUG: Updated {result.modified_count} donations")
-                    additional_info["other_donations_deactivated"] = len(other_donations)
+                    print(f"🔍 DEBUG: Found {len(other_donations)} other donations (pending/inprogress)")
+                    
+                    if other_donations:
+                        print(f"✅ DEBUG: Converting {len(other_donations)} donations to transferable")
+                        # تحويلها إلى قابلة للنقل وتعطيلها
+                        result = await db.donations.update_many(
+                            {
+                                "family_id": family_id,
+                                "id": {"$ne": donation_id},
+                                "status": {"$in": ["pending", "inprogress"]},
+                                "is_active": {"$ne": False}
+                            },
+                            {"$set": {
+                                "transfer_type": "transferable",
+                                "is_active": False,
+                                "updated_at": datetime.now(timezone.utc).isoformat(),
+                                "updated_by_user_id": current_user.id,
+                                "updated_by_user_name": current_user.full_name,
+                                "deactivation_reason": "تم تغطية احتياجات العائلة - التبرع قابل للنقل لعائلة أخرى"
+                            }}
+                        )
+                        
+                        print(f"✅ DEBUG: Updated {result.modified_count} donations")
+                        additional_info["other_donations_deactivated"] = len(other_donations)
+                else:
+                    print(f"❌ DEBUG: Conditions not met - donation_amount: {donation_amount}, total_needs: {total_needs}")
             else:
                 print(f"❌ DEBUG: No family_id found in donation!")
         
