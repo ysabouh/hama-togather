@@ -330,11 +330,15 @@ class DonationCompletionTester:
         print(f"   Active needs: {len(active_needs)}")
         print(f"   Inactive needs: {len(inactive_needs)}")
         
-        # Check donations status
-        completed_donations = [d for d in final_donations if d.get('status') == 'completed']
-        pending_donations = [d for d in final_donations if d.get('status') == 'pending']
-        active_donations = [d for d in final_donations if d.get('is_active', True)]
+        # Filter donations for this family only
+        family_donations = [d for d in final_donations if d.get('family_id') == self.test_family_id]
         
+        # Check donations status (family-specific)
+        completed_donations = [d for d in family_donations if d.get('status') == 'completed']
+        pending_donations = [d for d in family_donations if d.get('status') == 'pending']
+        active_donations = [d for d in family_donations if d.get('is_active', True)]
+        
+        print(f"   Family donations total: {len(family_donations)}")
         print(f"   Completed donations: {len(completed_donations)}")
         print(f"   Pending donations: {len(pending_donations)}")
         print(f"   Active donations: {len(active_donations)}")
@@ -348,14 +352,14 @@ class DonationCompletionTester:
         else:
             print("✅ PASS: Family needs remain ACTIVE")
         
-        if len(active_donations) != len(initial_donations):
-            print("❌ FAIL: All donations should remain ACTIVE (partial coverage)")
+        if len(active_donations) != 2:  # Should be 2 (both test donations remain active)
+            print(f"❌ FAIL: All family donations should remain ACTIVE (partial coverage) - got {len(active_donations)}, expected 2")
             success = False
         else:
-            print("✅ PASS: All donations remain ACTIVE")
+            print("✅ PASS: All family donations remain ACTIVE")
         
         if len(completed_donations) != 1:
-            print("❌ FAIL: Exactly 1 donation should be completed")
+            print(f"❌ FAIL: Exactly 1 donation should be completed - got {len(completed_donations)}")
             success = False
         else:
             print("✅ PASS: Donation A is completed")
