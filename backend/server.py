@@ -1080,7 +1080,7 @@ async def create_family(family_input: FamilyCreate, current_user: User = Depends
     return family_obj
 
 @api_router.put("/families/{family_id}", response_model=Family)
-async def update_family(family_id: str, family_input: FamilyCreate, admin: User = Depends(get_admin_user)):
+async def update_family(family_id: str, family_input: FamilyCreate, current_user: User = Depends(get_admin_or_committee_user)):
     existing = await db.families.find_one({"id": family_id})
     if not existing:
         raise HTTPException(status_code=404, detail="Family not found")
