@@ -989,6 +989,37 @@ async def change_password(
     
     return {"message": "Password changed successfully"}
 
+@api_router.put("/users/{user_id}/reset-password")
+async def reset_user_password(
+    user_id: str,
+    new_password: str = Body(..., embed=True),
+    admin: User = Depends(get_admin_user)
+):
+    """إعادة تعيين كلمة مرور المستخدم - للأدمن فقط"""
+    # التحقق من وجود المستخدم
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="المستخدم غير موجود")
+    
+    # التحقق من طول كلمة المرور
+    if len(new_password) < 6:
+        raise HTTPException(status_code=400, detail="كلمة المرور يجب أن تكون 6 أحرف على الأقل")
+    
+    # تشفير كلمة المرور الجديدة
+    hashed_password = get_password_hash(new_password)
+    
+    # تحديث كلمة المرور
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {
+            "password": hashed_password,
+            "updated_at": datetime.now(timezone.utc),
+            "updated_by_user_id": admin.id
+        }}
+    )
+    
+    return {"message": f"تم تغيير كلمة المرور للمستخدم {user.get('full_name', 'N/A')} بنجاح"}
+
 # ============= Family Routes =============
 
 @api_router.get("/families", response_model=List[Family])
