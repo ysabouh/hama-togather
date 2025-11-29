@@ -98,7 +98,7 @@ const Navbar = () => {
                       </DropdownMenuItem>
                     )}
                     
-                    {/* الأدمن يرى لوحة التحكم الكاملة */}
+                    {/* الأدمن فقط يرى لوحة التحكم الكاملة */}
                     {user.role === 'admin' && (
                       <>
                         <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
@@ -112,14 +112,12 @@ const Navbar = () => {
                       </>
                     )}
                     
-                    {/* موظفو اللجنة ورؤساء اللجان يرون لوحة اللجنة */}
+                    {/* موظفو اللجنة ورؤساء اللجان - لوحة محدودة فقط */}
                     {(user.role === 'committee_member' || user.role === 'committee_president') && (
-                      <>
-                        <DropdownMenuItem onClick={() => navigate('/committee-dashboard')} className="cursor-pointer">
-                          <LayoutDashboard className="w-4 h-4 ml-2" />
-                          لوحة اللجنة
-                        </DropdownMenuItem>
-                      </>
+                      <DropdownMenuItem onClick={() => navigate('/committee-dashboard')} className="cursor-pointer">
+                        <Home className="w-4 h-4 ml-2" />
+                        لوحة حيي
+                      </DropdownMenuItem>
                     )}
                     
                     <DropdownMenuSeparator />
