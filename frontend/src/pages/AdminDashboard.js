@@ -5016,6 +5016,140 @@ const AdminDashboard = () => {
         </Dialog>
       )}
 
+      {/* Edit User Dialog */}
+      <Dialog open={editUserDialog} onOpenChange={setEditUserDialog}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-right">تعديل معلومات المستخدم</DialogTitle>
+          </DialogHeader>
+          
+          {editingUser && (
+            <form onSubmit={handleUpdateUser} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* الاسم الكامل */}
+                <div>
+                  <Label htmlFor="edit_full_name">
+                    الاسم الكامل <span className="text-red-600">*</span>
+                  </Label>
+                  <Input
+                    id="edit_full_name"
+                    type="text"
+                    value={userFormData.full_name}
+                    onChange={(e) => setUserFormData({ ...userFormData, full_name: e.target.value })}
+                    required
+                    className="text-right"
+                  />
+                </div>
+
+                {/* البريد الإلكتروني */}
+                <div>
+                  <Label htmlFor="edit_email">البريد الإلكتروني</Label>
+                  <Input
+                    id="edit_email"
+                    type="email"
+                    value={userFormData.email}
+                    onChange={(e) => setUserFormData({ ...userFormData, email: e.target.value })}
+                    className="text-right"
+                    dir="ltr"
+                  />
+                </div>
+
+                {/* رقم الجوال */}
+                <div>
+                  <Label htmlFor="edit_phone">رقم الجوال</Label>
+                  <Input
+                    id="edit_phone"
+                    type="tel"
+                    value={userFormData.phone}
+                    onChange={(e) => setUserFormData({ ...userFormData, phone: e.target.value })}
+                    className="text-right"
+                    placeholder="0912345678"
+                    dir="ltr"
+                  />
+                </div>
+
+                {/* نوع المستخدم */}
+                <div>
+                  <Label htmlFor="edit_role">
+                    نوع المستخدم <span className="text-red-600">*</span>
+                  </Label>
+                  <select
+                    id="edit_role"
+                    value={userFormData.role}
+                    onChange={(e) => setUserFormData({ ...userFormData, role: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-right"
+                    required
+                  >
+                    <option value="user">متبرع كريم</option>
+                    <option value="committee_member">موظف لجنة</option>
+                    <option value="committee_president">رئيس لجنة</option>
+                    <option value="admin">مدير النظام</option>
+                  </select>
+                </div>
+
+                {/* الحي */}
+                <div className="md:col-span-2">
+                  <Label htmlFor="edit_neighborhood">الحي</Label>
+                  <select
+                    id="edit_neighborhood"
+                    value={userFormData.neighborhood_id}
+                    onChange={(e) => setUserFormData({ ...userFormData, neighborhood_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-right"
+                  >
+                    <option value="">اختر الحي...</option>
+                    {neighborhoods
+                      .filter(n => n.is_active !== false)
+                      .map(n => (
+                        <option key={n.id} value={n.id}>
+                          {n.name} - حي رقم {n.number}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                {/* الحالة */}
+                <div className="md:col-span-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="edit_is_active"
+                      checked={userFormData.is_active}
+                      onChange={(e) => setUserFormData({ ...userFormData, is_active: e.target.checked })}
+                      className="w-4 h-4 rounded border-gray-300"
+                    />
+                    <Label htmlFor="edit_is_active" className="cursor-pointer">
+                      مستخدم نشط
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  💡 <strong>ملاحظة:</strong> لتغيير كلمة المرور، يجب على المستخدم استخدام خيار "نسيت كلمة المرور" من صفحة تسجيل الدخول.
+                </p>
+              </div>
+
+              <div className="flex gap-3 justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setEditUserDialog(false)}
+                >
+                  إلغاء
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-emerald-700 hover:bg-emerald-800"
+                >
+                  حفظ التغييرات
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
           <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4 shadow-2xl">
