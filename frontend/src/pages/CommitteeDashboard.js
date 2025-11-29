@@ -153,37 +153,33 @@ const CommitteeDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Users className="w-6 h-6 text-blue-600" />
-              إدارة العائلات
-            </h2>
-            <p className="text-gray-600 mb-4">
-              عرض وتعديل معلومات العائلات في حيك
-            </p>
-            <Button 
-              onClick={() => navigate('/admin')}
-              className="w-full bg-blue-600 hover:bg-blue-700"
-            >
-              عرض العائلات
-            </Button>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Heart className="w-6 h-6 text-red-600" />
-              إدارة التبرعات
-            </h2>
-            <p className="text-gray-600 mb-4">
-              الموافقة على التبرعات وتعديل حالتها
-            </p>
-            <Button 
-              onClick={() => navigate('/donations-management')}
-              className="w-full bg-red-600 hover:bg-red-700"
-            >
-              عرض التبرعات
-            </Button>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
+          <div className="flex items-start gap-3">
+            <div className="text-yellow-600 mt-1">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-yellow-900 mb-2">
+                صلاحيات محدودة
+              </h3>
+              <p className="text-yellow-800 text-sm mb-3">
+                كموظف لجنة، يمكنك فقط رؤية وإدارة البيانات المتعلقة بحيك. 
+                لعرض العائلات والتبرعات، يرجى التواصل مع مدير النظام.
+              </p>
+              <div className="bg-white rounded-lg p-4 border border-yellow-300">
+                <p className="text-sm text-gray-700 mb-2">
+                  <strong>إحصائيات حيك:</strong>
+                </p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• العائلات: {stats.totalFamilies}</li>
+                  <li>• التبرعات الإجمالية: {stats.totalDonations}</li>
+                  <li>• التبرعات المعلقة: {stats.pendingDonations}</li>
+                  <li>• التبرعات المكتملة: {stats.completedDonations}</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
