@@ -853,6 +853,7 @@ const DonationsManagement = () => {
                                     onClick={() => {
                                       setSelectedDonation(donation);
                                       setSelectedFamilyForTransfer(donation.family_id || '');
+                                      setFamilySearchTerm('');
                                       setShowTransferModal(true);
                                     }}
                                     className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
