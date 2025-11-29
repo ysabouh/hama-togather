@@ -912,6 +912,58 @@ async def update_profile(
     
     return User(**{k: v for k, v in updated_user.items() if k != 'password'})
 
+@api_router.put("/users/{user_id}", response_model=User)
+async def update_user_by_admin(
+    user_id: str,
+    update_data: dict,
+    admin: User = Depends(get_admin_user)
+):
+    """تحديث معلومات مستخدم - للأدمن فقط"""
+    # التحقق من وجود المستخدم
+    existing_user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not existing_user:
+        raise HTTPException(status_code=404, detail="المستخدم غير موجود")
+    
+    # التحقق من البريد الإلكتروني إذا تم تغييره
+    if update_data.get('email') and update_data['email'] != existing_user.get('email'):
+        email_exists = await db.users.find_one({
+            "email": update_data['email'], 
+            "id": {"$ne": user_id}
+        })
+        if email_exists:
+            raise HTTPException(status_code=400, detail="البريد الإلكتروني مستخدم بالفعل")
+    
+    # التحقق من رقم الجوال إذا تم تغييره
+    if update_data.get('phone') and update_data['phone'] != existing_user.get('phone'):
+        phone_exists = await db.users.find_one({
+            "phone": update_data['phone'], 
+            "id": {"$ne": user_id}
+        })
+        if phone_exists:
+            raise HTTPException(status_code=400, detail="رقم الجوال مستخدم بالفعل")
+    
+    # تجهيز البيانات للتحديث
+    allowed_fields = ['full_name', 'email', 'phone', 'role', 'neighborhood_id', 'is_active']
+    update_dict = {k: v for k, v in update_data.items() if k in allowed_fields}
+    
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="لا توجد بيانات للتحديث")
+    
+    update_dict['updated_at'] = datetime.now(timezone.utc)
+    update_dict['updated_by_user_id'] = admin.id
+    
+    # تحديث المستخدم
+    await db.users.update_one({"id": user_id}, {"$set": update_dict})
+    
+    # جلب المستخدم المحدث
+    updated_user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if isinstance(updated_user.get('created_at'), str):
+        updated_user['created_at'] = datetime.fromisoformat(updated_user['created_at'])
+    if isinstance(updated_user.get('updated_at'), str):
+        updated_user['updated_at'] = datetime.fromisoformat(updated_user['updated_at'])
+    
+    return User(**{k: v for k, v in updated_user.items() if k != 'password'})
+
 @api_router.put("/users/change-password")
 async def change_password(
     password_data: ChangePasswordRequest,
