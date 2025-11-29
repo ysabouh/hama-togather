@@ -668,6 +668,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if isinstance(user['created_at'], str):
         user['created_at'] = datetime.fromisoformat(user['created_at'])
     
+    # تنظيف البيانات: تحويل email الفارغ إلى None
+    if user.get('email') == '':
+        user['email'] = None
+    
     return User(**user)
 
 async def get_admin_user(current_user: User = Depends(get_current_user)):
