@@ -749,11 +749,16 @@ async def register(user_input: UserCreate):
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await db.users.find_one({"email": form_data.username}, {"_id": 0})
+    # البحث برقم الجوال أولاً، ثم البريد الإلكتروني (للتوافق مع الحسابات القديمة)
+    user = await db.users.find_one({"phone": form_data.username}, {"_id": 0})
+    if not user:
+        # محاولة البحث بالبريد الإلكتروني
+        user = await db.users.find_one({"email": form_data.username}, {"_id": 0})
+    
     if not user or not verify_password(form_data.password, user['password']):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="رقم الجوال أو كلمة المرور غير صحيحة",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
