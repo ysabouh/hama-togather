@@ -3160,8 +3160,14 @@ async def get_committee_member(member_id: str):
 
 @api_router.post("/committee-members", response_model=CommitteeMember)
 async def create_committee_member(member: CommitteeMemberCreate, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+    """إضافة عضو لجنة - متاح للأدمن ورئيس اللجنة"""
+    if current_user.role not in ["admin", "committee_president"]:
+        raise HTTPException(status_code=403, detail="يتطلب صلاحيات رئيس لجنة")
+    
+    # رئيس اللجنة يمكنه إضافة أعضاء لحيّه فقط
+    if current_user.role == "committee_president":
+        if member.neighborhood_id != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="يمكنك إدارة موظفي حيك فقط")
     
     member_obj = CommitteeMember(**member.model_dump())
     doc = member_obj.model_dump()
