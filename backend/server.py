@@ -1109,7 +1109,7 @@ async def update_family(family_id: str, family_input: FamilyCreate, current_user
     return Family(**updated)
 
 @api_router.post("/families/{family_id}/images")
-async def add_family_image(family_id: str, file: UploadFile = File(...), admin: User = Depends(get_admin_user)):
+async def add_family_image(family_id: str, file: UploadFile = File(...), current_user: User = Depends(get_admin_or_committee_user)):
     """إضافة صورة للعائلة"""
     family = await db.families.find_one({"id": family_id})
     if not family:
