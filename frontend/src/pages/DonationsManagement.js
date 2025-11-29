@@ -75,6 +75,18 @@ const DonationsManagement = () => {
     }
   }, [sortBy, sortOrder]);
 
+  // إغلاق الـ dropdown عند النقر خارجه
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isDropdownOpen && !event.target.closest('.combobox-container')) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDropdownOpen]);
+
   const fetchData = async () => {
     setLoading(true);
     try {
