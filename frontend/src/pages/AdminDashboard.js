@@ -514,6 +514,44 @@ const AdminDashboard = () => {
     }
   };
 
+  // User Management Functions
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setUserFormData({
+      full_name: user.full_name || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      role: user.role || 'user',
+      neighborhood_id: user.neighborhood_id || '',
+      is_active: user.is_active !== false
+    });
+    setEditUserDialog(true);
+  };
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    
+    if (!userFormData.full_name.trim()) {
+      toast.error('الرجاء إدخال الاسم الكامل');
+      return;
+    }
+
+    const loadingToast = toast.loading('جارٍ تحديث المستخدم...');
+    
+    try {
+      await axios.put(`${API_URL}/users/${editingUser.id}`, userFormData);
+      toast.dismiss(loadingToast);
+      toast.success('تم تحديث المستخدم بنجاح');
+      setEditUserDialog(false);
+      setEditingUser(null);
+      fetchAllData();
+    } catch (error) {
+      console.error('Update user error:', error);
+      toast.dismiss(loadingToast);
+      toast.error(error.response?.data?.detail || 'فشل تحديث المستخدم');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
