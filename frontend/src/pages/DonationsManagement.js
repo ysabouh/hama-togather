@@ -43,6 +43,7 @@ const DonationsManagement = () => {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [selectedFamilyForTransfer, setSelectedFamilyForTransfer] = useState('');
   const [familySearchTerm, setFamilySearchTerm] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
