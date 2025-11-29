@@ -41,8 +41,8 @@ class UserBase(BaseModel):
     email: Optional[EmailStr] = None  # الإيميل اختياري
     full_name: str
     role: str = "user"  # user, admin, committee_member, committee_president
-    neighborhood_id: str  # الحي ضروري
-    phone: str  # رقم الجوال ضروري
+    neighborhood_id: Optional[str] = None  # الحي (ضروري للتسجيل الجديد، اختياري للحسابات القديمة)
+    phone: Optional[str] = None  # رقم الجوال (ضروري للتسجيل الجديد، اختياري للحسابات القديمة)
     committee_member_id: Optional[str] = None  # ربط المستخدم بعضو اللجنة إذا كان عضو أو رئيس لجنة
     is_active: bool = True
 
