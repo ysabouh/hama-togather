@@ -2159,9 +2159,26 @@ async def get_donations(
     if sort_by == "family_name":
         sort_field = "family_id"  # سنفرز على family_id ثم نرتب في الكود
     
+    # تحديد الاستعلام بناءً على دور المستخدم
     if current_user.role == "admin":
+        # الأدمن يرى كل شيء
         donations = await db.donations.find({}, {"_id": 0}).sort(sort_field, sort_direction).to_list(1000)
+    elif current_user.role in ["committee_member", "committee_president"]:
+        # موظفو اللجنة يرون تبرعات حيّهم فقط
+        if not current_user.neighborhood_id:
+            return []
+        # نحصل على عائلات الحي أولاً
+        families_in_neighborhood = await db.families.find(
+            {"neighborhood_id": current_user.neighborhood_id}, 
+            {"_id": 0, "id": 1}
+        ).to_list(1000)
+        family_ids_in_neighborhood = [f['id'] for f in families_in_neighborhood]
+        donations = await db.donations.find(
+            {"family_id": {"$in": family_ids_in_neighborhood}}, 
+            {"_id": 0}
+        ).sort(sort_field, sort_direction).to_list(1000)
     else:
+        # المتبرعون يرون تبرعاتهم فقط
         donations = await db.donations.find({"donor_id": current_user.id}, {"_id": 0}).sort(sort_field, sort_direction).to_list(1000)
     
     # جلب معلومات العائلات والأحياء والتصنيفات
