@@ -827,6 +827,9 @@ async def get_all_users(current_user: User = Depends(get_current_user)):
             user['created_at'] = datetime.fromisoformat(user['created_at'])
         if isinstance(user.get('updated_at'), str):
             user['updated_at'] = datetime.fromisoformat(user['updated_at'])
+        # تنظيف البيانات: تحويل email الفارغ إلى None
+        if user.get('email') == '':
+            user['email'] = None
     return users
 
 @api_router.put("/users/{user_id}/role")
