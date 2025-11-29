@@ -560,6 +560,46 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleResetPassword = (user) => {
+    setResetPasswordUser(user);
+    setPasswordResetData({
+      new_password: '',
+      confirm_password: ''
+    });
+    setResetPasswordDialog(true);
+  };
+
+  const handleResetPasswordSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (passwordResetData.new_password.length < 6) {
+      toast.error('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      return;
+    }
+
+    if (passwordResetData.new_password !== passwordResetData.confirm_password) {
+      toast.error('كلمتا المرور غير متطابقتين');
+      return;
+    }
+
+    const loadingToast = toast.loading('جارٍ تغيير كلمة المرور...');
+    
+    try {
+      await axios.put(`${API_URL}/users/${resetPasswordUser.id}/reset-password`, {
+        new_password: passwordResetData.new_password
+      });
+      toast.dismiss(loadingToast);
+      toast.success('تم تغيير كلمة المرور بنجاح');
+      setResetPasswordDialog(false);
+      setResetPasswordUser(null);
+      setPasswordResetData({ new_password: '', confirm_password: '' });
+    } catch (error) {
+      console.error('Reset password error:', error);
+      toast.dismiss(loadingToast);
+      toast.error(error.response?.data?.detail || 'فشل تغيير كلمة المرور');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
