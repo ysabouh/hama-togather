@@ -1890,9 +1890,10 @@ const AdminDashboard = () => {
 
           {/* Tabs */}
           <Tabs defaultValue="families" className="w-full">
-            <TabsList className="mb-6 bg-white p-2 rounded-lg shadow">
-              {/* القائمة المنسدلة للموقع - للأدمن فقط */}
-              {user.role === 'admin' && (
+            {/* للأدمن: عرض جميع القوائم */}
+            {user.role === 'admin' && (
+              <TabsList className="mb-6 bg-white p-2 rounded-lg shadow">
+                {/* القائمة المنسدلة للموقع */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <TabsTrigger value={activeSiteTab} data-testid="site-dropdown" className="relative">
@@ -1931,10 +1932,8 @@ const AdminDashboard = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
-              
-              {/* القائمة المنسدلة للأحياء - للأدمن فقط */}
-              {user.role === 'admin' && (
+                
+                {/* القائمة المنسدلة للأحياء */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <TabsTrigger value={activeNeighborhoodTab} data-testid="neighborhoods-dropdown" className="relative">
@@ -1965,44 +1964,42 @@ const AdminDashboard = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
-              
-              {/* القائمة المنسدلة للعائلات */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <TabsTrigger value={activeFamiliesTab} data-testid="families-dropdown" className="relative">
-                    العائلات
-                    <ChevronDown className="w-4 h-4 mr-2" />
-                  </TabsTrigger>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('families')} className="cursor-pointer">
-                    <Users className="w-4 h-4 ml-2" />
-                    قائمة العائلات
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('family-categories')} className="cursor-pointer">
-                    <Tag className="w-4 h-4 ml-2" />
-                    تصنيف العائلات
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('income-levels')} className="cursor-pointer">
-                    <Building2 className="w-4 h-4 ml-2" />
-                    مستويات الدخل
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('need-assessments')} className="cursor-pointer">
-                    <AlertCircle className="w-4 h-4 ml-2" />
-                    تقييم الاحتياج
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveFamiliesTab('needs')} className="cursor-pointer">
-                    <Tag className="w-4 h-4 ml-2" />
-                    الاحتياجات
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
-              
-              {/* القائمة المنسدلة للمستخدمين - للأدمن فقط */}
-              {user.role === 'admin' && (
+                
+                {/* القائمة المنسدلة للعائلات */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <TabsTrigger value={activeFamiliesTab} data-testid="families-dropdown" className="relative">
+                      العائلات
+                      <ChevronDown className="w-4 h-4 mr-2" />
+                    </TabsTrigger>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={() => setActiveFamiliesTab('families')} className="cursor-pointer">
+                      <Users className="w-4 h-4 ml-2" />
+                      قائمة العائلات
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFamiliesTab('family-categories')} className="cursor-pointer">
+                      <Tag className="w-4 h-4 ml-2" />
+                      تصنيف العائلات
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFamiliesTab('income-levels')} className="cursor-pointer">
+                      <Building2 className="w-4 h-4 ml-2" />
+                      مستويات الدخل
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFamiliesTab('need-assessments')} className="cursor-pointer">
+                      <AlertCircle className="w-4 h-4 ml-2" />
+                      تقييم الاحتياج
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFamiliesTab('needs')} className="cursor-pointer">
+                      <Tag className="w-4 h-4 ml-2" />
+                      الاحتياجات
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                
+                <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
+                
+                {/* القائمة المنسدلة للمستخدمين */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <TabsTrigger value={activeUsersTab} data-testid="users-dropdown" className="relative">
@@ -2021,8 +2018,32 @@ const AdminDashboard = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
-            </TabsList>
+              </TabsList>
+            )}
+            
+            {/* لموظفي اللجنة: رسالة توجيههم للوحة اللجنة */}
+            {(user.role === 'committee_member' || user.role === 'committee_president') && (
+              <div className="bg-gradient-to-r from-emerald-50 to-blue-50 border-2 border-emerald-200 rounded-xl p-8 text-center shadow-lg mb-6">
+                <div className="flex justify-center mb-4">
+                  <div className="bg-emerald-100 rounded-full p-4">
+                    <Home className="w-12 h-12 text-emerald-700" />
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                  مرحباً بك في لوحة التحكم
+                </h2>
+                <p className="text-gray-700 mb-6 text-lg">
+                  للوصول إلى لوحة حيك وإدارة العائلات والتبرعات، يرجى الانتقال إلى:
+                </p>
+                <Button 
+                  onClick={() => window.location.href = '/committee-dashboard'}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-6 text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  <Home className="w-6 h-6 ml-2" />
+                  الذهاب إلى لوحة اللجنة
+                </Button>
+              </div>
+            )}
 
             {/* Hero Section Tab */}
             <TabsContent value="hero">
