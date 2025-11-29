@@ -675,6 +675,41 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Not authorized")
     return current_user
 
+# Helper functions for role-based access control
+async def get_admin_or_committee_user(current_user: User = Depends(get_current_user)):
+    """للسماح بالوصول للأدمن وموظفي اللجنة ورؤساء اللجان"""
+    if current_user.role not in ["admin", "committee_member", "committee_president"]:
+        raise HTTPException(status_code=403, detail="غير مصرح لك بالوصول")
+    return current_user
+
+async def get_committee_president_user(current_user: User = Depends(get_current_user)):
+    """للسماح فقط لرئيس اللجنة والأدمن"""
+    if current_user.role not in ["admin", "committee_president"]:
+        raise HTTPException(status_code=403, detail="يتطلب صلاحيات رئيس لجنة")
+    return current_user
+
+def filter_by_neighborhood(current_user: User, query: dict = None):
+    """
+    فلترة البيانات حسب الحي للمستخدمين من اللجنة
+    إذا كان المستخدم admin، يعيد الـ query كما هو
+    إذا كان من اللجنة، يضيف شرط neighborhood_id
+    """
+    if query is None:
+        query = {}
+    
+    if current_user.role in ["committee_member", "committee_president"]:
+        if not current_user.neighborhood_id:
+            raise HTTPException(status_code=400, detail="المستخدم غير مرتبط بحي")
+        query["neighborhood_id"] = current_user.neighborhood_id
+    
+    return query
+
+def can_delete(current_user: User):
+    """التحقق من صلاحية الحذف - فقط الأدمن"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="لا يمكنك حذف البيانات")
+    return True
+
 async def log_need_action(
     family_id: str,
     need_record_id: Optional[str],
