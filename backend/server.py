@@ -811,6 +811,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if isinstance(user['created_at'], str):
         user['created_at'] = datetime.fromisoformat(user['created_at'])
     
+    # تنظيف البيانات: تحويل email الفارغ إلى None
+    if user.get('email') == '':
+        user['email'] = None
+    
     user_obj = User(**{k: v for k, v in user.items() if k != 'password'})
     access_token = create_access_token(data={"sub": user_obj.id})
     return Token(access_token=access_token, token_type="bearer", user=user_obj)
