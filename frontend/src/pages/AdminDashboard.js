@@ -192,7 +192,7 @@ const AdminDashboard = () => {
     setLoadingNeeds(true);
     
     try {
-      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes, familyCategoriesRes, incomeLevelsRes, needAssessmentsRes, needsRes, familyNeedsRes] = await Promise.all([
+      const results = await Promise.allSettled([
         axios.get(`${API_URL}/stats`),
         axios.get(`${API_URL}/families`),
         axios.get(`${API_URL}/health-cases`),
@@ -217,30 +217,35 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/family-needs`)
       ]);
 
-      setStats(statsRes.data);
-      setFamilies(familiesRes.data);
-      setHealthCases(healthRes.data);
-      setCourses(coursesRes.data);
-      setProjects(projectsRes.data);
-      setInitiatives(initiativesRes.data);
-      setStories(storiesRes.data);
-      setDonations(donationsRes.data);
-      setMissionContent(missionRes.data);
-      setHeroContent(heroRes.data);
-      setNeighborhoods(neighborhoodsRes.data.items);
-      setNeighborhoodsTotal(neighborhoodsRes.data.total);
-      setNeighborhoodsTotalPages(neighborhoodsRes.data.pages);
-      setPositions(positionsRes.data);
-      setCommitteeMembers(committeeMembersRes.data);
-      setJobs(jobsRes.data);
-      setEducationLevels(educationLevelsRes.data);
-      setUsers(usersRes.data);
-      setUserRoles(userRolesRes.data);
-      setFamilyCategories(familyCategoriesRes.data);
-      setIncomeLevels(incomeLevelsRes.data);
-      setNeedAssessments(needAssessmentsRes.data);
-      setNeeds(needsRes.data);
-      setFamilyNeeds(familyNeedsRes.data);
+      // استخراج البيانات من النتائج الناجحة فقط
+      const [statsRes, familiesRes, healthRes, coursesRes, projectsRes, initiativesRes, storiesRes, donationsRes, missionRes, heroRes, neighborhoodsRes, positionsRes, committeeMembersRes, jobsRes, educationLevelsRes, usersRes, userRolesRes, familyCategoriesRes, incomeLevelsRes, needAssessmentsRes, needsRes, familyNeedsRes] = results;
+
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value.data);
+      if (familiesRes.status === 'fulfilled') setFamilies(familiesRes.value.data);
+      if (healthRes.status === 'fulfilled') setHealthCases(healthRes.value.data);
+      if (coursesRes.status === 'fulfilled') setCourses(coursesRes.value.data);
+      if (projectsRes.status === 'fulfilled') setProjects(projectsRes.value.data);
+      if (initiativesRes.status === 'fulfilled') setInitiatives(initiativesRes.value.data);
+      if (storiesRes.status === 'fulfilled') setStories(storiesRes.value.data);
+      if (donationsRes.status === 'fulfilled') setDonations(donationsRes.value.data);
+      if (missionRes.status === 'fulfilled') setMissionContent(missionRes.value.data);
+      if (heroRes.status === 'fulfilled') setHeroContent(heroRes.value.data);
+      if (neighborhoodsRes.status === 'fulfilled') {
+        setNeighborhoods(neighborhoodsRes.value.data.items);
+        setNeighborhoodsTotal(neighborhoodsRes.value.data.total);
+        setNeighborhoodsTotalPages(neighborhoodsRes.value.data.pages);
+      }
+      if (positionsRes.status === 'fulfilled') setPositions(positionsRes.value.data);
+      if (committeeMembersRes.status === 'fulfilled') setCommitteeMembers(committeeMembersRes.value.data);
+      if (jobsRes.status === 'fulfilled') setJobs(jobsRes.value.data);
+      if (educationLevelsRes.status === 'fulfilled') setEducationLevels(educationLevelsRes.value.data);
+      if (usersRes.status === 'fulfilled') setUsers(usersRes.value.data);
+      if (userRolesRes.status === 'fulfilled') setUserRoles(userRolesRes.value.data);
+      if (familyCategoriesRes.status === 'fulfilled') setFamilyCategories(familyCategoriesRes.value.data);
+      if (incomeLevelsRes.status === 'fulfilled') setIncomeLevels(incomeLevelsRes.value.data);
+      if (needAssessmentsRes.status === 'fulfilled') setNeedAssessments(needAssessmentsRes.value.data);
+      if (needsRes.status === 'fulfilled') setNeeds(needsRes.value.data);
+      if (familyNeedsRes.status === 'fulfilled') setFamilyNeeds(familyNeedsRes.value.data);
     } catch (error) {
       toast.error('فشل تحميل البيانات');
     } finally {
