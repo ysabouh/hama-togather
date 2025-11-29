@@ -59,6 +59,7 @@ const calculateAge = (dateOfBirth) => {
 };
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState({});
   const [families, setFamilies] = useState([]);
   const [healthCases, setHealthCases] = useState([]);
