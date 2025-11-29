@@ -966,6 +966,10 @@ async def update_user_by_admin(
     if isinstance(updated_user.get('updated_at'), str):
         updated_user['updated_at'] = datetime.fromisoformat(updated_user['updated_at'])
     
+    # تنظيف البيانات: إزالة email فارغ لتجنب خطأ Pydantic validation
+    if updated_user.get('email') == '':
+        updated_user['email'] = None
+    
     return User(**{k: v for k, v in updated_user.items() if k != 'password'})
 
 @api_router.put("/users/change-password")
