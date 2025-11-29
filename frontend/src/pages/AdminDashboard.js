@@ -1889,77 +1889,81 @@ const AdminDashboard = () => {
           {/* Tabs */}
           <Tabs defaultValue="families" className="w-full">
             <TabsList className="mb-6 bg-white p-2 rounded-lg shadow">
-              {/* القائمة المنسدلة للموقع */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <TabsTrigger value={activeSiteTab} data-testid="site-dropdown" className="relative">
-                    الموقع
-                    <ChevronDown className="w-4 h-4 mr-2" />
-                  </TabsTrigger>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('hero')} className="cursor-pointer">
-                    <BookOpen className="w-4 h-4 ml-2" />
-                    القسم الأول
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('health')} className="cursor-pointer">
-                    <Activity className="w-4 h-4 ml-2" />
-                    الحالات الصحية
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('courses')} className="cursor-pointer">
-                    <GraduationCap className="w-4 h-4 ml-2" />
-                    الدورات
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('projects')} className="cursor-pointer">
-                    <Building2 className="w-4 h-4 ml-2" />
-                    المشاريع
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('initiatives')} className="cursor-pointer">
-                    <HandHeart className="w-4 h-4 ml-2" />
-                    المبادرات
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('stories')} className="cursor-pointer">
-                    <Heart className="w-4 h-4 ml-2" />
-                    قصص النجاح
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveSiteTab('mission')} className="cursor-pointer">
-                    <BookOpen className="w-4 h-4 ml-2" />
-                    رؤيتنا ورسالتنا
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* القائمة المنسدلة للموقع - للأدمن فقط */}
+              {user.role === 'admin' && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <TabsTrigger value={activeSiteTab} data-testid="site-dropdown" className="relative">
+                      الموقع
+                      <ChevronDown className="w-4 h-4 mr-2" />
+                    </TabsTrigger>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('hero')} className="cursor-pointer">
+                      <BookOpen className="w-4 h-4 ml-2" />
+                      القسم الأول
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('health')} className="cursor-pointer">
+                      <Activity className="w-4 h-4 ml-2" />
+                      الحالات الصحية
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('courses')} className="cursor-pointer">
+                      <GraduationCap className="w-4 h-4 ml-2" />
+                      الدورات
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('projects')} className="cursor-pointer">
+                      <Building2 className="w-4 h-4 ml-2" />
+                      المشاريع
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('initiatives')} className="cursor-pointer">
+                      <HandHeart className="w-4 h-4 ml-2" />
+                      المبادرات
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('stories')} className="cursor-pointer">
+                      <Heart className="w-4 h-4 ml-2" />
+                      قصص النجاح
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveSiteTab('mission')} className="cursor-pointer">
+                      <BookOpen className="w-4 h-4 ml-2" />
+                      رؤيتنا ورسالتنا
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               
-              {/* القائمة المنسدلة للأحياء */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <TabsTrigger value={activeNeighborhoodTab} data-testid="neighborhoods-dropdown" className="relative">
-                    الأحياء
-                    <ChevronDown className="w-4 h-4 mr-2" />
-                  </TabsTrigger>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('neighborhoods')} className="cursor-pointer">
-                    <MapPin className="w-4 h-4 ml-2" />
-                    الأحياء
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('committees')} className="cursor-pointer">
-                    <Users className="w-4 h-4 ml-2" />
-                    لجان الأحياء
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('positions')} className="cursor-pointer">
-                    <Building2 className="w-4 h-4 ml-2" />
-                    المناصب
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('jobs')} className="cursor-pointer">
-                    <BookOpen className="w-4 h-4 ml-2" />
-                    قائمة الأعمال
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('education')} className="cursor-pointer">
-                    <GraduationCap className="w-4 h-4 ml-2" />
-                    المؤهلات الدراسية
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* القائمة المنسدلة للأحياء - للأدمن فقط */}
+              {user.role === 'admin' && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <TabsTrigger value={activeNeighborhoodTab} data-testid="neighborhoods-dropdown" className="relative">
+                      الأحياء
+                      <ChevronDown className="w-4 h-4 mr-2" />
+                    </TabsTrigger>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('neighborhoods')} className="cursor-pointer">
+                      <MapPin className="w-4 h-4 ml-2" />
+                      الأحياء
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('committees')} className="cursor-pointer">
+                      <Users className="w-4 h-4 ml-2" />
+                      لجان الأحياء
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('positions')} className="cursor-pointer">
+                      <Building2 className="w-4 h-4 ml-2" />
+                      المناصب
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('jobs')} className="cursor-pointer">
+                      <BookOpen className="w-4 h-4 ml-2" />
+                      قائمة الأعمال
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveNeighborhoodTab('education')} className="cursor-pointer">
+                      <GraduationCap className="w-4 h-4 ml-2" />
+                      المؤهلات الدراسية
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               
               {/* القائمة المنسدلة للعائلات */}
               <DropdownMenu>
