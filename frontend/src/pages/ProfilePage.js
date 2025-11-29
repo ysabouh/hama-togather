@@ -306,14 +306,28 @@ const ProfilePage = () => {
               <form onSubmit={handlePasswordChange} className="space-y-5">
                 <div>
                   <Label htmlFor="current_password">كلمة المرور الحالية</Label>
-                  <Input
-                    id="current_password"
-                    type="password"
-                    value={passwordData.current_password}
-                    onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
-                    required
-                    className="text-right"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="current_password"
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={passwordData.current_password}
+                      onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
+                      required
+                      className="text-right pl-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showCurrentPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div>
