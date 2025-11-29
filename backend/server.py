@@ -1296,9 +1296,8 @@ async def toggle_family_status(
 
 # ============= Family Categories Routes =============
 @api_router.get("/family-categories", response_model=List[FamilyCategory])
-async def get_family_categories(current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+async def get_family_categories(current_user: User = Depends(get_admin_or_committee_user)):
+    """جلب تصنيفات العائلات - متاح للأدمن وموظفي اللجنة"""
     categories = await db.family_categories.find({}, {"_id": 0}).to_list(1000)
     return categories
 
