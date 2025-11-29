@@ -139,6 +139,18 @@ const AdminDashboard = () => {
   const [activeUsersTab, setActiveUsersTab] = useState('users');
   const [activeSiteTab, setActiveSiteTab] = useState('hero');
   const [activeFamiliesTab, setActiveFamiliesTab] = useState('families');
+  
+  // User Edit Dialog
+  const [editUserDialog, setEditUserDialog] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
+  const [userFormData, setUserFormData] = useState({
+    full_name: '',
+    email: '',
+    phone: '',
+    role: 'user',
+    neighborhood_id: '',
+    is_active: true
+  });
 
   // Setup axios with token from localStorage
   useEffect(() => {
