@@ -1139,6 +1139,8 @@ async def add_family_image(family_id: str, file: UploadFile = File(...), current
 
 @api_router.delete("/families/{family_id}/images/{image_index}")
 async def delete_family_image(family_id: str, image_index: int, admin: User = Depends(get_admin_user)):
+    """حذف صورة - فقط للأدمن"""
+    can_delete(admin)
     """حذف صورة من العائلة"""
     family = await db.families.find_one({"id": family_id})
     if not family:
