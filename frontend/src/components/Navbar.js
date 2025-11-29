@@ -79,8 +79,8 @@ const Navbar = () => {
                       }`}>
                         {user.role === 'admin' ? 'مدير النظام' :
                          user.role === 'committee_president' ? 'رئيس لجنة' :
-                         user.role === 'committee_member' ? 'عضو لجنة' :
-                         'مستخدم عادي'}
+                         user.role === 'committee_member' ? 'موظف لجنة' :
+                         'متبرع كريم'}
                       </span>
                     </div>
                     <DropdownMenuSeparator />
