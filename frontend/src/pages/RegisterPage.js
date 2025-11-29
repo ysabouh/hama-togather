@@ -102,7 +102,7 @@ const RegisterPage = () => {
     try {
       await register({
         full_name: formData.full_name,
-        email: formData.email,
+        email: formData.email && formData.email.trim() !== '' ? formData.email : null,  // إرسال null إذا كان فارغاً
         password: formData.password,
         role: formData.role,  // استخدام الدور من formData
         neighborhood_id: formData.neighborhood_id,
