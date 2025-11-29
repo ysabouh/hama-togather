@@ -940,8 +940,10 @@ async def change_password(
 # ============= Family Routes =============
 
 @api_router.get("/families", response_model=List[Family])
-async def get_families():
-    families = await db.families.find({}, {"_id": 0}).to_list(1000)
+async def get_families(current_user: User = Depends(get_admin_or_committee_user)):
+    """جلب العائلات - مع فلترة حسب الحي لموظفي اللجنة"""
+    query = filter_by_neighborhood(current_user, {})
+    families = await db.families.find(query, {"_id": 0}).to_list(1000)
     for family in families:
         if isinstance(family.get('created_at'), str):
             family['created_at'] = datetime.fromisoformat(family['created_at'])
