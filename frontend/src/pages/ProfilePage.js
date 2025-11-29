@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { User, Save, ArrowRight, Lock } from 'lucide-react';
+import { User, Save, ArrowRight, Lock, Eye, EyeOff } from 'lucide-react';
 import Select from 'react-select';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
