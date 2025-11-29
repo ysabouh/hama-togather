@@ -20,7 +20,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const user = await login(email, password);
+      const user = await login(phone, password);
       toast.success('تم تسجيل الدخول بنجاح');
       
       if (user.role === 'admin') {
