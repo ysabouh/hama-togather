@@ -3208,9 +3208,9 @@ async def update_committee_member(
     return updated
 
 @api_router.delete("/committee-members/{member_id}")
-async def delete_committee_member(member_id: str, current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+async def delete_committee_member(member_id: str, admin: User = Depends(get_admin_user)):
+    """حذف عضو لجنة - فقط للأدمن"""
+    can_delete(admin)
     
     result = await db.committee_members.delete_one({"id": member_id})
     if result.deleted_count == 0:
