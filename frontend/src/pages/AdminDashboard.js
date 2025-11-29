@@ -5073,6 +5073,97 @@ const AdminDashboard = () => {
         </Dialog>
       )}
 
+      {/* Reset Password Dialog */}
+      <Dialog open={resetPasswordDialog} onOpenChange={setResetPasswordDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-right flex items-center gap-2 justify-end">
+              <span>تغيير كلمة المرور</span>
+              <Key className="w-6 h-6 text-purple-600" />
+            </DialogTitle>
+          </DialogHeader>
+          
+          {resetPasswordUser && (
+            <form onSubmit={handleResetPasswordSubmit} className="space-y-6">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <p className="text-sm text-purple-800 text-right">
+                  <strong>المستخدم:</strong> {resetPasswordUser.full_name}
+                </p>
+                {resetPasswordUser.email && (
+                  <p className="text-sm text-purple-700 text-right">
+                    <strong>البريد:</strong> {resetPasswordUser.email}
+                  </p>
+                )}
+                {resetPasswordUser.phone && (
+                  <p className="text-sm text-purple-700 text-right">
+                    <strong>الجوال:</strong> {resetPasswordUser.phone}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                {/* كلمة المرور الجديدة */}
+                <div>
+                  <Label htmlFor="new_password">
+                    كلمة المرور الجديدة <span className="text-red-600">*</span>
+                  </Label>
+                  <Input
+                    id="new_password"
+                    type="password"
+                    value={passwordResetData.new_password}
+                    onChange={(e) => setPasswordResetData({ ...passwordResetData, new_password: e.target.value })}
+                    required
+                    minLength={6}
+                    className="text-right"
+                    placeholder="أدخل كلمة المرور الجديدة (6 أحرف على الأقل)"
+                  />
+                </div>
+
+                {/* تأكيد كلمة المرور */}
+                <div>
+                  <Label htmlFor="confirm_password">
+                    تأكيد كلمة المرور <span className="text-red-600">*</span>
+                  </Label>
+                  <Input
+                    id="confirm_password"
+                    type="password"
+                    value={passwordResetData.confirm_password}
+                    onChange={(e) => setPasswordResetData({ ...passwordResetData, confirm_password: e.target.value })}
+                    required
+                    minLength={6}
+                    className="text-right"
+                    placeholder="أعد إدخال كلمة المرور"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800 text-right">
+                  ⚠️ <strong>تنبيه:</strong> سيتم تغيير كلمة المرور فوراً وسيحتاج المستخدم لاستخدام كلمة المرور الجديدة عند تسجيل الدخول.
+                </p>
+              </div>
+
+              <div className="flex gap-3 justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setResetPasswordDialog(false)}
+                >
+                  إلغاء
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  <Key className="w-4 h-4 ml-2" />
+                  تغيير كلمة المرور
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Edit User Dialog */}
       <Dialog open={editUserDialog} onOpenChange={setEditUserDialog}>
         <DialogContent className="sm:max-w-2xl">
