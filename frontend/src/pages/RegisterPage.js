@@ -145,20 +145,6 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <Label htmlFor="email" className="text-right block mb-2">البريد الإلكتروني</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="example@email.com"
-                required
-                className="text-right"
-                data-testid="email-input"
-              />
-            </div>
-
-            <div>
               <Label htmlFor="phone" className="text-right block mb-2">
                 رقم الجوال <span className="text-red-600">*</span>
               </Label>
@@ -172,6 +158,21 @@ const RegisterPage = () => {
                 className="text-right"
                 data-testid="phone-input"
                 dir="ltr"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="email" className="text-right block mb-2">
+                البريد الإلكتروني <span className="text-gray-400 text-sm">(اختياري)</span>
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="example@email.com"
+                className="text-right"
+                data-testid="email-input"
               />
             </div>
 
