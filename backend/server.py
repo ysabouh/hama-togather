@@ -1069,7 +1069,7 @@ async def create_family(family_input: FamilyCreate, current_user: User = Depends
     family_dict['family_number'] = f"FAM-{new_num:03d}"
     
     # حفظ معرف المستخدم الذي أضاف العائلة
-    family_dict['created_by_user_id'] = admin.id
+    family_dict['created_by_user_id'] = current_user.id
     
     family_obj = Family(**family_dict)
     
