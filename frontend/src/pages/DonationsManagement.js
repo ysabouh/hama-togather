@@ -1601,7 +1601,7 @@ const DonationsManagement = () => {
                   اختر العائلة الجديدة المستفيدة:
                 </label>
                 
-                <div className="relative">
+                <div className="relative combobox-container">
                   {/* Combobox Button */}
                   <button
                     type="button"
