@@ -713,10 +713,24 @@ async def log_need_action(
 
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_input: UserCreate):
-    # Check if user exists
-    existing_user = await db.users.find_one({"email": user_input.email})
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+    # التحقق من رقم الجوال (ضروري)
+    if not user_input.phone or user_input.phone.strip() == '':
+        raise HTTPException(status_code=400, detail="رقم الجوال مطلوب")
+    
+    # التحقق من الحي (ضروري)
+    if not user_input.neighborhood_id or user_input.neighborhood_id.strip() == '':
+        raise HTTPException(status_code=400, detail="الحي مطلوب")
+    
+    # التحقق من وجود المستخدم بالإيميل (إذا تم إدخاله)
+    if user_input.email:
+        existing_user = await db.users.find_one({"email": user_input.email})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="البريد الإلكتروني مسجل مسبقاً")
+    
+    # التحقق من وجود المستخدم برقم الجوال
+    existing_phone = await db.users.find_one({"phone": user_input.phone})
+    if existing_phone:
+        raise HTTPException(status_code=400, detail="رقم الجوال مسجل مسبقاً")
     
     # Create user
     user_dict = user_input.model_dump()
