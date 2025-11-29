@@ -2371,8 +2371,8 @@ async def update_donation_status(
     request: UpdateDonationStatusRequest,
     current_user: User = Depends(get_current_user)
 ):
-    """تحديث حالة التبرع - متاح للمشرفين فقط"""
-    if current_user.role != 'admin':
+    """تحديث حالة التبرع - متاح للأدمن وموظفي اللجنة"""
+    if current_user.role not in ['admin', 'committee_member', 'committee_president']:
         raise HTTPException(status_code=403, detail="غير مصرح لك بهذا الإجراء")
     
     try:
