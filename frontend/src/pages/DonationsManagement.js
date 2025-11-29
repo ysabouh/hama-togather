@@ -1583,97 +1583,135 @@ const DonationsManagement = () => {
                 </div>
               </div>
 
-              {/* Select New Family */}
+              {/* Select New Family - Combobox with Search */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   اختر العائلة الجديدة المستفيدة:
                 </label>
                 
-                {/* Search Input */}
-                <div className="relative mb-2">
-                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="ابحث عن عائلة بالاسم أو الرقم أو الحي..."
-                    value={familySearchTerm}
-                    onChange={(e) => setFamilySearchTerm(e.target.value)}
-                    className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                  />
-                </div>
-                
-                {/* Families List */}
-                <div className="border border-gray-300 rounded-lg max-h-64 overflow-y-auto">
-                  {(() => {
-                    const filteredFamilies = families.filter(family => {
-                      const searchLower = familySearchTerm.toLowerCase();
-                      const familyName = (family.fac_name || family.name || '').toLowerCase();
-                      const familyNumber = (family.family_number || '').toLowerCase();
-                      const neighborhood = (family.neighborhood_name || '').toLowerCase();
-                      
-                      return familyName.includes(searchLower) || 
-                             familyNumber.includes(searchLower) || 
-                             neighborhood.includes(searchLower);
-                    });
-                    
-                    if (filteredFamilies.length === 0) {
-                      return (
-                        <div className="p-4 text-center text-gray-500">
-                          لا توجد عائلات تطابق البحث
-                        </div>
-                      );
-                    }
-                    
-                    return filteredFamilies.map(family => (
-                      <button
-                        key={family.id}
-                        onClick={() => {
-                          setSelectedFamilyForTransfer(family.id);
-                          setFamilySearchTerm('');
-                        }}
-                        className={`w-full text-right px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-100 last:border-b-0 ${
-                          selectedFamilyForTransfer === family.id ? 'bg-orange-100 font-semibold' : ''
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-semibold text-gray-900">
-                              {family.fac_name || family.name}
-                            </div>
-                            <div className="text-sm text-gray-600 flex items-center gap-2 mt-1">
-                              {family.family_number && (
-                                <span className="font-mono bg-gray-100 px-2 py-0.5 rounded">
-                                  {family.family_number}
+                <div className="relative">
+                  {/* Combobox Button */}
+                  <button
+                    type="button"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    <span className={selectedFamilyForTransfer ? 'text-gray-900' : 'text-gray-500'}>
+                      {selectedFamilyForTransfer ? (
+                        (() => {
+                          const selected = families.find(f => f.id === selectedFamilyForTransfer);
+                          return selected ? (
+                            <span className="flex items-center gap-2">
+                              <span className="font-semibold">{selected.fac_name || selected.name}</span>
+                              {selected.family_number && (
+                                <span className="text-sm font-mono bg-gray-100 px-2 py-0.5 rounded">
+                                  {selected.family_number}
                                 </span>
                               )}
-                              {family.neighborhood_name && (
-                                <span className="flex items-center gap-1">
-                                  <MapPin className="w-3 h-3" />
-                                  {family.neighborhood_name}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          {selectedFamilyForTransfer === family.id && (
-                            <Check className="w-5 h-5 text-orange-600" />
+                            </span>
+                          ) : '-- اختر عائلة --';
+                        })()
+                      ) : '-- اختر عائلة --'}
+                    </span>
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Panel */}
+                  {isDropdownOpen && (
+                    <div className="absolute z-50 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-xl">
+                      {/* Search Input */}
+                      <div className="p-3 border-b border-gray-200">
+                        <div className="relative">
+                          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="ابحث بالاسم، الرقم، أو الحي..."
+                            value={familySearchTerm}
+                            onChange={(e) => setFamilySearchTerm(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full pl-3 pr-9 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            autoFocus
+                          />
+                          {familySearchTerm && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFamilySearchTerm('');
+                              }}
+                              className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
                           )}
                         </div>
-                      </button>
-                    ));
-                  })()}
-                </div>
-                
-                {/* Selected Family Display */}
-                {selectedFamilyForTransfer && (
-                  <div className="mt-2 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                    <div className="text-sm text-gray-700">
-                      <span className="font-semibold">العائلة المختارة: </span>
-                      {(() => {
-                        const selected = families.find(f => f.id === selectedFamilyForTransfer);
-                        return selected ? `${selected.fac_name || selected.name} ${selected.family_number ? `(${selected.family_number})` : ''}` : '';
-                      })()}
+                      </div>
+
+                      {/* Families List */}
+                      <div className="max-h-64 overflow-y-auto">
+                        {(() => {
+                          const filteredFamilies = families.filter(family => {
+                            if (!familySearchTerm) return true;
+                            const searchLower = familySearchTerm.toLowerCase();
+                            const familyName = (family.fac_name || family.name || '').toLowerCase();
+                            const familyNumber = (family.family_number || '').toLowerCase();
+                            const neighborhood = (family.neighborhood_name || '').toLowerCase();
+                            
+                            return familyName.includes(searchLower) || 
+                                   familyNumber.includes(searchLower) || 
+                                   neighborhood.includes(searchLower);
+                          });
+                          
+                          if (filteredFamilies.length === 0) {
+                            return (
+                              <div className="p-4 text-center text-gray-500 text-sm">
+                                لا توجد عائلات تطابق البحث
+                              </div>
+                            );
+                          }
+                          
+                          return filteredFamilies.map(family => (
+                            <button
+                              key={family.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedFamilyForTransfer(family.id);
+                                setIsDropdownOpen(false);
+                                setFamilySearchTerm('');
+                              }}
+                              className={`w-full text-right px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-100 last:border-b-0 ${
+                                selectedFamilyForTransfer === family.id ? 'bg-orange-100' : ''
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                  <div className="font-semibold text-gray-900 text-sm">
+                                    {family.fac_name || family.name}
+                                  </div>
+                                  <div className="text-xs text-gray-600 flex items-center gap-2 mt-1">
+                                    {family.family_number && (
+                                      <span className="font-mono bg-gray-100 px-2 py-0.5 rounded">
+                                        {family.family_number}
+                                      </span>
+                                    )}
+                                    {family.neighborhood_name && (
+                                      <span className="flex items-center gap-1">
+                                        <MapPin className="w-3 h-3" />
+                                        {family.neighborhood_name}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                                {selectedFamilyForTransfer === family.id && (
+                                  <Check className="w-4 h-4 text-orange-600 flex-shrink-0" />
+                                )}
+                              </div>
+                            </button>
+                          ));
+                        })()}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
               {/* Warning */}
