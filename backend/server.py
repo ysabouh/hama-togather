@@ -1130,7 +1130,7 @@ async def add_family_image(family_id: str, file: UploadFile = File(...), current
             "$set": {
                 "images": current_images,
                 "updated_at": datetime.now(timezone.utc),
-                "updated_by_user_id": admin.id
+                "updated_by_user_id": current_user.id
             }
         }
     )
@@ -1157,7 +1157,7 @@ async def delete_family_image(family_id: str, image_index: int, admin: User = De
             "$set": {
                 "images": current_images,
                 "updated_at": datetime.now(timezone.utc),
-                "updated_by_user_id": admin.id
+                "updated_by_user_id": current_user.id
             }
         }
     )
