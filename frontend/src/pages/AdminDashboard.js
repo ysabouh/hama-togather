@@ -151,6 +151,14 @@ const AdminDashboard = () => {
     neighborhood_id: '',
     is_active: true
   });
+  
+  // Password Reset Dialog
+  const [resetPasswordDialog, setResetPasswordDialog] = useState(false);
+  const [resetPasswordUser, setResetPasswordUser] = useState(null);
+  const [passwordResetData, setPasswordResetData] = useState({
+    new_password: '',
+    confirm_password: ''
+  });
 
   // Setup axios with token from localStorage
   useEffect(() => {
