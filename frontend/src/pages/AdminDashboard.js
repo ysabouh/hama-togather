@@ -4735,9 +4735,18 @@ const AdminDashboard = () => {
                                 variant="outline"
                                 onClick={() => handleEditUser(user)}
                                 className="text-blue-600 hover:bg-blue-50"
-                                title="تعديل"
+                                title="تعديل المعلومات"
                               >
                                 <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleResetPassword(user)}
+                                className="text-purple-600 hover:bg-purple-50"
+                                title="تغيير كلمة المرور"
+                              >
+                                <Key className="w-4 h-4" />
                               </Button>
                               <Button
                                 size="sm"
