@@ -1045,7 +1045,7 @@ async def get_family(family_id: str):
     return Family(**family)
 
 @api_router.post("/families", response_model=Family)
-async def create_family(family_input: FamilyCreate, admin: User = Depends(get_admin_user)):
+async def create_family(family_input: FamilyCreate, current_user: User = Depends(get_admin_or_committee_user)):
     family_dict = family_input.model_dump()
     
     # توليد رقم العائلة تلقائياً
