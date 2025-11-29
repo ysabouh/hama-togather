@@ -16,9 +16,10 @@ import DonationsManagement from './pages/DonationsManagement';
 import MyDonationsPage from './pages/MyDonationsPage';
 import OurMissionPage from './pages/OurMissionPage';
 import ProfilePage from './pages/ProfilePage';
+import CommitteeDashboard from './pages/CommitteeDashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-const ProtectedRoute = ({ children, adminOnly = false }) => {
+const ProtectedRoute = ({ children, adminOnly = false, committeeOnly = false }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -32,6 +33,10 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   }
 
   if (adminOnly && user.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
+  if (committeeOnly && !['admin', 'committee_member', 'committee_president'].includes(user.role)) {
     return <Navigate to="/" replace />;
   }
 
