@@ -917,6 +917,10 @@ async def update_profile(
     if isinstance(updated_user.get('updated_at'), str):
         updated_user['updated_at'] = datetime.fromisoformat(updated_user['updated_at'])
     
+    # تنظيف البيانات: تحويل email الفارغ إلى None
+    if updated_user.get('email') == '':
+        updated_user['email'] = None
+    
     return User(**{k: v for k, v in updated_user.items() if k != 'password'})
 
 @api_router.put("/users/{user_id}", response_model=User)
