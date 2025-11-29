@@ -925,18 +925,22 @@ async def update_user_by_admin(
         raise HTTPException(status_code=404, detail="المستخدم غير موجود")
     
     # التحقق من البريد الإلكتروني إذا تم تغييره
-    if update_data.get('email') and update_data['email'] != existing_user.get('email'):
+    new_email = update_data.get('email', '').strip()
+    old_email = existing_user.get('email', '').strip()
+    if new_email and new_email != old_email:
         email_exists = await db.users.find_one({
-            "email": update_data['email'], 
+            "email": new_email, 
             "id": {"$ne": user_id}
         })
         if email_exists:
             raise HTTPException(status_code=400, detail="البريد الإلكتروني مستخدم بالفعل")
     
     # التحقق من رقم الجوال إذا تم تغييره
-    if update_data.get('phone') and update_data['phone'] != existing_user.get('phone'):
+    new_phone = update_data.get('phone', '').strip()
+    old_phone = existing_user.get('phone', '').strip()
+    if new_phone and new_phone != old_phone:
         phone_exists = await db.users.find_one({
-            "phone": update_data['phone'], 
+            "phone": new_phone, 
             "id": {"$ne": user_id}
         })
         if phone_exists:
