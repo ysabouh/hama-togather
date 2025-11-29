@@ -38,11 +38,11 @@ api_router = APIRouter(prefix="/api")
 
 # User Models
 class UserBase(BaseModel):
-    email: EmailStr
+    email: Optional[EmailStr] = None  # الإيميل اختياري
     full_name: str
     role: str = "user"  # user, admin, committee_member, committee_president
-    neighborhood_id: Optional[str] = None
-    phone: Optional[str] = None
+    neighborhood_id: str  # الحي ضروري
+    phone: str  # رقم الجوال ضروري
     committee_member_id: Optional[str] = None  # ربط المستخدم بعضو اللجنة إذا كان عضو أو رئيس لجنة
     is_active: bool = True
 
