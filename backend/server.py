@@ -3181,8 +3181,17 @@ async def update_committee_member(
     member_update: CommitteeMemberUpdate,
     current_user: User = Depends(get_current_user)
 ):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+    """تعديل عضو لجنة - متاح للأدمن ورئيس اللجنة"""
+    if current_user.role not in ["admin", "committee_president"]:
+        raise HTTPException(status_code=403, detail="يتطلب صلاحيات رئيس لجنة")
+    
+    # رئيس اللجنة يمكنه تعديل أعضاء حيّه فقط
+    if current_user.role == "committee_president":
+        existing = await db.committee_members.find_one({"id": member_id}, {"_id": 0})
+        if not existing:
+            raise HTTPException(status_code=404, detail="العضو غير موجود")
+        if existing.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="يمكنك إدارة موظفي حيك فقط")
     
     update_data = {k: v for k, v in member_update.model_dump().items() if v is not None}
     if not update_data:
