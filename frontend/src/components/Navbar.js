@@ -90,11 +90,15 @@ const Navbar = () => {
                       تعديل الملف الشخصي
                     </DropdownMenuItem>
                     
-                    <DropdownMenuItem onClick={() => navigate('/my-donations')} className="cursor-pointer">
-                      <Heart className="w-4 h-4 ml-2" />
-                      تبرعاتي
-                    </DropdownMenuItem>
+                    {/* المتبرع الكريم يرى تبرعاته */}
+                    {user.role === 'user' && (
+                      <DropdownMenuItem onClick={() => navigate('/my-donations')} className="cursor-pointer">
+                        <Heart className="w-4 h-4 ml-2" />
+                        تبرعاتي
+                      </DropdownMenuItem>
+                    )}
                     
+                    {/* الأدمن يرى لوحة التحكم الكاملة */}
                     {user.role === 'admin' && (
                       <>
                         <DropdownMenuItem onClick={() => navigate('/admin')} className="cursor-pointer">
@@ -104,6 +108,16 @@ const Navbar = () => {
                         <DropdownMenuItem onClick={() => navigate('/donations-management')} className="cursor-pointer">
                           <Heart className="w-4 h-4 ml-2" />
                           إدارة التبرعات
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    
+                    {/* موظفو اللجنة ورؤساء اللجان يرون لوحة اللجنة */}
+                    {(user.role === 'committee_member' || user.role === 'committee_president') && (
+                      <>
+                        <DropdownMenuItem onClick={() => navigate('/committee-dashboard')} className="cursor-pointer">
+                          <LayoutDashboard className="w-4 h-4 ml-2" />
+                          لوحة اللجنة
                         </DropdownMenuItem>
                       </>
                     )}
