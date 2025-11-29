@@ -79,7 +79,7 @@ function App() {
             <Route 
               path="/admin" 
               element={
-                <ProtectedRoute committeeOnly>
+                <ProtectedRoute adminOnly>
                   <AdminDashboard />
                 </ProtectedRoute>
               } 
@@ -87,7 +87,7 @@ function App() {
             <Route 
               path="/donations-management" 
               element={
-                <ProtectedRoute committeeOnly>
+                <ProtectedRoute adminOnly>
                   <DonationsManagement />
                 </ProtectedRoute>
               } 
