@@ -1013,31 +1013,6 @@ async def update_user_by_admin(
     
     return User(**{k: v for k, v in updated_user.items() if k != 'password'})
 
-@api_router.put("/users/change-password")
-async def change_password(
-    password_data: ChangePasswordRequest,
-    current_user: User = Depends(get_current_user)
-):
-    # جلب المستخدم مع كلمة المرور
-    user_doc = await db.users.find_one({"id": current_user.id})
-    
-    if not user_doc or not verify_password(password_data.current_password, user_doc['password']):
-        raise HTTPException(status_code=400, detail="Current password is incorrect")
-    
-    # تشفير كلمة المرور الجديدة
-    hashed_password = get_password_hash(password_data.new_password)
-    
-    # تحديث كلمة المرور
-    await db.users.update_one(
-        {"id": current_user.id},
-        {"$set": {
-            "password": hashed_password,
-            "updated_at": datetime.now(timezone.utc)
-        }}
-    )
-    
-    return {"message": "Password changed successfully"}
-
 @api_router.put("/users/{user_id}/reset-password")
 async def reset_user_password(
     user_id: str,
