@@ -1586,20 +1586,92 @@ const DonationsManagement = () => {
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   اختر العائلة الجديدة المستفيدة:
                 </label>
-                <select
-                  value={selectedFamilyForTransfer}
-                  onChange={(e) => setSelectedFamilyForTransfer(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                >
-                  <option value="">-- اختر عائلة --</option>
-                  {families.map(family => (
-                    <option key={family.id} value={family.id}>
-                      {family.fac_name || family.name} 
-                      {family.family_number && ` (${family.family_number})`}
-                      {family.neighborhood_name && ` - ${family.neighborhood_name}`}
-                    </option>
-                  ))}
-                </select>
+                
+                {/* Search Input */}
+                <div className="relative mb-2">
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="ابحث عن عائلة بالاسم أو الرقم أو الحي..."
+                    value={familySearchTerm}
+                    onChange={(e) => setFamilySearchTerm(e.target.value)}
+                    className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  />
+                </div>
+                
+                {/* Families List */}
+                <div className="border border-gray-300 rounded-lg max-h-64 overflow-y-auto">
+                  {(() => {
+                    const filteredFamilies = families.filter(family => {
+                      const searchLower = familySearchTerm.toLowerCase();
+                      const familyName = (family.fac_name || family.name || '').toLowerCase();
+                      const familyNumber = (family.family_number || '').toLowerCase();
+                      const neighborhood = (family.neighborhood_name || '').toLowerCase();
+                      
+                      return familyName.includes(searchLower) || 
+                             familyNumber.includes(searchLower) || 
+                             neighborhood.includes(searchLower);
+                    });
+                    
+                    if (filteredFamilies.length === 0) {
+                      return (
+                        <div className="p-4 text-center text-gray-500">
+                          لا توجد عائلات تطابق البحث
+                        </div>
+                      );
+                    }
+                    
+                    return filteredFamilies.map(family => (
+                      <button
+                        key={family.id}
+                        onClick={() => {
+                          setSelectedFamilyForTransfer(family.id);
+                          setFamilySearchTerm('');
+                        }}
+                        className={`w-full text-right px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-100 last:border-b-0 ${
+                          selectedFamilyForTransfer === family.id ? 'bg-orange-100 font-semibold' : ''
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-semibold text-gray-900">
+                              {family.fac_name || family.name}
+                            </div>
+                            <div className="text-sm text-gray-600 flex items-center gap-2 mt-1">
+                              {family.family_number && (
+                                <span className="font-mono bg-gray-100 px-2 py-0.5 rounded">
+                                  {family.family_number}
+                                </span>
+                              )}
+                              {family.neighborhood_name && (
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" />
+                                  {family.neighborhood_name}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {selectedFamilyForTransfer === family.id && (
+                            <Check className="w-5 h-5 text-orange-600" />
+                          )}
+                        </div>
+                      </button>
+                    ));
+                  })()}
+                </div>
+                
+                {/* Selected Family Display */}
+                {selectedFamilyForTransfer && (
+                  <div className="mt-2 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                    <div className="text-sm text-gray-700">
+                      <span className="font-semibold">العائلة المختارة: </span>
+                      {(() => {
+                        const selected = families.find(f => f.id === selectedFamilyForTransfer);
+                        return selected ? `${selected.fac_name || selected.name} ${selected.family_number ? `(${selected.family_number})` : ''}` : '';
+                      })()}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Warning */}
