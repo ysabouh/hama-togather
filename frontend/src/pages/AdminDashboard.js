@@ -4685,6 +4685,15 @@ const AdminDashboard = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
+                                onClick={() => handleEditUser(user)}
+                                className="text-blue-600 hover:bg-blue-50"
+                                title="تعديل"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
                                 onClick={async () => {
                                   const action = user.is_active !== false ? 'إيقاف' : 'تفعيل';
                                   if (!window.confirm(`هل تريد ${action} هذا المستخدم؟`)) return;
