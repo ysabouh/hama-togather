@@ -1097,7 +1097,7 @@ async def update_family(family_id: str, family_input: FamilyCreate, current_user
         update_data['created_by_user_id'] = existing['created_by_user_id']
     
     # حفظ معرف المستخدم الذي قام بالتعديل
-    update_data['updated_by_user_id'] = admin.id
+    update_data['updated_by_user_id'] = current_user.id
     
     await db.families.update_one({"id": family_id}, {"$set": update_data})
     
