@@ -10,143 +10,136 @@ The user wants to develop a comprehensive web application called Together We Bui
 **User's preferred language**: العربية (Arabic). The next agent MUST communicate in Arabic.
 
 **what currently exists?**
-The application is a full-stack platform with a React frontend, FastAPI backend, and MongoDB database. A significant number of features and UI enhancements have been implemented across the admin dashboard, family details page, and donations management page.
-
-Key functionalities include:
-- Management of families, needs, and donations.
-- A detailed financial summary on the family page.
-- An audit log for donation changes.
-- UI features like donation attachments, image viewers, and server-side sorting/filtering on tables.
-- A complex (but currently buggy) backend logic that attempts to automate actions when a donation is marked as completed.
-
-The agent has just identified a critical bug in this backend logic but has not yet implemented the fix.
+The application has undergone a significant UI/UX overhaul driven by the user. The login and registration flows have been updated to be phone-number-centric, with email now being optional. The  page has been completely redesigned to match the  page, featuring a timeline layout, tabs for active/inactive donations, pagination, and detailed family information on each donation card. It also now correctly displays receipt images and cancellation reasons. A major new feature allows admins to transfer a donation to a different family via a modal with a custom-built searchable combobox. Password visibility toggles ('eye' icons) have been added to the login and registration pages. Multiple backend bugs related to data validation and optional fields have been resolved.
 
 **Last working item**:
--   **Last item agent was working**: The agent was debugging a critical bug reported by the user. When a donation was marked as completed for family , other pending donations for that family were incorrectly disabled, even though the completed donation's amount did not cover all of the family's active needs. The agent successfully diagnosed the root cause by examining the debug logs. The problem is in , where the logic to disable other donations is placed outside the  block that checks if the donation amount is sufficient to cover the family's needs.
--   **Status**: IN PROGRESS
--   **Agent Testing Done**: N (Diagnosis complete, fix not implemented).
--   **Which testing method agent to use?**: backend testing agent. After fixing the code, the agent should create a test scenario to verify the logic. The test should:
-    1.  Create a family with active needs totaling a specific amount (e.g., 200,000).
-    2.  Create two pending donations for that family (e.g., one for 50,000 and another for 300,000).
-    3.  Update the status of the smaller donation (50,000) to completed.
-    4.  Assert that the family's needs are NOT deactivated and the other large donation is NOT converted to transferable.
-    5.  Then, update the larger donation (300,000) to completed.
-    6.  Assert that the family's needs ARE deactivated and any other pending donations ARE converted to transferable.
+-   **Last item agent was working**: Adding a password visibility toggle (eye icon) to the Change Password section of the . The user requested this feature to improve usability. The agent located the file  and was about to start implementation.
+-   **Status**: NOT STARTED
+-   **Agent Testing Done**: N
+-   **Which testing method agent to use?**: screenshot tool. The agent needs to log in, navigate to , and visually verify that the eye icon appears and correctly toggles password visibility in the three password fields.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: (P0) Critical Bug in Donation Completion Logic**
-    -   **Description**: When a donation is marked completed, the system incorrectly deactivates other pending/in-progress donations for that family, regardless of whether the completed donation's amount actually covers the family's total active needs. This leads to incorrect financial summaries and faulty state management.
-    -   **Attempted fixes**: The agent added detailed logging to  and diagnosed the issue. The logic to convert other donations to 'transferable' is outside the  block.
-    -   **Next debug checklist**:
-        1.  Open .
-        2.  Locate the  endpoint (around line 2240).
-        3.  Find the code block that handles other donations (starts around line , with the comment ).
-        4.  Move this entire block *inside* the  block (which starts around line ).
-        5.  Restart the backend and test thoroughly using the scenario described in Last working item.
-    -   **Why fix this issue and what will be achieved with the fix?**: This is a core business logic failure that corrupts data and makes the platform's financial tracking unreliable. Fixing it will ensure that family needs and other donations are only deactivated when they are fully covered.
-    -   **Status**: IN PROGRESS
-    -   **Is recurring issue?**: N
-    -   **Should Test frontend/backend/both after fix?**: backend
-    -   **Blocked on other issue**: None
-
--   **Issue 2: (P1) Verify Add Need Functionality**
-    -   **Description**: A critical bug from a previous session prevented adding new family needs. This was never explicitly confirmed as fixed with the user.
-    -   **Next debug checklist**: Ask the user to confirm if they can now add a new need to a family without any errors. If not, investigate backend logs for Pydantic validation errors.
-    -   **Why fix this issue and what will be achieved with the fix?**: This is a core feature. Confirming its resolution is essential.
-    -   **Status**: USER VERIFICATION PENDING
-    -   **Is recurring issue?**: Y
-    -   **Should Test frontend/backend/both after fix?**: Both
-    -   **Blocked on other issue**: None
-
--   **Issue 3: (P2) Testing Tools Authentication Failure**
-    -   **Description**: The  and  consistently fail by being redirected to the  page. This recurring environmental issue prevents automated visual verification.
-    -   **Next debug checklist**: Be prepared for authentication failures. If they occur, rely on  for backend validation and inform the user that visual confirmation is not possible.
-    -   **Why fix this issue and what will be achieved with the fix?**: Resolving this would significantly speed up development and verification cycles.
+-   **Issue 1: (P1) Testing Tools Authentication Failure**
+    -   **Description**: A recurring issue where the  and  fail to authenticate, getting stuck on the  page. This was observed multiple times in the session, forcing the agent to use workarounds like creating static HTML files to demonstrate UI changes.
+    -   **Attempted fixes**: None. The agent has been working around the issue.
+    -   **Next debug checklist**: Expect these tools to fail. If they do, the agent must rely on  for backend checks and manual inspection of frontend code. The agent might need to investigate how authentication tokens are handled by the testing tools.
+    -   **Why fix this issue and what will be achieved with the fix?**: Resolving this would unblock automated testing, speed up the development cycle, and provide more reliable verification of UI changes.
     -   **Status**: NOT STARTED
     -   **Is recurring issue?**: Y
-    -   **Should Test frontend/backend/both after fix?**: NA
+    -   **Should Test frontend/backend/both after fix?**: frontend
     -   **Blocked on other issue**: None
 
 **In progress Task List**:
--   None.
+-   **Task 1: (P0) Implement password visibility on Profile Page**
+    -   **Where to resume**: . The agent needs to add state for password visibility and modify the three password input fields (current, new, confirm) to include the toggle icon and functionality, similar to what was done for  and .
+    -   **What will be achieved with this?**: Fulfills a direct user request and brings UI consistency to all password fields in the application.
+    -   **Status**: NOT STARTED
+    -   **Should Test frontend/backend/both after fix?**: frontend
+    -   **Blocked on something**: None
+
+-   **Task 2: (P1) Continue UI/UX Review and Refinement**
+    -   **Where to resume**: The user has initiated a systematic review of the application's pages, starting with  and . After completing the  task, the agent should ask the user which page they would like to review and refine next.
+    -   **What will be achieved with this?**: Systematically improves the user experience and interface design across the entire application according to the user's vision.
+    -   **Status**: IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?**: frontend
+    -   **Blocked on something**: None
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks**:
-    -   (P1) **Complete Refactoring of **: Extract large sections into standalone components to improve maintainability.
+    -   (P1) **Refactor Large Components**:  (over 3000 lines) and  (over 1600 lines) are very large and complex. They should be broken down into smaller, reusable components to improve maintainability.
 -   **Future Tasks**:
     -   (P2) Build and activate the remaining unimplemented sections in the Site dropdown menu (e.g., Health Cases, Courses, Projects, Initiatives).
     -   (P3) Implement modules for family awareness and educational support.
 
 **Completed work in this session**
--   **Feature: Server-Side Sorting**: Implemented server-side sorting (by date, amount, family) on the  page.
--   **Feature: Enhanced Search**: Expanded search on  to include family name, neighborhood, category, phone, amount, and status.
--   **Feature: Donation Tabs on Family Page**: Separated donations into Active and Disabled tabs on the  page.
--   **Feature: Financial Summary for Inactive Donations**: Updated the family financial summary to display totals for disabled/transferable donations.
--   **Feature: Loading Indicator**: Added a loading spinner to the families table in the .
--   **Fix:  Logic**: Corrected the display logic for the  (fixed vs. transferable) globally across the platform to be consistent, setting the correct default for new donations.
--   **Fix: Donation Details Modal**: Redesigned the modal on the  page to be simpler and show required information (status, images/reason, updater).
--   **Fix: API Data Fetching**: Corrected the  backend endpoint to return all required fields (, , etc.), which fixed images not appearing in the details modal.
--   **Fix: Financial Summary Calculation**: The backend now fetches and displays all donations (active and inactive) on the  page.
--   **Fix: Admin Dashboard Crash**: Resolved a JavaScript parsing error that was crashing the  page.
--   **Enhancement: UI Data Display**: Added donation ID to  table and  cards; added neighborhood/category info to  table; added neighborhood to family name in .
+-   **Feature: Active Monthly Need Indicator**: Fixed and enhanced the indicator on  to correctly show a badge for families with active *monthly* needs.
+-   **Feature:  Page Redesign**:
+    -   Rebuilt the page with a timeline-based design, matching the  page.
+    -   Added tabs for Active and Inactive donations.
+    -   Implemented pagination (10 items per page).
+    -   Added family details (name, number, category, neighborhood) to each donation card.
+-   **Feature: Enhanced Donation Details**:
+    -   Added display for Cancellation Reason on cancelled donations.
+    -   Added an image gallery with a modal viewer for Receipt Images on completed donations.
+-   **Feature: Transfer Donation**:
+    -   Implemented a new feature in  allowing admins to transfer a transferable donation to a new family.
+    -   The backend logic updates the  and sets  to .
+    -   Created a custom, searchable dropdown combobox component from scratch for family selection.
+-   **Feature: Reworked Auth Flow**:
+    -   **Register Page**: Fields reordered,  is now required, and  is optional.
+    -   **Login Page**: Login is now primarily via  instead of email.
+-   **Feature: Password Visibility Toggle**: Added an eye icon to show/hide passwords on the  and  pages.
+-   **Critical Bug Fixes**:
+    -   Resolved a bug where two different fields ( and ) were used for donation images, causing data inconsistency. The logic is now consolidated.
+    -   Fixed a server crash caused by Pydantic validation errors when legacy users without  or  were loaded.
+    -   Fixed a bug preventing user registration when an email was not provided.
 
 **Earlier issues found/mentioned but not fixed**
--   Same as the pending issue list.
+-   The recurring authentication failure with  and other testing agents remains unresolved.
 
 **Known issue recurrence from previous fork**
 -   **Issue recurrence in previous fork**: Persistent authentication/session failures when using the  and .
--   **Recurrence count**: Multiple times.
+-   **Recurrence count**: High (occurred multiple times this session).
 -   **Status**: NOT RESOLVED.
 
 **Code Architecture**
-update_donation_status/donationstransfer_type
+
 
 **Key Technical Concepts**
--   **Complex Backend Business Logic**: The core of the current work involves implementing and debugging a complex workflow in  that triggers multiple database updates based on a single status change.
--   **Server-Side Operations**: Shifted sorting for donations from client-side to server-side (FastAPI/MongoDB) to improve performance.
--   **State-Driven UI**: Extensive use of React state to manage UI changes, including tabs, modals, and conditional rendering based on complex data structures (e.g., , ).
--   **Iterative Debugging**: The agent and user engaged in a tight loop of reporting, diagnosing (with backend logging), and attempting fixes for multiple interconnected issues.
+-   **Backend Auth Logic**: The login endpoint in  was updated to accept a  that can be either a phone number or an email, providing flexible authentication.
+-   **Data Model Backward Compatibility**: Pydantic models (e.g., ) were updated to use  for newly required fields (, ) to prevent crashes when loading legacy data from MongoDB.
+-   **Custom Searchable Combobox**: A complex, reusable UI component was built from scratch in React for the Transfer Donation modal, featuring an input for searching and a dropdown list of results.
+-   **Database Name Specificity**: A critical debugging session revealed the agent was attempting to modify the wrong database. **The correct database name is **, and this must be specified in any direct DB scripts.
+-   **Data Consistency**: A bug was caused by having two fields for the same data ( and ). The code was consolidated to prioritize the correct field ().
 
 **key DB schema**
--   ****: Added  and  to store pre-calculated financial summaries.
--   ****: The  field logic was corrected and its default value was managed.
+-   : The Pydantic model  now has  and  to support older documents.  is now  in the  model.
+-   : Contains two fields for images:  (correct one, stores base64) and  (incorrectly added by agent, stores URLs). The agent must use . Also contains , , etc., which are added dynamically by the API and are not in the DB document itself.
 
 **All files**
--   : Heavily modified for donation completion logic (buggy), server-side sorting, and financial summary calculations.
--   : Minor UI enhancements and bug fixes.
--   : Major UI and logic changes for sorting and searching.
--   : Major UI and logic changes for displaying donations and financial summaries.
+-   : Modified auth endpoints, user models, and added a new  endpoint.
+-   : Updated the active need indicator logic.
+-   : Complete overhaul with new design, features, and pagination.
+-   : Added the transfer feature and the searchable combobox.
+-   : Updated fields and added password visibility toggle.
+-   : Updated login to use phone number and added password visibility toggle.
+
+**Areas that need refactoring**:
+-   : Still over 3200 lines. The card component is a prime candidate for extraction.
+-   : Now over 1600 lines, with multiple modals. The new transfer modal and its searchable combobox could be extracted into their own components.
 
 **Critical Info for New Agent**
--   **TOP PRIORITY (P0)**: You must immediately fix the critical bug in  as detailed in the All Pending/In progress Issue list. The logic to disable other donations is being executed unconditionally and must be moved inside the  check.
--   **User Communication**: The user is frustrated with the time spent on the current bug. It is crucial to fix it correctly and test it thoroughly before asking for user verification.
--   **Confirm Fixes**: After fixing the P0 bug, politely ask the user to verify the Add Need functionality (P1 issue) as it's a lingering, unconfirmed issue.
--   **Testing Tool Unreliability**: Expect  to fail. Be prepared to use  and ask the user for visual confirmation. For the P0 bug, a dedicated backend test is the best approach.
+-   **Priority**: Your first task is to add the password visibility toggle to . Then, continue the UI/UX review by asking the user which page to work on next.
+-   **Database is **: When running any manual database scripts, you MUST target the  database, not the default. The agent wasted significant time debugging due to this.
+-   **Donation Image Field**: Be aware that donation documents might have two image fields. The correct field to use is . Do not use or add data to .
+-   **Testing Tool Authentication**: Expect the  to fail at logging in. Be prepared to use  to test API endpoints and inspect frontend code manually. Creating temporary HTML files to showcase UI is a valid workaround.
+-   **Auth Flow**: Login is now primarily with a phone number. Registration requires a phone number, but email is optional.
 
 **documents created in this job**
--   None.
+-    (temporary, likely deleted)
+-    (temporary, likely deleted)
+-    (temporary, likely deleted)
 
 **Last 5 User Messages and any pending user messages**
-1.  **User**: I can't see the financial summary for disabled donations. (Status: COMPLETED - Agent fixed the backend model and UI).
-2.  **User**: Needs are not being deactivated when a donation is marked completed. (Status: IN PROGRESS - This is the main P0 bug).
-3.  **User**: Add server-side sorting (latest first, by amount, by family) to the donations management page. (Status: COMPLETED).
-4.  **User**: When I completed a donation for FAM-002, other donations were stopped even though the needs were not met, and the financial summary is wrong. (Status: IN PROGRESS - This is the detailed report of the P0 bug. Agent has diagnosed the cause).
-5.  **User**: The donation list disappears after I made changes to the search filter. (Status: COMPLETED - Agent fixed the filtering logic).
+1.  **User**: It gives an error when I press add user. (Status: COMPLETED. Fixed by sending  instead of  for optional email).
+2.  **User**: Can you put a small eye next to the password field to know the password when pressed... (Status: COMPLETED for ).
+3.  **User**: On the login page, please make the username the mobile number with the password. (Status: COMPLETED).
+4.  **User**: There is a failure in loading the data, why? (Status: COMPLETED. Fixed Pydantic model to allow optional fields for legacy users).
+5.  **User**: In the profile page, please put an eye on the passwords in the change password section... (Status: IN PROGRESS. This is the current 
+wtmp begins Fri Nov 28 22:09:50 2025).
 
 **Project Health Check:**
--   **Broken**: The core business logic for completing a donation is critically flawed.
+-   **Broken**: Automated frontend testing via  or  is unreliable due to authentication failures.
 -   **Mocked**: None.
 
 **Testing status**
 -   **Testing agent used after significant changes**: NO
--   **Troubleshoot agent used after agent stuck in loop**: YES, it helped guide the debugging process for the donation completion logic.
+-   **Troubleshoot agent used after agent stuck in loop**: NO
 -   **Test files created**: None.
--   **Known regressions**: The donation completion logic is a regression that corrupts data state.
+-   **Known regressions**: None.
 
 **Credentials to test flow:**
+-   :  (can be used for login if the user exists from before the phone number change)
 -   : 
--   : 
-
-**What agent forgot to execute**
--   The agent correctly diagnosed the critical P0 bug in the donation completion logic but was forked before implementing the code change (moving the block of code inside the  statement).</analysis>
+-   **Note**: The primary login method is now **phone number**. The agent may need to find the admin's phone number in the DB or register a new admin user to test the main login flow.</analysis>

@@ -27,7 +27,7 @@ import os
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://community-support-6.preview.emergentagent.com') + '/api'
+BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://twb-community.preview.emergentagent.com') + '/api'
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 
