@@ -3346,6 +3346,40 @@ const AdminDashboard = () => {
                                 </div>
                               </div>
 
+                              {/* Last Update Info */}
+                              {family.updated_at && (
+                                <div className="px-6 pb-3">
+                                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 border border-blue-200">
+                                    <div className="flex items-center justify-between text-xs">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-blue-600">⏰</span>
+                                        <span className="text-gray-600">آخر تحديث:</span>
+                                        <span className="font-semibold text-gray-900">
+                                          {new Date(family.updated_at).toLocaleString('ar-SY', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: false
+                                          })}
+                                        </span>
+                                      </div>
+                                      {family.updated_by_user_id && (
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-blue-600">👤</span>
+                                          <span className="font-bold text-blue-700 truncate max-w-[120px]">
+                                            {users.find(u => u.id === family.updated_by_user_id)?.full_name || 
+                                             users.find(u => u.id === family.updated_by_user_id)?.email || 
+                                             'غير معروف'}
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
                               {/* Actions */}
                               <div className="px-6 pb-5">
                                 <div className="flex gap-2 flex-wrap">
