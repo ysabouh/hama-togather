@@ -815,9 +815,16 @@ const DonationsManagement = () => {
                               )}
                             </td>
                             <td className="px-6 py-4">
-                              <span className="font-bold text-emerald-600 text-lg">
-                                {formatAmount(donation.amount)} ل.س
-                              </span>
+                              {donation.donation_type === 'عينية' && !donation.amount?.match(/\d/) ? (
+                                <div>
+                                  <span className="font-bold text-blue-600 text-base">تبرع عيني</span>
+                                  <div className="text-xs text-gray-500 mt-1">{donation.amount}</div>
+                                </div>
+                              ) : (
+                                <span className="font-bold text-emerald-600 text-lg">
+                                  {formatAmount(donation.amount)} ل.س
+                                </span>
+                              )}
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2 text-gray-600">
