@@ -201,7 +201,21 @@ const DonationsManagement = () => {
 
   const formatAmount = (amount) => {
     if (!amount) return '0';
-    return new Intl.NumberFormat('ar-SY').format(amount);
+    
+    // إذا كان المبلغ نصاً (مثل "سلة غذائية")، نعيده كما هو
+    const amountStr = String(amount);
+    
+    // محاولة استخراج رقم من النص
+    const numberMatch = amountStr.match(/\d+(\.\d+)?/);
+    
+    // إذا وجدنا رقماً، نقوم بتنسيقه
+    if (numberMatch) {
+      const numericAmount = parseFloat(numberMatch[0]);
+      return new Intl.NumberFormat('ar-SY').format(numericAmount);
+    }
+    
+    // إذا لم نجد رقماً، نعيد النص كما هو (مثل "سلة غذائية")
+    return amountStr;
   };
 
   const getStatusColor = (status) => {
