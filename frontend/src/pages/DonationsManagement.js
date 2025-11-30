@@ -61,7 +61,8 @@ const DonationsManagement = () => {
   });
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    // السماح للمدير وأعضاء اللجنة بالوصول
+    if (!user || !['admin', 'committee_member', 'committee_president'].includes(user.role)) {
       navigate('/');
       return;
     }
