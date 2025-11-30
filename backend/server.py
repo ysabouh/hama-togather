@@ -825,10 +825,8 @@ async def get_me(current_user: User = Depends(get_current_user)):
 
 # ============= Users Management Routes (Admin Only) =============
 @api_router.get("/users", response_model=List[User])
-async def get_all_users(current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
-    
+async def get_all_users(current_user: User = Depends(get_admin_or_committee_user)):
+    # أعضاء اللجنة يمكنهم رؤية قائمة المستخدمين للقراءة فقط (لعرض من قام بالتعديلات)
     users = await db.users.find({}, {"_id": 0, "password": 0}).to_list(1000)
     for user in users:
         if isinstance(user.get('created_at'), str):
