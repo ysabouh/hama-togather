@@ -1047,7 +1047,14 @@ const DonationsManagement = () => {
                 <div className="space-y-3">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">المبلغ</p>
-                    <p className="text-2xl font-bold text-emerald-600">{formatAmount(selectedDonation.amount)} ل.س</p>
+                    {selectedDonation.donation_type === 'عينية' && !selectedDonation.amount?.match(/\d/) ? (
+                      <div>
+                        <p className="text-2xl font-bold text-blue-600">تبرع عيني</p>
+                        <p className="text-sm text-gray-500 mt-1">{selectedDonation.amount}</p>
+                      </div>
+                    ) : (
+                      <p className="text-2xl font-bold text-emerald-600">{formatAmount(selectedDonation.amount)} ل.س</p>
+                    )}
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">الوصف</p>
