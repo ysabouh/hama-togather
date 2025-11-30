@@ -119,6 +119,10 @@ const Navbar = () => {
                           <LayoutDashboard className="w-4 h-4 ml-2" />
                           لوحة اللجنة
                         </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/donations-management')} className="cursor-pointer">
+                          <Heart className="w-4 h-4 ml-2" />
+                          إدارة التبرعات
+                        </DropdownMenuItem>
                       </>
                     )}
                     
