@@ -1837,58 +1837,68 @@ const AdminDashboard = () => {
 
       <div className="flex-1 py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-emerald-900 mb-8" data-testid="admin-title">لوحة التحكم الإدارية</h1>
+          {/* عنوان لوحة التحكم - يظهر للمدير فقط */}
+          {user.role === 'admin' && (
+            <h1 className="text-4xl font-bold text-emerald-900 mb-8" data-testid="admin-title">لوحة التحكم الإدارية</h1>
+          )}
+          
+          {/* عنوان لأعضاء اللجنة */}
+          {(user.role === 'committee_member' || user.role === 'committee_president') && (
+            <h1 className="text-4xl font-bold text-emerald-900 mb-8">لوحة تحكم اللجنة</h1>
+          )}
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-emerald-600">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
-                  <Users className="w-6 h-6 text-emerald-700" />
+          {/* Stats - للمدير فقط */}
+          {user.role === 'admin' && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-emerald-600">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                    <Users className="w-6 h-6 text-emerald-700" />
+                  </div>
+                  <div>
+                    <p className="text-gray-600 text-sm">العائلات</p>
+                    <p className="text-2xl font-bold text-gray-900">{stats.families || 0}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-600 text-sm">العائلات</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.families || 0}</p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-rose-600">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-rose-700" />
+                  </div>
+                  <div>
+                    <p className="text-gray-600 text-sm">حالات صحية</p>
+                    <p className="text-2xl font-bold text-gray-900">{stats.health_cases || 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-amber-600">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-amber-700" />
+                  </div>
+                  <div>
+                    <p className="text-gray-600 text-sm">مشاريع</p>
+                    <p className="text-2xl font-bold text-gray-900">{stats.projects || 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-600">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Heart className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <div>
+                    <p className="text-gray-600 text-sm">تبرعات</p>
+                    <p className="text-2xl font-bold text-gray-900">{stats.donations || 0}</p>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-rose-600">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center">
-                  <Activity className="w-6 h-6 text-rose-700" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">حالات صحية</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.health_cases || 0}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-amber-600">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-amber-700" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">مشاريع</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.projects || 0}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-600">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-blue-700" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">تبرعات</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.donations || 0}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Tabs */}
           <Tabs defaultValue="families" className="w-full">
