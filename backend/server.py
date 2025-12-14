@@ -1354,9 +1354,8 @@ async def toggle_family_category_status(
 
 # ============= Income Levels Routes =============
 @api_router.get("/income-levels", response_model=List[IncomeLevel])
-async def get_income_levels(current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+async def get_income_levels(current_user: User = Depends(get_admin_or_committee_user)):
+    """جلب مستويات الدخل - متاح للأدمن وموظفي اللجنة"""
     levels = await db.income_levels.find({}, {"_id": 0}).to_list(1000)
     return levels
 
