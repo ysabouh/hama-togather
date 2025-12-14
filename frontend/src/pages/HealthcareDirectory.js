@@ -64,8 +64,18 @@ const HealthcareDirectory = () => {
       const neighborhoodFilter = user?.neighborhood_id || '';
       setSelectedNeighborhood(neighborhoodFilter);
 
-      // جلب البيانات حسب النوع النشط
-      await fetchProviders(neighborhoodFilter);
+      // جلب جميع أنواع البيانات للحصول على العداد الصحيح
+      const params = neighborhoodFilter ? { neighborhood_id: neighborhoodFilter } : {};
+      
+      const [doctorsRes, pharmaciesRes, laboratoriesRes] = await Promise.all([
+        axios.get(`${API_URL}/doctors`, { params }),
+        axios.get(`${API_URL}/pharmacies`, { params }),
+        axios.get(`${API_URL}/laboratories`, { params })
+      ]);
+      
+      setDoctors(doctorsRes.data || []);
+      setPharmacies(pharmaciesRes.data || []);
+      setLaboratories(laboratoriesRes.data || []);
 
     } catch (error) {
       console.error('Error fetching data:', error);
