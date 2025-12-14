@@ -3489,9 +3489,6 @@ async def delete_committee_member(member_id: str, admin: User = Depends(get_admi
         raise HTTPException(status_code=404, detail="Committee member not found")
     return {"message": "Committee member deleted successfully"}
 
-# Include router
-app.include_router(api_router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
