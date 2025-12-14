@@ -110,11 +110,13 @@ const HealthcareDirectory = () => {
   };
 
   const getSpecialtyName = (specialtyId) => {
+    if (!specialties || !Array.isArray(specialties)) return 'غير محدد';
     const specialty = specialties.find(s => s.id === specialtyId);
     return specialty?.name_ar || 'غير محدد';
   };
 
   const getNeighborhoodName = (neighborhoodId) => {
+    if (!neighborhoods || !Array.isArray(neighborhoods)) return 'غير محدد';
     const neighborhood = neighborhoods.find(n => n.id === neighborhoodId);
     return neighborhood?.name || 'غير محدد';
   };
