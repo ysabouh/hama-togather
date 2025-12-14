@@ -3506,6 +3506,393 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+# ============= Healthcare Routes =============
+
+# Medical Specialties Routes
+@api_router.get("/medical-specialties", response_model=List[MedicalSpecialty])
+async def get_medical_specialties():
+    """جلب الاختصاصات الطبية - متاح للجميع"""
+    specialties = await db.medical_specialties.find({"is_active": True}, {"_id": 0}).to_list(1000)
+    return specialties
+
+@api_router.post("/medical-specialties", response_model=MedicalSpecialty)
+async def create_medical_specialty(
+    specialty_data: MedicalSpecialtyCreate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """إضافة اختصاص طبي جديد - متاح للمشرف ورئيس اللجنة"""
+    specialty = MedicalSpecialty(**specialty_data.model_dump())
+    doc = specialty.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('updated_at'):
+        doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.medical_specialties.insert_one(doc)
+    return specialty
+
+@api_router.put("/medical-specialties/{specialty_id}", response_model=MedicalSpecialty)
+async def update_medical_specialty(
+    specialty_id: str,
+    specialty_data: MedicalSpecialtyUpdate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """تعديل اختصاص طبي - متاح للمشرف ورئيس اللجنة"""
+    update_dict = {k: v for k, v in specialty_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.medical_specialties.update_one({"id": specialty_id}, {"$set": update_dict})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Medical specialty not found")
+    
+    updated_specialty = await db.medical_specialties.find_one({"id": specialty_id}, {"_id": 0})
+    return MedicalSpecialty(**updated_specialty)
+
+@api_router.delete("/medical-specialties/{specialty_id}")
+async def delete_medical_specialty(
+    specialty_id: str,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """حذف اختصاص طبي - متاح للمشرف ورئيس اللجنة"""
+    result = await db.medical_specialties.delete_one({"id": specialty_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Medical specialty not found")
+    return {"message": "Medical specialty deleted successfully"}
+
+# Doctors Routes
+@api_router.get("/doctors")
+async def get_doctors(
+    neighborhood_id: Optional[str] = None,
+    specialty_id: Optional[str] = None,
+    is_active: Optional[bool] = None,
+    participates_in_solidarity: Optional[bool] = None,
+    search: Optional[str] = None
+):
+    """جلب الأطباء - متاح للجميع مع إمكانية الفلترة"""
+    query = {}
+    
+    if neighborhood_id:
+        query['neighborhood_id'] = neighborhood_id
+    if specialty_id:
+        query['specialty_id'] = specialty_id
+    if is_active is not None:
+        query['is_active'] = is_active
+    if participates_in_solidarity is not None:
+        query['participates_in_solidarity'] = participates_in_solidarity
+    if search:
+        query['$or'] = [
+            {'full_name': {'$regex': search, '$options': 'i'}},
+            {'address': {'$regex': search, '$options': 'i'}},
+            {'specialty_description': {'$regex': search, '$options': 'i'}}
+        ]
+    
+    doctors = await db.doctors.find(query, {"_id": 0}).to_list(1000)
+    return doctors
+
+@api_router.get("/doctors/{doctor_id}")
+async def get_doctor(doctor_id: str):
+    """جلب معلومات طبيب معين - متاح للجميع"""
+    doctor = await db.doctors.find_one({"id": doctor_id}, {"_id": 0})
+    if not doctor:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    return doctor
+
+@api_router.post("/doctors", response_model=Doctor)
+async def create_doctor(
+    doctor_data: DoctorCreate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """إضافة طبيب جديد - متاح للمشرف ورئيس اللجنة"""
+    
+    # التحقق من أن رئيس اللجنة يضيف فقط في حيه
+    if current_user.role == "committee_president" and doctor_data.neighborhood_id != current_user.neighborhood_id:
+        raise HTTPException(status_code=403, detail="Committee presidents can only add doctors in their own neighborhood")
+    
+    doctor = Doctor(**doctor_data.model_dump(), created_by=current_user.id)
+    doc = doctor.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('updated_at'):
+        doc['updated_at'] = doc['updated_at'].isoformat()
+    
+    # تحويل working_hours إلى dict
+    if 'working_hours' in doc and hasattr(doc['working_hours'], 'model_dump'):
+        doc['working_hours'] = doc['working_hours'].model_dump()
+    
+    await db.doctors.insert_one(doc)
+    return doctor
+
+@api_router.put("/doctors/{doctor_id}", response_model=Doctor)
+async def update_doctor(
+    doctor_id: str,
+    doctor_data: DoctorUpdate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """تعديل معلومات طبيب - متاح للمشرف ورئيس اللجنة"""
+    
+    # التحقق من وجود الطبيب
+    existing_doctor = await db.doctors.find_one({"id": doctor_id}, {"_id": 0})
+    if not existing_doctor:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    
+    # التحقق من صلاحيات رئيس اللجنة
+    if current_user.role == "committee_president":
+        if existing_doctor.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="Committee presidents can only edit doctors in their own neighborhood")
+        if doctor_data.neighborhood_id and doctor_data.neighborhood_id != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="Committee presidents cannot change doctor's neighborhood")
+    
+    update_dict = {k: v for k, v in doctor_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    # تحويل working_hours إلى dict إذا كان موجوداً
+    if 'working_hours' in update_dict and hasattr(update_dict['working_hours'], 'model_dump'):
+        update_dict['working_hours'] = update_dict['working_hours'].model_dump()
+    
+    result = await db.doctors.update_one({"id": doctor_id}, {"$set": update_dict})
+    
+    updated_doctor = await db.doctors.find_one({"id": doctor_id}, {"_id": 0})
+    return Doctor(**updated_doctor)
+
+@api_router.delete("/doctors/{doctor_id}")
+async def delete_doctor(
+    doctor_id: str,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """حذف طبيب - متاح للمشرف ورئيس اللجنة"""
+    
+    # التحقق من وجود الطبيب
+    existing_doctor = await db.doctors.find_one({"id": doctor_id}, {"_id": 0})
+    if not existing_doctor:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    
+    # التحقق من صلاحيات رئيس اللجنة
+    if current_user.role == "committee_president" and existing_doctor.get('neighborhood_id') != current_user.neighborhood_id:
+        raise HTTPException(status_code=403, detail="Committee presidents can only delete doctors in their own neighborhood")
+    
+    result = await db.doctors.delete_one({"id": doctor_id})
+    return {"message": "Doctor deleted successfully"}
+
+# Pharmacies Routes
+@api_router.get("/pharmacies")
+async def get_pharmacies(
+    neighborhood_id: Optional[str] = None,
+    is_active: Optional[bool] = None,
+    participates_in_solidarity: Optional[bool] = None,
+    search: Optional[str] = None
+):
+    """جلب الصيدليات - متاح للجميع مع إمكانية الفلترة"""
+    query = {}
+    
+    if neighborhood_id:
+        query['neighborhood_id'] = neighborhood_id
+    if is_active is not None:
+        query['is_active'] = is_active
+    if participates_in_solidarity is not None:
+        query['participates_in_solidarity'] = participates_in_solidarity
+    if search:
+        query['$or'] = [
+            {'name': {'$regex': search, '$options': 'i'}},
+            {'owner_full_name': {'$regex': search, '$options': 'i'}},
+            {'address': {'$regex': search, '$options': 'i'}},
+            {'description': {'$regex': search, '$options': 'i'}}
+        ]
+    
+    pharmacies = await db.pharmacies.find(query, {"_id": 0}).to_list(1000)
+    return pharmacies
+
+@api_router.get("/pharmacies/{pharmacy_id}")
+async def get_pharmacy(pharmacy_id: str):
+    """جلب معلومات صيدلية معينة - متاح للجميع"""
+    pharmacy = await db.pharmacies.find_one({"id": pharmacy_id}, {"_id": 0})
+    if not pharmacy:
+        raise HTTPException(status_code=404, detail="Pharmacy not found")
+    return pharmacy
+
+@api_router.post("/pharmacies", response_model=Pharmacy)
+async def create_pharmacy(
+    pharmacy_data: PharmacyCreate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """إضافة صيدلية جديدة - متاح للمشرف ورئيس اللجنة"""
+    
+    if current_user.role == "committee_president" and pharmacy_data.neighborhood_id != current_user.neighborhood_id:
+        raise HTTPException(status_code=403, detail="Committee presidents can only add pharmacies in their own neighborhood")
+    
+    pharmacy = Pharmacy(**pharmacy_data.model_dump(), created_by=current_user.id)
+    doc = pharmacy.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('updated_at'):
+        doc['updated_at'] = doc['updated_at'].isoformat()
+    
+    if 'working_hours' in doc and hasattr(doc['working_hours'], 'model_dump'):
+        doc['working_hours'] = doc['working_hours'].model_dump()
+    
+    await db.pharmacies.insert_one(doc)
+    return pharmacy
+
+@api_router.put("/pharmacies/{pharmacy_id}", response_model=Pharmacy)
+async def update_pharmacy(
+    pharmacy_id: str,
+    pharmacy_data: PharmacyUpdate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """تعديل معلومات صيدلية - متاح للمشرف ورئيس اللجنة"""
+    
+    existing_pharmacy = await db.pharmacies.find_one({"id": pharmacy_id}, {"_id": 0})
+    if not existing_pharmacy:
+        raise HTTPException(status_code=404, detail="Pharmacy not found")
+    
+    if current_user.role == "committee_president":
+        if existing_pharmacy.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="Committee presidents can only edit pharmacies in their own neighborhood")
+        if pharmacy_data.neighborhood_id and pharmacy_data.neighborhood_id != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="Committee presidents cannot change pharmacy's neighborhood")
+    
+    update_dict = {k: v for k, v in pharmacy_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    if 'working_hours' in update_dict and hasattr(update_dict['working_hours'], 'model_dump'):
+        update_dict['working_hours'] = update_dict['working_hours'].model_dump()
+    
+    result = await db.pharmacies.update_one({"id": pharmacy_id}, {"$set": update_dict})
+    
+    updated_pharmacy = await db.pharmacies.find_one({"id": pharmacy_id}, {"_id": 0})
+    return Pharmacy(**updated_pharmacy)
+
+@api_router.delete("/pharmacies/{pharmacy_id}")
+async def delete_pharmacy(
+    pharmacy_id: str,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """حذف صيدلية - متاح للمشرف ورئيس اللجنة"""
+    
+    existing_pharmacy = await db.pharmacies.find_one({"id": pharmacy_id}, {"_id": 0})
+    if not existing_pharmacy:
+        raise HTTPException(status_code=404, detail="Pharmacy not found")
+    
+    if current_user.role == "committee_president" and existing_pharmacy.get('neighborhood_id') != current_user.neighborhood_id:
+        raise HTTPException(status_code=403, detail="Committee presidents can only delete pharmacies in their own neighborhood")
+    
+    result = await db.pharmacies.delete_one({"id": pharmacy_id})
+    return {"message": "Pharmacy deleted successfully"}
+
+# Laboratories Routes
+@api_router.get("/laboratories")
+async def get_laboratories(
+    neighborhood_id: Optional[str] = None,
+    is_active: Optional[bool] = None,
+    participates_in_solidarity: Optional[bool] = None,
+    search: Optional[str] = None
+):
+    """جلب المخابر - متاح للجميع مع إمكانية الفلترة"""
+    query = {}
+    
+    if neighborhood_id:
+        query['neighborhood_id'] = neighborhood_id
+    if is_active is not None:
+        query['is_active'] = is_active
+    if participates_in_solidarity is not None:
+        query['participates_in_solidarity'] = participates_in_solidarity
+    if search:
+        query['$or'] = [
+            {'name': {'$regex': search, '$options': 'i'}},
+            {'owner_full_name': {'$regex': search, '$options': 'i'}},
+            {'address': {'$regex': search, '$options': 'i'}},
+            {'description': {'$regex': search, '$options': 'i'}}
+        ]
+    
+    laboratories = await db.laboratories.find(query, {"_id": 0}).to_list(1000)
+    return laboratories
+
+@api_router.get("/laboratories/{laboratory_id}")
+async def get_laboratory(laboratory_id: str):
+    """جلب معلومات مخبر معين - متاح للجميع"""
+    laboratory = await db.laboratories.find_one({"id": laboratory_id}, {"_id": 0})
+    if not laboratory:
+        raise HTTPException(status_code=404, detail="Laboratory not found")
+    return laboratory
+
+@api_router.post("/laboratories", response_model=Laboratory)
+async def create_laboratory(
+    laboratory_data: LaboratoryCreate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """إضافة مخبر جديد - متاح للمشرف ورئيس اللجنة"""
+    
+    if current_user.role == "committee_president" and laboratory_data.neighborhood_id != current_user.neighborhood_id:
+        raise HTTPException(status_code=403, detail="Committee presidents can only add laboratories in their own neighborhood")
+    
+    laboratory = Laboratory(**laboratory_data.model_dump(), created_by=current_user.id)
+    doc = laboratory.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('updated_at'):
+        doc['updated_at'] = doc['updated_at'].isoformat()
+    
+    if 'working_hours' in doc and hasattr(doc['working_hours'], 'model_dump'):
+        doc['working_hours'] = doc['working_hours'].model_dump()
+    
+    await db.laboratories.insert_one(doc)
+    return laboratory
+
+@api_router.put("/laboratories/{laboratory_id}", response_model=Laboratory)
+async def update_laboratory(
+    laboratory_id: str,
+    laboratory_data: LaboratoryUpdate,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """تعديل معلومات مخبر - متاح للمشرف ورئيس اللجنة"""
+    
+    existing_laboratory = await db.laboratories.find_one({"id": laboratory_id}, {"_id": 0})
+    if not existing_laboratory:
+        raise HTTPException(status_code=404, detail="Laboratory not found")
+    
+    if current_user.role == "committee_president":
+        if existing_laboratory.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="Committee presidents can only edit laboratories in their own neighborhood")
+        if laboratory_data.neighborhood_id and laboratory_data.neighborhood_id != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="Committee presidents cannot change laboratory's neighborhood")
+    
+    update_dict = {k: v for k, v in laboratory_data.model_dump().items() if v is not None}
+    if not update_dict:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    if 'working_hours' in update_dict and hasattr(update_dict['working_hours'], 'model_dump'):
+        update_dict['working_hours'] = update_dict['working_hours'].model_dump()
+    
+    result = await db.laboratories.update_one({"id": laboratory_id}, {"$set": update_dict})
+    
+    updated_laboratory = await db.laboratories.find_one({"id": laboratory_id}, {"_id": 0})
+    return Laboratory(**updated_laboratory)
+
+@api_router.delete("/laboratories/{laboratory_id}")
+async def delete_laboratory(
+    laboratory_id: str,
+    current_user: User = Depends(get_admin_or_committee_president)
+):
+    """حذف مخبر - متاح للمشرف ورئيس اللجنة"""
+    
+    existing_laboratory = await db.laboratories.find_one({"id": laboratory_id}, {"_id": 0})
+    if not existing_laboratory:
+        raise HTTPException(status_code=404, detail="Laboratory not found")
+    
+    if current_user.role == "committee_president" and existing_laboratory.get('neighborhood_id') != current_user.neighborhood_id:
+        raise HTTPException(status_code=403, detail="Committee presidents can only delete laboratories in their own neighborhood")
+    
+    result = await db.laboratories.delete_one({"id": laboratory_id})
+    return {"message": "Laboratory deleted successfully"}
+
+# ============= End Healthcare Routes =============
+
 @app.on_event("startup")
 async def startup_db():
     # تحديث جميع العائلات بالحقول الجديدة إذا لم تكن موجودة
