@@ -55,8 +55,10 @@ const HealthcareDirectory = () => {
         axios.get(`${API_URL}/neighborhoods`)
       ]);
 
-      setSpecialties(specialtiesRes.data);
-      setNeighborhoods(neighborhoodsRes.data);
+      setSpecialties(specialtiesRes.data || []);
+      // neighborhoods API returns paginated response
+      const neighborhoodsData = neighborhoodsRes.data?.items || neighborhoodsRes.data || [];
+      setNeighborhoods(neighborhoodsData);
 
       // إذا كان المستخدم مسجل دخول، فلترة حسب حيه
       const neighborhoodFilter = user?.neighborhood_id || '';
