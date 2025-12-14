@@ -176,66 +176,76 @@ const HealthcareDirectory = () => {
   };
 
   const DoctorCard = ({ doctor }) => (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="bg-blue-100 p-3 rounded-full">
-            <Stethoscope className="w-6 h-6 text-blue-600" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-gray-900">{doctor.full_name}</h3>
-            <p className="text-sm text-blue-600 font-medium">{getSpecialtyName(doctor.specialty_id)}</p>
-            <div className="mt-1 inline-flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-              <MapPin className="w-3 h-3 text-gray-600" />
-              <span className="text-xs font-medium text-gray-700">{getNeighborhoodName(doctor.neighborhood_id)}</span>
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300">
+      {/* Header with gradient */}
+      <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-cyan-50 p-6 pb-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start gap-4">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+              <Stethoscope className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{doctor.full_name}</h3>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  {getSpecialtyName(doctor.specialty_id)}
+                </span>
+                <span className="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm">
+                  <MapPin className="w-3 h-3" />
+                  {getNeighborhoodName(doctor.neighborhood_id)}
+                </span>
+              </div>
             </div>
           </div>
+          {doctor.participates_in_solidarity && (
+            <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <Heart className="w-4 h-4 fill-white" />
+              <span className="text-xs font-bold">تكافل</span>
+            </div>
+          )}
         </div>
-        {doctor.participates_in_solidarity && (
-          <div className="bg-green-100 px-3 py-1 rounded-full flex items-center gap-1">
-            <Heart className="w-4 h-4 text-green-600" />
-            <span className="text-xs font-medium text-green-700">تكافل</span>
-          </div>
+        {doctor.specialty_description && (
+          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 mt-2">{doctor.specialty_description}</p>
         )}
       </div>
 
-      {doctor.specialty_description && (
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{doctor.specialty_description}</p>
-      )}
-
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-gray-700">
-          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-sm">{doctor.address}</span>
+      {/* Body with info */}
+      <div className="p-6 pt-4 space-y-3">
+        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+          <span className="text-sm text-gray-700 leading-relaxed">{doctor.address}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-700">
-          <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <Phone className="w-5 h-5 text-blue-500 flex-shrink-0" />
           <div className="text-sm">
-            <span className="font-medium">{doctor.mobile}</span>
+            <span className="font-semibold text-gray-900">{doctor.mobile}</span>
             {doctor.landline && <span className="text-gray-500 mr-2">• {doctor.landline}</span>}
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-700">
-          <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-sm">{formatWorkingHours(doctor.working_hours)}</span>
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <Clock className="w-5 h-5 text-blue-500 flex-shrink-0" />
+          <span className="text-sm text-gray-700">{formatWorkingHours(doctor.working_hours)}</span>
         </div>
 
-        <div className="flex items-center gap-2 mt-4">
+        <div className="pt-2 flex items-center justify-between">
           {doctor.is_active ? (
-            <span className="flex items-center gap-1 text-green-600 text-sm">
+            <span className="flex items-center gap-1.5 text-green-600 font-medium text-sm bg-green-50 px-3 py-1.5 rounded-lg">
               <CheckCircle className="w-4 h-4" />
-              نشط
+              متاح حالياً
             </span>
           ) : (
-            <span className="flex items-center gap-1 text-red-600 text-sm">
+            <span className="flex items-center gap-1.5 text-red-600 font-medium text-sm bg-red-50 px-3 py-1.5 rounded-lg">
               <XCircle className="w-4 h-4" />
-              غير نشط
+              غير متاح
             </span>
           )}
         </div>
       </div>
+
+      {/* Bottom accent line */}
+      <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500"></div>
     </div>
   );
 
