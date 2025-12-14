@@ -177,18 +177,19 @@ const HealthcareDirectory = () => {
 
   const DoctorCard = ({ doctor }) => (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300">
-      {/* Solidarity Badge - Top Left Corner */}
+      {/* Solidarity Ribbon Badge */}
       {doctor.participates_in_solidarity && (
-        <div className="absolute top-0 left-0 z-10">
+        <div className="absolute -top-1 -left-1 z-10">
           <div className="relative">
-            <div className="bg-gradient-to-br from-red-500 to-rose-600 text-white px-4 py-2 shadow-xl">
-              <div className="flex items-center gap-1.5">
-                <Heart className="w-4 h-4 fill-white" />
-                <span className="text-sm font-bold">تكافل</span>
+            {/* Main ribbon */}
+            <div className="bg-gradient-to-r from-red-500 via-red-600 to-rose-600 text-white px-6 py-2 shadow-2xl transform -rotate-45 origin-top-left translate-x-[-10px] translate-y-[25px]">
+              <div className="flex items-center gap-1.5 transform rotate-45">
+                <Heart className="w-4 h-4 fill-white animate-pulse" />
+                <span className="text-xs font-extrabold tracking-wide">تكافل</span>
               </div>
             </div>
-            {/* Triangle bottom */}
-            <div className="absolute bottom-0 left-0 w-0 h-0 border-l-[40px] border-l-transparent border-t-[15px] border-t-red-700"></div>
+            {/* Shadow effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent rounded-tl-2xl pointer-events-none"></div>
           </div>
         </div>
       )}
