@@ -55,7 +55,6 @@ function App() {
             <Route path="/families-public" element={<FamiliesPublic />} />
             <Route path="/family/:familyId" element={<FamilyDetails />} />
             <Route path="/families" element={<FamiliesPage />} />
-            <Route path="/health-cases" element={<HealthCasesPage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/initiatives" element={<InitiativesPage />} />
