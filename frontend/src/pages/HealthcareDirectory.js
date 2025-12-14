@@ -320,66 +320,72 @@ const HealthcareDirectory = () => {
   );
 
   const LaboratoryCard = ({ laboratory }) => (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="bg-purple-100 p-3 rounded-full">
-            <FlaskConical className="w-6 h-6 text-purple-600" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-gray-900">{laboratory.name}</h3>
-            <p className="text-sm text-gray-600">صاحب المخبر: {laboratory.owner_full_name}</p>
-            <div className="mt-1 inline-flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
-              <MapPin className="w-3 h-3 text-gray-600" />
-              <span className="text-xs font-medium text-gray-700">{getNeighborhoodName(laboratory.neighborhood_id)}</span>
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300">
+      {/* Header with gradient */}
+      <div className="bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-50 p-6 pb-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start gap-4">
+            <div className="bg-gradient-to-br from-purple-500 to-violet-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+              <FlaskConical className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{laboratory.name}</h3>
+              <p className="text-sm text-gray-600 mb-2">صاحب المخبر: {laboratory.owner_full_name}</p>
+              <span className="flex items-center gap-1 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm inline-flex">
+                <MapPin className="w-3 h-3" />
+                {getNeighborhoodName(laboratory.neighborhood_id)}
+              </span>
             </div>
           </div>
+          {laboratory.participates_in_solidarity && (
+            <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <Heart className="w-4 h-4 fill-white" />
+              <span className="text-xs font-bold">تكافل</span>
+            </div>
+          )}
         </div>
-        {laboratory.participates_in_solidarity && (
-          <div className="bg-green-100 px-3 py-1 rounded-full flex items-center gap-1">
-            <Heart className="w-4 h-4 text-green-600" />
-            <span className="text-xs font-medium text-green-700">تكافل</span>
-          </div>
+        {laboratory.description && (
+          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 mt-2">{laboratory.description}</p>
         )}
       </div>
 
-      {laboratory.description && (
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{laboratory.description}</p>
-      )}
-
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-gray-700">
-          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-sm">{laboratory.address}</span>
+      {/* Body with info */}
+      <div className="p-6 pt-4 space-y-3">
+        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <MapPin className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
+          <span className="text-sm text-gray-700 leading-relaxed">{laboratory.address}</span>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-700">
-          <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <Phone className="w-5 h-5 text-purple-500 flex-shrink-0" />
           <div className="text-sm">
-            <span className="font-medium">{laboratory.mobile}</span>
+            <span className="font-semibold text-gray-900">{laboratory.mobile}</span>
             {laboratory.landline && <span className="text-gray-500 mr-2">• {laboratory.landline}</span>}
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-700">
-          <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-sm">{formatWorkingHours(laboratory.working_hours)}</span>
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <Clock className="w-5 h-5 text-purple-500 flex-shrink-0" />
+          <span className="text-sm text-gray-700">{formatWorkingHours(laboratory.working_hours)}</span>
         </div>
 
-        <div className="flex items-center gap-2 mt-4">
+        <div className="pt-2 flex items-center justify-between">
           {laboratory.is_active ? (
-            <span className="flex items-center gap-1 text-green-600 text-sm">
+            <span className="flex items-center gap-1.5 text-green-600 font-medium text-sm bg-green-50 px-3 py-1.5 rounded-lg">
               <CheckCircle className="w-4 h-4" />
-              نشط
+              متاح حالياً
             </span>
           ) : (
-            <span className="flex items-center gap-1 text-red-600 text-sm">
+            <span className="flex items-center gap-1.5 text-red-600 font-medium text-sm bg-red-50 px-3 py-1.5 rounded-lg">
               <XCircle className="w-4 h-4" />
-              غير نشط
+              غير متاح
             </span>
           )}
         </div>
       </div>
+
+      {/* Bottom accent line */}
+      <div className="h-1 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500"></div>
     </div>
   );
 
