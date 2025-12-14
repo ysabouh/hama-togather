@@ -268,7 +268,7 @@ const HealthcareDirectory = () => {
             </div>
           </div>
           {pharmacy.participates_in_solidarity && (
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+            <div className="bg-gradient-to-r from-red-500 to-rose-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <Heart className="w-4 h-4 fill-white" />
               <span className="text-xs font-bold">تكافل</span>
             </div>
