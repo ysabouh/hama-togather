@@ -9,7 +9,7 @@ import json
 import uuid
 
 # Configuration
-BACKEND_URL = "https://solidarity-hub-7.preview.emergentagent.com/api"
+BACKEND_URL = "https://hama-community.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 

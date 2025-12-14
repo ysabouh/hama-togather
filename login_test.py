@@ -9,7 +9,7 @@ import json
 import sys
 
 # Configuration - using the same URL from existing backend_test.py
-BACKEND_URL = "https://solidarity-hub-7.preview.emergentagent.com/api"
+BACKEND_URL = "https://hama-community.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@test.com"
 ADMIN_PASSWORD = "admin123"
 
