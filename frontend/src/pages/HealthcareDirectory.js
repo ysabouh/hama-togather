@@ -261,6 +261,22 @@ const HealthcareDirectory = () => {
 
   const PharmacyCard = ({ pharmacy }) => (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300">
+      {/* Solidarity Badge - Top Left Corner */}
+      {pharmacy.participates_in_solidarity && (
+        <div className="absolute top-0 left-0 z-10">
+          <div className="relative">
+            <div className="bg-gradient-to-br from-red-500 to-rose-600 text-white px-4 py-2 shadow-xl">
+              <div className="flex items-center gap-1.5">
+                <Heart className="w-4 h-4 fill-white" />
+                <span className="text-sm font-bold">تكافل</span>
+              </div>
+            </div>
+            {/* Triangle bottom */}
+            <div className="absolute bottom-0 left-0 w-0 h-0 border-l-[40px] border-l-transparent border-t-[15px] border-t-red-700"></div>
+          </div>
+        </div>
+      )}
+      
       {/* Header with gradient */}
       <div className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-6 pb-4">
         <div className="flex items-start justify-between mb-3">
@@ -277,12 +293,6 @@ const HealthcareDirectory = () => {
               </span>
             </div>
           </div>
-          {pharmacy.participates_in_solidarity && (
-            <div className="bg-gradient-to-r from-red-500 to-rose-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-              <Heart className="w-4 h-4 fill-white" />
-              <span className="text-xs font-bold">تكافل</span>
-            </div>
-          )}
         </div>
         {pharmacy.description && (
           <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 mt-2">{pharmacy.description}</p>
