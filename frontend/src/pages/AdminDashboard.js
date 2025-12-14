@@ -144,6 +144,7 @@ const AdminDashboard = () => {
   const [activeUsersTab, setActiveUsersTab] = useState('users');
   const [activeSiteTab, setActiveSiteTab] = useState('hero');
   const [activeFamiliesTab, setActiveFamiliesTab] = useState('families');
+  const [activeHealthcareTab, setActiveHealthcareTab] = useState('doctors');
   
   // User Edit Dialog
   const [editUserDialog, setEditUserDialog] = useState(false);
