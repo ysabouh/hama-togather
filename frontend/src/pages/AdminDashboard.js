@@ -4694,14 +4694,12 @@ const AdminDashboard = () => {
 
 
 
+
             {/* Healthcare Tab - الحالات الصحية */}
             <TabsContent value="healthcare">
-              <div className="bg-white rounded-xl shadow-lg p-8">
-                <div className="flex justify-between items-center mb-8">
-                  <div>
-                    <h2 className="text-3xl font-bold text-emerald-900">الحالات الصحية</h2>
-                    <p className="text-gray-600 mt-2">دليل الأطباء والصيدليات والمخابر في الأحياء</p>
-                  </div>
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-emerald-900">دليل الحالات الصحية</h2>
                   <Button 
                     onClick={() => window.open('/health-cases', '_blank')}
                     className="bg-emerald-600 hover:bg-emerald-700"
@@ -4709,136 +4707,91 @@ const AdminDashboard = () => {
                     <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                    فتح في صفحة كاملة
+                    فتح الدليل الكامل
                   </Button>
                 </div>
 
-                {/* Quick Message */}
-                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-r-4 border-emerald-500 rounded-lg p-6 mb-8">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-emerald-900 mb-2">مرحباً بك في قسم الحالات الصحية</h3>
-                      <p className="text-emerald-800 leading-relaxed">
-                        هنا يمكنك إدارة دليل مقدمي الخدمات الصحية في الأحياء (الأطباء، الصيدليات، والمخابر) مع تفاصيل الشراكات والخصومات المقدمة للعائلات.
+                <p className="text-gray-600 mb-6">
+                  دليل شامل لجميع الأطباء والصيدليات والمخابر في الأحياء مع تفاصيل الشراكات والخصومات
+                </p>
+
+                {/* Message */}
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-r-4 border-emerald-600 rounded-lg p-6 mb-6">
+                  <div className="flex gap-4">
+                    <svg className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p className="text-emerald-900 font-semibold mb-1">للوصول إلى الدليل الكامل</p>
+                      <p className="text-emerald-800 text-sm">
+                        اضغط على الزر أعلاه أو من القائمة الرئيسية → "الحالات الصحية" للوصول إلى الدليل الكامل مع إمكانية الإضافة والتعديل والبحث.
                       </p>
-                      <div className="mt-4 flex gap-3">
-                        <Button 
-                          onClick={() => window.open('/health-cases', '_blank')}
-                          className="bg-emerald-600 hover:bg-emerald-700"
-                        >
-                          الذهاب إلى الدليل الكامل
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                          </svg>
-                        </Button>
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Preview Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border-2 border-emerald-200 hover:shadow-lg transition-all cursor-pointer" onClick={() => window.open('/health-cases?tab=doctor', '_blank')}>
+                {/* Quick Preview Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div 
+                    onClick={() => window.open('/health-cases?filter=doctor', '_blank')}
+                    className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border-2 border-emerald-200 hover:shadow-xl transition-all cursor-pointer group"
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <div className="bg-emerald-600 p-3 rounded-xl">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="bg-emerald-600 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                       </div>
-                      <div className="text-left">
-                        <p className="text-3xl font-bold text-emerald-900">--</p>
-                        <p className="text-sm text-emerald-700">طبيب</p>
-                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-emerald-900 mb-2">دليل الأطباء</h3>
-                    <p className="text-sm text-emerald-700">جميع الأطباء في الأحياء مع الاختصاصات والخصومات</p>
+                    <h3 className="text-xl font-bold text-emerald-900 mb-2">🩺 الأطباء</h3>
+                    <p className="text-sm text-emerald-700">دليل شامل لجميع الأطباء في الأحياء مع الاختصاصات والخصومات المقدمة</p>
+                    <div className="mt-4 flex items-center text-emerald-600 text-sm font-semibold">
+                      <span>عرض التفاصيل</span>
+                      <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 hover:shadow-lg transition-all cursor-pointer" onClick={() => window.open('/health-cases?tab=pharmacy', '_blank')}>
+                  <div 
+                    onClick={() => window.open('/health-cases?filter=pharmacy', '_blank')}
+                    className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200 hover:shadow-xl transition-all cursor-pointer group"
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <div className="bg-blue-600 p-3 rounded-xl">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="bg-blue-600 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                       </div>
-                      <div className="text-left">
-                        <p className="text-3xl font-bold text-blue-900">--</p>
-                        <p className="text-sm text-blue-700">صيدلية</p>
-                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-blue-900 mb-2">دليل الصيدليات</h3>
-                    <p className="text-sm text-blue-700">جميع الصيدليات المشتركة في البرنامج التكافلي</p>
+                    <h3 className="text-xl font-bold text-blue-900 mb-2">💊 الصيدليات</h3>
+                    <p className="text-sm text-blue-700">دليل الصيدليات المشتركة في البرنامج التكافلي مع نسب الخصم المتاحة</p>
+                    <div className="mt-4 flex items-center text-blue-600 text-sm font-semibold">
+                      <span>عرض التفاصيل</span>
+                      <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border-2 border-amber-200 hover:shadow-lg transition-all cursor-pointer" onClick={() => window.open('/health-cases?tab=laboratory', '_blank')}>
+                  <div 
+                    onClick={() => window.open('/health-cases?filter=laboratory', '_blank')}
+                    className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border-2 border-amber-200 hover:shadow-xl transition-all cursor-pointer group"
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <div className="bg-amber-600 p-3 rounded-xl">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="bg-amber-600 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                       </div>
-                      <div className="text-left">
-                        <p className="text-3xl font-bold text-amber-900">--</p>
-                        <p className="text-sm text-amber-700">مختبر</p>
-                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-amber-900 mb-2">دليل المخابر</h3>
-                    <p className="text-sm text-amber-700">جميع المخابر الطبية المتاحة في الأحياء</p>
-                  </div>
-                </div>
-
-                {/* Features List */}
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">المميزات المتوفرة:</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">إدارة كاملة</p>
-                        <p className="text-sm text-gray-600">إضافة وتعديل وحذف مقدمي الخدمات</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">تفاصيل الشراكة</p>
-                        <p className="text-sm text-gray-600">نسب الخصم والمعاينات المجانية</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">ساعات العمل</p>
-                        <p className="text-sm text-gray-600">جدول مفصل لكل يوم من أيام الأسبوع</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">بحث وتصفية</p>
-                        <p className="text-sm text-gray-600">بحث سريع بالاسم والاختصاص والحي</p>
-                      </div>
+                    <h3 className="text-xl font-bold text-amber-900 mb-2">🔬 المخابر</h3>
+                    <p className="text-sm text-amber-700">دليل المخابر الطبية المتاحة في الأحياء مع التحاليل المتوفرة</p>
+                    <div className="mt-4 flex items-center text-amber-600 text-sm font-semibold">
+                      <span>عرض التفاصيل</span>
+                      <svg className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
                     </div>
                   </div>
                 </div>
