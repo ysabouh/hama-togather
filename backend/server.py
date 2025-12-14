@@ -3399,6 +3399,189 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# ============= Healthcare Routes (العناية الصحية) =============
+
+# Get all healthcare providers (الكل - أطباء، صيدليات، مخابر)
+@api_router.get("/healthcare-providers", response_model=List[HealthcareProvider])
+async def get_healthcare_providers(
+    type: Optional[str] = None,
+    neighborhood_id: Optional[str] = None,
+    current_user: User = Depends(get_current_user)
+):
+    query = {}
+    
+    # تصفية حسب النوع (doctor, pharmacy, laboratory)
+    if type:
+        query['type'] = type
+    
+    # أعضاء اللجنة يرون فقط مقدمي الخدمات في حيهم
+    if current_user.role in ['committee_member', 'committee_president']:
+        if not current_user.neighborhood_id:
+            raise HTTPException(status_code=400, detail="لا يوجد حي مرتبط بحسابك")
+        query['neighborhood_id'] = current_user.neighborhood_id
+    elif neighborhood_id:
+        # المدير يمكنه التصفية حسب الحي
+        query['neighborhood_id'] = neighborhood_id
+    
+    providers = await db.healthcare_providers.find(query, {"_id": 0}).to_list(1000)
+    return providers
+
+# Get single healthcare provider
+@api_router.get("/healthcare-providers/{provider_id}", response_model=HealthcareProvider)
+async def get_healthcare_provider(
+    provider_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    provider = await db.healthcare_providers.find_one({"id": provider_id}, {"_id": 0})
+    if not provider:
+        raise HTTPException(status_code=404, detail="مقدم الخدمة غير موجود")
+    
+    # أعضاء اللجنة يمكنهم رؤية فقط مقدمي الخدمات في حيهم
+    if current_user.role in ['committee_member', 'committee_president']:
+        if provider.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="ليس لديك صلاحية لرؤية هذا المقدم")
+    
+    return provider
+
+# Create healthcare provider (admin + committee_president)
+@api_router.post("/healthcare-providers", response_model=HealthcareProvider)
+async def create_healthcare_provider(
+    provider: HealthcareProviderCreate,
+    current_user: User = Depends(get_current_user)
+):
+    # المدير أو رئيس اللجنة فقط
+    if current_user.role not in ['admin', 'committee_president']:
+        raise HTTPException(status_code=403, detail="ليس لديك صلاحية لإضافة مقدمي خدمات")
+    
+    # رئيس اللجنة يمكنه فقط إضافة في حيه
+    if current_user.role == 'committee_president':
+        if provider.neighborhood_id != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="يمكنك فقط إضافة مقدمي خدمات في حيك")
+    
+    # Validate type
+    if provider.type not in ['doctor', 'pharmacy', 'laboratory']:
+        raise HTTPException(status_code=400, detail="نوع مقدم الخدمة غير صحيح")
+    
+    new_provider = HealthcareProvider(
+        **provider.model_dump(),
+        created_by_user_id=current_user.id,
+        created_at=datetime.now(timezone.utc)
+    )
+    
+    provider_dict = new_provider.model_dump()
+    provider_dict['created_at'] = provider_dict['created_at'].isoformat()
+    if provider_dict.get('updated_at'):
+        provider_dict['updated_at'] = provider_dict['updated_at'].isoformat()
+    
+    await db.healthcare_providers.insert_one(provider_dict)
+    
+    return new_provider
+
+# Update healthcare provider
+@api_router.put("/healthcare-providers/{provider_id}", response_model=HealthcareProvider)
+async def update_healthcare_provider(
+    provider_id: str,
+    provider_update: HealthcareProviderUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    # المدير أو رئيس اللجنة فقط
+    if current_user.role not in ['admin', 'committee_president']:
+        raise HTTPException(status_code=403, detail="ليس لديك صلاحية لتعديل مقدمي خدمات")
+    
+    existing_provider = await db.healthcare_providers.find_one({"id": provider_id})
+    if not existing_provider:
+        raise HTTPException(status_code=404, detail="مقدم الخدمة غير موجود")
+    
+    # رئيس اللجنة يمكنه فقط تعديل في حيه
+    if current_user.role == 'committee_president':
+        if existing_provider.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="يمكنك فقط تعديل مقدمي خدمات في حيك")
+    
+    update_data = {k: v for k, v in provider_update.model_dump(exclude_unset=True).items() if v is not None}
+    
+    if update_data:
+        update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+        update_data['updated_by_user_id'] = current_user.id
+        
+        await db.healthcare_providers.update_one(
+            {"id": provider_id},
+            {"$set": update_data}
+        )
+    
+    updated_provider = await db.healthcare_providers.find_one({"id": provider_id}, {"_id": 0})
+    return updated_provider
+
+# Delete healthcare provider
+@api_router.delete("/healthcare-providers/{provider_id}")
+async def delete_healthcare_provider(
+    provider_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    # المدير أو رئيس اللجنة فقط
+    if current_user.role not in ['admin', 'committee_president']:
+        raise HTTPException(status_code=403, detail="ليس لديك صلاحية لحذف مقدمي خدمات")
+    
+    existing_provider = await db.healthcare_providers.find_one({"id": provider_id})
+    if not existing_provider:
+        raise HTTPException(status_code=404, detail="مقدم الخدمة غير موجود")
+    
+    # رئيس اللجنة يمكنه فقط حذف في حيه
+    if current_user.role == 'committee_president':
+        if existing_provider.get('neighborhood_id') != current_user.neighborhood_id:
+            raise HTTPException(status_code=403, detail="يمكنك فقط حذف مقدمي خدمات في حيك")
+    
+    result = await db.healthcare_providers.delete_one({"id": provider_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="فشل الحذف")
+    
+    return {"message": "تم حذف مقدم الخدمة بنجاح"}
+
+# Get healthcare statistics
+@api_router.get("/healthcare-stats")
+async def get_healthcare_stats(current_user: User = Depends(get_current_user)):
+    query = {}
+    
+    # أعضاء اللجنة يرون إحصائيات حيهم فقط
+    if current_user.role in ['committee_member', 'committee_president']:
+        if not current_user.neighborhood_id:
+            raise HTTPException(status_code=400, detail="لا يوجد حي مرتبط بحسابك")
+        query['neighborhood_id'] = current_user.neighborhood_id
+    
+    total_doctors = await db.healthcare_providers.count_documents({**query, 'type': 'doctor'})
+    total_pharmacies = await db.healthcare_providers.count_documents({**query, 'type': 'pharmacy'})
+    total_laboratories = await db.healthcare_providers.count_documents({**query, 'type': 'laboratory'})
+    
+    active_doctors = await db.healthcare_providers.count_documents({**query, 'type': 'doctor', 'is_active': True})
+    active_pharmacies = await db.healthcare_providers.count_documents({**query, 'type': 'pharmacy', 'is_active': True})
+    active_laboratories = await db.healthcare_providers.count_documents({**query, 'type': 'laboratory', 'is_active': True})
+    
+    partner_doctors = await db.healthcare_providers.count_documents({**query, 'type': 'doctor', 'is_partner': True})
+    partner_pharmacies = await db.healthcare_providers.count_documents({**query, 'type': 'pharmacy', 'is_partner': True})
+    partner_laboratories = await db.healthcare_providers.count_documents({**query, 'type': 'laboratory', 'is_partner': True})
+    
+    return {
+        "total": {
+            "doctors": total_doctors,
+            "pharmacies": total_pharmacies,
+            "laboratories": total_laboratories,
+            "all": total_doctors + total_pharmacies + total_laboratories
+        },
+        "active": {
+            "doctors": active_doctors,
+            "pharmacies": active_pharmacies,
+            "laboratories": active_laboratories,
+            "all": active_doctors + active_pharmacies + active_laboratories
+        },
+        "partners": {
+            "doctors": partner_doctors,
+            "pharmacies": partner_pharmacies,
+            "laboratories": partner_laboratories,
+            "all": partner_doctors + partner_pharmacies + partner_laboratories
+        }
+    }
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
