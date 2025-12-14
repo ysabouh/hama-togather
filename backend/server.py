@@ -3890,6 +3890,9 @@ async def delete_laboratory(
 
 # ============= End Healthcare Routes =============
 
+# Include router (must be after all route definitions)
+app.include_router(api_router)
+
 @app.on_event("startup")
 async def startup_db():
     # تحديث جميع العائلات بالحقول الجديدة إذا لم تكن موجودة
