@@ -338,11 +338,6 @@ const HealthcareDirectory = () => {
         </div>
 
         <div className="flex items-center gap-2 text-gray-700">
-          <Building2 className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-sm">{getNeighborhoodName(laboratory.neighborhood_id)}</span>
-        </div>
-
-        <div className="flex items-center gap-2 text-gray-700">
           <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
           <div className="text-sm">
             <span className="font-medium">{laboratory.mobile}</span>
