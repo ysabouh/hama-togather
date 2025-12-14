@@ -17,6 +17,7 @@ import MyDonationsPage from './pages/MyDonationsPage';
 import OurMissionPage from './pages/OurMissionPage';
 import ProfilePage from './pages/ProfilePage';
 import CommitteeDashboard from './pages/CommitteeDashboard';
+import HealthcareDirectory from './pages/HealthcareDirectory';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children, adminOnly = false, committeeOnly = false }) => {
