@@ -2,78 +2,76 @@
 The user wants to develop a comprehensive web application called Together We Build (معاً نَبني), a community solidarity platform for the city of Hama. The application aims to support families, manage in-kind donations, handle healthcare cases, daily initiatives, family awareness, and educational support.
 
 **PRODUCT REQUIREMENTS:**
-1.  **User Roles**: Administrator (Admin), Committee Member, Committee Head, and regular User.
+1.  **User Roles**: Administrator (Admin), Committee Member, Committee Head, and regular User (Generous Donor).
 2.  **Dynamic Content**: All sections of the site must be editable from the control panel.
 3.  **Admin Dashboard**: A comprehensive panel for managing all site content.
 4.  **Neighborhood System**: Manage neighborhoods and their committees, and link users to them upon registration.
+5.  **Permissions**: Implement a detailed permission system where users can only see and manage data relevant to their role and (if applicable) their neighborhood.
 
 **User's preferred language**: العربية (Arabic). The next agent MUST communicate in Arabic.
 
 **what currently exists?**
-The application has undergone a significant UI/UX overhaul driven by the user. The login and registration flows have been updated to be phone-number-centric, with email now being optional. The  page has been completely redesigned to match the  page, featuring a timeline layout, tabs for active/inactive donations, pagination, and detailed family information on each donation card. It also now correctly displays receipt images and cancellation reasons. A major new feature allows admins to transfer a donation to a different family via a modal with a custom-built searchable combobox. Password visibility toggles ('eye' icons) have been added to the login and registration pages. Multiple backend bugs related to data validation and optional fields have been resolved.
+The application now has a sophisticated and detailed user roles and permissions system. The four roles (, , , ) have been implemented with specific access controls on both the backend and frontend.
+
+-   **Backend**: API endpoints for families, donations, and other resources are now secured. Admins have full access, while committee members/presidents are restricted to viewing and managing data only within their assigned neighborhood.
+-   **Frontend**:
+    -   The UI dynamically adapts to the user's role. The main  now conditionally hides administrative tabs (like Users, Site Content, Neighborhoods) from non-admins.
+    -   If a committee member accesses the  page, they are shown a dedicated splash page that directs them to their own .
+    -   The  also renders different menu items based on the user's role.
+-   **Admin Features**: Admins now have dedicated dialogs within the dashboard to edit any user's information (name, role, neighborhood, etc.) and to reset any user's password.
+-   **Bug Fixes**: Multiple critical bugs were resolved, including Pydantic validation errors from empty email strings, a FastAPI route ordering issue that caused authorization failures, and data loading failures for committee members.
+-   **Completed User Request**: Password visibility toggles (eye icons) were successfully added to the Change Password section of the user profile page.
 
 **Last working item**:
--   **Last item agent was working**: Adding a password visibility toggle (eye icon) to the Change Password section of the . The user requested this feature to improve usability. The agent located the file  and was about to start implementation.
--   **Status**: NOT STARTED
+-   **Last item agent was working**: The user reported that when a committee member tries to edit a family, the dropdown menus for Income Level and Family Category are empty. The agent correctly diagnosed that the backend endpoints providing this data (, ) are incorrectly restricted to  access only. The agent was about to modify the backend to grant read access to committee members.
+-   **Status**: IN PROGRESS
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: screenshot tool. The agent needs to log in, navigate to , and visually verify that the eye icon appears and correctly toggles password visibility in the three password fields.
+-   **Which testing method agent to use?**: First, use  to test the modified backend endpoints with a committee member's token to ensure they return data. Then, use the  to log in as a committee member, navigate to the family edit form, and visually confirm the dropdowns are populated.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: (P1) Testing Tools Authentication Failure**
-    -   **Description**: A recurring issue where the  and  fail to authenticate, getting stuck on the  page. This was observed multiple times in the session, forcing the agent to use workarounds like creating static HTML files to demonstrate UI changes.
-    -   **Attempted fixes**: None. The agent has been working around the issue.
-    -   **Next debug checklist**: Expect these tools to fail. If they do, the agent must rely on  for backend checks and manual inspection of frontend code. The agent might need to investigate how authentication tokens are handled by the testing tools.
-    -   **Why fix this issue and what will be achieved with the fix?**: Resolving this would unblock automated testing, speed up the development cycle, and provide more reliable verification of UI changes.
+-   **Issue 1: (P0) Empty dropdowns for committee members when editing families.**
+    -   **Description**: Committee members/presidents see empty dropdowns for Income Level, Family Category, etc., when editing a family. This is because the backend endpoints that populate these lists are currently restricted to Admins only.
+    -   **Attempted fixes**: None implemented yet. The issue has been diagnosed.
+    -   **Next debug checklist**:
+        1.  In , locate the  endpoints for , , and any other similar lookup data.
+        2.  Change the dependency injector from  to a more permissive one that includes committee roles, such as .
+        3.  Restart the backend server using backend: stopped
+backend: started.
+        4.  Log in as a committee member and test the frontend flow to confirm the dropdowns are now filled.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is a critical blocker for committee members, as they cannot properly manage family information without this data.
+    -   **Status**: IN PROGRESS
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: both
+    -   **Blocked on other issue**: None
+
+-   **Issue 2: (P1) Testing Tools Authentication Failure**
+    -   **Description**: A recurring issue where the  and  fail to authenticate, getting stuck on the  page. This forces the agent to use workarounds.
     -   **Status**: NOT STARTED
     -   **Is recurring issue?**: Y
     -   **Should Test frontend/backend/both after fix?**: frontend
-    -   **Blocked on other issue**: None
 
 **In progress Task List**:
--   **Task 1: (P0) Implement password visibility on Profile Page**
-    -   **Where to resume**: . The agent needs to add state for password visibility and modify the three password input fields (current, new, confirm) to include the toggle icon and functionality, similar to what was done for  and .
-    -   **What will be achieved with this?**: Fulfills a direct user request and brings UI consistency to all password fields in the application.
-    -   **Status**: NOT STARTED
-    -   **Should Test frontend/backend/both after fix?**: frontend
-    -   **Blocked on something**: None
-
--   **Task 2: (P1) Continue UI/UX Review and Refinement**
-    -   **Where to resume**: The user has initiated a systematic review of the application's pages, starting with  and . After completing the  task, the agent should ask the user which page they would like to review and refine next.
-    -   **What will be achieved with this?**: Systematically improves the user experience and interface design across the entire application according to the user's vision.
-    -   **Status**: IN PROGRESS
-    -   **Should Test frontend/backend/both after fix?**: frontend
-    -   **Blocked on something**: None
+None.
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks**:
-    -   (P1) **Refactor Large Components**:  (over 3000 lines) and  (over 1600 lines) are very large and complex. They should be broken down into smaller, reusable components to improve maintainability.
+    -   (P1) **Refactor Large Components**:  is now extremely large and complex (over 5000 lines) after adding user management and role-based logic. It should be broken down into smaller, reusable components (e.g., , , ).
 -   **Future Tasks**:
     -   (P2) Build and activate the remaining unimplemented sections in the Site dropdown menu (e.g., Health Cases, Courses, Projects, Initiatives).
     -   (P3) Implement modules for family awareness and educational support.
 
 **Completed work in this session**
--   **Feature: Active Monthly Need Indicator**: Fixed and enhanced the indicator on  to correctly show a badge for families with active *monthly* needs.
--   **Feature:  Page Redesign**:
-    -   Rebuilt the page with a timeline-based design, matching the  page.
-    -   Added tabs for Active and Inactive donations.
-    -   Implemented pagination (10 items per page).
-    -   Added family details (name, number, category, neighborhood) to each donation card.
--   **Feature: Enhanced Donation Details**:
-    -   Added display for Cancellation Reason on cancelled donations.
-    -   Added an image gallery with a modal viewer for Receipt Images on completed donations.
--   **Feature: Transfer Donation**:
-    -   Implemented a new feature in  allowing admins to transfer a transferable donation to a new family.
-    -   The backend logic updates the  and sets  to .
-    -   Created a custom, searchable dropdown combobox component from scratch for family selection.
--   **Feature: Reworked Auth Flow**:
-    -   **Register Page**: Fields reordered,  is now required, and  is optional.
-    -   **Login Page**: Login is now primarily via  instead of email.
--   **Feature: Password Visibility Toggle**: Added an eye icon to show/hide passwords on the  and  pages.
--   **Critical Bug Fixes**:
-    -   Resolved a bug where two different fields ( and ) were used for donation images, causing data inconsistency. The logic is now consolidated.
-    -   Fixed a server crash caused by Pydantic validation errors when legacy users without  or  were loaded.
-    -   Fixed a bug preventing user registration when an email was not provided.
+-   **Feature: Comprehensive Roles & Permissions System**:
+    -   Secured backend endpoints to enforce role-based access ( vs.  vs. ).
+    -   Conditionally rendered UI components (Navbar, Admin Dashboard Tabs) based on the logged-in user's role.
+    -   Created a dedicated  for committee members.
+    -   Created a splash page at  for non-admins that redirects them to their own dashboard.
+-   **Feature: Admin User Management**: Implemented UI and backend for Admins to edit user details and reset user passwords from the dashboard.
+-   **Feature: Password Visibility on Profile Page**: Added eye icon toggles to the change password fields on the user profile page.
+-   **Critical Bug Fix: FastAPI Route Order**: Fixed a Not authorized error for users changing their own password by reordering the routes in  to ensure  was defined before the generic .
+-   **Critical Bug Fix: Pydantic Validation Errors**: Fixed multiple server crashes by adding data cleaning logic to convert empty email strings () to  before returning user data from API endpoints.
+-   **Critical Bug Fix: Data Loading for Committee Members**: Fixed a Failed to load data error on the  by replacing  with , allowing the page to load even if some admin-only data requests fail.
 
 **Earlier issues found/mentioned but not fixed**
 -   The recurring authentication failure with  and other testing agents remains unresolved.
@@ -87,59 +85,61 @@ The application has undergone a significant UI/UX overhaul driven by the user. T
 
 
 **Key Technical Concepts**
--   **Backend Auth Logic**: The login endpoint in  was updated to accept a  that can be either a phone number or an email, providing flexible authentication.
--   **Data Model Backward Compatibility**: Pydantic models (e.g., ) were updated to use  for newly required fields (, ) to prevent crashes when loading legacy data from MongoDB.
--   **Custom Searchable Combobox**: A complex, reusable UI component was built from scratch in React for the Transfer Donation modal, featuring an input for searching and a dropdown list of results.
--   **Database Name Specificity**: A critical debugging session revealed the agent was attempting to modify the wrong database. **The correct database name is **, and this must be specified in any direct DB scripts.
--   **Data Consistency**: A bug was caused by having two fields for the same data ( and ). The code was consolidated to prioritize the correct field ().
+-   **FastAPI Route Order Precedence**: A critical discovery. Specific routes (e.g., ) MUST be defined *before* generic path parameter routes (e.g., ) to avoid misrouting and incorrect dependency injection.
+-   **Role-Based Access Control (RBAC)**: A detailed RBAC system was implemented on both the backend (securing API endpoints with FastAPI dependencies) and frontend (conditionally rendering UI with React hooks and logic).
+-   **Pydantic Data Cleaning**: To prevent , data from MongoDB must be cleaned before being returned from an API endpoint. Specifically, empty strings () for  fields must be converted to .
+-   ** vs. **:  was used in  to gracefully handle API calls that are expected to fail for certain user roles, preventing the entire page from crashing and improving robustness.
 
 **key DB schema**
--   : The Pydantic model  now has  and  to support older documents.  is now  in the  model.
--   : Contains two fields for images:  (correct one, stores base64) and  (incorrectly added by agent, stores URLs). The agent must use . Also contains , , etc., which are added dynamically by the API and are not in the DB document itself.
+-   : The  field (, , , ) and  are central to the application's security and logic.
 
 **All files**
--   : Modified auth endpoints, user models, and added a new  endpoint.
--   : Updated the active need indicator logic.
--   : Complete overhaul with new design, features, and pagination.
--   : Added the transfer feature and the searchable combobox.
--   : Updated fields and added password visibility toggle.
--   : Updated login to use phone number and added password visibility toggle.
+-   **/app/backend/server.py**: Major changes to implement RBAC, add user management endpoints, and fix validation/routing bugs.
+-   **/app/frontend/src/pages/AdminDashboard.js**: Major changes to add user management dialogs and conditional UI rendering based on role.
+-   **/app/frontend/src/pages/ProfilePage.js**: Added password visibility toggles.
+-   **/app/frontend/src/pages/CommitteeDashboard.js**: New file for the committee member's dedicated view.
+-   **/app/frontend/src/components/Navbar.js**: Updated for role-based link visibility.
+-   **/app/frontend/src/App.js**: Updated routes and  logic for new permissions.
 
 **Areas that need refactoring**:
--   : Still over 3200 lines. The card component is a prime candidate for extraction.
--   : Now over 1600 lines, with multiple modals. The new transfer modal and its searchable combobox could be extracted into their own components.
+-   : This file has grown to over 5000 lines and is extremely difficult to maintain. It urgently needs to be broken down into smaller, single-responsibility components (e.g., , , ).
+-   : The file is becoming monolithic. The API logic for different resources (Users, Families, Donations, etc.) and the permission helpers could be split into separate router files for better organization.
 
 **Critical Info for New Agent**
--   **Priority**: Your first task is to add the password visibility toggle to . Then, continue the UI/UX review by asking the user which page to work on next.
--   **Database is **: When running any manual database scripts, you MUST target the  database, not the default. The agent wasted significant time debugging due to this.
--   **Donation Image Field**: Be aware that donation documents might have two image fields. The correct field to use is . Do not use or add data to .
--   **Testing Tool Authentication**: Expect the  to fail at logging in. Be prepared to use  to test API endpoints and inspect frontend code manually. Creating temporary HTML files to showcase UI is a valid workaround.
--   **Auth Flow**: Login is now primarily with a phone number. Registration requires a phone number, but email is optional.
+-   **Immediate Task**: Your first priority is to fix the empty dropdowns for committee members. The issue is in , where lookup data endpoints (like ) are restricted to admins. You need to change their dependency to allow read access for committee roles.
+-   **RBAC is Key**: The application logic heavily relies on the user's  and . Always consider these when debugging or adding features.
+-   **FastAPI Routing Order**: Remember that specific routes must be defined before generic routes with path parameters to function correctly.
+-   **Pydantic & Data Cleaning**: Be vigilant about cleaning data from the database (especially empty strings for optional fields) before it's returned by an API to avoid validation errors.
+-   **Testing Workaround**: Automated frontend testing tools are unreliable for logging in. Test APIs with  and use code inspection or temporary HTML files for UI verification.
 
 **documents created in this job**
--    (temporary, likely deleted)
--    (temporary, likely deleted)
--    (temporary, likely deleted)
+-   
+-   
 
 **Last 5 User Messages and any pending user messages**
-1.  **User**: It gives an error when I press add user. (Status: COMPLETED. Fixed by sending  instead of  for optional email).
-2.  **User**: Can you put a small eye next to the password field to know the password when pressed... (Status: COMPLETED for ).
-3.  **User**: On the login page, please make the username the mobile number with the password. (Status: COMPLETED).
-4.  **User**: There is a failure in loading the data, why? (Status: COMPLETED. Fixed Pydantic model to allow optional fields for legacy users).
-5.  **User**: In the profile page, please put an eye on the passwords in the change password section... (Status: IN PROGRESS. This is the current 
-wtmp begins Fri Nov 28 22:09:50 2025).
+1.  **User**: I was wrong, committee members shouldn't be completely blocked from the admin panel. They should see it, but only the tabs for Families and Donations. (Status: COMPLETED. Agent implemented conditional rendering of tabs in ).
+2.  **User**: Excellent, but can we hide the tabs completely and just show a link that takes them to the committee dashboard? (Status: COMPLETED. Agent implemented a splash page in  for non-admins).
+3.  **User**: When a committee member tries to edit a family, the dropdowns for income level and categories are empty. Please fix this. (Status: IN PROGRESS. This is the current 
+wtmp begins Sat Nov 29 23:31:17 2025).
+4.  **User**: When a committee member tries to load families and donations from their dashboard, it fails. (Status: COMPLETED. Fixed by using  in ).
+5.  **User**: Committee members can see admin-only sections. They should only see their own data. (Status: COMPLETED. Agent implemented several layers of fixes, culminating in the current RBAC design).
 
 **Project Health Check:**
--   **Broken**: Automated frontend testing via  or  is unreliable due to authentication failures.
+-   **Broken**: Automated frontend testing (, ) is unreliable due to persistent login failures.
 -   **Mocked**: None.
 
 **Testing status**
--   **Testing agent used after significant changes**: NO
+-   **Testing agent used after significant changes**: NO (Relied on  and manual checks due to authentication issues).
 -   **Troubleshoot agent used after agent stuck in loop**: NO
 -   **Test files created**: None.
 -   **Known regressions**: None.
 
 **Credentials to test flow:**
--   :  (can be used for login if the user exists from before the phone number change)
--   : 
--   **Note**: The primary login method is now **phone number**. The agent may need to find the admin's phone number in the DB or register a new admin user to test the main login flow.</analysis>
+-   **Admin**:  / 
+-   **Committee Member**:  /  (Neighborhood: 'حي الشمالية')
+-   **Committee President**:  / 
+-   **Generous Donor**:  / 
+-   **User for Password Change Test**:  / (password was changed multiple times, last known was )
+
+**What agent forgot to execute**
+-   The agent has been focused on the user's immediate requests and has not yet addressed the technical debt of refactoring the massive  file, which was noted in the previous handoff and has only grown larger.</analysis>

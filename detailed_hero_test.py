@@ -7,7 +7,7 @@ import requests
 import json
 
 # Configuration
-BACKEND_URL = "https://twb-community.preview.emergentagent.com/api"
+BACKEND_URL = "https://solidarity-hub-7.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@test.com"
 ADMIN_PASSWORD = "admin123"
 
