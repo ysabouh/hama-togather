@@ -185,6 +185,10 @@ const HealthcareDirectory = () => {
           <div>
             <h3 className="text-xl font-bold text-gray-900">{doctor.full_name}</h3>
             <p className="text-sm text-blue-600 font-medium">{getSpecialtyName(doctor.specialty_id)}</p>
+            <div className="mt-1 inline-flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md">
+              <MapPin className="w-3 h-3 text-gray-600" />
+              <span className="text-xs font-medium text-gray-700">{getNeighborhoodName(doctor.neighborhood_id)}</span>
+            </div>
           </div>
         </div>
         {doctor.participates_in_solidarity && (
