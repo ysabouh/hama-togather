@@ -229,8 +229,8 @@ const HealthcareManagement = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">العناية الصحية</h1>
-              <p className="text-gray-600 mt-2">إدارة الأطباء والصيدليات والمخابر</p>
+              <h1 className="text-3xl font-bold text-gray-900">الحالات الصحية</h1>
+              <p className="text-gray-600 mt-2">دليل الأطباء والصيدليات والمخابر في الأحياء</p>
             </div>
             {(user?.role === 'admin' || user?.role === 'committee_president') && (
               <Button 
