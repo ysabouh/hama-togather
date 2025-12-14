@@ -101,6 +101,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/healthcare" 
+              element={
+                <ProtectedRoute>
+                  <HealthcareManagement />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
           <Toaster position="top-center" richColors />
         </div>
