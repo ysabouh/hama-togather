@@ -179,7 +179,7 @@ const HealthcareDirectory = () => {
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300">
       {/* Solidarity Badge - Simple & Beautiful */}
       {doctor.participates_in_solidarity && (
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 left-4 z-10">
           <div className="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-red-600 transition-colors">
             <Heart className="w-4 h-4 fill-white" />
             <span className="text-sm font-bold">تكافل</span>
@@ -257,7 +257,7 @@ const HealthcareDirectory = () => {
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300">
       {/* Solidarity Badge - Simple & Beautiful */}
       {pharmacy.participates_in_solidarity && (
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 left-4 z-10">
           <div className="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-red-600 transition-colors">
             <Heart className="w-4 h-4 fill-white" />
             <span className="text-sm font-bold">تكافل</span>
@@ -331,7 +331,7 @@ const HealthcareDirectory = () => {
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300">
       {/* Solidarity Badge - Simple & Beautiful */}
       {laboratory.participates_in_solidarity && (
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 left-4 z-10">
           <div className="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-red-600 transition-colors">
             <Heart className="w-4 h-4 fill-white" />
             <span className="text-sm font-bold">تكافل</span>
