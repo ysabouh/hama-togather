@@ -102,7 +102,7 @@ function App() {
               } 
             />
             <Route 
-              path="/healthcare" 
+              path="/health-cases" 
               element={
                 <ProtectedRoute>
                   <HealthcareManagement />
