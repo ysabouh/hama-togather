@@ -4692,6 +4692,18 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+
+            {/* Healthcare Tab - الحالات الصحية */}
+            <TabsContent value="healthcare">
+              <iframe
+                src="/health-cases"
+                className="w-full border-0 rounded-lg"
+                style={{ height: 'calc(100vh - 200px)', minHeight: '800px' }}
+                title="الحالات الصحية"
+              />
+            </TabsContent>
+
+
             {/* Users Tab */}
             <TabsContent value="users">
               <div className="bg-white rounded-xl shadow-lg p-6">
