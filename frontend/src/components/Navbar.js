@@ -46,6 +46,7 @@ const Navbar = () => {
             <li><Link to="/" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-home">الرئيسية</Link></li>
             <li><Link to="/our-mission" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-mission">رؤيتنا</Link></li>
             <li><a href="/#services" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-services">خدماتنا</a></li>
+            <li><Link to="/healthcare-directory" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-healthcare">دليل الرعاية</Link></li>
             <li><a href="/#family" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-family">التوعية</a></li>
             <li><a href="/#education" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-education">التعليم</a></li>
             <li><a href="/#community" className="text-gray-700 hover:text-emerald-700 font-medium transition-colors" data-testid="nav-community">التكافل</a></li>
