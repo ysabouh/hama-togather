@@ -423,7 +423,289 @@ const HealthcareManagement = () => {
         </div>
       </div>
 
-      {/* Add/Edit Dialog - سأضيفه في الجزء التالي */}
+      {/* Add/Edit Dialog */}
+      {(showAddDialog || showEditDialog) && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-emerald-600 text-white p-6 rounded-t-2xl flex justify-between items-center">
+              <h3 className="text-2xl font-bold">
+                {selectedProvider ? 'تعديل مقدم خدمة' : 'إضافة مقدم خدمة جديد'}
+              </h3>
+              <button 
+                onClick={() => {
+                  setShowAddDialog(false);
+                  setShowEditDialog(false);
+                  resetForm();
+                }}
+                className="text-white hover:bg-emerald-700 p-2 rounded-full"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              {/* Type Selection */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  النوع *
+                </label>
+                <select
+                  value={formData.type}
+                  onChange={(e) => setFormData({...formData, type: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                  required
+                  disabled={!!selectedProvider}
+                >
+                  <option value="doctor">طبيب</option>
+                  <option value="pharmacy">صيدلية</option>
+                  <option value="laboratory">مختبر</option>
+                </select>
+              </div>
+
+              {/* Full Name */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  الاسم الثلاثي / اسم المؤسسة *
+                </label>
+                <input
+                  type="text"
+                  value={formData.full_name}
+                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                  required
+                  placeholder="مثال: د. محمد أحمد السيد / صيدلية النور"
+                />
+              </div>
+
+              {/* Specialty */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    الاختصاص الرئيسي *
+                  </label>
+                  <select
+                    value={formData.main_specialty}
+                    onChange={(e) => setFormData({...formData, main_specialty: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    required
+                  >
+                    <option value="">اختر الاختصاص</option>
+                    {specialties[formData.type]?.map((spec) => (
+                      <option key={spec} value={spec}>{spec}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    تفصيل الاختصاص
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.specialty_details}
+                    onChange={(e) => setFormData({...formData, specialty_details: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    placeholder="مثال: خبرة 15 سنة"
+                  />
+                </div>
+              </div>
+
+              {/* Phone Numbers */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    هاتف أرضي
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.landline_phone}
+                    onChange={(e) => setFormData({...formData, landline_phone: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    placeholder="031-1234567"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    جوال/واتساب *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.mobile_phone}
+                    onChange={(e) => setFormData({...formData, mobile_phone: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    required
+                    placeholder="0933-123-456"
+                  />
+                </div>
+              </div>
+
+              {/* Address & Neighborhood */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    العنوان *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    required
+                    placeholder="شارع الثورة - بناء النور"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    الحي *
+                  </label>
+                  <select
+                    value={formData.neighborhood_id}
+                    onChange={(e) => setFormData({...formData, neighborhood_id: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    required
+                  >
+                    <option value="">اختر الحي</option>
+                    {neighborhoods.map((n) => (
+                      <option key={n.id} value={n.id}>{n.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Status Checkboxes */}
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.is_active}
+                    onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
+                    className="w-5 h-5 text-emerald-600"
+                  />
+                  <span className="text-gray-700 font-medium">فعال</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.is_partner}
+                    onChange={(e) => setFormData({...formData, is_partner: e.target.checked})}
+                    className="w-5 h-5 text-purple-600"
+                  />
+                  <span className="text-gray-700 font-medium">مشترك في البرنامج التكافلي</span>
+                </label>
+              </div>
+
+              {/* Partnership Details */}
+              {formData.is_partner && (
+                <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-6 space-y-4">
+                  <h4 className="font-bold text-purple-900 mb-4">تفاصيل الشراكة</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                        نسبة الخصم %
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        value={formData.discount_percentage || ''}
+                        onChange={(e) => setFormData({...formData, discount_percentage: parseFloat(e.target.value) || null})}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                        placeholder="20"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                        عدد الخصومات المتاحة
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.discount_count || ''}
+                        onChange={(e) => setFormData({...formData, discount_count: parseInt(e.target.value) || null})}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                        placeholder="50"
+                      />
+                    </div>
+
+                    {formData.type === 'doctor' && (
+                      <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">
+                          عدد المعاينات المجانية
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={formData.free_consultations || ''}
+                          onChange={(e) => setFormData({...formData, free_consultations: parseInt(e.target.value) || null})}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                          placeholder="10"
+                        />
+                      </div>
+                    )}
+
+                    {(formData.type === 'pharmacy' || formData.type === 'laboratory') && (
+                      <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">
+                          المبالغ المخصصة (ل.س)
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={formData.allocated_amount || ''}
+                          onChange={(e) => setFormData({...formData, allocated_amount: parseFloat(e.target.value) || null})}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                          placeholder="50000"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Notes */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  ملاحظات
+                </label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                  rows="3"
+                  placeholder="ملاحظات إضافية..."
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-4 border-t">
+                <Button
+                  type="submit"
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 text-lg font-bold"
+                >
+                  {selectedProvider ? 'حفظ التعديلات' : 'إضافة'}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowAddDialog(false);
+                    setShowEditDialog(false);
+                    resetForm();
+                  }}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 text-lg font-bold"
+                >
+                  إلغاء
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
