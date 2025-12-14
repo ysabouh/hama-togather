@@ -3519,7 +3519,7 @@ async def get_medical_specialties():
 @api_router.post("/medical-specialties", response_model=MedicalSpecialty)
 async def create_medical_specialty(
     specialty_data: MedicalSpecialtyCreate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """إضافة اختصاص طبي جديد - متاح للمشرف ورئيس اللجنة"""
     specialty = MedicalSpecialty(**specialty_data.model_dump())
@@ -3534,7 +3534,7 @@ async def create_medical_specialty(
 async def update_medical_specialty(
     specialty_id: str,
     specialty_data: MedicalSpecialtyUpdate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """تعديل اختصاص طبي - متاح للمشرف ورئيس اللجنة"""
     update_dict = {k: v for k, v in specialty_data.model_dump().items() if v is not None}
@@ -3553,7 +3553,7 @@ async def update_medical_specialty(
 @api_router.delete("/medical-specialties/{specialty_id}")
 async def delete_medical_specialty(
     specialty_id: str,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """حذف اختصاص طبي - متاح للمشرف ورئيس اللجنة"""
     result = await db.medical_specialties.delete_one({"id": specialty_id})
@@ -3602,7 +3602,7 @@ async def get_doctor(doctor_id: str):
 @api_router.post("/doctors", response_model=Doctor)
 async def create_doctor(
     doctor_data: DoctorCreate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """إضافة طبيب جديد - متاح للمشرف ورئيس اللجنة"""
     
@@ -3627,7 +3627,7 @@ async def create_doctor(
 async def update_doctor(
     doctor_id: str,
     doctor_data: DoctorUpdate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """تعديل معلومات طبيب - متاح للمشرف ورئيس اللجنة"""
     
@@ -3661,7 +3661,7 @@ async def update_doctor(
 @api_router.delete("/doctors/{doctor_id}")
 async def delete_doctor(
     doctor_id: str,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """حذف طبيب - متاح للمشرف ورئيس اللجنة"""
     
@@ -3716,7 +3716,7 @@ async def get_pharmacy(pharmacy_id: str):
 @api_router.post("/pharmacies", response_model=Pharmacy)
 async def create_pharmacy(
     pharmacy_data: PharmacyCreate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """إضافة صيدلية جديدة - متاح للمشرف ورئيس اللجنة"""
     
@@ -3739,7 +3739,7 @@ async def create_pharmacy(
 async def update_pharmacy(
     pharmacy_id: str,
     pharmacy_data: PharmacyUpdate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """تعديل معلومات صيدلية - متاح للمشرف ورئيس اللجنة"""
     
@@ -3770,7 +3770,7 @@ async def update_pharmacy(
 @api_router.delete("/pharmacies/{pharmacy_id}")
 async def delete_pharmacy(
     pharmacy_id: str,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """حذف صيدلية - متاح للمشرف ورئيس اللجنة"""
     
@@ -3823,7 +3823,7 @@ async def get_laboratory(laboratory_id: str):
 @api_router.post("/laboratories", response_model=Laboratory)
 async def create_laboratory(
     laboratory_data: LaboratoryCreate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """إضافة مخبر جديد - متاح للمشرف ورئيس اللجنة"""
     
@@ -3846,7 +3846,7 @@ async def create_laboratory(
 async def update_laboratory(
     laboratory_id: str,
     laboratory_data: LaboratoryUpdate,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """تعديل معلومات مخبر - متاح للمشرف ورئيس اللجنة"""
     
@@ -3877,7 +3877,7 @@ async def update_laboratory(
 @api_router.delete("/laboratories/{laboratory_id}")
 async def delete_laboratory(
     laboratory_id: str,
-    current_user: User = Depends(get_admin_or_committee_president)
+    current_user: User = Depends(get_committee_president_user)
 ):
     """حذف مخبر - متاح للمشرف ورئيس اللجنة"""
     
