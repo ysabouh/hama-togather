@@ -3964,6 +3964,36 @@ async def startup_db():
             await db.education_levels.insert_one(doc)
         logger.info(f"Created {len(default_education_levels)} default education levels")
     
+    # Create default medical specialties if they don't exist
+    default_specialties = [
+        {'name_ar': 'طب عام', 'name_en': 'General Medicine'},
+        {'name_ar': 'جراحة', 'name_en': 'Surgery'},
+        {'name_ar': 'أطفال', 'name_en': 'Pediatrics'},
+        {'name_ar': 'نسائية وتوليد', 'name_en': 'Obstetrics and Gynecology'},
+        {'name_ar': 'قلبية وأوعية', 'name_en': 'Cardiology'},
+        {'name_ar': 'عظام', 'name_en': 'Orthopedics'},
+        {'name_ar': 'عيون', 'name_en': 'Ophthalmology'},
+        {'name_ar': 'أذن وأنف وحنجرة', 'name_en': 'ENT'},
+        {'name_ar': 'جلدية', 'name_en': 'Dermatology'},
+        {'name_ar': 'أسنان', 'name_en': 'Dentistry'},
+        {'name_ar': 'نفسية', 'name_en': 'Psychiatry'},
+        {'name_ar': 'باطنية', 'name_en': 'Internal Medicine'},
+        {'name_ar': 'أعصاب', 'name_en': 'Neurology'},
+        {'name_ar': 'مسالك بولية', 'name_en': 'Urology'},
+        {'name_ar': 'صدرية', 'name_en': 'Pulmonology'}
+    ]
+    
+    existing_specialties_count = await db.medical_specialties.count_documents({})
+    if existing_specialties_count == 0:
+        for spec_data in default_specialties:
+            specialty = MedicalSpecialty(**spec_data)
+            doc = specialty.model_dump()
+            doc['created_at'] = doc['created_at'].isoformat()
+            if doc.get('updated_at'):
+                doc['updated_at'] = doc['updated_at'].isoformat()
+            await db.medical_specialties.insert_one(doc)
+        logger.info(f"Created {len(default_specialties)} default medical specialties")
+    
     # Ensure default admin user exists
     admin_exists = await db.users.find_one({"email": "admin@example.com"})
     if not admin_exists:
