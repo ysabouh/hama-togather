@@ -75,15 +75,26 @@ const HealthcareDirectory = () => {
 
   const fetchProviders = async (neighborhoodFilter = selectedNeighborhood) => {
     try {
-      const params = {
-        neighborhood_id: neighborhoodFilter || undefined,
-        is_active: showActiveOnly || undefined,
-        participates_in_solidarity: showSolidarityOnly || undefined,
-        search: searchQuery || undefined
-      };
+      const params = {};
+      
+      // إضافة المعاملات فقط إذا كانت محددة
+      if (neighborhoodFilter) {
+        params.neighborhood_id = neighborhoodFilter;
+      }
+      if (showActiveOnly === true) {
+        params.is_active = true;
+      }
+      if (showSolidarityOnly === true) {
+        params.participates_in_solidarity = true;
+      }
+      if (searchQuery && searchQuery.trim()) {
+        params.search = searchQuery.trim();
+      }
 
       if (activeTab === 'doctors') {
-        params.specialty_id = selectedSpecialty || undefined;
+        if (selectedSpecialty) {
+          params.specialty_id = selectedSpecialty;
+        }
         const res = await axios.get(`${API_URL}/doctors`, { params });
         setDoctors(res.data);
       } else if (activeTab === 'pharmacies') {
@@ -100,8 +111,12 @@ const HealthcareDirectory = () => {
   };
 
   useEffect(() => {
-    if (!loading) {
-      fetchProviders();
+    // تجنب التحميل المزدوج عند التحميل الأولي
+    if (!loading && (specialties.length > 0 || neighborhoods.length > 0)) {
+      const timer = setTimeout(() => {
+        fetchProviders();
+      }, 300);
+      return () => clearTimeout(timer);
     }
   }, [activeTab, selectedNeighborhood, selectedSpecialty, showActiveOnly, showSolidarityOnly, searchQuery]);
 
