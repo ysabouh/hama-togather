@@ -2011,6 +2011,8 @@ const AdminDashboard = () => {
                 
                 <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
                 
+                <TabsTrigger value="healthcare" data-testid="tab-healthcare">الحالات الصحية</TabsTrigger>
+                
                 {/* القائمة المنسدلة للمستخدمين */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
