@@ -632,6 +632,173 @@ class CommitteeMemberUpdate(BaseModel):
     image: Optional[str] = None
     is_active: Optional[bool] = None
 
+# ============= Healthcare Models =============
+
+# Medical Specialty Models
+class MedicalSpecialty(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name_ar: str  # اسم الاختصاص بالعربية
+    name_en: Optional[str] = None  # اسم الاختصاص بالإنجليزية (اختياري)
+    description: Optional[str] = None  # وصف الاختصاص
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+
+class MedicalSpecialtyCreate(BaseModel):
+    name_ar: str
+    name_en: Optional[str] = None
+    description: Optional[str] = None
+    is_active: bool = True
+
+class MedicalSpecialtyUpdate(BaseModel):
+    name_ar: Optional[str] = None
+    name_en: Optional[str] = None
+    description: Optional[str] = None
+    is_active: Optional[bool] = None
+
+# Working Hours Model (for all healthcare providers)
+class DaySchedule(BaseModel):
+    is_open: bool = True  # هل يعمل في هذا اليوم
+    opening_time: Optional[str] = None  # وقت الفتح (مثال: "09:00")
+    closing_time: Optional[str] = None  # وقت الإغلاق (مثال: "17:00")
+    notes: Optional[str] = None  # ملاحظات (مثال: "استراحة من 12:00 - 13:00")
+
+class WorkingHours(BaseModel):
+    saturday: DaySchedule = Field(default_factory=DaySchedule)
+    sunday: DaySchedule = Field(default_factory=DaySchedule)
+    monday: DaySchedule = Field(default_factory=DaySchedule)
+    tuesday: DaySchedule = Field(default_factory=DaySchedule)
+    wednesday: DaySchedule = Field(default_factory=DaySchedule)
+    thursday: DaySchedule = Field(default_factory=DaySchedule)
+    friday: DaySchedule = Field(default_factory=lambda: DaySchedule(is_open=False))
+
+# Doctor Model
+class Doctor(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    full_name: str  # الاسم الكامل للطبيب
+    specialty_id: str  # معرف الاختصاص الرئيسي
+    specialty_description: Optional[str] = None  # وصف عن اختصاصه وخبراته
+    landline: Optional[str] = None  # الهاتف الأرضي
+    mobile: str  # الهاتف الجوال (واتساب)
+    address: str  # العنوان
+    working_hours: WorkingHours  # أوقات الدوام
+    is_active: bool = True  # نشط/غير نشط
+    participates_in_solidarity: bool = False  # مشترك في التكافل الاجتماعي
+    neighborhood_id: str  # الحي
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+    created_by: Optional[str] = None  # معرف المستخدم الذي أضاف الطبيب
+
+class DoctorCreate(BaseModel):
+    full_name: str
+    specialty_id: str
+    specialty_description: Optional[str] = None
+    landline: Optional[str] = None
+    mobile: str
+    address: str
+    working_hours: WorkingHours
+    is_active: bool = True
+    participates_in_solidarity: bool = False
+    neighborhood_id: str
+
+class DoctorUpdate(BaseModel):
+    full_name: Optional[str] = None
+    specialty_id: Optional[str] = None
+    specialty_description: Optional[str] = None
+    landline: Optional[str] = None
+    mobile: Optional[str] = None
+    address: Optional[str] = None
+    working_hours: Optional[WorkingHours] = None
+    is_active: Optional[bool] = None
+    participates_in_solidarity: Optional[bool] = None
+    neighborhood_id: Optional[str] = None
+
+# Pharmacy Model
+class Pharmacy(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # اسم الصيدلية
+    owner_full_name: str  # اسم صاحب الصيدلية الثلاثي
+    description: Optional[str] = None  # وصف عن الصيدلية وخدماتها
+    landline: Optional[str] = None  # الهاتف الأرضي
+    mobile: str  # الهاتف الجوال (واتساب)
+    address: str  # العنوان
+    working_hours: WorkingHours  # أوقات الدوام
+    is_active: bool = True  # نشط/غير نشط
+    participates_in_solidarity: bool = False  # مشترك في التكافل الاجتماعي
+    neighborhood_id: str  # الحي
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+
+class PharmacyCreate(BaseModel):
+    name: str
+    owner_full_name: str
+    description: Optional[str] = None
+    landline: Optional[str] = None
+    mobile: str
+    address: str
+    working_hours: WorkingHours
+    is_active: bool = True
+    participates_in_solidarity: bool = False
+    neighborhood_id: str
+
+class PharmacyUpdate(BaseModel):
+    name: Optional[str] = None
+    owner_full_name: Optional[str] = None
+    description: Optional[str] = None
+    landline: Optional[str] = None
+    mobile: Optional[str] = None
+    address: Optional[str] = None
+    working_hours: Optional[WorkingHours] = None
+    is_active: Optional[bool] = None
+    participates_in_solidarity: Optional[bool] = None
+    neighborhood_id: Optional[str] = None
+
+# Laboratory Model
+class Laboratory(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # اسم المخبر
+    owner_full_name: str  # اسم صاحب المخبر الثلاثي
+    description: Optional[str] = None  # وصف عن المخبر وخدماته
+    landline: Optional[str] = None  # الهاتف الأرضي
+    mobile: str  # الهاتف الجوال (واتساب)
+    address: str  # العنوان
+    working_hours: WorkingHours  # أوقات الدوام
+    is_active: bool = True  # نشط/غير نشط
+    participates_in_solidarity: bool = False  # مشترك في التكافل الاجتماعي
+    neighborhood_id: str  # الحي
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+
+class LaboratoryCreate(BaseModel):
+    name: str
+    owner_full_name: str
+    description: Optional[str] = None
+    landline: Optional[str] = None
+    mobile: str
+    address: str
+    working_hours: WorkingHours
+    is_active: bool = True
+    participates_in_solidarity: bool = False
+    neighborhood_id: str
+
+class LaboratoryUpdate(BaseModel):
+    name: Optional[str] = None
+    owner_full_name: Optional[str] = None
+    description: Optional[str] = None
+    landline: Optional[str] = None
+    mobile: Optional[str] = None
+    address: Optional[str] = None
+    working_hours: Optional[WorkingHours] = None
+    is_active: Optional[bool] = None
+    participates_in_solidarity: Optional[bool] = None
+    neighborhood_id: Optional[str] = None
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
