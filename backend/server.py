@@ -632,6 +632,75 @@ class CommitteeMemberUpdate(BaseModel):
     image: Optional[str] = None
     is_active: Optional[bool] = None
 
+# Healthcare Models (العناية الصحية)
+class WorkingHours(BaseModel):
+    day: str  # اليوم: الأحد، الاثنين...
+    from_time: str  # من الساعة
+    to_time: str  # إلى الساعة
+    is_working: bool = True  # هل يعمل في هذا اليوم
+
+class HealthcareProvider(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    type: str  # doctor, pharmacy, laboratory
+    full_name: str  # الاسم الثلاثي
+    main_specialty: str  # الاختصاص الرئيسي
+    specialty_details: Optional[str] = None  # تفصيل الاختصاص
+    landline_phone: Optional[str] = None  # هاتف أرضي
+    mobile_phone: str  # جوال/واتساب
+    address: str  # العنوان
+    neighborhood_id: str  # الحي
+    image: Optional[str] = None  # صورة (base64 أو URL)
+    working_hours: List[WorkingHours] = []  # ساعات العمل لكل يوم
+    notes: Optional[str] = None  # ملاحظات
+    is_active: bool = True  # فعال/متوقف
+    is_partner: bool = False  # مشترك في البرنامج التكافلي
+    discount_percentage: Optional[float] = None  # نسبة الخصم %
+    discount_count: Optional[int] = None  # عدد الخصومات المتاحة
+    free_consultations: Optional[int] = None  # عدد المعاينات المجانية (للأطباء)
+    allocated_amount: Optional[float] = None  # المبالغ المخصصة (للصيدليات/مخابر)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_by_user_id: Optional[str] = None
+    updated_at: Optional[datetime] = None
+    updated_by_user_id: Optional[str] = None
+
+class HealthcareProviderCreate(BaseModel):
+    type: str
+    full_name: str
+    main_specialty: str
+    specialty_details: Optional[str] = None
+    landline_phone: Optional[str] = None
+    mobile_phone: str
+    address: str
+    neighborhood_id: str
+    image: Optional[str] = None
+    working_hours: List[WorkingHours] = []
+    notes: Optional[str] = None
+    is_active: bool = True
+    is_partner: bool = False
+    discount_percentage: Optional[float] = None
+    discount_count: Optional[int] = None
+    free_consultations: Optional[int] = None
+    allocated_amount: Optional[float] = None
+
+class HealthcareProviderUpdate(BaseModel):
+    full_name: Optional[str] = None
+    main_specialty: Optional[str] = None
+    specialty_details: Optional[str] = None
+    landline_phone: Optional[str] = None
+    mobile_phone: Optional[str] = None
+    address: Optional[str] = None
+    neighborhood_id: Optional[str] = None
+    image: Optional[str] = None
+    working_hours: Optional[List[WorkingHours]] = None
+    notes: Optional[str] = None
+    is_active: Optional[bool] = None
+    is_partner: Optional[bool] = None
+    discount_percentage: Optional[float] = None
+    discount_count: Optional[int] = None
+    free_consultations: Optional[int] = None
+    allocated_amount: Optional[float] = None
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
