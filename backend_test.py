@@ -655,10 +655,10 @@ class HealthcareManagementTester:
         print("📋 DETAILED ANALYSIS")
         print("=" * 80)
         
-        if results['authentication_required']:
-            print("✅ Healthcare APIs correctly require authentication")
+        if results['public_access_allowed']:
+            print("✅ Healthcare APIs correctly allow public access for viewing")
         else:
-            print("❌ Healthcare APIs authentication issues")
+            print("❌ Healthcare APIs public access issues")
         
         if results['committee_member_login'] and results['committee_president_login']:
             print("✅ Committee user authentication working")
