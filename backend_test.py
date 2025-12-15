@@ -272,37 +272,85 @@ class HealthcareManagementTester:
             print(f"❌ Doctors CRUD error: {str(e)}")
             return False
     
-    def login_regular_user(self):
-        """Login as regular user and get authentication token"""
-        print("\n🔐 Testing Regular User Login...")
+    def test_pharmacies_crud(self, token, user_type):
+        """Test CRUD operations for pharmacies"""
+        print(f"\n💊 Testing Pharmacies CRUD as {user_type}...")
         
-        login_data = {
-            "username": self.test_user_email,
-            "password": self.test_user_password
-        }
+        if not token or not self.test_neighborhood_id:
+            print(f"❌ Missing {user_type} token or neighborhood ID")
+            return False
+        
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
         
         try:
-            response = self.session.post(
-                f"{BACKEND_URL}/auth/login",
-                data=login_data,
-                headers={"Content-Type": "application/x-www-form-urlencoded"}
-            )
+            # Test GET pharmacies
+            response = self.session.get(f"{BACKEND_URL}/pharmacies", headers=headers)
             
             if response.status_code == 200:
-                data = response.json()
-                self.regular_user_token = data["access_token"]
-                print(f"✅ Regular user login successful")
-                print(f"   Token: {self.regular_user_token[:20]}...")
-                print(f"   User: {data['user']['email']} ({data['user']['role']})")
-                print(f"   Neighborhood: {data['user']['neighborhood_id']}")
+                pharmacies = response.json()
+                print(f"✅ GET pharmacies successful - Found {len(pharmacies)} pharmacies")
+                
+                # Test POST (create new pharmacy)
+                pharmacy_data = {
+                    "name": "صيدلية النهضة - اختبار",
+                    "owner_full_name": "محمد أحمد السعد",
+                    "description": "صيدلية شاملة تقدم جميع الأدوية والمستلزمات الطبية",
+                    "landline": "0112345679",
+                    "mobile": "0501234568",
+                    "address": "شارع العليا، الرياض",
+                    "working_hours": {
+                        "saturday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                        "sunday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                        "monday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                        "tuesday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                        "wednesday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                        "thursday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                        "friday": {"is_open": True, "opening_time": "14:00", "closing_time": "22:00"}
+                    },
+                    "is_active": True,
+                    "participates_in_solidarity": True,
+                    "neighborhood_id": self.test_neighborhood_id
+                }
+                
+                create_response = self.session.post(
+                    f"{BACKEND_URL}/pharmacies",
+                    json=pharmacy_data,
+                    headers=headers
+                )
+                
+                if create_response.status_code == 200:
+                    created_pharmacy = create_response.json()
+                    self.test_pharmacy_id = created_pharmacy['id']
+                    print(f"✅ POST pharmacy successful - Created: {created_pharmacy['name']}")
+                    
+                    # Test PUT (update pharmacy)
+                    update_data = {
+                        "name": "صيدلية النهضة المحدثة - اختبار",
+                        "description": "صيدلية شاملة محدثة تقدم جميع الأدوية"
+                    }
+                    
+                    update_response = self.session.put(
+                        f"{BACKEND_URL}/pharmacies/{self.test_pharmacy_id}",
+                        json=update_data,
+                        headers=headers
+                    )
+                    
+                    if update_response.status_code == 200:
+                        print("✅ PUT pharmacy successful")
+                    else:
+                        print(f"❌ PUT pharmacy failed: {update_response.status_code}")
+                else:
+                    print(f"❌ POST pharmacy failed: {create_response.status_code}")
+                    print(f"   Response: {create_response.text}")
+                
                 return True
             else:
-                print(f"❌ Regular user login failed: {response.status_code}")
+                print(f"❌ GET pharmacies failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False
                 
         except Exception as e:
-            print(f"❌ Regular user login error: {str(e)}")
+            print(f"❌ Pharmacies CRUD error: {str(e)}")
             return False
     
     def test_families_by_category_guest(self, category_id):
