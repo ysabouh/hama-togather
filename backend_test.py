@@ -374,27 +374,28 @@ class HealthcareManagementTester:
                 laboratories = response.json()
                 print(f"✅ GET laboratories successful - Found {len(laboratories)} laboratories")
                 
-                # Test POST (create new laboratory)
-                laboratory_data = {
-                    "name": "مختبر الدقة الطبي - اختبار",
-                    "owner_full_name": "سعد محمد الأحمد",
-                    "description": "مختبر طبي شامل للتحاليل والفحوصات",
-                    "landline": "0112345680",
-                    "mobile": "0501234569",
-                    "address": "شارع الأمير محمد بن عبدالعزيز، الرياض",
-                    "working_hours": {
-                        "saturday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
-                        "sunday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
-                        "monday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
-                        "tuesday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
-                        "wednesday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
-                        "thursday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
-                        "friday": {"is_open": False}
-                    },
-                    "is_active": True,
-                    "participates_in_solidarity": False,
-                    "neighborhood_id": self.test_neighborhood_id
-                }
+                # Test POST (create new laboratory) - only for committee president with correct neighborhood
+                if user_type == "committee_president" and self.committee_president_neighborhood_id:
+                    laboratory_data = {
+                        "name": "مختبر الدقة الطبي - اختبار",
+                        "owner_full_name": "سعد محمد الأحمد",
+                        "description": "مختبر طبي شامل للتحاليل والفحوصات",
+                        "landline": "0112345680",
+                        "mobile": "0501234569",
+                        "address": "شارع الأمير محمد بن عبدالعزيز، الرياض",
+                        "working_hours": {
+                            "saturday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                            "sunday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                            "monday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                            "tuesday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                            "wednesday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                            "thursday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                            "friday": {"is_open": False}
+                        },
+                        "is_active": True,
+                        "participates_in_solidarity": False,
+                        "neighborhood_id": self.committee_president_neighborhood_id
+                    }
                 
                 create_response = self.session.post(
                     f"{BACKEND_URL}/laboratories",
