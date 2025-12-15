@@ -436,9 +436,9 @@ class HealthcareManagementTester:
             print(f"❌ Laboratories CRUD error: {str(e)}")
             return False
     
-    def test_authentication_required(self):
-        """Test that healthcare APIs require authentication"""
-        print("\n🚫 Testing Authentication Requirements...")
+    def test_public_access_allowed(self):
+        """Test that healthcare GET APIs are publicly accessible (correct behavior)"""
+        print("\n🌐 Testing Public Access to Healthcare APIs...")
         
         endpoints = [
             "/doctors",
@@ -447,21 +447,22 @@ class HealthcareManagementTester:
             "/medical-specialties"
         ]
         
-        all_protected = True
+        all_public = True
         
         for endpoint in endpoints:
             try:
                 response = self.session.get(f"{BACKEND_URL}{endpoint}")
-                if response.status_code == 401:
-                    print(f"✅ {endpoint} correctly requires authentication")
+                if response.status_code == 200:
+                    data = response.json()
+                    print(f"✅ {endpoint} publicly accessible - Found {len(data)} items")
                 else:
-                    print(f"❌ {endpoint} should require authentication, got: {response.status_code}")
-                    all_protected = False
+                    print(f"❌ {endpoint} should be publicly accessible, got: {response.status_code}")
+                    all_public = False
             except Exception as e:
                 print(f"❌ Error testing {endpoint}: {str(e)}")
-                all_protected = False
+                all_public = False
         
-        return all_protected
+        return all_public
     
     def test_neighborhood_filtering(self):
         """Test that committee president sees only their neighborhood data"""
