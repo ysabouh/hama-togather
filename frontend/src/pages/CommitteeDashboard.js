@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import HealthcareManagement from '../components/admin/HealthcareManagement';
 import { 
   Users, 
   Heart, 
@@ -14,7 +15,8 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  ArrowRight
+  ArrowRight,
+  Stethoscope
 } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
