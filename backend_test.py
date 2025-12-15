@@ -210,8 +210,8 @@ class HealthcareManagementTester:
                 doctors = response.json()
                 print(f"✅ GET doctors successful - Found {len(doctors)} doctors")
                 
-                # Test POST (create new doctor) - need specialty first
-                if self.test_specialty_id:
+                # Test POST (create new doctor) - need specialty first and correct neighborhood
+                if self.test_specialty_id and user_type == "committee_president" and self.committee_president_neighborhood_id:
                     doctor_data = {
                         "full_name": "د. أحمد محمد علي",
                         "specialty_id": self.test_specialty_id,
@@ -230,7 +230,7 @@ class HealthcareManagementTester:
                         },
                         "is_active": True,
                         "participates_in_solidarity": True,
-                        "neighborhood_id": self.test_neighborhood_id
+                        "neighborhood_id": self.committee_president_neighborhood_id
                     }
                     
                     create_response = self.session.post(
