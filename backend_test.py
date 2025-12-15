@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Families Public Page Functionality
-Tests public families stats, neighborhoods, and families by category with different user roles
+Backend API Testing for Healthcare Management Feature
+Tests healthcare APIs (doctors, pharmacies, laboratories, medical-specialties) with authentication
 """
 
 import requests
@@ -12,6 +12,12 @@ import uuid
 BACKEND_URL = "https://hama-community.preview.emergentagent.com/api"
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
+
+# Healthcare test credentials
+COMMITTEE_MEMBER_PHONE = "0933333333"
+COMMITTEE_MEMBER_PASSWORD = "committee123"
+COMMITTEE_PRESIDENT_PHONE = "0944444444"
+COMMITTEE_PRESIDENT_PASSWORD = "test123"
 
 class FamiliesPublicTester:
     def __init__(self):
