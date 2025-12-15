@@ -538,7 +538,7 @@ class HealthcareManagementTester:
         
         results = {
             'get_neighborhoods': False,
-            'authentication_required': False,
+            'public_access_allowed': False,
             'committee_member_login': False,
             'committee_president_login': False,
             'medical_specialties_crud_member': False,
