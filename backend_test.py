@@ -84,10 +84,11 @@ class HealthcareManagementTester:
             if response.status_code == 200:
                 data = response.json()
                 self.committee_president_token = data["access_token"]
+                self.committee_president_neighborhood_id = data['user'].get('neighborhood_id')
                 print(f"✅ Committee president login successful")
                 print(f"   Token: {self.committee_president_token[:20]}...")
                 print(f"   User: {data['user']['phone']} ({data['user']['role']})")
-                print(f"   Neighborhood: {data['user'].get('neighborhood_id', 'N/A')}")
+                print(f"   Neighborhood: {self.committee_president_neighborhood_id}")
                 return True
             else:
                 print(f"❌ Committee president login failed: {response.status_code}")
