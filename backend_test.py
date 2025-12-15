@@ -398,37 +398,39 @@ class HealthcareManagementTester:
                         "participates_in_solidarity": False,
                         "neighborhood_id": self.committee_president_neighborhood_id
                     }
-                
-                create_response = self.session.post(
-                    f"{BACKEND_URL}/laboratories",
-                    json=laboratory_data,
-                    headers=headers
-                )
-                
-                if create_response.status_code == 200:
-                    created_laboratory = create_response.json()
-                    self.test_laboratory_id = created_laboratory['id']
-                    print(f"✅ POST laboratory successful - Created: {created_laboratory['name']}")
                     
-                    # Test PUT (update laboratory)
-                    update_data = {
-                        "name": "مختبر الدقة الطبي المحدث - اختبار",
-                        "description": "مختبر طبي شامل محدث للتحاليل والفحوصات المتقدمة"
-                    }
-                    
-                    update_response = self.session.put(
-                        f"{BACKEND_URL}/laboratories/{self.test_laboratory_id}",
-                        json=update_data,
+                    create_response = self.session.post(
+                        f"{BACKEND_URL}/laboratories",
+                        json=laboratory_data,
                         headers=headers
                     )
                     
-                    if update_response.status_code == 200:
-                        print("✅ PUT laboratory successful")
+                    if create_response.status_code == 200:
+                        created_laboratory = create_response.json()
+                        self.test_laboratory_id = created_laboratory['id']
+                        print(f"✅ POST laboratory successful - Created: {created_laboratory['name']}")
+                        
+                        # Test PUT (update laboratory)
+                        update_data = {
+                            "name": "مختبر الدقة الطبي المحدث - اختبار",
+                            "description": "مختبر طبي شامل محدث للتحاليل والفحوصات المتقدمة"
+                        }
+                        
+                        update_response = self.session.put(
+                            f"{BACKEND_URL}/laboratories/{self.test_laboratory_id}",
+                            json=update_data,
+                            headers=headers
+                        )
+                        
+                        if update_response.status_code == 200:
+                            print("✅ PUT laboratory successful")
+                        else:
+                            print(f"❌ PUT laboratory failed: {update_response.status_code}")
                     else:
-                        print(f"❌ PUT laboratory failed: {update_response.status_code}")
+                        print(f"❌ POST laboratory failed: {create_response.status_code}")
+                        print(f"   Response: {create_response.text}")
                 else:
-                    print(f"❌ POST laboratory failed: {create_response.status_code}")
-                    print(f"   Response: {create_response.text}")
+                    print(f"ℹ️ Skipping POST test for {user_type} (requires committee_president role)")
                 
                 return True
             else:
