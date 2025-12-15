@@ -190,68 +190,86 @@ class HealthcareManagementTester:
             print(f"❌ Medical specialties CRUD error: {str(e)}")
             return False
     
-    def create_regular_user(self):
-        """Create a regular user for testing"""
-        print("\n👤 Creating Regular User...")
+    def test_doctors_crud(self, token, user_type):
+        """Test CRUD operations for doctors"""
+        print(f"\n👨‍⚕️ Testing Doctors CRUD as {user_type}...")
         
-        if not self.admin_token:
-            print("❌ No admin token available")
+        if not token or not self.test_neighborhood_id:
+            print(f"❌ Missing {user_type} token or neighborhood ID")
             return False
         
-        if not self.regular_user_neighborhood_id:
-            print("❌ No neighborhood ID available for user creation")
-            return False
-        
-        user_data = {
-            "full_name": "مستخدم اختبار",
-            "email": self.test_user_email,
-            "password": self.test_user_password,
-            "role": "committee_member",
-            "neighborhood_id": self.regular_user_neighborhood_id
-        }
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
         
         try:
-            headers = {
-                "Authorization": f"Bearer {self.admin_token}",
-                "Content-Type": "application/json"
-            }
-            
-            # First check if user already exists
-            existing_users_response = self.session.get(
-                f"{BACKEND_URL}/users",
-                headers=headers
-            )
-            
-            if existing_users_response.status_code == 200:
-                existing_users = existing_users_response.json()
-                for user in existing_users:
-                    if user.get('email') == self.test_user_email:
-                        print(f"✅ Regular user already exists: {user.get('email')}")
-                        self.regular_user_id = user.get('id')
-                        return True
-            
-            # Create new user using register endpoint
-            response = self.session.post(
-                f"{BACKEND_URL}/auth/register",
-                json=user_data,
-                headers={"Content-Type": "application/json"}
-            )
+            # Test GET doctors
+            response = self.session.get(f"{BACKEND_URL}/doctors", headers=headers)
             
             if response.status_code == 200:
-                data = response.json()
-                self.regular_user_id = data['user']['id']
-                print("✅ Regular user created successfully")
-                print(f"   Email: {data['user']['email']}")
-                print(f"   Role: {data['user']['role']}")
-                print(f"   Neighborhood ID: {data['user']['neighborhood_id']}")
+                doctors = response.json()
+                print(f"✅ GET doctors successful - Found {len(doctors)} doctors")
+                
+                # Test POST (create new doctor) - need specialty first
+                if self.test_specialty_id:
+                    doctor_data = {
+                        "full_name": "د. أحمد محمد علي",
+                        "specialty_id": self.test_specialty_id,
+                        "specialty_description": "خبرة 10 سنوات في طب الأطفال",
+                        "landline": "0112345678",
+                        "mobile": "0501234567",
+                        "address": "شارع الملك فهد، الرياض",
+                        "working_hours": {
+                            "saturday": {"is_open": True, "opening_time": "09:00", "closing_time": "17:00"},
+                            "sunday": {"is_open": True, "opening_time": "09:00", "closing_time": "17:00"},
+                            "monday": {"is_open": True, "opening_time": "09:00", "closing_time": "17:00"},
+                            "tuesday": {"is_open": True, "opening_time": "09:00", "closing_time": "17:00"},
+                            "wednesday": {"is_open": True, "opening_time": "09:00", "closing_time": "17:00"},
+                            "thursday": {"is_open": True, "opening_time": "09:00", "closing_time": "17:00"},
+                            "friday": {"is_open": False}
+                        },
+                        "is_active": True,
+                        "participates_in_solidarity": True,
+                        "neighborhood_id": self.test_neighborhood_id
+                    }
+                    
+                    create_response = self.session.post(
+                        f"{BACKEND_URL}/doctors",
+                        json=doctor_data,
+                        headers=headers
+                    )
+                    
+                    if create_response.status_code == 200:
+                        created_doctor = create_response.json()
+                        self.test_doctor_id = created_doctor['id']
+                        print(f"✅ POST doctor successful - Created: {created_doctor['full_name']}")
+                        
+                        # Test PUT (update doctor)
+                        update_data = {
+                            "full_name": "د. أحمد محمد علي المحدث",
+                            "specialty_description": "خبرة 15 سنة في طب الأطفال"
+                        }
+                        
+                        update_response = self.session.put(
+                            f"{BACKEND_URL}/doctors/{self.test_doctor_id}",
+                            json=update_data,
+                            headers=headers
+                        )
+                        
+                        if update_response.status_code == 200:
+                            print("✅ PUT doctor successful")
+                        else:
+                            print(f"❌ PUT doctor failed: {update_response.status_code}")
+                    else:
+                        print(f"❌ POST doctor failed: {create_response.status_code}")
+                        print(f"   Response: {create_response.text}")
+                
                 return True
             else:
-                print(f"❌ Regular user creation failed: {response.status_code}")
+                print(f"❌ GET doctors failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False
                 
         except Exception as e:
-            print(f"❌ Regular user creation error: {str(e)}")
+            print(f"❌ Doctors CRUD error: {str(e)}")
             return False
     
     def login_regular_user(self):
