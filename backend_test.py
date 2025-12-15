@@ -659,17 +659,18 @@ class HealthcareManagementTester:
         test_descriptions = {
             'get_neighborhoods': '1️⃣ Get Neighborhoods',
             'public_access_allowed': '2️⃣ Public Access to Healthcare APIs (GET)',
-            'committee_member_login': '3️⃣ Committee Member Login',
-            'committee_president_login': '4️⃣ Committee President Login',
-            'medical_specialties_crud_member': '5️⃣ Medical Specialties CRUD (Committee Member)',
-            'medical_specialties_crud_president': '6️⃣ Medical Specialties CRUD (Committee President)',
-            'doctors_crud_member': '7️⃣ Doctors CRUD (Committee Member)',
-            'doctors_crud_president': '8️⃣ Doctors CRUD (Committee President)',
-            'pharmacies_crud_member': '9️⃣ Pharmacies CRUD (Committee Member)',
-            'pharmacies_crud_president': '🔟 Pharmacies CRUD (Committee President)',
-            'laboratories_crud_member': '1️⃣1️⃣ Laboratories CRUD (Committee Member)',
-            'laboratories_crud_president': '1️⃣2️⃣ Laboratories CRUD (Committee President)',
-            'neighborhood_filtering': '1️⃣3️⃣ Neighborhood Filtering (Committee President)'
+            'post_authentication_required': '3️⃣ POST Authentication Required',
+            'committee_member_login': '4️⃣ Committee Member Login',
+            'committee_president_login': '5️⃣ Committee President Login',
+            'medical_specialties_crud_member': '6️⃣ Medical Specialties CRUD (Committee Member)',
+            'medical_specialties_crud_president': '7️⃣ Medical Specialties CRUD (Committee President)',
+            'doctors_crud_member': '8️⃣ Doctors CRUD (Committee Member)',
+            'doctors_crud_president': '9️⃣ Doctors CRUD (Committee President)',
+            'pharmacies_crud_member': '🔟 Pharmacies CRUD (Committee Member)',
+            'pharmacies_crud_president': '1️⃣1️⃣ Pharmacies CRUD (Committee President)',
+            'laboratories_crud_member': '1️⃣2️⃣ Laboratories CRUD (Committee Member)',
+            'laboratories_crud_president': '1️⃣3️⃣ Laboratories CRUD (Committee President)',
+            'neighborhood_filtering': '1️⃣4️⃣ Neighborhood Filtering (Committee President)'
         }
         
         for test_name, success in results.items():
