@@ -434,52 +434,32 @@ class HealthcareManagementTester:
             print(f"❌ Laboratories CRUD error: {str(e)}")
             return False
     
-    def test_families_by_category_admin(self, category_id):
-        """Test GET /api/public/families-by-category/{category_id} as admin (should see all families)"""
-        print(f"\n👑 Testing Families by Category as Admin...")
+    def test_authentication_required(self):
+        """Test that healthcare APIs require authentication"""
+        print("\n🚫 Testing Authentication Requirements...")
         
-        if not self.admin_token:
-            print("❌ No admin token available")
-            return False
+        endpoints = [
+            "/doctors",
+            "/pharmacies", 
+            "/laboratories",
+            "/medical-specialties"
+        ]
         
-        try:
-            headers = {
-                "Authorization": f"Bearer {self.admin_token}"
-            }
-            
-            response = self.session.get(
-                f"{BACKEND_URL}/public/families-by-category/{category_id}",
-                headers=headers
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                print("✅ Admin access to families by category successful")
-                print(f"   Total families in category: {len(data)}")
-                
-                if data:
-                    # Check if families from different neighborhoods are included
-                    neighborhoods = set()
-                    for family in data:
-                        if family.get('neighborhood_id'):
-                            neighborhoods.add(family['neighborhood_id'])
-                    
-                    print(f"   Families from {len(neighborhoods)} different neighborhoods")
-                    print(f"   Sample families:")
-                    for family in data[:3]:
-                        print(f"     - {family.get('name', 'Unknown')} (Neighborhood: {family.get('neighborhood_id', 'N/A')})")
+        all_protected = True
+        
+        for endpoint in endpoints:
+            try:
+                response = self.session.get(f"{BACKEND_URL}{endpoint}")
+                if response.status_code == 401:
+                    print(f"✅ {endpoint} correctly requires authentication")
                 else:
-                    print("   ⚠️  No families found in this category")
-                
-                return True, data
-            else:
-                print(f"❌ Admin access failed: {response.status_code}")
-                print(f"   Response: {response.text}")
-                return False, None
-                
-        except Exception as e:
-            print(f"❌ Admin access error: {str(e)}")
-            return False, None
+                    print(f"❌ {endpoint} should require authentication, got: {response.status_code}")
+                    all_protected = False
+            except Exception as e:
+                print(f"❌ Error testing {endpoint}: {str(e)}")
+                all_protected = False
+        
+        return all_protected
     
     def test_families_by_category_regular_user(self, category_id):
         """Test GET /api/public/families-by-category/{category_id} as regular user (should see only their neighborhood)"""
