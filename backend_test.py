@@ -25,6 +25,7 @@ class HealthcareManagementTester:
         self.admin_token = None
         self.committee_member_token = None
         self.committee_president_token = None
+        self.committee_president_neighborhood_id = None
         self.test_neighborhood_id = None
         self.test_specialty_id = None
         self.test_doctor_id = None
