@@ -689,13 +689,13 @@ class HealthcareManagementTester:
 
 def main():
     """Main test execution"""
-    tester = FamiliesPublicTester()
+    tester = HealthcareManagementTester()
     success = tester.run_all_tests()
     
     if success:
-        print("\n✅ Families Public Page functionality is working correctly")
+        print("\n✅ Healthcare Management functionality is working correctly")
     else:
-        print("\n❌ Families Public Page functionality has issues")
+        print("\n❌ Healthcare Management functionality has issues")
     
     return success
 
