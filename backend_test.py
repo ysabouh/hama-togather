@@ -314,37 +314,39 @@ class HealthcareManagementTester:
                         "participates_in_solidarity": True,
                         "neighborhood_id": self.committee_president_neighborhood_id
                     }
-                
-                create_response = self.session.post(
-                    f"{BACKEND_URL}/pharmacies",
-                    json=pharmacy_data,
-                    headers=headers
-                )
-                
-                if create_response.status_code == 200:
-                    created_pharmacy = create_response.json()
-                    self.test_pharmacy_id = created_pharmacy['id']
-                    print(f"✅ POST pharmacy successful - Created: {created_pharmacy['name']}")
                     
-                    # Test PUT (update pharmacy)
-                    update_data = {
-                        "name": "صيدلية النهضة المحدثة - اختبار",
-                        "description": "صيدلية شاملة محدثة تقدم جميع الأدوية"
-                    }
-                    
-                    update_response = self.session.put(
-                        f"{BACKEND_URL}/pharmacies/{self.test_pharmacy_id}",
-                        json=update_data,
+                    create_response = self.session.post(
+                        f"{BACKEND_URL}/pharmacies",
+                        json=pharmacy_data,
                         headers=headers
                     )
                     
-                    if update_response.status_code == 200:
-                        print("✅ PUT pharmacy successful")
+                    if create_response.status_code == 200:
+                        created_pharmacy = create_response.json()
+                        self.test_pharmacy_id = created_pharmacy['id']
+                        print(f"✅ POST pharmacy successful - Created: {created_pharmacy['name']}")
+                        
+                        # Test PUT (update pharmacy)
+                        update_data = {
+                            "name": "صيدلية النهضة المحدثة - اختبار",
+                            "description": "صيدلية شاملة محدثة تقدم جميع الأدوية"
+                        }
+                        
+                        update_response = self.session.put(
+                            f"{BACKEND_URL}/pharmacies/{self.test_pharmacy_id}",
+                            json=update_data,
+                            headers=headers
+                        )
+                        
+                        if update_response.status_code == 200:
+                            print("✅ PUT pharmacy successful")
+                        else:
+                            print(f"❌ PUT pharmacy failed: {update_response.status_code}")
                     else:
-                        print(f"❌ PUT pharmacy failed: {update_response.status_code}")
+                        print(f"❌ POST pharmacy failed: {create_response.status_code}")
+                        print(f"   Response: {create_response.text}")
                 else:
-                    print(f"❌ POST pharmacy failed: {create_response.status_code}")
-                    print(f"   Response: {create_response.text}")
+                    print(f"ℹ️ Skipping POST test for {user_type} (requires committee_president role)")
                 
                 return True
             else:
