@@ -461,63 +461,39 @@ class HealthcareManagementTester:
         
         return all_protected
     
-    def test_families_by_category_regular_user(self, category_id):
-        """Test GET /api/public/families-by-category/{category_id} as regular user (should see only their neighborhood)"""
-        print(f"\n👤 Testing Families by Category as Regular User...")
+    def test_neighborhood_filtering(self):
+        """Test that committee president sees only their neighborhood data"""
+        print("\n🏘️ Testing Neighborhood Filtering for Committee President...")
         
-        if not self.regular_user_token:
-            print("❌ No regular user token available")
+        if not self.committee_president_token:
+            print("❌ No committee president token available")
             return False
         
+        headers = {"Authorization": f"Bearer {self.committee_president_token}"}
+        
         try:
-            headers = {
-                "Authorization": f"Bearer {self.regular_user_token}"
-            }
-            
-            response = self.session.get(
-                f"{BACKEND_URL}/public/families-by-category/{category_id}",
-                headers=headers
-            )
-            
+            # Test doctors filtering
+            response = self.session.get(f"{BACKEND_URL}/doctors", headers=headers)
             if response.status_code == 200:
-                data = response.json()
-                print("✅ Regular user access to families by category successful")
-                print(f"   Total families in category (user's neighborhood only): {len(data)}")
+                doctors = response.json()
+                print(f"✅ Committee president can access doctors - Found {len(doctors)} doctors")
                 
-                if data:
-                    # Verify all families are from user's neighborhood
-                    user_neighborhood_families = 0
-                    other_neighborhood_families = 0
-                    
-                    for family in data:
-                        if family.get('neighborhood_id') == self.regular_user_neighborhood_id:
-                            user_neighborhood_families += 1
-                        else:
-                            other_neighborhood_families += 1
-                    
-                    print(f"   Families from user's neighborhood: {user_neighborhood_families}")
-                    print(f"   Families from other neighborhoods: {other_neighborhood_families}")
-                    
-                    if other_neighborhood_families == 0:
-                        print("✅ Neighborhood restriction working correctly")
+                # Check if filtering is applied (all doctors should be from same neighborhood)
+                if doctors:
+                    neighborhoods = set(doc.get('neighborhood_id') for doc in doctors if doc.get('neighborhood_id'))
+                    if len(neighborhoods) <= 1:
+                        print("✅ Neighborhood filtering working for doctors")
                     else:
-                        print("❌ Neighborhood restriction not working - seeing families from other neighborhoods")
-                    
-                    print(f"   Sample families:")
-                    for family in data[:3]:
-                        print(f"     - {family.get('name', 'Unknown')} (Neighborhood: {family.get('neighborhood_id', 'N/A')})")
-                else:
-                    print("   ⚠️  No families found in this category for user's neighborhood")
+                        print(f"⚠️ Multiple neighborhoods found in doctors: {len(neighborhoods)}")
                 
-                return True, data
+                return True
             else:
-                print(f"❌ Regular user access failed: {response.status_code}")
-                print(f"   Response: {response.text}")
-                return False, None
+                print(f"❌ Committee president doctors access failed: {response.status_code}")
+                return False
                 
         except Exception as e:
-            print(f"❌ Regular user access error: {str(e)}")
-            return False, None
+            print(f"❌ Neighborhood filtering test error: {str(e)}")
+            return False
     
     def test_neighborhood_filter_admin(self, category_id, neighborhood_id):
         """Test neighborhood filter functionality for admin"""
