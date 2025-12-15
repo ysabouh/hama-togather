@@ -526,85 +526,113 @@ class HealthcareManagementTester:
                     print(f"⚠️ Error deleting test {entity_type}: {str(e)}")
     
     def run_all_tests(self):
-        """Run all families public page tests"""
+        """Run all healthcare management tests"""
         print("=" * 80)
-        print("🚀 Starting Families Public Page Functionality Tests")
+        print("🚀 Starting Healthcare Management API Tests")
         print("=" * 80)
         
         results = {
-            'public_families_stats': False,
-            'public_neighborhoods': False,
-            'admin_login': False,
-            'create_regular_user': False,
-            'regular_user_login': False,
-            'guest_access_denied': False,
-            'admin_sees_all_families': False,
-            'regular_user_neighborhood_restriction': False,
-            'admin_neighborhood_filter': False
+            'get_neighborhoods': False,
+            'authentication_required': False,
+            'committee_member_login': False,
+            'committee_president_login': False,
+            'medical_specialties_crud_member': False,
+            'medical_specialties_crud_president': False,
+            'doctors_crud_member': False,
+            'doctors_crud_president': False,
+            'pharmacies_crud_member': False,
+            'pharmacies_crud_president': False,
+            'laboratories_crud_member': False,
+            'laboratories_crud_president': False,
+            'neighborhood_filtering': False
         }
         
-        # Test 1: Public families stats (no auth)
-        results['public_families_stats'], families_stats = self.test_public_families_stats()
+        # Test 1: Get neighborhoods for testing
+        results['get_neighborhoods'] = self.get_neighborhoods()
         
-        # Test 2: Public neighborhoods (no auth)
-        results['public_neighborhoods'], neighborhoods = self.test_public_neighborhoods()
+        # Test 2: Authentication requirements
+        results['authentication_required'] = self.test_authentication_required()
         
-        # Test 3: Admin login
-        results['admin_login'] = self.login_admin()
+        # Test 3: Committee member login
+        results['committee_member_login'] = self.login_committee_member()
         
-        # Find a category with families for testing
-        test_category_id = None
-        if results['public_families_stats'] and families_stats:
-            categories_with_families = [cat for cat in families_stats.get('categories', []) if cat.get('families_count', 0) > 0]
-            if categories_with_families:
-                test_category_id = categories_with_families[0]['id']
-                print(f"\n🎯 Using category '{categories_with_families[0]['name']}' (ID: {test_category_id}) for testing")
+        # Test 4: Committee president login
+        results['committee_president_login'] = self.login_committee_president()
         
-        if not test_category_id:
-            print("\n⚠️  No categories with families found - some tests will be skipped")
+        # Test 5: Medical specialties CRUD as committee member
+        if results['committee_member_login']:
+            results['medical_specialties_crud_member'] = self.test_medical_specialties_crud(
+                self.committee_member_token, "committee_member"
+            )
         
-        # Test 4: Guest access (should be denied)
-        if test_category_id:
-            results['guest_access_denied'] = self.test_families_by_category_guest(test_category_id)
+        # Test 6: Medical specialties CRUD as committee president
+        if results['committee_president_login']:
+            results['medical_specialties_crud_president'] = self.test_medical_specialties_crud(
+                self.committee_president_token, "committee_president"
+            )
         
-        # Test 5: Admin access (should see all families)
-        if results['admin_login'] and test_category_id:
-            admin_success, admin_families = self.test_families_by_category_admin(test_category_id)
-            results['admin_sees_all_families'] = admin_success
+        # Test 7: Doctors CRUD as committee member
+        if results['committee_member_login'] and self.test_specialty_id:
+            results['doctors_crud_member'] = self.test_doctors_crud(
+                self.committee_member_token, "committee_member"
+            )
         
-        # Test 6: Create regular user
-        if results['admin_login'] and results['public_neighborhoods']:
-            results['create_regular_user'] = self.create_regular_user()
+        # Test 8: Doctors CRUD as committee president
+        if results['committee_president_login'] and self.test_specialty_id:
+            results['doctors_crud_president'] = self.test_doctors_crud(
+                self.committee_president_token, "committee_president"
+            )
         
-        # Test 7: Regular user login
-        if results['create_regular_user']:
-            results['regular_user_login'] = self.login_regular_user()
+        # Test 9: Pharmacies CRUD as committee member
+        if results['committee_member_login']:
+            results['pharmacies_crud_member'] = self.test_pharmacies_crud(
+                self.committee_member_token, "committee_member"
+            )
         
-        # Test 8: Regular user access (should see only their neighborhood)
-        if results['regular_user_login'] and test_category_id:
-            regular_success, regular_families = self.test_families_by_category_regular_user(test_category_id)
-            results['regular_user_neighborhood_restriction'] = regular_success
+        # Test 10: Pharmacies CRUD as committee president
+        if results['committee_president_login']:
+            results['pharmacies_crud_president'] = self.test_pharmacies_crud(
+                self.committee_president_token, "committee_president"
+            )
         
-        # Test 9: Admin neighborhood filter
-        if results['admin_login'] and test_category_id and self.regular_user_neighborhood_id:
-            filter_success, filtered_families = self.test_neighborhood_filter_admin(test_category_id, self.regular_user_neighborhood_id)
-            results['admin_neighborhood_filter'] = filter_success
+        # Test 11: Laboratories CRUD as committee member
+        if results['committee_member_login']:
+            results['laboratories_crud_member'] = self.test_laboratories_crud(
+                self.committee_member_token, "committee_member"
+            )
+        
+        # Test 12: Laboratories CRUD as committee president
+        if results['committee_president_login']:
+            results['laboratories_crud_president'] = self.test_laboratories_crud(
+                self.committee_president_token, "committee_president"
+            )
+        
+        # Test 13: Neighborhood filtering for committee president
+        if results['committee_president_login']:
+            results['neighborhood_filtering'] = self.test_neighborhood_filtering()
+        
+        # Cleanup test data
+        self.cleanup_test_data()
         
         # Print summary
         print("\n" + "=" * 80)
-        print("📊 FAMILIES PUBLIC PAGE TEST RESULTS SUMMARY")
+        print("📊 HEALTHCARE MANAGEMENT TEST RESULTS SUMMARY")
         print("=" * 80)
         
         test_descriptions = {
-            'public_families_stats': '1️⃣ Public Families Stats API (no auth)',
-            'public_neighborhoods': '2️⃣ Public Neighborhoods API (no auth)',
-            'admin_login': '3️⃣ Admin Login',
-            'guest_access_denied': '4️⃣ Guest Access Denied (families by category)',
-            'admin_sees_all_families': '5️⃣ Admin Sees All Families (no neighborhood restriction)',
-            'create_regular_user': '6️⃣ Create Regular User',
-            'regular_user_login': '7️⃣ Regular User Login',
-            'regular_user_neighborhood_restriction': '8️⃣ Regular User Neighborhood Restriction',
-            'admin_neighborhood_filter': '9️⃣ Admin Neighborhood Filter'
+            'get_neighborhoods': '1️⃣ Get Neighborhoods',
+            'authentication_required': '2️⃣ Authentication Required for Healthcare APIs',
+            'committee_member_login': '3️⃣ Committee Member Login',
+            'committee_president_login': '4️⃣ Committee President Login',
+            'medical_specialties_crud_member': '5️⃣ Medical Specialties CRUD (Committee Member)',
+            'medical_specialties_crud_president': '6️⃣ Medical Specialties CRUD (Committee President)',
+            'doctors_crud_member': '7️⃣ Doctors CRUD (Committee Member)',
+            'doctors_crud_president': '8️⃣ Doctors CRUD (Committee President)',
+            'pharmacies_crud_member': '9️⃣ Pharmacies CRUD (Committee Member)',
+            'pharmacies_crud_president': '🔟 Pharmacies CRUD (Committee President)',
+            'laboratories_crud_member': '1️⃣1️⃣ Laboratories CRUD (Committee Member)',
+            'laboratories_crud_president': '1️⃣2️⃣ Laboratories CRUD (Committee President)',
+            'neighborhood_filtering': '1️⃣3️⃣ Neighborhood Filtering (Committee President)'
         }
         
         for test_name, success in results.items():
@@ -622,36 +650,41 @@ class HealthcareManagementTester:
         print("📋 DETAILED ANALYSIS")
         print("=" * 80)
         
-        if results['public_families_stats'] and results['public_neighborhoods']:
-            print("✅ Public APIs working correctly (no authentication required)")
+        if results['authentication_required']:
+            print("✅ Healthcare APIs correctly require authentication")
         else:
-            print("❌ Public APIs have issues")
+            print("❌ Healthcare APIs authentication issues")
         
-        if results['guest_access_denied']:
-            print("✅ Protected endpoint correctly requires authentication")
+        if results['committee_member_login'] and results['committee_president_login']:
+            print("✅ Committee user authentication working")
         else:
-            print("❌ Protected endpoint security issue")
+            print("❌ Committee user authentication issues")
         
-        if results['admin_sees_all_families']:
-            print("✅ Admin can see all families (no neighborhood restriction)")
-        else:
-            print("❌ Admin access has issues")
+        crud_tests = [
+            'medical_specialties_crud_member', 'medical_specialties_crud_president',
+            'doctors_crud_member', 'doctors_crud_president',
+            'pharmacies_crud_member', 'pharmacies_crud_president',
+            'laboratories_crud_member', 'laboratories_crud_president'
+        ]
         
-        if results['regular_user_neighborhood_restriction']:
-            print("✅ Regular user correctly restricted to their neighborhood")
-        else:
-            print("❌ Regular user neighborhood restriction not working")
+        crud_passed = sum([1 for test in crud_tests if results.get(test, False)])
+        crud_total = len([test for test in crud_tests if results.get(test) is not None])
         
-        if results['admin_neighborhood_filter']:
-            print("✅ Admin neighborhood filter working correctly")
+        if crud_passed == crud_total and crud_total > 0:
+            print("✅ All healthcare CRUD operations working")
         else:
-            print("❌ Admin neighborhood filter has issues")
+            print(f"❌ Healthcare CRUD operations issues: {crud_passed}/{crud_total} passed")
+        
+        if results['neighborhood_filtering']:
+            print("✅ Neighborhood filtering working for committee president")
+        else:
+            print("❌ Neighborhood filtering issues")
         
         if passed_tests == total_tests:
-            print("\n🎉 All families public page tests passed!")
+            print("\n🎉 All healthcare management tests passed!")
             return True
         else:
-            print("\n⚠️  Some families public page tests failed - check details above")
+            print("\n⚠️ Some healthcare management tests failed - check details above")
             return False
 
 def main():
