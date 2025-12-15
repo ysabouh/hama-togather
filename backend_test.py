@@ -587,7 +587,10 @@ class HealthcareManagementTester:
         # Test 2: Public access allowed (correct behavior)
         results['public_access_allowed'] = self.test_public_access_allowed()
         
-        # Test 3: Committee member login
+        # Test 3: POST authentication required
+        results['post_authentication_required'] = self.test_post_authentication_required()
+        
+        # Test 4: Committee member login
         results['committee_member_login'] = self.login_committee_member()
         
         # Test 4: Committee president login
