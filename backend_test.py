@@ -626,7 +626,7 @@ class HealthcareManagementTester:
         
         test_descriptions = {
             'get_neighborhoods': '1️⃣ Get Neighborhoods',
-            'authentication_required': '2️⃣ Authentication Required for Healthcare APIs',
+            'public_access_allowed': '2️⃣ Public Access to Healthcare APIs (GET)',
             'committee_member_login': '3️⃣ Committee Member Login',
             'committee_president_login': '4️⃣ Committee President Login',
             'medical_specialties_crud_member': '5️⃣ Medical Specialties CRUD (Committee Member)',
