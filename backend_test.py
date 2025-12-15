@@ -23,11 +23,13 @@ class HealthcareManagementTester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
-        self.regular_user_token = None
-        self.regular_user_id = None
-        self.regular_user_neighborhood_id = None
-        self.test_user_email = "test_user@example.com"
-        self.test_user_password = "test123"
+        self.committee_member_token = None
+        self.committee_president_token = None
+        self.test_neighborhood_id = None
+        self.test_specialty_id = None
+        self.test_doctor_id = None
+        self.test_pharmacy_id = None
+        self.test_laboratory_id = None
         
     def login_admin(self):
         """Login as admin and get authentication token"""
