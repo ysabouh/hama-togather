@@ -97,39 +97,29 @@ class HealthcareManagementTester:
             print(f"❌ Committee president login error: {str(e)}")
             return False
     
-    def test_public_families_stats(self):
-        """Test GET /api/public/families-stats (no authentication required)"""
-        print("\n📊 Testing Public Families Stats API...")
+    def get_neighborhoods(self):
+        """Get neighborhoods for testing"""
+        print("\n🏘️ Getting Neighborhoods...")
         
         try:
-            response = self.session.get(f"{BACKEND_URL}/public/families-stats")
+            response = self.session.get(f"{BACKEND_URL}/public/neighborhoods")
             
             if response.status_code == 200:
                 data = response.json()
-                print("✅ Public families stats API successful")
-                print(f"   Total families: {data.get('total_families', 0)}")
-                print(f"   Categories count: {len(data.get('categories', []))}")
-                
-                # Check if we have categories with families
-                categories = data.get('categories', [])
-                categories_with_families = [cat for cat in categories if cat.get('families_count', 0) > 0]
-                
-                if categories_with_families:
-                    print(f"   Categories with families: {len(categories_with_families)}")
-                    for cat in categories_with_families[:3]:  # Show first 3
-                        print(f"     - {cat.get('name', 'Unknown')}: {cat.get('families_count', 0)} families")
+                if data:
+                    self.test_neighborhood_id = data[0].get('id')
+                    print(f"✅ Got neighborhoods, using: {data[0].get('name')} (ID: {self.test_neighborhood_id})")
+                    return True
                 else:
-                    print("   ⚠️  No categories with families found")
-                
-                return True, data
+                    print("❌ No neighborhoods found")
+                    return False
             else:
-                print(f"❌ Public families stats failed: {response.status_code}")
-                print(f"   Response: {response.text}")
-                return False, None
+                print(f"❌ Failed to get neighborhoods: {response.status_code}")
+                return False
                 
         except Exception as e:
-            print(f"❌ Public families stats error: {str(e)}")
-            return False, None
+            print(f"❌ Get neighborhoods error: {str(e)}")
+            return False
     
     def test_public_neighborhoods(self):
         """Test GET /api/public/neighborhoods (no authentication required)"""
