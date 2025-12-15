@@ -156,7 +156,7 @@ const CommitteeDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <Users className="w-6 h-6 text-blue-600" />
@@ -188,7 +188,37 @@ const CommitteeDashboard = () => {
               عرض التبرعات
             </Button>
           </div>
+
+          {/* Healthcare Management - for committee_president only */}
+          {user.role === 'committee_president' && (
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Stethoscope className="w-6 h-6 text-emerald-600" />
+                إدارة الرعاية الصحية
+              </h2>
+              <p className="text-gray-600 mb-4">
+                إضافة وتعديل الأطباء والصيدليات والمختبرات
+              </p>
+              <Button 
+                onClick={() => setShowHealthcare(!showHealthcare)}
+                className="w-full bg-emerald-600 hover:bg-emerald-700"
+              >
+                {showHealthcare ? 'إخفاء' : 'عرض'} الرعاية الصحية
+              </Button>
+            </div>
+          )}
         </div>
+
+        {/* Healthcare Management Section */}
+        {user.role === 'committee_president' && showHealthcare && (
+          <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Stethoscope className="w-7 h-7 text-emerald-600" />
+              إدارة الرعاية الصحية - حي {neighborhood?.name || ''}
+            </h2>
+            <HealthcareManagement activeTab="doctors" />
+          </div>
+        )}
 
         {/* Recent Pending Donations */}
         <div className="bg-white rounded-xl shadow-md p-6">
