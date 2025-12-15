@@ -121,38 +121,74 @@ class HealthcareManagementTester:
             print(f"❌ Get neighborhoods error: {str(e)}")
             return False
     
-    def test_public_neighborhoods(self):
-        """Test GET /api/public/neighborhoods (no authentication required)"""
-        print("\n🏘️ Testing Public Neighborhoods API...")
+    def test_medical_specialties_crud(self, token, user_type):
+        """Test CRUD operations for medical specialties"""
+        print(f"\n🩺 Testing Medical Specialties CRUD as {user_type}...")
+        
+        if not token:
+            print(f"❌ No {user_type} token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
         
         try:
-            response = self.session.get(f"{BACKEND_URL}/public/neighborhoods")
+            # Test GET medical specialties
+            response = self.session.get(f"{BACKEND_URL}/medical-specialties", headers=headers)
             
             if response.status_code == 200:
-                data = response.json()
-                print("✅ Public neighborhoods API successful")
-                print(f"   Total neighborhoods: {len(data)}")
+                specialties = response.json()
+                print(f"✅ GET medical specialties successful - Found {len(specialties)} specialties")
                 
-                if data:
-                    # Store first neighborhood for regular user creation
-                    self.regular_user_neighborhood_id = data[0].get('id')
-                    print(f"   First neighborhood: {data[0].get('name', 'Unknown')} (ID: {self.regular_user_neighborhood_id})")
+                # Test POST (create new specialty) - only for admin/committee users
+                if user_type in ["committee_member", "committee_president"]:
+                    specialty_data = {
+                        "name_ar": "طب الأطفال - اختبار",
+                        "name_en": "Pediatrics - Test",
+                        "description": "تخصص طب الأطفال للاختبار",
+                        "is_active": True
+                    }
                     
-                    # Show some neighborhoods
-                    for neighborhood in data[:3]:
-                        print(f"     - {neighborhood.get('name', 'Unknown')} (Number: {neighborhood.get('number', 'N/A')})")
-                else:
-                    print("   ⚠️  No neighborhoods found")
+                    create_response = self.session.post(
+                        f"{BACKEND_URL}/medical-specialties",
+                        json=specialty_data,
+                        headers=headers
+                    )
+                    
+                    if create_response.status_code == 200:
+                        created_specialty = create_response.json()
+                        self.test_specialty_id = created_specialty['id']
+                        print(f"✅ POST medical specialty successful - Created: {created_specialty['name_ar']}")
+                        
+                        # Test PUT (update specialty)
+                        update_data = {
+                            "name_ar": "طب الأطفال - محدث",
+                            "description": "تخصص طب الأطفال المحدث للاختبار"
+                        }
+                        
+                        update_response = self.session.put(
+                            f"{BACKEND_URL}/medical-specialties/{self.test_specialty_id}",
+                            json=update_data,
+                            headers=headers
+                        )
+                        
+                        if update_response.status_code == 200:
+                            print("✅ PUT medical specialty successful")
+                        else:
+                            print(f"❌ PUT medical specialty failed: {update_response.status_code}")
+                            print(f"   Response: {update_response.text}")
+                    else:
+                        print(f"❌ POST medical specialty failed: {create_response.status_code}")
+                        print(f"   Response: {create_response.text}")
                 
-                return True, data
+                return True
             else:
-                print(f"❌ Public neighborhoods failed: {response.status_code}")
+                print(f"❌ GET medical specialties failed: {response.status_code}")
                 print(f"   Response: {response.text}")
-                return False, None
+                return False
                 
         except Exception as e:
-            print(f"❌ Public neighborhoods error: {str(e)}")
-            return False, None
+            print(f"❌ Medical specialties CRUD error: {str(e)}")
+            return False
     
     def create_regular_user(self):
         """Create a regular user for testing"""
