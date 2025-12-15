@@ -593,10 +593,10 @@ class HealthcareManagementTester:
         # Test 4: Committee member login
         results['committee_member_login'] = self.login_committee_member()
         
-        # Test 4: Committee president login
+        # Test 5: Committee president login
         results['committee_president_login'] = self.login_committee_president()
         
-        # Test 5: Medical specialties CRUD as committee member
+        # Test 6: Medical specialties CRUD as committee member
         if results['committee_member_login']:
             results['medical_specialties_crud_member'] = self.test_medical_specialties_crud(
                 self.committee_member_token, "committee_member"
