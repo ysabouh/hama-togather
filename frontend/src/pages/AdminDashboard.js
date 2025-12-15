@@ -2000,6 +2000,34 @@ const AdminDashboard = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                {/* القائمة المنسدلة للرعاية الصحية */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <TabsTrigger value={activeHealthcareTab} data-testid="healthcare-dropdown" className="relative">
+                      الرعاية الصحية
+                      <ChevronDown className="w-4 h-4 mr-2" />
+                    </TabsTrigger>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={() => setActiveHealthcareTab('doctors')} className="cursor-pointer">
+                      <Stethoscope className="w-4 h-4 ml-2" />
+                      الأطباء
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveHealthcareTab('pharmacies')} className="cursor-pointer">
+                      <Building2 className="w-4 h-4 ml-2" />
+                      الصيدليات
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveHealthcareTab('laboratories')} className="cursor-pointer">
+                      <FlaskConical className="w-4 h-4 ml-2" />
+                      المختبرات
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveHealthcareTab('specialties')} className="cursor-pointer">
+                      <Tag className="w-4 h-4 ml-2" />
+                      التخصصات الطبية
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 
                 <TabsTrigger value="donations" data-testid="tab-donations">التبرعات</TabsTrigger>
                 
