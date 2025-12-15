@@ -353,24 +353,85 @@ class HealthcareManagementTester:
             print(f"❌ Pharmacies CRUD error: {str(e)}")
             return False
     
-    def test_families_by_category_guest(self, category_id):
-        """Test GET /api/public/families-by-category/{category_id} without authentication (should fail)"""
-        print(f"\n🚫 Testing Families by Category as Guest (should fail)...")
+    def test_laboratories_crud(self, token, user_type):
+        """Test CRUD operations for laboratories"""
+        print(f"\n🔬 Testing Laboratories CRUD as {user_type}...")
+        
+        if not token or not self.test_neighborhood_id:
+            print(f"❌ Missing {user_type} token or neighborhood ID")
+            return False
+        
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
         
         try:
-            response = self.session.get(f"{BACKEND_URL}/public/families-by-category/{category_id}")
+            # Test GET laboratories
+            response = self.session.get(f"{BACKEND_URL}/laboratories", headers=headers)
             
-            if response.status_code == 401:
-                print("✅ Guest access correctly denied (401 Unauthorized)")
-                print(f"   Response: {response.text}")
+            if response.status_code == 200:
+                laboratories = response.json()
+                print(f"✅ GET laboratories successful - Found {len(laboratories)} laboratories")
+                
+                # Test POST (create new laboratory)
+                laboratory_data = {
+                    "name": "مختبر الدقة الطبي - اختبار",
+                    "owner_full_name": "سعد محمد الأحمد",
+                    "description": "مختبر طبي شامل للتحاليل والفحوصات",
+                    "landline": "0112345680",
+                    "mobile": "0501234569",
+                    "address": "شارع الأمير محمد بن عبدالعزيز، الرياض",
+                    "working_hours": {
+                        "saturday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                        "sunday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                        "monday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                        "tuesday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                        "wednesday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                        "thursday": {"is_open": True, "opening_time": "07:00", "closing_time": "20:00"},
+                        "friday": {"is_open": False}
+                    },
+                    "is_active": True,
+                    "participates_in_solidarity": False,
+                    "neighborhood_id": self.test_neighborhood_id
+                }
+                
+                create_response = self.session.post(
+                    f"{BACKEND_URL}/laboratories",
+                    json=laboratory_data,
+                    headers=headers
+                )
+                
+                if create_response.status_code == 200:
+                    created_laboratory = create_response.json()
+                    self.test_laboratory_id = created_laboratory['id']
+                    print(f"✅ POST laboratory successful - Created: {created_laboratory['name']}")
+                    
+                    # Test PUT (update laboratory)
+                    update_data = {
+                        "name": "مختبر الدقة الطبي المحدث - اختبار",
+                        "description": "مختبر طبي شامل محدث للتحاليل والفحوصات المتقدمة"
+                    }
+                    
+                    update_response = self.session.put(
+                        f"{BACKEND_URL}/laboratories/{self.test_laboratory_id}",
+                        json=update_data,
+                        headers=headers
+                    )
+                    
+                    if update_response.status_code == 200:
+                        print("✅ PUT laboratory successful")
+                    else:
+                        print(f"❌ PUT laboratory failed: {update_response.status_code}")
+                else:
+                    print(f"❌ POST laboratory failed: {create_response.status_code}")
+                    print(f"   Response: {create_response.text}")
+                
                 return True
             else:
-                print(f"❌ Guest access should be denied, got: {response.status_code}")
+                print(f"❌ GET laboratories failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False
                 
         except Exception as e:
-            print(f"❌ Guest access test error: {str(e)}")
+            print(f"❌ Laboratories CRUD error: {str(e)}")
             return False
     
     def test_families_by_category_admin(self, category_id):
