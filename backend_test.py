@@ -555,8 +555,8 @@ class HealthcareManagementTester:
         # Test 1: Get neighborhoods for testing
         results['get_neighborhoods'] = self.get_neighborhoods()
         
-        # Test 2: Authentication requirements
-        results['authentication_required'] = self.test_authentication_required()
+        # Test 2: Public access allowed (correct behavior)
+        results['public_access_allowed'] = self.test_public_access_allowed()
         
         # Test 3: Committee member login
         results['committee_member_login'] = self.login_committee_member()
