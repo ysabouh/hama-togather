@@ -292,27 +292,28 @@ class HealthcareManagementTester:
                 pharmacies = response.json()
                 print(f"✅ GET pharmacies successful - Found {len(pharmacies)} pharmacies")
                 
-                # Test POST (create new pharmacy)
-                pharmacy_data = {
-                    "name": "صيدلية النهضة - اختبار",
-                    "owner_full_name": "محمد أحمد السعد",
-                    "description": "صيدلية شاملة تقدم جميع الأدوية والمستلزمات الطبية",
-                    "landline": "0112345679",
-                    "mobile": "0501234568",
-                    "address": "شارع العليا، الرياض",
-                    "working_hours": {
-                        "saturday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
-                        "sunday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
-                        "monday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
-                        "tuesday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
-                        "wednesday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
-                        "thursday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
-                        "friday": {"is_open": True, "opening_time": "14:00", "closing_time": "22:00"}
-                    },
-                    "is_active": True,
-                    "participates_in_solidarity": True,
-                    "neighborhood_id": self.test_neighborhood_id
-                }
+                # Test POST (create new pharmacy) - only for committee president with correct neighborhood
+                if user_type == "committee_president" and self.committee_president_neighborhood_id:
+                    pharmacy_data = {
+                        "name": "صيدلية النهضة - اختبار",
+                        "owner_full_name": "محمد أحمد السعد",
+                        "description": "صيدلية شاملة تقدم جميع الأدوية والمستلزمات الطبية",
+                        "landline": "0112345679",
+                        "mobile": "0501234568",
+                        "address": "شارع العليا، الرياض",
+                        "working_hours": {
+                            "saturday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                            "sunday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                            "monday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                            "tuesday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                            "wednesday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                            "thursday": {"is_open": True, "opening_time": "08:00", "closing_time": "22:00"},
+                            "friday": {"is_open": True, "opening_time": "14:00", "closing_time": "22:00"}
+                        },
+                        "is_active": True,
+                        "participates_in_solidarity": True,
+                        "neighborhood_id": self.committee_president_neighborhood_id
+                    }
                 
                 create_response = self.session.post(
                     f"{BACKEND_URL}/pharmacies",
