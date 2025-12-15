@@ -495,60 +495,35 @@ class HealthcareManagementTester:
             print(f"❌ Neighborhood filtering test error: {str(e)}")
             return False
     
-    def test_neighborhood_filter_admin(self, category_id, neighborhood_id):
-        """Test neighborhood filter functionality for admin"""
-        print(f"\n🏘️ Testing Neighborhood Filter for Admin...")
+    def cleanup_test_data(self):
+        """Clean up test data created during testing"""
+        print("\n🧹 Cleaning up test data...")
         
-        if not self.admin_token:
-            print("❌ No admin token available")
-            return False
+        # Only cleanup if we have committee member token (has delete permissions)
+        if not self.committee_member_token:
+            print("⚠️ No committee member token for cleanup")
+            return
         
-        try:
-            headers = {
-                "Authorization": f"Bearer {self.admin_token}"
-            }
-            
-            # Test with neighborhood filter
-            response = self.session.get(
-                f"{BACKEND_URL}/public/families-by-category/{category_id}?neighborhood_id={neighborhood_id}",
-                headers=headers
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                print("✅ Admin neighborhood filter successful")
-                print(f"   Families in specific neighborhood: {len(data)}")
-                
-                if data:
-                    # Verify all families are from the specified neighborhood
-                    correct_neighborhood = 0
-                    wrong_neighborhood = 0
-                    
-                    for family in data:
-                        if family.get('neighborhood_id') == neighborhood_id:
-                            correct_neighborhood += 1
-                        else:
-                            wrong_neighborhood += 1
-                    
-                    print(f"   Families from correct neighborhood: {correct_neighborhood}")
-                    print(f"   Families from wrong neighborhood: {wrong_neighborhood}")
-                    
-                    if wrong_neighborhood == 0:
-                        print("✅ Neighborhood filter working correctly")
+        headers = {"Authorization": f"Bearer {self.committee_member_token}"}
+        
+        # Delete test entities (if they were created)
+        entities_to_delete = [
+            (self.test_doctor_id, "doctors", "doctor"),
+            (self.test_pharmacy_id, "pharmacies", "pharmacy"),
+            (self.test_laboratory_id, "laboratories", "laboratory"),
+            (self.test_specialty_id, "medical-specialties", "medical specialty")
+        ]
+        
+        for entity_id, endpoint, entity_type in entities_to_delete:
+            if entity_id:
+                try:
+                    response = self.session.delete(f"{BACKEND_URL}/{endpoint}/{entity_id}", headers=headers)
+                    if response.status_code in [200, 204]:
+                        print(f"✅ Deleted test {entity_type}")
                     else:
-                        print("❌ Neighborhood filter not working properly")
-                else:
-                    print("   ⚠️  No families found in this neighborhood for this category")
-                
-                return True, data
-            else:
-                print(f"❌ Admin neighborhood filter failed: {response.status_code}")
-                print(f"   Response: {response.text}")
-                return False, None
-                
-        except Exception as e:
-            print(f"❌ Admin neighborhood filter error: {str(e)}")
-            return False, None
+                        print(f"⚠️ Could not delete test {entity_type}: {response.status_code}")
+                except Exception as e:
+                    print(f"⚠️ Error deleting test {entity_type}: {str(e)}")
     
     def run_all_tests(self):
         """Run all families public page tests"""
