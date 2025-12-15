@@ -31,13 +31,13 @@ class HealthcareManagementTester:
         self.test_pharmacy_id = None
         self.test_laboratory_id = None
         
-    def login_admin(self):
-        """Login as admin and get authentication token"""
-        print("🔐 Testing Admin Login...")
+    def login_committee_member(self):
+        """Login as committee member and get authentication token"""
+        print("🔐 Testing Committee Member Login...")
         
         login_data = {
-            "username": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
+            "username": COMMITTEE_MEMBER_PHONE,
+            "password": COMMITTEE_MEMBER_PASSWORD
         }
         
         try:
@@ -49,18 +49,52 @@ class HealthcareManagementTester:
             
             if response.status_code == 200:
                 data = response.json()
-                self.admin_token = data["access_token"]
-                print(f"✅ Admin login successful")
-                print(f"   Token: {self.admin_token[:20]}...")
-                print(f"   User: {data['user']['email']} ({data['user']['role']})")
+                self.committee_member_token = data["access_token"]
+                print(f"✅ Committee member login successful")
+                print(f"   Token: {self.committee_member_token[:20]}...")
+                print(f"   User: {data['user']['phone']} ({data['user']['role']})")
+                print(f"   Neighborhood: {data['user'].get('neighborhood_id', 'N/A')}")
                 return True
             else:
-                print(f"❌ Admin login failed: {response.status_code}")
+                print(f"❌ Committee member login failed: {response.status_code}")
                 print(f"   Response: {response.text}")
                 return False
                 
         except Exception as e:
-            print(f"❌ Admin login error: {str(e)}")
+            print(f"❌ Committee member login error: {str(e)}")
+            return False
+    
+    def login_committee_president(self):
+        """Login as committee president and get authentication token"""
+        print("🔐 Testing Committee President Login...")
+        
+        login_data = {
+            "username": COMMITTEE_PRESIDENT_PHONE,
+            "password": COMMITTEE_PRESIDENT_PASSWORD
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/auth/login",
+                data=login_data,
+                headers={"Content-Type": "application/x-www-form-urlencoded"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.committee_president_token = data["access_token"]
+                print(f"✅ Committee president login successful")
+                print(f"   Token: {self.committee_president_token[:20]}...")
+                print(f"   User: {data['user']['phone']} ({data['user']['role']})")
+                print(f"   Neighborhood: {data['user'].get('neighborhood_id', 'N/A')}")
+                return True
+            else:
+                print(f"❌ Committee president login failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Committee president login error: {str(e)}")
             return False
     
     def test_public_families_stats(self):
