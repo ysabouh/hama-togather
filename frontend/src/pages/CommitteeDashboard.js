@@ -25,6 +25,7 @@ const CommitteeDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showHealthcare, setShowHealthcare] = useState(false);
   const [stats, setStats] = useState({
     totalFamilies: 0,
     totalDonations: 0,
