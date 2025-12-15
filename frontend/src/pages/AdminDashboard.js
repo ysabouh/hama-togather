@@ -4113,6 +4113,47 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* Healthcare Management Tabs */}
+            <TabsContent value="doctors">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <Stethoscope className="w-7 h-7 text-blue-600" />
+                  إدارة الرعاية الصحية
+                </h2>
+                <HealthcareManagement activeTab="doctors" />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="pharmacies">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <Building2 className="w-7 h-7 text-green-600" />
+                  إدارة الرعاية الصحية
+                </h2>
+                <HealthcareManagement activeTab="pharmacies" />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="laboratories">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <FlaskConical className="w-7 h-7 text-purple-600" />
+                  إدارة الرعاية الصحية
+                </h2>
+                <HealthcareManagement activeTab="laboratories" />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="specialties">
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <Tag className="w-7 h-7 text-orange-600" />
+                  إدارة الرعاية الصحية
+                </h2>
+                <HealthcareManagement activeTab="specialties" />
+              </div>
+            </TabsContent>
+
             {/* Health Cases Tab */}
             <TabsContent value="health">
               <div className="bg-white rounded-xl shadow-lg p-6">
