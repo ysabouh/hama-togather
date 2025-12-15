@@ -466,6 +466,34 @@ class HealthcareManagementTester:
         
         return all_public
     
+    def test_post_authentication_required(self):
+        """Test that POST operations require authentication"""
+        print("\n🔒 Testing POST Authentication Requirements...")
+        
+        # Test POST to medical specialties without auth
+        specialty_data = {
+            "name_ar": "اختبار بدون مصادقة",
+            "is_active": True
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/medical-specialties",
+                json=specialty_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 401:
+                print("✅ POST operations correctly require authentication")
+                return True
+            else:
+                print(f"❌ POST should require authentication, got: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Error testing POST authentication: {str(e)}")
+            return False
+    
     def test_neighborhood_filtering(self):
         """Test that committee president sees only their neighborhood data"""
         print("\n🏘️ Testing Neighborhood Filtering for Committee President...")
