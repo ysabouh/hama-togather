@@ -19,7 +19,7 @@ COMMITTEE_MEMBER_PASSWORD = "committee123"
 COMMITTEE_PRESIDENT_PHONE = "0944444444"
 COMMITTEE_PRESIDENT_PASSWORD = "test123"
 
-class FamiliesPublicTester:
+class HealthcareManagementTester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
