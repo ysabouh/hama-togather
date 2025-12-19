@@ -112,13 +112,6 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       setLoading(false);
     }
   };
-    } catch (error) {
-      console.error('Error fetching benefits:', error);
-      toast.error('فشل تحميل سجلات الاستفادة');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
