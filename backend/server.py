@@ -3633,10 +3633,6 @@ async def create_doctor(
     if doc.get('updated_at'):
         doc['updated_at'] = doc['updated_at'].isoformat()
     
-    # تحويل working_hours إلى dict
-    if 'working_hours' in doc and hasattr(doc['working_hours'], 'model_dump'):
-        doc['working_hours'] = doc['working_hours'].model_dump()
-    
     await db.doctors.insert_one(doc)
     return doctor
 
