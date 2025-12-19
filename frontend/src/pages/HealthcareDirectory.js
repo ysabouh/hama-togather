@@ -279,17 +279,28 @@ const HealthcareDirectory = () => {
     setShowTakafulModal(true);
   };
 
-  const DoctorCard = ({ doctor }) => (
+  const DoctorCard = ({ doctor }) => {
+    const stats = takafulStats[doctor.id];
+    const benefitCount = stats?.total_benefits || 0;
+    
+    return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300 flex flex-col h-full">
-      {/* Solidarity Badge - Clickable */}
+      {/* Solidarity Badge - Clickable with count */}
       {doctor.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
           <button
             onClick={() => openTakafulCalendar(doctor, 'doctor')}
-            className="bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
+            className="relative bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
             title="عرض رزنامة التكافل"
           >
-            <Heart className="w-3.5 h-3.5 fill-white" />
+            <div className="relative">
+              <Heart className="w-3.5 h-3.5 fill-white" />
+              {benefitCount > 0 && (
+                <span className="absolute -bottom-3 -right-2 min-w-[18px] h-[18px] bg-white text-red-600 text-[10px] font-bold rounded-full flex items-center justify-center shadow-md border border-red-200">
+                  {benefitCount}
+                </span>
+              )}
+            </div>
             <span className="text-xs font-bold">تكافل</span>
           </button>
         </div>
