@@ -3933,6 +3933,157 @@ async def delete_laboratory(
     result = await db.laboratories.delete_one({"id": laboratory_id})
     return {"message": "Laboratory deleted successfully"}
 
+# ============= Takaful Benefits Routes =============
+
+@api_router.get("/takaful-benefits/{provider_type}/{provider_id}")
+async def get_provider_takaful_benefits(
+    provider_type: str,
+    provider_id: str,
+    month: Optional[int] = None,
+    year: Optional[int] = None
+):
+    """الحصول على سجلات استفادة التكافل لمقدم خدمة معين - متاح للجميع"""
+    
+    if provider_type not in ['doctor', 'pharmacy', 'laboratory']:
+        raise HTTPException(status_code=400, detail="Invalid provider type")
+    
+    # التحقق من وجود مقدم الخدمة
+    collection_name = f"{provider_type}s" if provider_type != 'pharmacy' else 'pharmacies'
+    provider = await db[collection_name].find_one({"id": provider_id}, {"_id": 0})
+    if not provider:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    # بناء استعلام البحث
+    query = {
+        "provider_type": provider_type,
+        "provider_id": provider_id
+    }
+    
+    # فلترة حسب الشهر والسنة إذا تم تحديدهما
+    if month and year:
+        # البحث عن السجلات في الشهر المحدد
+        start_date = f"{year}-{str(month).zfill(2)}-01"
+        if month == 12:
+            end_date = f"{year + 1}-01-01"
+        else:
+            end_date = f"{year}-{str(month + 1).zfill(2)}-01"
+        query["benefit_date"] = {"$gte": start_date, "$lt": end_date}
+    
+    # جلب سجلات الاستفادة
+    benefits = await db.takaful_benefits.find(query, {"_id": 0}).to_list(1000)
+    
+    # جلب أرقام العائلات
+    family_ids = list(set([b['family_id'] for b in benefits]))
+    families = await db.families.find(
+        {"id": {"$in": family_ids}},
+        {"_id": 0, "id": 1, "family_number": 1, "family_code": 1}
+    ).to_list(1000)
+    families_map = {f['id']: f for f in families}
+    
+    # إضافة رقم العائلة لكل سجل
+    result = []
+    for benefit in benefits:
+        family = families_map.get(benefit['family_id'], {})
+        benefit['family_number'] = family.get('family_number') or family.get('family_code') or 'غير معروف'
+        result.append(benefit)
+    
+    return result
+
+@api_router.post("/takaful-benefits")
+async def create_takaful_benefit(
+    benefit_data: TakafulBenefitCreate,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """إنشاء سجل استفادة جديد - متاح للمشرف وأعضاء اللجنة"""
+    
+    if benefit_data.provider_type not in ['doctor', 'pharmacy', 'laboratory']:
+        raise HTTPException(status_code=400, detail="Invalid provider type")
+    
+    if benefit_data.benefit_type not in ['free', 'discount']:
+        raise HTTPException(status_code=400, detail="Invalid benefit type")
+    
+    if benefit_data.benefit_type == 'discount' and not benefit_data.discount_percentage:
+        raise HTTPException(status_code=400, detail="Discount percentage is required for discount type")
+    
+    # التحقق من وجود مقدم الخدمة
+    collection_name = f"{benefit_data.provider_type}s" if benefit_data.provider_type != 'pharmacy' else 'pharmacies'
+    provider = await db[collection_name].find_one({"id": benefit_data.provider_id}, {"_id": 0})
+    if not provider:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    # التحقق من وجود الأسرة
+    family = await db.families.find_one({"id": benefit_data.family_id}, {"_id": 0})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    
+    # إنشاء السجل
+    benefit = TakafulBenefit(
+        provider_type=benefit_data.provider_type,
+        provider_id=benefit_data.provider_id,
+        family_id=benefit_data.family_id,
+        benefit_date=benefit_data.benefit_date,
+        benefit_type=benefit_data.benefit_type,
+        discount_percentage=benefit_data.discount_percentage,
+        notes=benefit_data.notes,
+        created_by_user_id=current_user.id
+    )
+    
+    doc = benefit.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.takaful_benefits.insert_one(doc)
+    
+    return {"message": "Benefit record created successfully", "id": benefit.id}
+
+@api_router.delete("/takaful-benefits/{benefit_id}")
+async def delete_takaful_benefit(
+    benefit_id: str,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """حذف سجل استفادة - متاح للمشرف وأعضاء اللجنة"""
+    
+    existing_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
+    if not existing_benefit:
+        raise HTTPException(status_code=404, detail="Benefit record not found")
+    
+    await db.takaful_benefits.delete_one({"id": benefit_id})
+    return {"message": "Benefit record deleted successfully"}
+
+@api_router.get("/takaful-benefits/stats/{provider_type}/{provider_id}")
+async def get_provider_takaful_stats(
+    provider_type: str,
+    provider_id: str
+):
+    """الحصول على إحصائيات التكافل لمقدم خدمة - متاح للجميع"""
+    
+    if provider_type not in ['doctor', 'pharmacy', 'laboratory']:
+        raise HTTPException(status_code=400, detail="Invalid provider type")
+    
+    # إجمالي السجلات
+    total = await db.takaful_benefits.count_documents({
+        "provider_type": provider_type,
+        "provider_id": provider_id
+    })
+    
+    # عدد المجانية
+    free_count = await db.takaful_benefits.count_documents({
+        "provider_type": provider_type,
+        "provider_id": provider_id,
+        "benefit_type": "free"
+    })
+    
+    # عدد الخصومات
+    discount_count = await db.takaful_benefits.count_documents({
+        "provider_type": provider_type,
+        "provider_id": provider_id,
+        "benefit_type": "discount"
+    })
+    
+    return {
+        "total_benefits": total,
+        "free_benefits": free_count,
+        "discount_benefits": discount_count
+    }
+
 # ============= End Healthcare Routes =============
 
 # Include router (must be after all route definitions)
