@@ -779,9 +779,10 @@ class Laboratory(BaseModel):
     owner_full_name: str  # اسم صاحب المخبر الثلاثي
     description: Optional[str] = None  # وصف عن المخبر وخدماته
     landline: Optional[str] = None  # الهاتف الأرضي
-    mobile: str  # الهاتف الجوال (واتساب)
+    mobile: str  # الهاتف الجوال
+    whatsapp: Optional[str] = None  # رقم الواتساب
     address: str  # العنوان
-    working_hours: WorkingHours  # أوقات الدوام
+    working_hours: Optional[dict] = None  # أوقات الدوام
     is_active: bool = True  # نشط/غير نشط
     participates_in_solidarity: bool = False  # مشترك في التكافل الاجتماعي
     neighborhood_id: str  # الحي
@@ -795,8 +796,9 @@ class LaboratoryCreate(BaseModel):
     description: Optional[str] = None
     landline: Optional[str] = None
     mobile: str
+    whatsapp: Optional[str] = None
     address: str
-    working_hours: WorkingHours
+    working_hours: Optional[dict] = None
     is_active: bool = True
     participates_in_solidarity: bool = False
     neighborhood_id: str
@@ -807,8 +809,9 @@ class LaboratoryUpdate(BaseModel):
     description: Optional[str] = None
     landline: Optional[str] = None
     mobile: Optional[str] = None
+    whatsapp: Optional[str] = None
     address: Optional[str] = None
-    working_hours: Optional[WorkingHours] = None
+    working_hours: Optional[dict] = None
     is_active: Optional[bool] = None
     participates_in_solidarity: Optional[bool] = None
     neighborhood_id: Optional[str] = None
