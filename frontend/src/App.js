@@ -18,9 +18,10 @@ import OurMissionPage from './pages/OurMissionPage';
 import ProfilePage from './pages/ProfilePage';
 import CommitteeDashboard from './pages/CommitteeDashboard';
 import HealthcareDirectory from './pages/HealthcareDirectory';
+import HealthcareDashboard from './pages/HealthcareDashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-const ProtectedRoute = ({ children, adminOnly = false, committeeOnly = false }) => {
+const ProtectedRoute = ({ children, adminOnly = false, committeeOnly = false, healthcareOnly = false }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -38,6 +39,10 @@ const ProtectedRoute = ({ children, adminOnly = false, committeeOnly = false }) 
   }
 
   if (committeeOnly && !['admin', 'committee_member', 'committee_president'].includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (healthcareOnly && !['doctor', 'pharmacist', 'laboratory'].includes(user.role)) {
     return <Navigate to="/" replace />;
   }
 
