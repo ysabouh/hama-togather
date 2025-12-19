@@ -746,5 +746,479 @@ def main():
     
     return success
 
+class TakafulBenefitsTester:
+    def __init__(self):
+        self.session = requests.Session()
+        self.admin_token = None
+        self.test_provider_id = None
+        self.test_family_id = None
+        self.test_benefit_id = None
+        
+    def login_admin(self):
+        """Login as admin and get authentication token"""
+        print("🔐 Testing Admin Login for Takaful Benefits...")
+        
+        login_data = {
+            "username": "0933445566",  # Admin phone from review request
+            "password": "admin123"     # Admin password from review request
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/auth/login",
+                data=login_data,
+                headers={"Content-Type": "application/x-www-form-urlencoded"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.admin_token = data["access_token"]
+                print(f"✅ Admin login successful")
+                print(f"   Token: {self.admin_token[:20]}...")
+                print(f"   User: {data['user']['phone']} ({data['user']['role']})")
+                return True
+            else:
+                print(f"❌ Admin login failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Admin login error: {str(e)}")
+            return False
+    
+    def get_test_providers_and_families(self):
+        """Get existing providers and families for testing"""
+        print("\n📋 Getting test providers and families...")
+        
+        try:
+            # Get doctors (public endpoint)
+            doctors_response = self.session.get(f"{BACKEND_URL}/doctors")
+            if doctors_response.status_code == 200:
+                doctors = doctors_response.json()
+                if doctors:
+                    # Find a doctor that participates in solidarity
+                    for doctor in doctors:
+                        if doctor.get('participates_in_solidarity', False):
+                            self.test_provider_id = doctor['id']
+                            print(f"✅ Found test doctor: {doctor['full_name']} (ID: {self.test_provider_id})")
+                            break
+                    
+                    if not self.test_provider_id and doctors:
+                        # If no solidarity doctor, use first available
+                        self.test_provider_id = doctors[0]['id']
+                        print(f"✅ Using first available doctor: {doctors[0]['full_name']} (ID: {self.test_provider_id})")
+            
+            # Get families (requires authentication)
+            if self.admin_token:
+                headers = {"Authorization": f"Bearer {self.admin_token}"}
+                families_response = self.session.get(f"{BACKEND_URL}/families", headers=headers)
+                if families_response.status_code == 200:
+                    families = families_response.json()
+                    if families:
+                        self.test_family_id = families[0]['id']
+                        family_number = families[0].get('family_number', 'غير محدد')
+                        print(f"✅ Found test family: {families[0]['name']} (رقم: {family_number}, ID: {self.test_family_id})")
+            
+            return self.test_provider_id and self.test_family_id
+            
+        except Exception as e:
+            print(f"❌ Error getting test data: {str(e)}")
+            return False
+    
+    def test_public_get_benefits(self):
+        """Test GET /api/takaful-benefits/{provider_type}/{provider_id} - Public access"""
+        print("\n🌐 Testing Public GET Takaful Benefits...")
+        
+        if not self.test_provider_id:
+            print("❌ No test provider ID available")
+            return False
+        
+        try:
+            # Test without authentication (should work - public endpoint)
+            response = self.session.get(f"{BACKEND_URL}/takaful-benefits/doctor/{self.test_provider_id}")
+            
+            if response.status_code == 200:
+                benefits = response.json()
+                print(f"✅ Public GET benefits successful - Found {len(benefits)} benefits")
+                
+                # Test with month/year parameters
+                response_filtered = self.session.get(
+                    f"{BACKEND_URL}/takaful-benefits/doctor/{self.test_provider_id}?month=12&year=2025"
+                )
+                
+                if response_filtered.status_code == 200:
+                    filtered_benefits = response_filtered.json()
+                    print(f"✅ Public GET benefits with filters successful - Found {len(filtered_benefits)} benefits for Dec 2025")
+                    return True
+                else:
+                    print(f"❌ Public GET benefits with filters failed: {response_filtered.status_code}")
+                    return False
+            else:
+                print(f"❌ Public GET benefits failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Public GET benefits error: {str(e)}")
+            return False
+    
+    def test_public_get_stats(self):
+        """Test GET /api/takaful-benefits/stats/{provider_type}/{provider_id} - Public access"""
+        print("\n📊 Testing Public GET Takaful Stats...")
+        
+        if not self.test_provider_id:
+            print("❌ No test provider ID available")
+            return False
+        
+        try:
+            # Test without authentication (should work - public endpoint)
+            response = self.session.get(f"{BACKEND_URL}/takaful-benefits/stats/doctor/{self.test_provider_id}")
+            
+            if response.status_code == 200:
+                stats = response.json()
+                print(f"✅ Public GET stats successful")
+                print(f"   Total benefits: {stats.get('total_benefits', 0)}")
+                print(f"   Free benefits: {stats.get('free_benefits', 0)}")
+                print(f"   Discount benefits: {stats.get('discount_benefits', 0)}")
+                
+                # Verify expected structure
+                expected_keys = ['total_benefits', 'free_benefits', 'discount_benefits']
+                if all(key in stats for key in expected_keys):
+                    print("✅ Stats response has correct structure")
+                    return True
+                else:
+                    print("❌ Stats response missing expected keys")
+                    return False
+            else:
+                print(f"❌ Public GET stats failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Public GET stats error: {str(e)}")
+            return False
+    
+    def test_post_requires_auth(self):
+        """Test POST /api/takaful-benefits requires authentication"""
+        print("\n🔒 Testing POST Takaful Benefits Authentication Requirement...")
+        
+        if not self.test_provider_id or not self.test_family_id:
+            print("❌ Missing test provider or family ID")
+            return False
+        
+        # Test POST without authentication (should fail)
+        benefit_data = {
+            "provider_type": "doctor",
+            "provider_id": self.test_provider_id,
+            "family_id": self.test_family_id,
+            "benefit_date": "2025-12-19",
+            "benefit_type": "free",
+            "notes": "اختبار بدون مصادقة"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/takaful-benefits",
+                json=benefit_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 401:
+                print("✅ POST correctly requires authentication")
+                return True
+            else:
+                print(f"❌ POST should require authentication, got: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ POST auth test error: {str(e)}")
+            return False
+    
+    def test_post_create_benefit(self):
+        """Test POST /api/takaful-benefits with authentication"""
+        print("\n➕ Testing POST Create Takaful Benefit...")
+        
+        if not self.admin_token or not self.test_provider_id or not self.test_family_id:
+            print("❌ Missing admin token, provider ID, or family ID")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}", "Content-Type": "application/json"}
+        
+        # Test creating a free benefit
+        free_benefit_data = {
+            "provider_type": "doctor",
+            "provider_id": self.test_provider_id,
+            "family_id": self.test_family_id,
+            "benefit_date": "2025-12-19",
+            "benefit_type": "free",
+            "notes": "استفادة مجانية من برنامج التكافل - اختبار"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/takaful-benefits",
+                json=free_benefit_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                self.test_benefit_id = result.get('id')
+                print(f"✅ POST create free benefit successful")
+                print(f"   Benefit ID: {self.test_benefit_id}")
+                
+                # Test creating a discount benefit
+                discount_benefit_data = {
+                    "provider_type": "doctor",
+                    "provider_id": self.test_provider_id,
+                    "family_id": self.test_family_id,
+                    "benefit_date": "2025-12-20",
+                    "benefit_type": "discount",
+                    "discount_percentage": 25.0,
+                    "notes": "خصم 25% من برنامج التكافل - اختبار"
+                }
+                
+                discount_response = self.session.post(
+                    f"{BACKEND_URL}/takaful-benefits",
+                    json=discount_benefit_data,
+                    headers=headers
+                )
+                
+                if discount_response.status_code == 200:
+                    print("✅ POST create discount benefit successful")
+                    return True
+                else:
+                    print(f"❌ POST create discount benefit failed: {discount_response.status_code}")
+                    print(f"   Response: {discount_response.text}")
+                    return False
+            else:
+                print(f"❌ POST create free benefit failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ POST create benefit error: {str(e)}")
+            return False
+    
+    def test_delete_requires_auth(self):
+        """Test DELETE /api/takaful-benefits/{benefit_id} requires authentication"""
+        print("\n🔒 Testing DELETE Takaful Benefits Authentication Requirement...")
+        
+        if not self.test_benefit_id:
+            print("❌ No test benefit ID available")
+            return False
+        
+        try:
+            # Test DELETE without authentication (should fail)
+            response = self.session.delete(f"{BACKEND_URL}/takaful-benefits/{self.test_benefit_id}")
+            
+            if response.status_code == 401:
+                print("✅ DELETE correctly requires authentication")
+                return True
+            else:
+                print(f"❌ DELETE should require authentication, got: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ DELETE auth test error: {str(e)}")
+            return False
+    
+    def test_delete_benefit(self):
+        """Test DELETE /api/takaful-benefits/{benefit_id} with authentication"""
+        print("\n🗑️ Testing DELETE Takaful Benefit...")
+        
+        if not self.admin_token or not self.test_benefit_id:
+            print("❌ Missing admin token or benefit ID")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.delete(
+                f"{BACKEND_URL}/takaful-benefits/{self.test_benefit_id}",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                print(f"✅ DELETE benefit successful")
+                print(f"   Message: {result.get('message', 'N/A')}")
+                return True
+            else:
+                print(f"❌ DELETE benefit failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ DELETE benefit error: {str(e)}")
+            return False
+    
+    def test_invalid_provider_type(self):
+        """Test API endpoints with invalid provider types"""
+        print("\n⚠️ Testing Invalid Provider Type Handling...")
+        
+        if not self.test_provider_id:
+            print("❌ No test provider ID available")
+            return False
+        
+        try:
+            # Test with invalid provider type
+            response = self.session.get(f"{BACKEND_URL}/takaful-benefits/invalid_type/{self.test_provider_id}")
+            
+            if response.status_code == 400:
+                print("✅ Invalid provider type correctly rejected")
+                return True
+            else:
+                print(f"❌ Invalid provider type should return 400, got: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Invalid provider type test error: {str(e)}")
+            return False
+    
+    def run_all_tests(self):
+        """Run all Takaful Benefits tests"""
+        print("=" * 80)
+        print("🚀 Starting Takaful Benefits API Tests")
+        print("=" * 80)
+        
+        results = {
+            'admin_login': False,
+            'get_test_data': False,
+            'public_get_benefits': False,
+            'public_get_stats': False,
+            'post_requires_auth': False,
+            'post_create_benefit': False,
+            'delete_requires_auth': False,
+            'delete_benefit': False,
+            'invalid_provider_type': False
+        }
+        
+        # Test 1: Admin login
+        results['admin_login'] = self.login_admin()
+        
+        # Test 2: Get test data
+        if results['admin_login']:
+            results['get_test_data'] = self.get_test_providers_and_families()
+        
+        # Test 3: Public GET benefits
+        if results['get_test_data']:
+            results['public_get_benefits'] = self.test_public_get_benefits()
+        
+        # Test 4: Public GET stats
+        if results['get_test_data']:
+            results['public_get_stats'] = self.test_public_get_stats()
+        
+        # Test 5: POST requires authentication
+        if results['get_test_data']:
+            results['post_requires_auth'] = self.test_post_requires_auth()
+        
+        # Test 6: POST create benefit
+        if results['admin_login'] and results['get_test_data']:
+            results['post_create_benefit'] = self.test_post_create_benefit()
+        
+        # Test 7: DELETE requires authentication
+        if results['post_create_benefit']:
+            results['delete_requires_auth'] = self.test_delete_requires_auth()
+        
+        # Test 8: DELETE benefit
+        if results['admin_login'] and results['post_create_benefit']:
+            results['delete_benefit'] = self.test_delete_benefit()
+        
+        # Test 9: Invalid provider type
+        if results['get_test_data']:
+            results['invalid_provider_type'] = self.test_invalid_provider_type()
+        
+        # Print summary
+        print("\n" + "=" * 80)
+        print("📊 TAKAFUL BENEFITS TEST RESULTS SUMMARY")
+        print("=" * 80)
+        
+        test_descriptions = {
+            'admin_login': '1️⃣ Admin Login',
+            'get_test_data': '2️⃣ Get Test Providers and Families',
+            'public_get_benefits': '3️⃣ Public GET Benefits',
+            'public_get_stats': '4️⃣ Public GET Stats',
+            'post_requires_auth': '5️⃣ POST Requires Authentication',
+            'post_create_benefit': '6️⃣ POST Create Benefit',
+            'delete_requires_auth': '7️⃣ DELETE Requires Authentication',
+            'delete_benefit': '8️⃣ DELETE Benefit',
+            'invalid_provider_type': '9️⃣ Invalid Provider Type Handling'
+        }
+        
+        for test_name, success in results.items():
+            status = "✅ PASS" if success else "❌ FAIL"
+            description = test_descriptions.get(test_name, test_name.replace('_', ' ').title())
+            print(f"{description}: {status}")
+        
+        total_tests = len([k for k, v in results.items() if v is not None])
+        passed_tests = sum([1 for v in results.values() if v is True])
+        
+        print(f"\nOverall: {passed_tests}/{total_tests} tests passed")
+        
+        # Detailed analysis
+        print("\n" + "=" * 80)
+        print("📋 DETAILED ANALYSIS")
+        print("=" * 80)
+        
+        if results['public_get_benefits'] and results['public_get_stats']:
+            print("✅ Public Takaful APIs working correctly")
+        else:
+            print("❌ Public Takaful APIs have issues")
+        
+        if results['post_requires_auth'] and results['delete_requires_auth']:
+            print("✅ Authentication requirements working correctly")
+        else:
+            print("❌ Authentication requirements have issues")
+        
+        if results['post_create_benefit'] and results['delete_benefit']:
+            print("✅ Takaful CRUD operations working correctly")
+        else:
+            print("❌ Takaful CRUD operations have issues")
+        
+        if passed_tests == total_tests:
+            print("\n🎉 All Takaful Benefits tests passed!")
+            return True
+        else:
+            print("\n⚠️ Some Takaful Benefits tests failed - check details above")
+            return False
+
+def run_takaful_tests():
+    """Run Takaful Benefits tests"""
+    tester = TakafulBenefitsTester()
+    return tester.run_all_tests()
+
 if __name__ == "__main__":
-    main()
+    # Run healthcare tests
+    healthcare_success = main()
+    
+    print("\n" + "=" * 80)
+    print("🔄 SWITCHING TO TAKAFUL BENEFITS TESTS")
+    print("=" * 80)
+    
+    # Run Takaful tests
+    takaful_success = run_takaful_tests()
+    
+    print("\n" + "=" * 80)
+    print("🏁 FINAL RESULTS")
+    print("=" * 80)
+    
+    if healthcare_success:
+        print("✅ Healthcare Management Tests: PASSED")
+    else:
+        print("❌ Healthcare Management Tests: FAILED")
+    
+    if takaful_success:
+        print("✅ Takaful Benefits Tests: PASSED")
+    else:
+        print("❌ Takaful Benefits Tests: FAILED")
+    
+    overall_success = healthcare_success and takaful_success
+    if overall_success:
+        print("\n🎉 ALL BACKEND TESTS PASSED!")
+    else:
+        print("\n⚠️ SOME BACKEND TESTS FAILED")
+    
+    exit(0 if overall_success else 1)
