@@ -163,14 +163,13 @@ class AdminDashboardTester:
                             donations = donations_response.json()
                             print(f"✅ Donations tab displays properly - Found {len(donations)} donations")
                             
-                            # Test donation update
+                            # Test donation status update (correct endpoint)
                             update_data = {
-                                "status": "inprogress",
-                                "notes": "تبرع محدث من لوحة الإدارة"
+                                "status": "inprogress"
                             }
                             
                             update_response = self.session.put(
-                                f"{BACKEND_URL}/donations/{self.test_donation_id}",
+                                f"{BACKEND_URL}/donations/{self.test_donation_id}/status",
                                 json=update_data,
                                 headers=headers
                             )
