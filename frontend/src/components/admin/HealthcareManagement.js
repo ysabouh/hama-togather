@@ -198,7 +198,41 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
     setShowDialog(true);
   };
 
+  // Validate form before saving
+  const validateForm = () => {
+    const errors = [];
+    
+    if (currentTab === 'doctors') {
+      // التحقق من حقول الطبيب
+      if (!formData.full_name?.trim()) errors.push('اسم الطبيب');
+      if (!formData.specialty_id) errors.push('التخصص');
+      if (!formData.specialty_description?.trim()) errors.push('وصف التخصص');
+      if (!formData.neighborhood_id) errors.push('الحي');
+      if (!formData.address?.trim()) errors.push('العنوان');
+      if (!formData.mobile?.trim()) errors.push('رقم الموبايل');
+      if (!formData.landline?.trim()) errors.push('رقم الهاتف الأرضي');
+    } else {
+      // التحقق من حقول الصيدلية والمختبر
+      if (!formData.name?.trim()) errors.push('الاسم');
+      if (!formData.owner_full_name?.trim()) errors.push('اسم المالك');
+      if (!formData.description?.trim()) errors.push('الوصف');
+      if (!formData.neighborhood_id) errors.push('الحي');
+      if (!formData.address?.trim()) errors.push('العنوان');
+      if (!formData.mobile?.trim()) errors.push('رقم الموبايل');
+      if (!formData.landline?.trim()) errors.push('رقم الهاتف الأرضي');
+    }
+    
+    return errors;
+  };
+
   const handleSave = async () => {
+    // التحقق من الحقول المطلوبة
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      toast.error(`يرجى ملء الحقول التالية: ${validationErrors.join('، ')}`);
+      return;
+    }
+
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
