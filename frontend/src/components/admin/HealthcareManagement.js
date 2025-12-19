@@ -642,16 +642,18 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
               <>
                 <div>
                   <Label>التخصص *</Label>
-                  <select
-                    value={formData.specialty_id || ''}
-                    onChange={(e) => setFormData({ ...formData, specialty_id: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  >
-                    <option value="">اختر التخصص</option>
-                    {specialties.map(s => (
-                      <option key={s.id} value={s.id}>{s.name_ar}</option>
-                    ))}
-                  </select>
+                  <Select
+                    options={specialties.map(s => ({ value: s.id, label: s.name_ar }))}
+                    value={formData.specialty_id ? { value: formData.specialty_id, label: getSpecialtyName(formData.specialty_id) } : null}
+                    onChange={(option) => setFormData({ ...formData, specialty_id: option?.value || '' })}
+                    placeholder="ابحث واختر التخصص..."
+                    isClearable
+                    isSearchable
+                    noOptionsMessage={() => 'لا توجد نتائج'}
+                    styles={customSelectStyles}
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                  />
                 </div>
                 <div>
                   <Label>وصف التخصص</Label>
@@ -680,17 +682,19 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
             {/* Neighborhood */}
             <div>
               <Label>الحي *</Label>
-              <select
-                value={formData.neighborhood_id || ''}
-                onChange={(e) => setFormData({ ...formData, neighborhood_id: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                disabled={user.role === 'committee_president'}
-              >
-                <option value="">اختر الحي</option>
-                {neighborhoods.map(n => (
-                  <option key={n.id} value={n.id}>{n.name}</option>
-                ))}
-              </select>
+              <Select
+                options={neighborhoods.map(n => ({ value: n.id, label: n.name }))}
+                value={formData.neighborhood_id ? { value: formData.neighborhood_id, label: getNeighborhoodName(formData.neighborhood_id) } : null}
+                onChange={(option) => setFormData({ ...formData, neighborhood_id: option?.value || '' })}
+                placeholder="ابحث واختر الحي..."
+                isClearable
+                isSearchable
+                isDisabled={user.role === 'committee_president'}
+                noOptionsMessage={() => 'لا توجد نتائج'}
+                styles={customSelectStyles}
+                className="react-select-container"
+                classNamePrefix="react-select"
+              />
             </div>
 
             {/* Address */}
