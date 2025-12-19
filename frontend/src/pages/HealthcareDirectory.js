@@ -34,6 +34,9 @@ const HealthcareDirectory = () => {
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [selectedProviderType, setSelectedProviderType] = useState(null);
   
+  // Takaful stats for each provider
+  const [takafulStats, setTakafulStats] = useState({});
+  
   // Data
   const [doctors, setDoctors] = useState([]);
   const [pharmacies, setPharmacies] = useState([]);
@@ -48,6 +51,26 @@ const HealthcareDirectory = () => {
   const [showActiveOnly, setShowActiveOnly] = useState(true);
   const [showSolidarityOnly, setShowSolidarityOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+
+  // Fetch takaful stats for solidarity providers
+  const fetchTakafulStats = async (providers, providerType) => {
+    const solidarityProviders = providers.filter(p => p.participates_in_solidarity);
+    const statsPromises = solidarityProviders.map(async (provider) => {
+      try {
+        const response = await axios.get(`${API_URL}/takaful-benefits/stats/${providerType}/${provider.id}`);
+        return { id: provider.id, stats: response.data };
+      } catch (error) {
+        return { id: provider.id, stats: { total_benefits: 0 } };
+      }
+    });
+    
+    const results = await Promise.all(statsPromises);
+    const statsMap = {};
+    results.forEach(r => {
+      statsMap[r.id] = r.stats;
+    });
+    return statsMap;
+  };
 
   useEffect(() => {
     fetchData();
@@ -80,9 +103,26 @@ const HealthcareDirectory = () => {
         axios.get(`${API_URL}/laboratories`, { params })
       ]);
       
-      setDoctors(doctorsRes.data || []);
-      setPharmacies(pharmaciesRes.data || []);
-      setLaboratories(laboratoriesRes.data || []);
+      const doctorsData = doctorsRes.data || [];
+      const pharmaciesData = pharmaciesRes.data || [];
+      const laboratoriesData = laboratoriesRes.data || [];
+      
+      setDoctors(doctorsData);
+      setPharmacies(pharmaciesData);
+      setLaboratories(laboratoriesData);
+
+      // جلب إحصائيات التكافل لمقدمي الخدمات المشاركين
+      const [doctorStats, pharmacyStats, labStats] = await Promise.all([
+        fetchTakafulStats(doctorsData, 'doctor'),
+        fetchTakafulStats(pharmaciesData, 'pharmacy'),
+        fetchTakafulStats(laboratoriesData, 'laboratory')
+      ]);
+      
+      setTakafulStats({
+        ...doctorStats,
+        ...pharmacyStats,
+        ...labStats
+      });
 
     } catch (error) {
       console.error('Error fetching data:', error);
