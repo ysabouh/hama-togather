@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -72,6 +72,10 @@ const UsersManagement = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [showInactive, setShowInactive] = useState(false);
   
+  // User roles from database
+  const [userRoles, setUserRoles] = useState([]);
+  const [rolesLoading, setRolesLoading] = useState(true);
+  
   // Add User Dialog
   const [addDialog, setAddDialog] = useState(false);
   const [newUserData, setNewUserData] = useState({
@@ -106,10 +110,41 @@ const UsersManagement = ({
     confirm_password: ''
   });
 
+  // Fetch user roles on mount
+  useEffect(() => {
+    fetchUserRoles();
+  }, []);
+
+  const fetchUserRoles = async () => {
+    setRolesLoading(true);
+    try {
+      const response = await axios.get(`${API_URL}/user-roles`);
+      const activeRoles = (response.data || []).filter(r => r.is_active !== false);
+      setUserRoles(activeRoles);
+    } catch (error) {
+      console.error('Error fetching user roles:', error);
+      // Fallback to default roles if API fails
+      setUserRoles([
+        { name: 'admin', display_name: 'مدير نظام' },
+        { name: 'committee_president', display_name: 'رئيس لجنة' },
+        { name: 'committee_member', display_name: 'عضو لجنة' },
+        { name: 'user', display_name: 'متبرع كريم' }
+      ]);
+    } finally {
+      setRolesLoading(false);
+    }
+  };
+
   // Get neighborhood options for react-select
   const neighborhoodOptions = neighborhoods.map(n => ({
     value: n.id,
     label: n.name
+  }));
+
+  // Get role options for react-select
+  const roleOptions = userRoles.map(r => ({
+    value: r.name,
+    label: r.display_name
   }));
 
   const resetNewUserForm = () => {
