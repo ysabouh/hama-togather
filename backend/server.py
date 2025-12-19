@@ -3809,7 +3809,10 @@ async def get_laboratories(
             {'name': {'$regex': search, '$options': 'i'}},
             {'owner_full_name': {'$regex': search, '$options': 'i'}},
             {'address': {'$regex': search, '$options': 'i'}},
-            {'description': {'$regex': search, '$options': 'i'}}
+            {'description': {'$regex': search, '$options': 'i'}},
+            {'mobile': {'$regex': search, '$options': 'i'}},
+            {'landline': {'$regex': search, '$options': 'i'}},
+            {'whatsapp': {'$regex': search, '$options': 'i'}}
         ]
     
     laboratories = await db.laboratories.find(query, {"_id": 0}).to_list(1000)
