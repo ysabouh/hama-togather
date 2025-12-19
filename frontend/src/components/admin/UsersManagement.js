@@ -463,9 +463,9 @@ const UsersManagement = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {filteredUsers.map((user, index) => (
+            {paginatedUsers.map((user, index) => (
               <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm text-gray-600 text-center">{index + 1}</td>
+                <td className="px-4 py-3 text-sm text-gray-600 text-center">{startIndex + index + 1}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 text-center font-medium">{user.full_name}</td>
                 <td className="px-4 py-3 text-sm text-gray-600 text-center" dir="ltr">{user.email}</td>
                 <td className="px-4 py-3 text-sm text-gray-900 text-center" dir="ltr">{user.phone || '-'}</td>
