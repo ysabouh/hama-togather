@@ -558,22 +558,43 @@ const HealthcareDirectory = () => {
             {/* Stats */}
             <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-8">
               <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-xl mb-2 mx-auto border border-blue-400/30">
-                  <Stethoscope className="w-8 h-8 text-blue-300" />
+                <div className="relative">
+                  <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-xl mb-2 mx-auto border border-blue-400/30">
+                    <Stethoscope className="w-8 h-8 text-blue-300" />
+                  </div>
+                  {/* Solidarity count in heart */}
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-red-500 rounded-full shadow-lg" title="مشاركون في التكافل">
+                    <Heart className="w-4 h-4 text-white fill-white absolute" />
+                    <span className="text-white text-[10px] font-bold z-10">{doctors.filter(d => d.participates_in_solidarity).length}</span>
+                  </div>
                 </div>
                 <div className="text-3xl font-bold">{doctors.length}</div>
                 <div className="text-emerald-200 text-sm">طبيب</div>
               </div>
               <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-xl mb-2 mx-auto border border-green-400/30">
-                  <Building2 className="w-8 h-8 text-green-300" />
+                <div className="relative">
+                  <div className="flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-xl mb-2 mx-auto border border-green-400/30">
+                    <Building2 className="w-8 h-8 text-green-300" />
+                  </div>
+                  {/* Solidarity count in heart */}
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-red-500 rounded-full shadow-lg" title="مشاركون في التكافل">
+                    <Heart className="w-4 h-4 text-white fill-white absolute" />
+                    <span className="text-white text-[10px] font-bold z-10">{pharmacies.filter(p => p.participates_in_solidarity).length}</span>
+                  </div>
                 </div>
                 <div className="text-3xl font-bold">{pharmacies.length}</div>
                 <div className="text-emerald-200 text-sm">صيدلية</div>
               </div>
               <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-xl mb-2 mx-auto border border-purple-400/30">
-                  <FlaskConical className="w-8 h-8 text-purple-300" />
+                <div className="relative">
+                  <div className="flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-xl mb-2 mx-auto border border-purple-400/30">
+                    <FlaskConical className="w-8 h-8 text-purple-300" />
+                  </div>
+                  {/* Solidarity count in heart */}
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-red-500 rounded-full shadow-lg" title="مشاركون في التكافل">
+                    <Heart className="w-4 h-4 text-white fill-white absolute" />
+                    <span className="text-white text-[10px] font-bold z-10">{laboratories.filter(l => l.participates_in_solidarity).length}</span>
+                  </div>
                 </div>
                 <div className="text-3xl font-bold">{laboratories.length}</div>
                 <div className="text-emerald-200 text-sm">مخبر</div>
