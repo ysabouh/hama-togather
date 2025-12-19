@@ -23,8 +23,13 @@ const LoginPage = () => {
       const user = await login(phone, password);
       toast.success('تم تسجيل الدخول بنجاح');
       
+      // توجيه حسب نوع المستخدم
       if (user.role === 'admin') {
         navigate('/admin');
+      } else if (['doctor', 'pharmacist', 'laboratory'].includes(user.role)) {
+        navigate('/healthcare-dashboard');
+      } else if (['committee_member', 'committee_president'].includes(user.role)) {
+        navigate('/committee-dashboard');
       } else {
         navigate('/');
       }
