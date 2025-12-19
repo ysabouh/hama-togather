@@ -18,6 +18,9 @@ import ReferenceDataManagement from '../components/admin/ReferenceDataManagement
 import FamilyNeedsManager from '../components/admin/FamilyNeedsManager';
 import FamilyNeedsList from '../components/admin/FamilyNeedsList';
 import HealthcareManagement from '../components/admin/HealthcareManagement';
+import DonationsManagement from '../components/admin/DonationsManagement';
+import UsersManagement from '../components/admin/UsersManagement';
+import HeroContentManagement from '../components/admin/HeroContentManagement';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
