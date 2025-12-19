@@ -546,16 +546,17 @@ const UsersManagement = ({
               </div>
               <div>
                 <Label className="text-sm font-medium">نوع المستخدم</Label>
-                <select
-                  value={newUserData.role}
-                  onChange={(e) => setNewUserData({ ...newUserData, role: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="user">متبرع كريم</option>
-                  <option value="committee_member">موظف لجنة</option>
-                  <option value="committee_president">رئيس لجنة</option>
-                  <option value="admin">مدير نظام</option>
-                </select>
+                <Select
+                  value={roleOptions.find(o => o.value === newUserData.role) || null}
+                  onChange={(option) => setNewUserData({ ...newUserData, role: option?.value || 'user' })}
+                  options={roleOptions}
+                  placeholder="اختر نوع المستخدم..."
+                  isSearchable
+                  noOptionsMessage={() => 'لا توجد نتائج'}
+                  styles={selectStyles}
+                  className="mt-1"
+                  isLoading={rolesLoading}
+                />
               </div>
               <div>
                 <Label className="text-sm font-medium">الحي</Label>
