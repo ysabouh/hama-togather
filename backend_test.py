@@ -819,7 +819,7 @@ class TakafulBenefitsTester:
                         family_number = families[0].get('family_number', 'غير محدد')
                         print(f"✅ Found test family: {families[0]['name']} (رقم: {family_number}, ID: {self.test_family_id})")
             
-            return self.test_provider_id and self.test_family_id
+            return bool(self.test_provider_id and self.test_family_id)
             
         except Exception as e:
             print(f"❌ Error getting test data: {str(e)}")
