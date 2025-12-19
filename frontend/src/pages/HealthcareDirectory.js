@@ -205,19 +205,19 @@ const HealthcareDirectory = () => {
     }
 
     return (
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         {workingDays.map(([day, schedule]) => (
-          <div key={day} className="flex items-center gap-2 text-xs whitespace-nowrap">
-            <span className="font-bold text-gray-700 min-w-[55px]">{days[day]}</span>
-            <div className="flex items-center gap-2">
+          <div key={day} className="flex items-center text-[11px]">
+            <span className="font-bold text-gray-700 w-14 flex-shrink-0">{days[day]}</span>
+            <div className="flex items-center gap-1 flex-wrap">
               {schedule.morning?.from && schedule.morning?.to && (
-                <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded text-xs font-medium">
-                  ☀️ {formatTime12(schedule.morning.from)} - {formatTime12(schedule.morning.to)}
+                <span className="bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded font-medium">
+                  ☀️{formatTime12(schedule.morning.from)}-{formatTime12(schedule.morning.to)}
                 </span>
               )}
               {schedule.evening?.from && schedule.evening?.to && (
-                <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-xs font-medium">
-                  🌙 {formatTime12(schedule.evening.from)} - {formatTime12(schedule.evening.to)}
+                <span className="bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded font-medium">
+                  🌙{formatTime12(schedule.evening.from)}-{formatTime12(schedule.evening.to)}
                 </span>
               )}
             </div>
