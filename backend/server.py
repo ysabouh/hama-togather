@@ -2689,8 +2689,8 @@ async def update_donation_status(
         
         # معالجة خاصة عند إكمال التبرع
         additional_info = {}
+        family_id = donation.get('family_id') or donation.get('target_id')  # Move this outside the if block
         if request.status == 'completed':
-            family_id = donation.get('family_id') or donation.get('target_id')
             print(f"🔍 DEBUG: Processing completed donation for family_id: {family_id}")
             print(f"🔍 DEBUG: Donation data: {donation}")
             
