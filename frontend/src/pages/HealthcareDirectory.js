@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import TakafulCalendarModal from '../components/TakafulCalendarModal';
 import {
   Search,
   MapPin,
@@ -27,6 +28,11 @@ const HealthcareDirectory = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('doctors'); // doctors, pharmacies, laboratories
   const [loading, setLoading] = useState(true);
+  
+  // Takaful Calendar Modal state
+  const [showTakafulModal, setShowTakafulModal] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState(null);
+  const [selectedProviderType, setSelectedProviderType] = useState(null);
   
   // Data
   const [doctors, setDoctors] = useState([]);
