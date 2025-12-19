@@ -662,7 +662,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
             {/* Owner (for pharmacies and labs) */}
             {currentTab !== 'doctors' && (
               <div className="md:col-span-2">
-                <Label>اسم المالك</Label>
+                <Label>اسم المالك *</Label>
                 <Input
                   value={formData.owner_full_name || ''}
                   onChange={(e) => setFormData({ ...formData, owner_full_name: e.target.value })}
