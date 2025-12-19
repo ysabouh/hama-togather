@@ -269,6 +269,21 @@ const HealthcareDirectory = () => {
           </div>
         </div>
 
+        {doctor.whatsapp && (
+          <a 
+            href={`https://wa.me/${doctor.whatsapp.replace(/[^0-9]/g, '')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 p-3 bg-green-50 rounded-xl hover:bg-green-100 transition-colors cursor-pointer"
+          >
+            <MessageCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+            <div className="text-sm">
+              <span className="font-semibold text-green-700">واتساب: </span>
+              <span className="text-green-600" dir="ltr">{doctor.whatsapp}</span>
+            </div>
+          </a>
+        )}
+
         <div className="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
           <div className="flex items-start gap-3">
             <Clock className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
