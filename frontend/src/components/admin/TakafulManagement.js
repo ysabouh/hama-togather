@@ -73,6 +73,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       setPharmacies((pharmaciesRes.data || []).filter(p => p.participates_in_solidarity));
       setLaboratories((laboratoriesRes.data || []).filter(l => l.participates_in_solidarity));
       setFamilies(familiesRes.data || []);
+      setDataLoaded(true);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('فشل تحميل البيانات');
