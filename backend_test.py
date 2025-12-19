@@ -1157,7 +1157,8 @@ class TakafulBenefitsTester:
             'post_create_benefit': False,
             'delete_requires_auth': False,
             'delete_benefit': False,
-            'invalid_provider_type': False
+            'invalid_provider_type': False,
+            'admin_dashboard_takaful_all': False
         }
         
         # Test 1: Admin login
@@ -1195,6 +1196,10 @@ class TakafulBenefitsTester:
         if results['get_test_data']:
             results['invalid_provider_type'] = self.test_invalid_provider_type()
         
+        # Test 10: Admin Dashboard Takaful All endpoint
+        if results['admin_login']:
+            results['admin_dashboard_takaful_all'] = self.test_admin_dashboard_takaful_all_endpoint()
+        
         # Print summary
         print("\n" + "=" * 80)
         print("📊 TAKAFUL BENEFITS TEST RESULTS SUMMARY")
@@ -1209,7 +1214,8 @@ class TakafulBenefitsTester:
             'post_create_benefit': '6️⃣ POST Create Benefit',
             'delete_requires_auth': '7️⃣ DELETE Requires Authentication',
             'delete_benefit': '8️⃣ DELETE Benefit',
-            'invalid_provider_type': '9️⃣ Invalid Provider Type Handling'
+            'invalid_provider_type': '9️⃣ Invalid Provider Type Handling',
+            'admin_dashboard_takaful_all': '🔟 Admin Dashboard Takaful All Endpoint'
         }
         
         for test_name, success in results.items():
@@ -1241,6 +1247,11 @@ class TakafulBenefitsTester:
             print("✅ Takaful CRUD operations working correctly")
         else:
             print("❌ Takaful CRUD operations have issues")
+        
+        if results['admin_dashboard_takaful_all']:
+            print("✅ Admin Dashboard Takaful Management endpoint working correctly")
+        else:
+            print("❌ Admin Dashboard Takaful Management endpoint has issues")
         
         if passed_tests == total_tests:
             print("\n🎉 All Takaful Benefits tests passed!")
