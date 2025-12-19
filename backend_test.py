@@ -1078,6 +1078,70 @@ class TakafulBenefitsTester:
             print(f"❌ Invalid provider type test error: {str(e)}")
             return False
     
+    def test_admin_dashboard_takaful_all_endpoint(self):
+        """Test GET /api/takaful-benefits/all endpoint for Admin Dashboard"""
+        print("\n🏥 Testing Admin Dashboard Takaful All Benefits Endpoint...")
+        
+        if not self.admin_token:
+            print("❌ No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test GET all benefits without filters
+            response = self.session.get(f"{BACKEND_URL}/takaful-benefits/all", headers=headers)
+            
+            if response.status_code == 200:
+                all_benefits = response.json()
+                print(f"✅ GET all benefits successful - Found {len(all_benefits)} total benefits")
+                
+                # Test with month and year filters (as per review request)
+                response_filtered = self.session.get(
+                    f"{BACKEND_URL}/takaful-benefits/all?month=12&year=2025",
+                    headers=headers
+                )
+                
+                if response_filtered.status_code == 200:
+                    filtered_benefits = response_filtered.json()
+                    print(f"✅ GET all benefits with filters successful - Found {len(filtered_benefits)} benefits for December 2025")
+                    
+                    # Verify response structure includes required fields
+                    if filtered_benefits:
+                        sample_benefit = filtered_benefits[0]
+                        required_fields = ['provider_name', 'family_number', 'benefit_date', 'benefit_type']
+                        missing_fields = [field for field in required_fields if field not in sample_benefit]
+                        
+                        if not missing_fields:
+                            print("✅ Response includes all required fields (provider_name, family_number, etc.)")
+                            
+                            # Check if we have the expected 7 records for د.مصطفى درويش
+                            mustafa_records = [b for b in filtered_benefits if 'مصطفى درويش' in b.get('provider_name', '')]
+                            if len(mustafa_records) == 7:
+                                print("✅ Found expected 7 benefit records for د.مصطفى درويش in December 2025")
+                            else:
+                                print(f"⚠️ Expected 7 records for د.مصطفى درويش, found {len(mustafa_records)}")
+                            
+                            return True
+                        else:
+                            print(f"❌ Response missing required fields: {missing_fields}")
+                            return False
+                    else:
+                        print("ℹ️ No benefits found for December 2025 (this may be expected)")
+                        return True
+                else:
+                    print(f"❌ GET all benefits with filters failed: {response_filtered.status_code}")
+                    print(f"   Response: {response_filtered.text}")
+                    return False
+            else:
+                print(f"❌ GET all benefits failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Admin dashboard takaful all endpoint error: {str(e)}")
+            return False
+    
     def run_all_tests(self):
         """Run all Takaful Benefits tests"""
         print("=" * 80)
