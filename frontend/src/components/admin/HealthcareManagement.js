@@ -222,6 +222,13 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
       if (!formData.landline?.trim()) errors.push('رقم الهاتف الأرضي');
     }
     
+    // التحقق من أوقات الدوام - يجب تحديد يوم عمل واحد على الأقل
+    const workingHours = formData.working_hours || {};
+    const hasWorkingDay = Object.values(workingHours).some(day => day?.is_working);
+    if (!hasWorkingDay) {
+      errors.push('أوقات الدوام (حدد يوم عمل واحد على الأقل)');
+    }
+    
     return errors;
   };
 
