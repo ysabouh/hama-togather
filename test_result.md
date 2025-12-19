@@ -8,6 +8,41 @@
 ## Incorporate User Feedback
 - Healthcare Directory badge moved to top-left corner
 - Healthcare Management added to Admin Dashboard
+- Takaful Calendar Modal added when clicking on "تكافل" badge
+
+## Current Test Requirements
+
+### Takaful Calendar Feature - NEW
+**Test Date:** 2025-12-19
+**Status:** Needs Testing
+
+#### Test Requirements:
+1. **Frontend - Public Calendar Modal:**
+   - Navigate to `/healthcare-directory`
+   - Click on "تكافل" badge on any provider card
+   - Verify modal opens with calendar
+   - Verify statistics show correctly (total, free, discounts)
+   - Navigate between months using previous/next buttons
+   - Verify benefits appear on correct dates with family numbers
+
+2. **Backend - Takaful APIs:**
+   - GET `/api/takaful-benefits/{provider_type}/{provider_id}` - Public access
+   - POST `/api/takaful-benefits` - Requires admin/committee auth
+   - DELETE `/api/takaful-benefits/{benefit_id}` - Requires admin/committee auth
+   - GET `/api/takaful-benefits/stats/{provider_type}/{provider_id}` - Public access
+
+3. **Admin Dashboard - Takaful Management:**
+   - Login as admin (0933445566 / admin123)
+   - Navigate to Admin Dashboard
+   - Go to "الرعاية الصحية" dropdown
+   - Click on "سجلات التكافل"
+   - Verify ability to add new benefit record
+   - Verify ability to delete benefit record
+   - Verify filters work (provider type, month, year)
+
+#### Test Credentials:
+- Admin: 0933445566 / admin123
+- Committee President: 0944444444 / test123
 
 ## Backend Testing Results
 
