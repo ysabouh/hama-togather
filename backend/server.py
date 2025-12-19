@@ -1093,8 +1093,14 @@ async def create_user_by_admin(
         if existing_email:
             raise HTTPException(status_code=400, detail="البريد الإلكتروني مستخدم مسبقاً")
     
-    # التحقق من صحة الدور
-    if user_data.role not in ["user", "admin", "committee_member", "committee_president"]:
+    # التحقق من صحة الدور من قاعدة البيانات
+    valid_roles = await db.user_roles.find({"is_active": True}, {"_id": 0, "name": 1}).to_list(100)
+    valid_role_names = [r['name'] for r in valid_roles]
+    # إضافة الأدوار الأساسية في حال عدم وجودها
+    default_roles = ["user", "admin", "committee_member", "committee_president"]
+    valid_role_names.extend([r for r in default_roles if r not in valid_role_names])
+    
+    if user_data.role not in valid_role_names:
         raise HTTPException(status_code=400, detail="نوع المستخدم غير صالح")
     
     # تشفير كلمة المرور
