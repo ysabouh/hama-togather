@@ -391,15 +391,20 @@ const HealthcareDirectory = () => {
       <div className="h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 mt-auto"></div>
     </div>
   );
+  };
 
-  const PharmacyCard = ({ pharmacy }) => (
+  const PharmacyCard = ({ pharmacy }) => {
+    const stats = takafulStats[pharmacy.id];
+    const benefitCount = stats?.total_benefits || 0;
+    
+    return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300 flex flex-col h-full">
-      {/* Solidarity Badge - Clickable */}
+      {/* Solidarity Badge - Clickable with count */}
       {pharmacy.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
           <button
             onClick={() => openTakafulCalendar(pharmacy, 'pharmacy')}
-            className="bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
+            className="relative bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
             title="عرض رزنامة التكافل"
           >
             <Heart className="w-3.5 h-3.5 fill-white" />
