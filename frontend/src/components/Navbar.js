@@ -76,11 +76,17 @@ const Navbar = () => {
                         user.role === 'admin' ? 'bg-red-100 text-red-800' :
                         user.role === 'committee_president' ? 'bg-blue-100 text-blue-800' :
                         user.role === 'committee_member' ? 'bg-green-100 text-green-800' :
+                        user.role === 'doctor' ? 'bg-cyan-100 text-cyan-800' :
+                        user.role === 'pharmacist' ? 'bg-emerald-100 text-emerald-800' :
+                        user.role === 'laboratory' ? 'bg-purple-100 text-purple-800' :
                         'bg-gray-100 text-gray-800'
                       }`}>
                         {user.role === 'admin' ? 'مدير النظام' :
                          user.role === 'committee_president' ? 'رئيس لجنة' :
                          user.role === 'committee_member' ? 'موظف لجنة' :
+                         user.role === 'doctor' ? 'طبيب' :
+                         user.role === 'pharmacist' ? 'صيدلاني' :
+                         user.role === 'laboratory' ? 'مخبري' :
                          'متبرع كريم'}
                       </span>
                     </div>
