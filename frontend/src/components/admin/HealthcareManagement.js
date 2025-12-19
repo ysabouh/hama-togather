@@ -799,6 +799,116 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
                 </span>
               </label>
             </div>
+
+            {/* Working Hours Section */}
+            <div className="md:col-span-2 pt-4 border-t">
+              <Label className="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+                <Clock className="w-5 h-5 text-emerald-600" />
+                أوقات الدوام *
+              </Label>
+              
+              <div className="space-y-3">
+                {['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'].map((day) => {
+                  const dayLabels = {
+                    saturday: 'السبت',
+                    sunday: 'الأحد',
+                    monday: 'الاثنين',
+                    tuesday: 'الثلاثاء',
+                    wednesday: 'الأربعاء',
+                    thursday: 'الخميس',
+                    friday: 'الجمعة'
+                  };
+                  
+                  const dayData = formData.working_hours?.[day] || { is_working: false, morning: { from: '', to: '' }, evening: { from: '', to: '' } };
+                  
+                  const updateDayData = (field, value) => {
+                    const newWorkingHours = { ...formData.working_hours };
+                    if (!newWorkingHours[day]) {
+                      newWorkingHours[day] = { is_working: false, morning: { from: '', to: '' }, evening: { from: '', to: '' } };
+                    }
+                    
+                    if (field === 'is_working') {
+                      newWorkingHours[day].is_working = value;
+                    } else if (field.startsWith('morning_')) {
+                      newWorkingHours[day].morning = newWorkingHours[day].morning || { from: '', to: '' };
+                      newWorkingHours[day].morning[field.replace('morning_', '')] = value;
+                    } else if (field.startsWith('evening_')) {
+                      newWorkingHours[day].evening = newWorkingHours[day].evening || { from: '', to: '' };
+                      newWorkingHours[day].evening[field.replace('evening_', '')] = value;
+                    }
+                    
+                    setFormData({ ...formData, working_hours: newWorkingHours });
+                  };
+                  
+                  return (
+                    <div key={day} className={`p-3 rounded-lg border ${dayData.is_working ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
+                      <div className="flex flex-wrap items-center gap-4">
+                        {/* Day checkbox */}
+                        <label className="flex items-center gap-2 min-w-[100px]">
+                          <input
+                            type="checkbox"
+                            checked={dayData.is_working || false}
+                            onChange={(e) => updateDayData('is_working', e.target.checked)}
+                            className="w-4 h-4 text-emerald-600 rounded"
+                          />
+                          <span className={`font-medium ${dayData.is_working ? 'text-emerald-700' : 'text-gray-500'}`}>
+                            {dayLabels[day]}
+                          </span>
+                        </label>
+                        
+                        {dayData.is_working && (
+                          <div className="flex flex-wrap gap-4 flex-1">
+                            {/* Morning shift */}
+                            <div className="flex items-center gap-2 bg-yellow-50 px-3 py-2 rounded-lg border border-yellow-200">
+                              <span className="text-xs font-medium text-yellow-700 whitespace-nowrap">☀️ صباحي:</span>
+                              <input
+                                type="time"
+                                value={dayData.morning?.from || ''}
+                                onChange={(e) => updateDayData('morning_from', e.target.value)}
+                                className="border border-gray-300 rounded px-2 py-1 text-sm w-24"
+                                dir="ltr"
+                              />
+                              <span className="text-gray-500">-</span>
+                              <input
+                                type="time"
+                                value={dayData.morning?.to || ''}
+                                onChange={(e) => updateDayData('morning_to', e.target.value)}
+                                className="border border-gray-300 rounded px-2 py-1 text-sm w-24"
+                                dir="ltr"
+                              />
+                            </div>
+                            
+                            {/* Evening shift */}
+                            <div className="flex items-center gap-2 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-200">
+                              <span className="text-xs font-medium text-indigo-700 whitespace-nowrap">🌙 مسائي:</span>
+                              <input
+                                type="time"
+                                value={dayData.evening?.from || ''}
+                                onChange={(e) => updateDayData('evening_from', e.target.value)}
+                                className="border border-gray-300 rounded px-2 py-1 text-sm w-24"
+                                dir="ltr"
+                              />
+                              <span className="text-gray-500">-</span>
+                              <input
+                                type="time"
+                                value={dayData.evening?.to || ''}
+                                onChange={(e) => updateDayData('evening_to', e.target.value)}
+                                className="border border-gray-300 rounded px-2 py-1 text-sm w-24"
+                                dir="ltr"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <p className="text-xs text-gray-500 mt-2">
+                * حدد أيام العمل وأوقات الدوام الصباحي والمسائي لكل يوم. يمكن ترك الدوام المسائي فارغاً إذا لم يكن هناك دوام مسائي.
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-4 border-t">
