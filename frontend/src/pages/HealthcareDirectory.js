@@ -176,40 +176,42 @@ const HealthcareDirectory = () => {
   // Detailed working hours component
   const WorkingHoursDetail = ({ workingHours }) => {
     if (!workingHours || Object.keys(workingHours).length === 0) {
-      return <span className="text-gray-500">غير محدد</span>;
+      return <span className="text-gray-500 text-xs">غير محدد</span>;
     }
     
     const days = {
-      saturday: 'السبت',
-      sunday: 'الأحد',
-      monday: 'الاثنين',
-      tuesday: 'الثلاثاء',
-      wednesday: 'الأربعاء',
-      thursday: 'الخميس',
-      friday: 'الجمعة'
+      saturday: 'سبت',
+      sunday: 'أحد',
+      monday: 'إثن',
+      tuesday: 'ثلا',
+      wednesday: 'أرب',
+      thursday: 'خمي',
+      friday: 'جمع'
     };
 
     const workingDays = Object.entries(workingHours).filter(([_, schedule]) => schedule?.is_working);
     
     if (workingDays.length === 0) {
-      return <span className="text-red-500">مغلق</span>;
+      return <span className="text-red-500 text-xs">مغلق</span>;
     }
 
     return (
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         {workingDays.map(([day, schedule]) => (
-          <div key={day} className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="font-semibold text-gray-700 min-w-[50px]">{days[day]}:</span>
-            {schedule.morning?.from && schedule.morning?.to && (
-              <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
-                ☀️ {schedule.morning.from} - {schedule.morning.to}
-              </span>
-            )}
-            {schedule.evening?.from && schedule.evening?.to && (
-              <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-                🌙 {schedule.evening.from} - {schedule.evening.to}
-              </span>
-            )}
+          <div key={day} className="flex items-center gap-1 text-xs">
+            <span className="font-bold text-gray-600 w-8">{days[day]}</span>
+            <div className="flex items-center gap-1 flex-1">
+              {schedule.morning?.from && schedule.morning?.to && (
+                <span className="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[10px]">
+                  ☀️{schedule.morning.from}-{schedule.morning.to}
+                </span>
+              )}
+              {schedule.evening?.from && schedule.evening?.to && (
+                <span className="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded text-[10px]">
+                  🌙{schedule.evening.from}-{schedule.evening.to}
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>
