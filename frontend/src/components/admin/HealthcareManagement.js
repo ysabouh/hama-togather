@@ -276,17 +276,39 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
     }
   };
 
-  // Filter data based on search
+  // Filter data based on search - enhanced to search in all fields
   const filterData = (data) => {
     if (!searchQuery) return data;
     const query = searchQuery.toLowerCase();
     return data.filter(item => {
-      const name = item.full_name || item.name || '';
-      const address = item.address || '';
-      const owner = item.owner_full_name || '';
-      return name.toLowerCase().includes(query) || 
-             address.toLowerCase().includes(query) ||
-             owner.toLowerCase().includes(query);
+      // الاسم
+      const name = (item.full_name || item.name || '').toLowerCase();
+      // العنوان
+      const address = (item.address || '').toLowerCase();
+      // المالك (للصيدليات والمختبرات)
+      const owner = (item.owner_full_name || '').toLowerCase();
+      // رقم الموبايل
+      const mobile = (item.mobile || '').toLowerCase();
+      // رقم الهاتف الأرضي
+      const landline = (item.landline || '').toLowerCase();
+      // واتساب
+      const whatsapp = (item.whatsapp || '').toLowerCase();
+      // اسم الحي
+      const neighborhoodName = getNeighborhoodName(item.neighborhood_id).toLowerCase();
+      // اسم التخصص (للأطباء)
+      const specialtyName = item.specialty_id ? getSpecialtyName(item.specialty_id).toLowerCase() : '';
+      // وصف التخصص
+      const specialtyDesc = (item.specialty_description || '').toLowerCase();
+      
+      return name.includes(query) || 
+             address.includes(query) ||
+             owner.includes(query) ||
+             mobile.includes(query) ||
+             landline.includes(query) ||
+             whatsapp.includes(query) ||
+             neighborhoodName.includes(query) ||
+             specialtyName.includes(query) ||
+             specialtyDesc.includes(query);
     });
   };
 
