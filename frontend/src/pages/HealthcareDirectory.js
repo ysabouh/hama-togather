@@ -819,6 +819,18 @@ const HealthcareDirectory = () => {
         )}
       </div>
 
+      {/* Takaful Calendar Modal */}
+      <TakafulCalendarModal
+        isOpen={showTakafulModal}
+        onClose={() => {
+          setShowTakafulModal(false);
+          setSelectedProvider(null);
+          setSelectedProviderType(null);
+        }}
+        provider={selectedProvider}
+        providerType={selectedProviderType}
+      />
+
       <Footer />
     </div>
   );
