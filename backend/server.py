@@ -690,8 +690,9 @@ class Doctor(BaseModel):
     specialty_description: Optional[str] = None  # وصف عن اختصاصه وخبراته
     landline: Optional[str] = None  # الهاتف الأرضي
     mobile: str  # الهاتف الجوال (واتساب)
+    whatsapp: Optional[str] = None  # رقم الواتساب
     address: str  # العنوان
-    working_hours: WorkingHours  # أوقات الدوام
+    working_hours: Optional[dict] = None  # أوقات الدوام
     is_active: bool = True  # نشط/غير نشط
     participates_in_solidarity: bool = False  # مشترك في التكافل الاجتماعي
     neighborhood_id: str  # الحي
@@ -705,8 +706,9 @@ class DoctorCreate(BaseModel):
     specialty_description: Optional[str] = None
     landline: Optional[str] = None
     mobile: str
+    whatsapp: Optional[str] = None
     address: str
-    working_hours: WorkingHours
+    working_hours: Optional[dict] = None
     is_active: bool = True
     participates_in_solidarity: bool = False
     neighborhood_id: str
@@ -717,8 +719,9 @@ class DoctorUpdate(BaseModel):
     specialty_description: Optional[str] = None
     landline: Optional[str] = None
     mobile: Optional[str] = None
+    whatsapp: Optional[str] = None
     address: Optional[str] = None
-    working_hours: Optional[WorkingHours] = None
+    working_hours: Optional[dict] = None
     is_active: Optional[bool] = None
     participates_in_solidarity: Optional[bool] = None
     neighborhood_id: Optional[str] = None
