@@ -582,8 +582,8 @@ const HealthcareDirectory = () => {
 
             {/* Solidarity Badge */}
             <div className="inline-flex items-center gap-2 bg-red-500/20 backdrop-blur-sm px-4 py-2 rounded-full border border-red-400/30">
-              <Heart className="w-5 h-5 text-red-400 fill-red-400" />
-              <span className="text-red-200 font-medium">مقدمو خدمات صحية مشاركون في برنامج التكافل</span>
+              <Heart className="w-5 h-5 text-white fill-white" />
+              <span className="text-white font-medium">مقدمو خدمات صحية مشاركون في برنامج التكافل</span>
             </div>
           </div>
         </div>
