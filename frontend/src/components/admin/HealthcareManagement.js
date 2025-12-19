@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,55 @@ import {
 } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+// Custom styles for react-select (RTL Arabic)
+const customSelectStyles = {
+  control: (base, state) => ({
+    ...base,
+    textAlign: 'right',
+    minHeight: '42px',
+    borderColor: state.isFocused ? '#10b981' : '#d1d5db',
+    boxShadow: state.isFocused ? '0 0 0 2px rgba(16, 185, 129, 0.2)' : 'none',
+    '&:hover': {
+      borderColor: '#10b981'
+    }
+  }),
+  menu: (base) => ({
+    ...base,
+    textAlign: 'right',
+    zIndex: 9999
+  }),
+  menuList: (base) => ({
+    ...base,
+    maxHeight: '200px'
+  }),
+  placeholder: (base) => ({
+    ...base,
+    textAlign: 'right',
+    color: '#9ca3af'
+  }),
+  singleValue: (base) => ({
+    ...base,
+    textAlign: 'right'
+  }),
+  option: (base, state) => ({
+    ...base,
+    textAlign: 'right',
+    backgroundColor: state.isSelected ? '#10b981' : state.isFocused ? '#d1fae5' : 'white',
+    color: state.isSelected ? 'white' : '#374151',
+    '&:active': {
+      backgroundColor: '#059669'
+    }
+  }),
+  noOptionsMessage: (base) => ({
+    ...base,
+    textAlign: 'right'
+  }),
+  input: (base) => ({
+    ...base,
+    textAlign: 'right'
+  })
+};
 
 const HealthcareManagement = ({ activeTab = 'doctors' }) => {
   const { user } = useAuth();
