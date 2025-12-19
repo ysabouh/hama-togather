@@ -3845,9 +3845,6 @@ async def create_laboratory(
     if doc.get('updated_at'):
         doc['updated_at'] = doc['updated_at'].isoformat()
     
-    if 'working_hours' in doc and hasattr(doc['working_hours'], 'model_dump'):
-        doc['working_hours'] = doc['working_hours'].model_dump()
-    
     await db.laboratories.insert_one(doc)
     return laboratory
 
@@ -3874,9 +3871,6 @@ async def update_laboratory(
         raise HTTPException(status_code=400, detail="No fields to update")
     
     update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
-    
-    if 'working_hours' in update_dict and hasattr(update_dict['working_hours'], 'model_dump'):
-        update_dict['working_hours'] = update_dict['working_hours'].model_dump()
     
     result = await db.laboratories.update_one({"id": laboratory_id}, {"$set": update_dict})
     
