@@ -441,13 +441,17 @@ const HealthcareDirectory = () => {
 
   const LaboratoryCard = ({ laboratory }) => (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300 flex flex-col h-full">
-      {/* Solidarity Badge - Simple & Beautiful */}
+      {/* Solidarity Badge - Clickable */}
       {laboratory.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
-          <div className="bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 transition-colors">
+          <button
+            onClick={() => openTakafulCalendar(laboratory, 'laboratory')}
+            className="bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
+            title="عرض رزنامة التكافل"
+          >
             <Heart className="w-3.5 h-3.5 fill-white" />
             <span className="text-xs font-bold">تكافل</span>
-          </div>
+          </button>
         </div>
       )}
       
