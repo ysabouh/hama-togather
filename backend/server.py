@@ -3662,10 +3662,6 @@ async def update_doctor(
     
     update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
     
-    # تحويل working_hours إلى dict إذا كان موجوداً
-    if 'working_hours' in update_dict and hasattr(update_dict['working_hours'], 'model_dump'):
-        update_dict['working_hours'] = update_dict['working_hours'].model_dump()
-    
     result = await db.doctors.update_one({"id": doctor_id}, {"$set": update_dict})
     
     updated_doctor = await db.doctors.find_one({"id": doctor_id}, {"_id": 0})
