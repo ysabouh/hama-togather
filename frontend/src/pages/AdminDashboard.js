@@ -4162,6 +4162,11 @@ const AdminDashboard = () => {
               </div>
             </TabsContent>
 
+            {/* Takaful Benefits Tab */}
+            <TabsContent value="takaful">
+              <TakafulManagement userRole="admin" />
+            </TabsContent>
+
             {/* Health Cases Tab */}
             <TabsContent value="health">
               <div className="bg-white rounded-xl shadow-lg p-6">
