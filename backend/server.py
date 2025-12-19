@@ -4084,6 +4084,73 @@ async def get_provider_takaful_stats(
         "discount_benefits": discount_count
     }
 
+@api_router.get("/takaful-benefits/all")
+async def get_all_takaful_benefits(
+    provider_type: Optional[str] = None,
+    month: Optional[int] = None,
+    year: Optional[int] = None,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """الحصول على جميع سجلات التكافل - للإدارة فقط"""
+    
+    query = {}
+    
+    # فلترة حسب نوع مقدم الخدمة
+    if provider_type and provider_type != 'all':
+        if provider_type not in ['doctor', 'pharmacy', 'laboratory']:
+            raise HTTPException(status_code=400, detail="Invalid provider type")
+        query["provider_type"] = provider_type
+    
+    # فلترة حسب الشهر والسنة
+    if month and year:
+        start_date = f"{year}-{str(month).zfill(2)}-01"
+        if month == 12:
+            end_date = f"{year + 1}-01-01"
+        else:
+            end_date = f"{year}-{str(month + 1).zfill(2)}-01"
+        query["benefit_date"] = {"$gte": start_date, "$lt": end_date}
+    
+    # جلب سجلات الاستفادة
+    benefits = await db.takaful_benefits.find(query, {"_id": 0}).to_list(1000)
+    
+    # جلب بيانات العائلات
+    family_ids = list(set([b['family_id'] for b in benefits]))
+    families = await db.families.find(
+        {"id": {"$in": family_ids}},
+        {"_id": 0, "id": 1, "family_number": 1, "family_code": 1, "name": 1}
+    ).to_list(1000)
+    families_map = {f['id']: f for f in families}
+    
+    # جلب بيانات مقدمي الخدمات
+    doctor_ids = [b['provider_id'] for b in benefits if b['provider_type'] == 'doctor']
+    pharmacy_ids = [b['provider_id'] for b in benefits if b['provider_type'] == 'pharmacy']
+    lab_ids = [b['provider_id'] for b in benefits if b['provider_type'] == 'laboratory']
+    
+    doctors = await db.doctors.find({"id": {"$in": doctor_ids}}, {"_id": 0, "id": 1, "full_name": 1}).to_list(1000)
+    pharmacies = await db.pharmacies.find({"id": {"$in": pharmacy_ids}}, {"_id": 0, "id": 1, "name": 1}).to_list(1000)
+    labs = await db.laboratories.find({"id": {"$in": lab_ids}}, {"_id": 0, "id": 1, "name": 1}).to_list(1000)
+    
+    providers_map = {}
+    for d in doctors:
+        providers_map[d['id']] = d.get('full_name', 'غير معروف')
+    for p in pharmacies:
+        providers_map[p['id']] = p.get('name', 'غير معروف')
+    for l in labs:
+        providers_map[l['id']] = l.get('name', 'غير معروف')
+    
+    # إضافة البيانات لكل سجل
+    result = []
+    for benefit in benefits:
+        family = families_map.get(benefit['family_id'], {})
+        benefit['family_number'] = family.get('family_number') or family.get('family_code') or 'غير معروف'
+        benefit['provider_name'] = providers_map.get(benefit['provider_id'], 'غير معروف')
+        result.append(benefit)
+    
+    # ترتيب حسب التاريخ تنازلياً
+    result.sort(key=lambda x: x['benefit_date'], reverse=True)
+    
+    return result
+
 # ============= End Healthcare Routes =============
 
 # Include router (must be after all route definitions)
