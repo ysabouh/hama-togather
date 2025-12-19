@@ -521,17 +521,82 @@ const HealthcareDirectory = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            دليل الرعاية الصحية
-          </h1>
-          <p className="text-gray-600 text-lg">
-            دليل شامل للأطباء والصيدليات والمخابر في حماة
-          </p>
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-emerald-800 via-teal-700 to-cyan-800 text-white overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        
+        {/* Medical Icons Background */}
+        <div className="absolute inset-0 opacity-5">
+          <Stethoscope className="absolute top-10 left-10 w-24 h-24" />
+          <Building2 className="absolute top-20 right-20 w-20 h-20" />
+          <FlaskConical className="absolute bottom-10 left-1/4 w-16 h-16" />
+          <Heart className="absolute bottom-20 right-1/3 w-12 h-12" />
         </div>
 
+        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Icon */}
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-6 border border-white/20">
+              <Stethoscope className="w-10 h-10 text-white" />
+            </div>
+            
+            {/* Title */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              دليل الرعاية الصحية
+            </h1>
+            
+            {/* Subtitle */}
+            <p className="text-lg md:text-xl text-emerald-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+              دليل شامل للأطباء والصيدليات والمخابر المشاركة في برنامج التكافل الصحي في مدينة حماة
+            </p>
+            
+            {/* Stats */}
+            <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-8">
+              <div className="text-center">
+                <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-xl mb-2 mx-auto border border-blue-400/30">
+                  <Stethoscope className="w-8 h-8 text-blue-300" />
+                </div>
+                <div className="text-3xl font-bold">{doctors.length}</div>
+                <div className="text-emerald-200 text-sm">طبيب</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-xl mb-2 mx-auto border border-green-400/30">
+                  <Building2 className="w-8 h-8 text-green-300" />
+                </div>
+                <div className="text-3xl font-bold">{pharmacies.length}</div>
+                <div className="text-emerald-200 text-sm">صيدلية</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-xl mb-2 mx-auto border border-purple-400/30">
+                  <FlaskConical className="w-8 h-8 text-purple-300" />
+                </div>
+                <div className="text-3xl font-bold">{laboratories.length}</div>
+                <div className="text-emerald-200 text-sm">مخبر</div>
+              </div>
+            </div>
+
+            {/* Solidarity Badge */}
+            <div className="inline-flex items-center gap-2 bg-red-500/20 backdrop-blur-sm px-4 py-2 rounded-full border border-red-400/30">
+              <Heart className="w-5 h-5 text-red-400 fill-red-400" />
+              <span className="text-red-200 font-medium">مقدمو خدمات صحية مشاركون في برنامج التكافل</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Wave Bottom */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f9fafb"/>
+          </svg>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4 py-8">
         {/* Tabs */}
         <div className="mb-6 flex flex-wrap gap-3">
           <Button
