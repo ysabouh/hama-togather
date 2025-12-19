@@ -816,6 +816,45 @@ class LaboratoryUpdate(BaseModel):
     participates_in_solidarity: Optional[bool] = None
     neighborhood_id: Optional[str] = None
 
+# ============= Takaful Benefits Models =============
+
+class TakafulBenefit(BaseModel):
+    """سجل استفادة من برنامج التكافل"""
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    provider_type: str  # doctor, pharmacy, laboratory
+    provider_id: str  # معرف مقدم الخدمة
+    family_id: str  # معرف الأسرة المستفيدة
+    benefit_date: str  # تاريخ الاستفادة (YYYY-MM-DD)
+    benefit_type: str  # free (مجاني) / discount (خصم)
+    discount_percentage: Optional[float] = None  # نسبة الخصم (إذا كان النوع خصم)
+    notes: Optional[str] = None  # ملاحظات إضافية
+    created_by_user_id: str  # معرف المستخدم الذي أضاف السجل
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class TakafulBenefitCreate(BaseModel):
+    """إنشاء سجل استفادة جديد"""
+    provider_type: str  # doctor, pharmacy, laboratory
+    provider_id: str
+    family_id: str
+    benefit_date: str  # YYYY-MM-DD
+    benefit_type: str  # free / discount
+    discount_percentage: Optional[float] = None
+    notes: Optional[str] = None
+
+class TakafulBenefitResponse(BaseModel):
+    """استجابة سجل الاستفادة مع بيانات إضافية"""
+    id: str
+    provider_type: str
+    provider_id: str
+    family_id: str
+    family_number: Optional[str] = None  # رقم الأسرة للعرض
+    benefit_date: str
+    benefit_type: str
+    discount_percentage: Optional[float] = None
+    notes: Optional[str] = None
+    created_at: datetime
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
