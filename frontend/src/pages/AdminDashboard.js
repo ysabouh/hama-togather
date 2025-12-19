@@ -4697,27 +4697,7 @@ const AdminDashboard = () => {
 
             {/* Donations Tab */}
             <TabsContent value="donations">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">سجل التبرعات</h2>
-                <div className="space-y-4">
-                  {donations.map((donation) => (
-                    <div key={donation.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-bold">{donation.donor_name}</h3>
-                          <p className="text-sm text-gray-600">النوع: {donation.type}</p>
-                          {donation.amount && <p className="text-sm text-gray-600">المبلغ: {donation.amount.toLocaleString()} ل.س</p>}
-                        </div>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          donation.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
-                        }`}>
-                          {donation.status === 'pending' ? 'قيد المعالجة' : 'مكتمل'}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <DonationsManagement donations={donations} />
             </TabsContent>
 
             {/* Users Tab */}
