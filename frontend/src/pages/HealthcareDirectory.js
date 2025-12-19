@@ -173,6 +173,15 @@ const HealthcareDirectory = () => {
            (openDays.length > 3 ? ` +${openDays.length - 3}` : '');
   };
 
+  // تحويل الوقت من 24 ساعة إلى 12 ساعة
+  const formatTime12 = (time24) => {
+    if (!time24) return '';
+    const [hours, minutes] = time24.split(':').map(Number);
+    const period = hours >= 12 ? 'م' : 'ص';
+    const hours12 = hours % 12 || 12;
+    return `${hours12}:${minutes.toString().padStart(2, '0')}${period}`;
+  };
+
   // Detailed working hours component
   const WorkingHoursDetail = ({ workingHours }) => {
     if (!workingHours || Object.keys(workingHours).length === 0) {
@@ -203,12 +212,12 @@ const HealthcareDirectory = () => {
             <div className="flex items-center gap-1 flex-1">
               {schedule.morning?.from && schedule.morning?.to && (
                 <span className="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[10px]">
-                  ☀️{schedule.morning.from}-{schedule.morning.to}
+                  ☀️{formatTime12(schedule.morning.from)}-{formatTime12(schedule.morning.to)}
                 </span>
               )}
               {schedule.evening?.from && schedule.evening?.to && (
                 <span className="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded text-[10px]">
-                  🌙{schedule.evening.from}-{schedule.evening.to}
+                  🌙{formatTime12(schedule.evening.from)}-{formatTime12(schedule.evening.to)}
                 </span>
               )}
             </div>
