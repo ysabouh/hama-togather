@@ -149,12 +149,12 @@ const HealthcareDirectory = () => {
   };
 
   const formatWorkingHours = (workingHours) => {
-    if (!workingHours) return 'غير محدد';
+    if (!workingHours || Object.keys(workingHours).length === 0) return 'غير محدد';
     
     const days = {
       saturday: 'السبت',
       sunday: 'الأحد',
-      monday: 'الإثنين',
+      monday: 'الاثنين',
       tuesday: 'الثلاثاء',
       wednesday: 'الأربعاء',
       thursday: 'الخميس',
@@ -162,17 +162,57 @@ const HealthcareDirectory = () => {
     };
 
     const openDays = Object.entries(workingHours)
-      .filter(([_, schedule]) => schedule.is_open)
-      .map(([day, schedule]) => ({
-        day: days[day],
-        time: `${schedule.opening_time || ''} - ${schedule.closing_time || ''}`
-      }));
+      .filter(([_, schedule]) => schedule?.is_working)
+      .map(([day]) => days[day]);
 
     if (openDays.length === 0) return 'مغلق';
     if (openDays.length === 7) return 'يومياً';
     
-    return openDays.slice(0, 2).map(d => `${d.day}`).join(', ') + 
-           (openDays.length > 2 ? ` +${openDays.length - 2}` : '');
+    return openDays.slice(0, 3).join('، ') + 
+           (openDays.length > 3 ? ` +${openDays.length - 3}` : '');
+  };
+
+  // Detailed working hours component
+  const WorkingHoursDetail = ({ workingHours }) => {
+    if (!workingHours || Object.keys(workingHours).length === 0) {
+      return <span className="text-gray-500">غير محدد</span>;
+    }
+    
+    const days = {
+      saturday: 'السبت',
+      sunday: 'الأحد',
+      monday: 'الاثنين',
+      tuesday: 'الثلاثاء',
+      wednesday: 'الأربعاء',
+      thursday: 'الخميس',
+      friday: 'الجمعة'
+    };
+
+    const workingDays = Object.entries(workingHours).filter(([_, schedule]) => schedule?.is_working);
+    
+    if (workingDays.length === 0) {
+      return <span className="text-red-500">مغلق</span>;
+    }
+
+    return (
+      <div className="space-y-1.5">
+        {workingDays.map(([day, schedule]) => (
+          <div key={day} className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="font-semibold text-gray-700 min-w-[50px]">{days[day]}:</span>
+            {schedule.morning?.from && schedule.morning?.to && (
+              <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
+                ☀️ {schedule.morning.from} - {schedule.morning.to}
+              </span>
+            )}
+            {schedule.evening?.from && schedule.evening?.to && (
+              <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
+                🌙 {schedule.evening.from} - {schedule.evening.to}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const DoctorCard = ({ doctor }) => (
