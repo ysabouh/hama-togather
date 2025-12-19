@@ -1102,8 +1102,9 @@ async def create_user_by_admin(
     hashed_password = bcrypt.hashpw(user_data.password.encode(), bcrypt.gensalt()).decode()
     
     # إنشاء المستخدم
+    user_id = str(uuid.uuid4())
     new_user = {
-        "id": str(uuid.uuid4()),
+        "id": user_id,
         "full_name": user_data.full_name,
         "phone": user_data.phone,
         "email": user_data.email,
@@ -1117,10 +1118,10 @@ async def create_user_by_admin(
     
     await db.users.insert_one(new_user)
     
-    # إزالة كلمة المرور من الاستجابة
-    del new_user['password']
+    # جلب المستخدم بدون _id و password
+    created_user = await db.users.find_one({"id": user_id}, {"_id": 0, "password": 0})
     
-    return {"message": "تم إنشاء المستخدم بنجاح", "user": new_user}
+    return {"message": "تم إنشاء المستخدم بنجاح", "user": created_user}
 
 @api_router.put("/users/{user_id}/role")
 async def update_user_role(
