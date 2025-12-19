@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import TakafulCalendarModal from '../components/TakafulCalendarModal';
+import Select from 'react-select';
 import {
   Search,
   MapPin,
@@ -23,6 +24,48 @@ import {
 } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+// Custom styles for react-select to match the design
+const selectStyles = {
+  control: (base, state) => ({
+    ...base,
+    borderRadius: '0.75rem',
+    borderColor: state.isFocused ? '#3b82f6' : '#e5e7eb',
+    boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.2)' : 'none',
+    '&:hover': {
+      borderColor: '#3b82f6'
+    },
+    minHeight: '42px',
+    direction: 'rtl'
+  }),
+  menu: (base) => ({
+    ...base,
+    borderRadius: '0.75rem',
+    overflow: 'hidden',
+    zIndex: 50,
+    direction: 'rtl'
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
+    color: state.isSelected ? 'white' : '#374151',
+    cursor: 'pointer',
+    textAlign: 'right'
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: '#9ca3af',
+    textAlign: 'right'
+  }),
+  singleValue: (base) => ({
+    ...base,
+    textAlign: 'right'
+  }),
+  input: (base) => ({
+    ...base,
+    textAlign: 'right'
+  })
+};
 
 const HealthcareDirectory = () => {
   const { user } = useAuth();
