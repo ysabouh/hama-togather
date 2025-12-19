@@ -690,7 +690,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
                   />
                 </div>
                 <div>
-                  <Label>وصف التخصص</Label>
+                  <Label>وصف التخصص *</Label>
                   <Input
                     value={formData.specialty_description || ''}
                     onChange={(e) => setFormData({ ...formData, specialty_description: e.target.value })}
@@ -703,7 +703,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
             {/* Description (for pharmacies and labs) */}
             {currentTab !== 'doctors' && (
               <div className="md:col-span-2">
-                <Label>الوصف</Label>
+                <Label>الوصف *</Label>
                 <Textarea
                   value={formData.description || ''}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -733,7 +733,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
 
             {/* Address */}
             <div>
-              <Label>العنوان</Label>
+              <Label>العنوان *</Label>
               <Input
                 value={formData.address || ''}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -754,7 +754,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
 
             {/* Landline */}
             <div>
-              <Label>رقم الهاتف الأرضي</Label>
+              <Label>رقم الهاتف الأرضي *</Label>
               <Input
                 value={formData.landline || ''}
                 onChange={(e) => setFormData({ ...formData, landline: e.target.value })}
@@ -765,7 +765,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
 
             {/* WhatsApp */}
             <div>
-              <Label>واتساب</Label>
+              <Label>واتساب (اختياري)</Label>
               <Input
                 value={formData.whatsapp || ''}
                 onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
