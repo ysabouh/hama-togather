@@ -228,7 +228,7 @@ const HealthcareDirectory = () => {
   };
 
   const DoctorCard = ({ doctor }) => (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300 flex flex-col">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300 flex flex-col h-full">
       {/* Solidarity Badge - Simple & Beautiful */}
       {doctor.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
@@ -326,7 +326,7 @@ const HealthcareDirectory = () => {
   );
 
   const PharmacyCard = ({ pharmacy }) => (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300 flex flex-col">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300 flex flex-col h-full">
       {/* Solidarity Badge - Simple & Beautiful */}
       {pharmacy.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
@@ -420,7 +420,7 @@ const HealthcareDirectory = () => {
   );
 
   const LaboratoryCard = ({ laboratory }) => (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300 flex flex-col">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300 flex flex-col h-full">
       {/* Solidarity Badge - Simple & Beautiful */}
       {laboratory.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
