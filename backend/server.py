@@ -658,20 +658,28 @@ class MedicalSpecialtyUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 # Working Hours Model (for all healthcare providers)
+class ShiftSchedule(BaseModel):
+    """جدول الدوام لفترة واحدة (صباحي/مسائي)"""
+    from_time: Optional[str] = Field(default=None, alias="from")  # وقت البداية (مثال: "09:00")
+    to_time: Optional[str] = Field(default=None, alias="to")  # وقت النهاية (مثال: "14:00")
+    
+    model_config = ConfigDict(populate_by_name=True)
+
 class DaySchedule(BaseModel):
-    is_open: bool = True  # هل يعمل في هذا اليوم
-    opening_time: Optional[str] = None  # وقت الفتح (مثال: "09:00")
-    closing_time: Optional[str] = None  # وقت الإغلاق (مثال: "17:00")
-    notes: Optional[str] = None  # ملاحظات (مثال: "استراحة من 12:00 - 13:00")
+    """جدول يوم عمل واحد"""
+    is_working: bool = False  # هل يعمل في هذا اليوم
+    morning: Optional[ShiftSchedule] = Field(default_factory=lambda: ShiftSchedule())  # الدوام الصباحي
+    evening: Optional[ShiftSchedule] = Field(default_factory=lambda: ShiftSchedule())  # الدوام المسائي
 
 class WorkingHours(BaseModel):
+    """أوقات الدوام الأسبوعية"""
     saturday: DaySchedule = Field(default_factory=DaySchedule)
     sunday: DaySchedule = Field(default_factory=DaySchedule)
     monday: DaySchedule = Field(default_factory=DaySchedule)
     tuesday: DaySchedule = Field(default_factory=DaySchedule)
     wednesday: DaySchedule = Field(default_factory=DaySchedule)
     thursday: DaySchedule = Field(default_factory=DaySchedule)
-    friday: DaySchedule = Field(default_factory=lambda: DaySchedule(is_open=False))
+    friday: DaySchedule = Field(default_factory=DaySchedule)
 
 # Doctor Model
 class Doctor(BaseModel):
