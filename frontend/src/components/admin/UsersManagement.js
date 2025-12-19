@@ -302,13 +302,20 @@ const UsersManagement = ({
   };
 
   const getRoleLabel = (role) => {
-    const roles = {
+    const foundRole = userRoles.find(r => r.name === role);
+    if (foundRole) return foundRole.display_name;
+    
+    // Fallback for common roles
+    const fallbackRoles = {
       'admin': 'مدير نظام',
       'committee_president': 'رئيس لجنة',
       'committee_member': 'موظف لجنة',
-      'user': 'متبرع كريم'
+      'user': 'متبرع كريم',
+      'doctor': 'دكتور',
+      'pharmacist': 'صيدلاني',
+      'laboratory': 'مخبري'
     };
-    return roles[role] || role;
+    return fallbackRoles[role] || role;
   };
 
   const getRoleColor = (role) => {
@@ -316,7 +323,10 @@ const UsersManagement = ({
       'admin': 'bg-red-100 text-red-800',
       'committee_president': 'bg-blue-100 text-blue-800',
       'committee_member': 'bg-green-100 text-green-800',
-      'user': 'bg-yellow-100 text-yellow-800'
+      'user': 'bg-yellow-100 text-yellow-800',
+      'doctor': 'bg-cyan-100 text-cyan-800',
+      'pharmacist': 'bg-emerald-100 text-emerald-800',
+      'laboratory': 'bg-purple-100 text-purple-800'
     };
     return colors[role] || 'bg-gray-100 text-gray-800';
   };
