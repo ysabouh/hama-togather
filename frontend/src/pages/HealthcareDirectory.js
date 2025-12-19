@@ -189,13 +189,13 @@ const HealthcareDirectory = () => {
     }
     
     const days = {
-      saturday: 'سبت',
-      sunday: 'أحد',
-      monday: 'إثن',
-      tuesday: 'ثلا',
-      wednesday: 'أرب',
-      thursday: 'خمي',
-      friday: 'جمع'
+      saturday: 'السبت',
+      sunday: 'الأحد',
+      monday: 'الاثنين',
+      tuesday: 'الثلاثاء',
+      wednesday: 'الأربعاء',
+      thursday: 'الخميس',
+      friday: 'الجمعة'
     };
 
     const workingDays = Object.entries(workingHours).filter(([_, schedule]) => schedule?.is_working);
@@ -205,19 +205,19 @@ const HealthcareDirectory = () => {
     }
 
     return (
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         {workingDays.map(([day, schedule]) => (
-          <div key={day} className="flex items-center gap-1 text-xs">
-            <span className="font-bold text-gray-600 w-8">{days[day]}</span>
-            <div className="flex items-center gap-1 flex-1">
+          <div key={day} className="flex items-center gap-2 text-xs whitespace-nowrap">
+            <span className="font-bold text-gray-700 min-w-[55px]">{days[day]}</span>
+            <div className="flex items-center gap-2">
               {schedule.morning?.from && schedule.morning?.to && (
-                <span className="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[10px]">
-                  ☀️{formatTime12(schedule.morning.from)}-{formatTime12(schedule.morning.to)}
+                <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded text-xs font-medium">
+                  ☀️ {formatTime12(schedule.morning.from)} - {formatTime12(schedule.morning.to)}
                 </span>
               )}
               {schedule.evening?.from && schedule.evening?.to && (
-                <span className="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded text-[10px]">
-                  🌙{formatTime12(schedule.evening.from)}-{formatTime12(schedule.evening.to)}
+                <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-xs font-medium">
+                  🌙 {formatTime12(schedule.evening.from)} - {formatTime12(schedule.evening.to)}
                 </span>
               )}
             </div>
