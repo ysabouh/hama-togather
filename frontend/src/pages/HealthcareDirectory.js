@@ -611,6 +611,7 @@ const HealthcareDirectory = () => {
       <div className="h-1.5 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500 mt-auto"></div>
     </div>
   );
+  };
 
   const currentData = activeTab === 'doctors' ? doctors : 
                        activeTab === 'pharmacies' ? pharmacies : 
