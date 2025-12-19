@@ -534,6 +534,116 @@ const UsersManagement = ({
         )}
       </div>
 
+      {/* Pagination */}
+      {!loading && filteredUsers.length > 0 && (
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t pt-4">
+          {/* Info */}
+          <div className="text-sm text-gray-600">
+            عرض <span className="font-semibold text-gray-900">{startIndex + 1}</span> إلى{' '}
+            <span className="font-semibold text-gray-900">{Math.min(endIndex, filteredUsers.length)}</span> من{' '}
+            <span className="font-semibold text-gray-900">{filteredUsers.length}</span> مستخدم
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex items-center gap-1">
+            {/* First Page */}
+            <button
+              onClick={() => goToPage(1)}
+              disabled={currentPage === 1}
+              className={`p-2 rounded-lg transition-colors ${
+                currentPage === 1
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+              title="الصفحة الأولى"
+            >
+              <ChevronsRight className="w-5 h-5" />
+            </button>
+
+            {/* Previous Page */}
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`p-2 rounded-lg transition-colors ${
+                currentPage === 1
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+              title="الصفحة السابقة"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1 mx-2">
+              {getPageNumbers().map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() => typeof page === 'number' && goToPage(page)}
+                  disabled={page === '...'}
+                  className={`min-w-[36px] h-9 px-3 rounded-lg text-sm font-medium transition-all ${
+                    page === currentPage
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : page === '...'
+                      ? 'text-gray-400 cursor-default'
+                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            {/* Next Page */}
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`p-2 rounded-lg transition-colors ${
+                currentPage === totalPages
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+              title="الصفحة التالية"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            {/* Last Page */}
+            <button
+              onClick={() => goToPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className={`p-2 rounded-lg transition-colors ${
+                currentPage === totalPages
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+              }`}
+              title="الصفحة الأخيرة"
+            >
+              <ChevronsLeft className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Items per page selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">عرض</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+            <span className="text-sm text-gray-600">في الصفحة</span>
+          </div>
+        </div>
+      )}
+
       {/* Add User Dialog */}
       <Dialog open={addDialog} onOpenChange={setAddDialog}>
         <DialogContent className="max-w-lg">
