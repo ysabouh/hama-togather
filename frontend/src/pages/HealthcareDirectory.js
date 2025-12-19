@@ -228,7 +228,7 @@ const HealthcareDirectory = () => {
   };
 
   const DoctorCard = ({ doctor }) => (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-blue-100 hover:border-blue-300 flex flex-col">
       {/* Solidarity Badge - Simple & Beautiful */}
       {doctor.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
@@ -266,7 +266,7 @@ const HealthcareDirectory = () => {
       </div>
 
       {/* Body with info */}
-      <div className="p-6 pt-4 space-y-3">
+      <div className="p-6 pt-4 space-y-3 flex-1">
         <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
           <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
           <span className="text-sm text-gray-700 leading-relaxed">{doctor.address}</span>
@@ -320,13 +320,13 @@ const HealthcareDirectory = () => {
         </div>
       </div>
 
-      {/* Bottom accent line */}
-      <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500"></div>
+      {/* Bottom accent line - positioned at absolute bottom */}
+      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 mt-auto"></div>
     </div>
   );
 
   const PharmacyCard = ({ pharmacy }) => (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-green-100 hover:border-green-300 flex flex-col">
       {/* Solidarity Badge - Simple & Beautiful */}
       {pharmacy.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
@@ -360,7 +360,7 @@ const HealthcareDirectory = () => {
       </div>
 
       {/* Body with info */}
-      <div className="p-6 pt-4 space-y-3">
+      <div className="p-6 pt-4 space-y-3 flex-1">
         <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
           <MapPin className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
           <span className="text-sm text-gray-700 leading-relaxed">{pharmacy.address}</span>
@@ -414,13 +414,13 @@ const HealthcareDirectory = () => {
         </div>
       </div>
 
-      {/* Bottom accent line */}
-      <div className="h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500"></div>
+      {/* Bottom accent line - positioned at absolute bottom */}
+      <div className="h-1.5 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 mt-auto"></div>
     </div>
   );
 
   const LaboratoryCard = ({ laboratory }) => (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-purple-100 hover:border-purple-300 flex flex-col">
       {/* Solidarity Badge - Simple & Beautiful */}
       {laboratory.participates_in_solidarity && (
         <div className="absolute top-2 left-2 z-10">
@@ -454,7 +454,7 @@ const HealthcareDirectory = () => {
       </div>
 
       {/* Body with info */}
-      <div className="p-6 pt-4 space-y-3">
+      <div className="p-6 pt-4 space-y-3 flex-1">
         <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
           <MapPin className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
           <span className="text-sm text-gray-700 leading-relaxed">{laboratory.address}</span>
@@ -508,8 +508,8 @@ const HealthcareDirectory = () => {
         </div>
       </div>
 
-      {/* Bottom accent line */}
-      <div className="h-1 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500"></div>
+      {/* Bottom accent line - positioned at absolute bottom */}
+      <div className="h-1.5 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500 mt-auto"></div>
     </div>
   );
 
