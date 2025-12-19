@@ -2030,6 +2030,10 @@ const AdminDashboard = () => {
                       <Tag className="w-4 h-4 ml-2" />
                       التخصصات الطبية
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveHealthcareTab('takaful')} className="cursor-pointer">
+                      <Heart className="w-4 h-4 ml-2" />
+                      سجلات التكافل
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 
