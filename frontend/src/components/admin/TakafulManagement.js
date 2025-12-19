@@ -47,14 +47,17 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [filterProviderType, setFilterProviderType] = useState('all');
   const [filterMonth, setFilterMonth] = useState(new Date().getMonth() + 1);
   const [filterYear, setFilterYear] = useState(new Date().getFullYear());
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-    fetchBenefits();
-  }, [filterProviderType, filterMonth, filterYear]);
+    if (dataLoaded) {
+      fetchBenefits();
+    }
+  }, [filterProviderType, filterMonth, filterYear, dataLoaded]);
 
   const fetchData = async () => {
     try {
