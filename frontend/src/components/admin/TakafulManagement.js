@@ -83,35 +83,35 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const fetchBenefits = async () => {
     setLoading(true);
     try {
-      // Get all benefits for all provider types
-      const providerTypes = filterProviderType === 'all' 
-        ? ['doctor', 'pharmacy', 'laboratory'] 
-        : [filterProviderType];
-      
-      let allBenefits = [];
-      
-      for (const type of providerTypes) {
-        const providers = type === 'doctor' ? doctors : type === 'pharmacy' ? pharmacies : laboratories;
-        for (const provider of providers) {
-          try {
-            const response = await axios.get(
-              `${API_URL}/takaful-benefits/${type}/${provider.id}`,
-              { params: { month: filterMonth, year: filterYear } }
-            );
-            const benefitsWithProvider = (response.data || []).map(b => ({
-              ...b,
-              provider_name: provider.full_name || provider.name
-            }));
-            allBenefits = [...allBenefits, ...benefitsWithProvider];
-          } catch (error) {
-            console.error(`Error fetching benefits for ${type} ${provider.id}:`, error);
-          }
-        }
+      const token = localStorage.getItem('token');
+      const params = {
+        month: filterMonth,
+        year: filterYear
+      };
+      if (filterProviderType !== 'all') {
+        params.provider_type = filterProviderType;
       }
       
-      // Sort by date descending
-      allBenefits.sort((a, b) => new Date(b.benefit_date) - new Date(a.benefit_date));
-      setBenefits(allBenefits);
+      const response = await axios.get(
+        `${API_URL}/takaful-benefits/all`,
+        { 
+          headers: { Authorization: `Bearer ${token}` },
+          params 
+        }
+      );
+      
+      setBenefits(response.data || []);
+    } catch (error) {
+      console.error('Error fetching benefits:', error);
+      if (error.response?.status === 401) {
+        toast.error('يرجى تسجيل الدخول مرة أخرى');
+      } else {
+        toast.error('فشل تحميل سجلات الاستفادة');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
     } catch (error) {
       console.error('Error fetching benefits:', error);
       toast.error('فشل تحميل سجلات الاستفادة');
