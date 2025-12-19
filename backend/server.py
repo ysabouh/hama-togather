@@ -1063,6 +1063,65 @@ async def get_all_users(current_user: User = Depends(get_current_user)):
             user['email'] = None
     return users
 
+class UserCreateAdmin(BaseModel):
+    """إنشاء مستخدم بواسطة المسؤول"""
+    full_name: str
+    phone: str
+    email: Optional[str] = None
+    password: str
+    role: str = "user"
+    neighborhood_id: Optional[str] = None
+    is_active: bool = True
+
+@api_router.post("/users")
+async def create_user_by_admin(
+    user_data: UserCreateAdmin,
+    current_user: User = Depends(get_current_user)
+):
+    """إنشاء مستخدم جديد - متاح للمسؤول فقط"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="صلاحيات المسؤول مطلوبة")
+    
+    # التحقق من أن رقم الجوال غير مستخدم
+    existing_user = await db.users.find_one({"phone": user_data.phone}, {"_id": 0})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="رقم الجوال مستخدم مسبقاً")
+    
+    # التحقق من البريد الإلكتروني إذا تم توفيره
+    if user_data.email:
+        existing_email = await db.users.find_one({"email": user_data.email}, {"_id": 0})
+        if existing_email:
+            raise HTTPException(status_code=400, detail="البريد الإلكتروني مستخدم مسبقاً")
+    
+    # التحقق من صحة الدور
+    if user_data.role not in ["user", "admin", "committee_member", "committee_president"]:
+        raise HTTPException(status_code=400, detail="نوع المستخدم غير صالح")
+    
+    # تشفير كلمة المرور
+    import bcrypt
+    hashed_password = bcrypt.hashpw(user_data.password.encode(), bcrypt.gensalt()).decode()
+    
+    # إنشاء المستخدم
+    new_user = {
+        "id": str(uuid.uuid4()),
+        "full_name": user_data.full_name,
+        "phone": user_data.phone,
+        "email": user_data.email,
+        "password": hashed_password,
+        "role": user_data.role,
+        "neighborhood_id": user_data.neighborhood_id,
+        "is_active": user_data.is_active,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.insert_one(new_user)
+    
+    # إزالة كلمة المرور من الاستجابة
+    del new_user['password']
+    
+    return {"message": "تم إنشاء المستخدم بنجاح", "user": new_user}
+
 @api_router.put("/users/{user_id}/role")
 async def update_user_role(
     user_id: str,
