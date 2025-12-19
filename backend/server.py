@@ -4065,9 +4065,9 @@ async def get_provider_takaful_benefits(
 @api_router.post("/takaful-benefits")
 async def create_takaful_benefit(
     benefit_data: TakafulBenefitCreate,
-    current_user: User = Depends(get_admin_or_committee_user)
+    current_user: User = Depends(get_admin_committee_or_healthcare_user)
 ):
-    """إنشاء سجل استفادة جديد - متاح للمشرف وأعضاء اللجنة"""
+    """إنشاء سجل استفادة جديد - متاح للمشرف وأعضاء اللجنة ومقدمي الرعاية الصحية"""
     
     if benefit_data.provider_type not in ['doctor', 'pharmacy', 'laboratory']:
         raise HTTPException(status_code=400, detail="Invalid provider type")
