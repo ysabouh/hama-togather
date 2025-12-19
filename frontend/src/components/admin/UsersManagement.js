@@ -16,7 +16,11 @@ import {
   Loader2,
   X,
   Plus,
-  UserPlus
+  UserPlus,
+  ChevronRight,
+  ChevronLeft,
+  ChevronsRight,
+  ChevronsLeft
 } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
