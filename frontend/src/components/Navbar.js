@@ -123,6 +123,16 @@ const Navbar = () => {
                       </>
                     )}
                     
+                    {/* مقدمو الرعاية الصحية يرون لوحتهم الخاصة */}
+                    {['doctor', 'pharmacist', 'laboratory'].includes(user.role) && (
+                      <>
+                        <DropdownMenuItem onClick={() => navigate('/healthcare-dashboard')} className="cursor-pointer">
+                          <LayoutDashboard className="w-4 h-4 ml-2" />
+                          لوحة الرعاية الصحية
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    
                     <DropdownMenuSeparator />
                     
                     <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
