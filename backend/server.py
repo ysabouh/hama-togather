@@ -909,6 +909,13 @@ async def get_admin_or_committee_user(current_user: User = Depends(get_current_u
         raise HTTPException(status_code=403, detail="غير مصرح لك بالوصول")
     return current_user
 
+async def get_admin_committee_or_healthcare_user(current_user: User = Depends(get_current_user)):
+    """للسماح بالوصول للأدمن وموظفي اللجنة ومقدمي الرعاية الصحية"""
+    allowed_roles = ["admin", "committee_member", "committee_president", "doctor", "pharmacist", "laboratory"]
+    if current_user.role not in allowed_roles:
+        raise HTTPException(status_code=403, detail="غير مصرح لك بالوصول")
+    return current_user
+
 async def get_committee_president_user(current_user: User = Depends(get_current_user)):
     """للسماح فقط لرئيس اللجنة والأدمن"""
     if current_user.role not in ["admin", "committee_president"]:
