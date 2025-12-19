@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import Select from 'react-select';
 import {
   Users,
   Search,
@@ -13,10 +14,54 @@ import {
   UserCheck,
   UserX,
   Loader2,
-  X
+  X,
+  Plus,
+  UserPlus
 } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+// Custom styles for react-select
+const selectStyles = {
+  control: (base, state) => ({
+    ...base,
+    borderRadius: '0.5rem',
+    borderColor: state.isFocused ? '#3b82f6' : '#d1d5db',
+    boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.2)' : 'none',
+    '&:hover': {
+      borderColor: '#3b82f6'
+    },
+    minHeight: '42px',
+    direction: 'rtl'
+  }),
+  menu: (base) => ({
+    ...base,
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
+    zIndex: 100,
+    direction: 'rtl'
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
+    color: state.isSelected ? 'white' : '#374151',
+    cursor: 'pointer',
+    textAlign: 'right'
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: '#9ca3af',
+    textAlign: 'right'
+  }),
+  singleValue: (base) => ({
+    ...base,
+    textAlign: 'right'
+  }),
+  input: (base) => ({
+    ...base,
+    textAlign: 'right'
+  })
+};
 
 const UsersManagement = ({ 
   users = [], 
@@ -26,6 +71,19 @@ const UsersManagement = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showInactive, setShowInactive] = useState(false);
+  
+  // Add User Dialog
+  const [addDialog, setAddDialog] = useState(false);
+  const [newUserData, setNewUserData] = useState({
+    full_name: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirm_password: '',
+    role: 'user',
+    neighborhood_id: '',
+    is_active: true
+  });
   
   // Edit User Dialog
   const [editDialog, setEditDialog] = useState(false);
@@ -47,6 +105,77 @@ const UsersManagement = ({
     new_password: '',
     confirm_password: ''
   });
+
+  // Get neighborhood options for react-select
+  const neighborhoodOptions = neighborhoods.map(n => ({
+    value: n.id,
+    label: n.name
+  }));
+
+  const resetNewUserForm = () => {
+    setNewUserData({
+      full_name: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirm_password: '',
+      role: 'user',
+      neighborhood_id: '',
+      is_active: true
+    });
+  };
+
+  const handleAddUser = async () => {
+    // Validation
+    if (!newUserData.full_name?.trim()) {
+      toast.error('الاسم الكامل مطلوب');
+      return;
+    }
+    if (!newUserData.phone?.trim()) {
+      toast.error('رقم الجوال مطلوب');
+      return;
+    }
+    if (!newUserData.password || newUserData.password.length < 6) {
+      toast.error('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      return;
+    }
+    if (newUserData.password !== newUserData.confirm_password) {
+      toast.error('كلمتا المرور غير متطابقتين');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const token = localStorage.getItem('token');
+      const userData = {
+        full_name: newUserData.full_name,
+        email: newUserData.email || null,
+        phone: newUserData.phone,
+        password: newUserData.password,
+        role: newUserData.role,
+        neighborhood_id: newUserData.neighborhood_id || null,
+        is_active: newUserData.is_active
+      };
+      
+      await axios.post(`${API_URL}/users`, userData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      toast.success('تم إضافة المستخدم بنجاح');
+      setAddDialog(false);
+      resetNewUserForm();
+      onRefresh?.();
+    } catch (error) {
+      console.error('Error adding user:', error);
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail);
+      } else {
+        toast.error('فشل إضافة المستخدم');
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleEditUser = (user) => {
     setEditingUser(user);
@@ -176,6 +305,16 @@ const UsersManagement = ({
           <Users className="w-7 h-7 text-blue-600" />
           إدارة المستخدمين
         </h2>
+        <Button 
+          onClick={() => {
+            resetNewUserForm();
+            setAddDialog(true);
+          }}
+          className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+        >
+          <UserPlus className="w-5 h-5" />
+          إضافة مستخدم جديد
+        </Button>
       </div>
 
       {/* Search and Filter */}
@@ -299,79 +438,199 @@ const UsersManagement = ({
         )}
       </div>
 
-      {/* Edit User Dialog */}
-      <Dialog open={editDialog} onOpenChange={setEditDialog}>
-        <DialogContent className="max-w-md">
+      {/* Add User Dialog */}
+      <Dialog open={addDialog} onOpenChange={setAddDialog}>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>تعديل بيانات المستخدم</DialogTitle>
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <UserPlus className="w-6 h-6 text-blue-600" />
+              إضافة مستخدم جديد
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div>
-              <Label>الاسم الكامل *</Label>
-              <Input
-                value={userFormData.full_name}
-                onChange={(e) => setUserFormData({ ...userFormData, full_name: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label>البريد الإلكتروني</Label>
-              <Input
-                type="email"
-                value={userFormData.email}
-                onChange={(e) => setUserFormData({ ...userFormData, email: e.target.value })}
-                dir="ltr"
-              />
-            </div>
-            <div>
-              <Label>رقم الجوال</Label>
-              <Input
-                value={userFormData.phone}
-                onChange={(e) => setUserFormData({ ...userFormData, phone: e.target.value })}
-                dir="ltr"
-              />
-            </div>
-            <div>
-              <Label>نوع المستخدم</Label>
-              <select
-                value={userFormData.role}
-                onChange={(e) => setUserFormData({ ...userFormData, role: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-              >
-                <option value="user">متبرع كريم</option>
-                <option value="committee_member">موظف لجنة</option>
-                <option value="committee_president">رئيس لجنة</option>
-                <option value="admin">مدير نظام</option>
-              </select>
-            </div>
-            <div>
-              <Label>الحي</Label>
-              <select
-                value={userFormData.neighborhood_id}
-                onChange={(e) => setUserFormData({ ...userFormData, neighborhood_id: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-              >
-                <option value="">-- اختر الحي --</option>
-                {neighborhoods.map(n => (
-                  <option key={n.id} value={n.id}>{n.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="user_is_active"
-                checked={userFormData.is_active}
-                onChange={(e) => setUserFormData({ ...userFormData, is_active: e.target.checked })}
-                className="w-4 h-4 rounded"
-              />
-              <Label htmlFor="user_is_active" className="cursor-pointer">نشط</Label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Label className="text-sm font-medium">الاسم الكامل <span className="text-red-500">*</span></Label>
+                <Input
+                  value={newUserData.full_name}
+                  onChange={(e) => setNewUserData({ ...newUserData, full_name: e.target.value })}
+                  placeholder="أدخل الاسم الكامل"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">رقم الجوال <span className="text-red-500">*</span></Label>
+                <Input
+                  value={newUserData.phone}
+                  onChange={(e) => setNewUserData({ ...newUserData, phone: e.target.value })}
+                  placeholder="09xxxxxxxx"
+                  dir="ltr"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">البريد الإلكتروني</Label>
+                <Input
+                  type="email"
+                  value={newUserData.email}
+                  onChange={(e) => setNewUserData({ ...newUserData, email: e.target.value })}
+                  placeholder="example@email.com"
+                  dir="ltr"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">كلمة المرور <span className="text-red-500">*</span></Label>
+                <Input
+                  type="password"
+                  value={newUserData.password}
+                  onChange={(e) => setNewUserData({ ...newUserData, password: e.target.value })}
+                  placeholder="6 أحرف على الأقل"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">تأكيد كلمة المرور <span className="text-red-500">*</span></Label>
+                <Input
+                  type="password"
+                  value={newUserData.confirm_password}
+                  onChange={(e) => setNewUserData({ ...newUserData, confirm_password: e.target.value })}
+                  placeholder="أعد كتابة كلمة المرور"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">نوع المستخدم</Label>
+                <select
+                  value={newUserData.role}
+                  onChange={(e) => setNewUserData({ ...newUserData, role: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="user">متبرع كريم</option>
+                  <option value="committee_member">موظف لجنة</option>
+                  <option value="committee_president">رئيس لجنة</option>
+                  <option value="admin">مدير نظام</option>
+                </select>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">الحي</Label>
+                <Select
+                  value={neighborhoodOptions.find(o => o.value === newUserData.neighborhood_id) || null}
+                  onChange={(option) => setNewUserData({ ...newUserData, neighborhood_id: option?.value || '' })}
+                  options={neighborhoodOptions}
+                  placeholder="ابحث عن حي..."
+                  isClearable
+                  isSearchable
+                  noOptionsMessage={() => 'لا توجد نتائج'}
+                  styles={selectStyles}
+                  className="mt-1"
+                />
+              </div>
+              <div className="col-span-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="new_user_is_active"
+                  checked={newUserData.is_active}
+                  onChange={(e) => setNewUserData({ ...newUserData, is_active: e.target.checked })}
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <Label htmlFor="new_user_is_active" className="cursor-pointer">المستخدم نشط</Label>
+              </div>
             </div>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-4 border-t">
+            <Button variant="outline" onClick={() => setAddDialog(false)}>إلغاء</Button>
+            <Button onClick={handleAddUser} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+              {saving && <Loader2 className="w-4 h-4 animate-spin ml-2" />}
+              <Plus className="w-4 h-4 ml-1" />
+              إضافة المستخدم
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit User Dialog */}
+      <Dialog open={editDialog} onOpenChange={setEditDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Edit className="w-5 h-5 text-blue-600" />
+              تعديل بيانات المستخدم
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Label className="text-sm font-medium">الاسم الكامل <span className="text-red-500">*</span></Label>
+                <Input
+                  value={userFormData.full_name}
+                  onChange={(e) => setUserFormData({ ...userFormData, full_name: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">رقم الجوال</Label>
+                <Input
+                  value={userFormData.phone}
+                  onChange={(e) => setUserFormData({ ...userFormData, phone: e.target.value })}
+                  dir="ltr"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">البريد الإلكتروني</Label>
+                <Input
+                  type="email"
+                  value={userFormData.email}
+                  onChange={(e) => setUserFormData({ ...userFormData, email: e.target.value })}
+                  dir="ltr"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-medium">نوع المستخدم</Label>
+                <select
+                  value={userFormData.role}
+                  onChange={(e) => setUserFormData({ ...userFormData, role: e.target.value })}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="user">متبرع كريم</option>
+                  <option value="committee_member">موظف لجنة</option>
+                  <option value="committee_president">رئيس لجنة</option>
+                  <option value="admin">مدير نظام</option>
+                </select>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">الحي</Label>
+                <Select
+                  value={neighborhoodOptions.find(o => o.value === userFormData.neighborhood_id) || null}
+                  onChange={(option) => setUserFormData({ ...userFormData, neighborhood_id: option?.value || '' })}
+                  options={neighborhoodOptions}
+                  placeholder="ابحث عن حي..."
+                  isClearable
+                  isSearchable
+                  noOptionsMessage={() => 'لا توجد نتائج'}
+                  styles={selectStyles}
+                  className="mt-1"
+                />
+              </div>
+              <div className="col-span-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="user_is_active"
+                  checked={userFormData.is_active}
+                  onChange={(e) => setUserFormData({ ...userFormData, is_active: e.target.checked })}
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <Label htmlFor="user_is_active" className="cursor-pointer">نشط</Label>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-4 border-t">
             <Button variant="outline" onClick={() => setEditDialog(false)}>إلغاء</Button>
             <Button onClick={handleSaveUser} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
               {saving && <Loader2 className="w-4 h-4 animate-spin ml-2" />}
-              حفظ
+              حفظ التغييرات
             </Button>
           </div>
         </DialogContent>
@@ -381,28 +640,33 @@ const UsersManagement = ({
       <Dialog open={resetPasswordDialog} onOpenChange={setResetPasswordDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>تغيير كلمة المرور - {resetPasswordUser?.full_name}</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <Key className="w-5 h-5 text-purple-600" />
+              تغيير كلمة المرور - {resetPasswordUser?.full_name}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
-              <Label>كلمة المرور الجديدة *</Label>
+              <Label className="text-sm font-medium">كلمة المرور الجديدة <span className="text-red-500">*</span></Label>
               <Input
                 type="password"
                 value={passwordData.new_password}
                 onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
                 placeholder="6 أحرف على الأقل"
+                className="mt-1"
               />
             </div>
             <div>
-              <Label>تأكيد كلمة المرور *</Label>
+              <Label className="text-sm font-medium">تأكيد كلمة المرور <span className="text-red-500">*</span></Label>
               <Input
                 type="password"
                 value={passwordData.confirm_password}
                 onChange={(e) => setPasswordData({ ...passwordData, confirm_password: e.target.value })}
+                className="mt-1"
               />
             </div>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-4 border-t">
             <Button variant="outline" onClick={() => setResetPasswordDialog(false)}>إلغاء</Button>
             <Button onClick={handleSavePassword} disabled={saving} className="bg-purple-600 hover:bg-purple-700">
               {saving && <Loader2 className="w-4 h-4 animate-spin ml-2" />}
