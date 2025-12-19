@@ -563,9 +563,9 @@ const HealthcareDirectory = () => {
                     <Stethoscope className="w-8 h-8 text-blue-300" />
                   </div>
                   {/* Solidarity count in heart */}
-                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-red-500 rounded-full shadow-lg" title="مشاركون في التكافل">
-                    <Heart className="w-4 h-4 text-white fill-white absolute" />
-                    <span className="text-white text-[10px] font-bold z-10">{doctors.filter(d => d.participates_in_solidarity).length}</span>
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-white rounded-full shadow-lg border-2 border-red-500" title="مشاركون في التكافل">
+                    <Heart className="w-5 h-5 text-red-500 fill-red-500 absolute" />
+                    <span className="text-red-800 text-[10px] font-bold z-10">{doctors.filter(d => d.participates_in_solidarity).length}</span>
                   </div>
                 </div>
                 <div className="text-3xl font-bold">{doctors.length}</div>
@@ -577,9 +577,9 @@ const HealthcareDirectory = () => {
                     <Building2 className="w-8 h-8 text-green-300" />
                   </div>
                   {/* Solidarity count in heart */}
-                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-red-500 rounded-full shadow-lg" title="مشاركون في التكافل">
-                    <Heart className="w-4 h-4 text-white fill-white absolute" />
-                    <span className="text-white text-[10px] font-bold z-10">{pharmacies.filter(p => p.participates_in_solidarity).length}</span>
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-white rounded-full shadow-lg border-2 border-red-500" title="مشاركون في التكافل">
+                    <Heart className="w-5 h-5 text-red-500 fill-red-500 absolute" />
+                    <span className="text-red-800 text-[10px] font-bold z-10">{pharmacies.filter(p => p.participates_in_solidarity).length}</span>
                   </div>
                 </div>
                 <div className="text-3xl font-bold">{pharmacies.length}</div>
@@ -591,9 +591,9 @@ const HealthcareDirectory = () => {
                     <FlaskConical className="w-8 h-8 text-purple-300" />
                   </div>
                   {/* Solidarity count in heart */}
-                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-red-500 rounded-full shadow-lg" title="مشاركون في التكافل">
-                    <Heart className="w-4 h-4 text-white fill-white absolute" />
-                    <span className="text-white text-[10px] font-bold z-10">{laboratories.filter(l => l.participates_in_solidarity).length}</span>
+                  <div className="absolute -top-1 -right-1 flex items-center justify-center w-7 h-7 bg-white rounded-full shadow-lg border-2 border-red-500" title="مشاركون في التكافل">
+                    <Heart className="w-5 h-5 text-red-500 fill-red-500 absolute" />
+                    <span className="text-red-800 text-[10px] font-bold z-10">{laboratories.filter(l => l.participates_in_solidarity).length}</span>
                   </div>
                 </div>
                 <div className="text-3xl font-bold">{laboratories.length}</div>
