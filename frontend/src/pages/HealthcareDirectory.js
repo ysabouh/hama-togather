@@ -825,44 +825,48 @@ const HealthcareDirectory = () => {
           {/* Filters Section */}
           {showFilters && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
-              {/* Neighborhood Filter */}
+              {/* Neighborhood Filter - Searchable */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   الحي
                 </label>
-                <select
-                  value={selectedNeighborhood}
-                  onChange={(e) => setSelectedNeighborhood(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
-                  disabled={!!user?.neighborhood_id}
-                >
-                  <option value="">جميع الأحياء</option>
-                  {neighborhoods.map((n) => (
-                    <option key={n.id} value={n.id}>
-                      {n.name}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  value={selectedNeighborhood ? { value: selectedNeighborhood, label: neighborhoods.find(n => n.id === selectedNeighborhood)?.name || 'غير محدد' } : null}
+                  onChange={(option) => setSelectedNeighborhood(option?.value || '')}
+                  options={[
+                    { value: '', label: 'جميع الأحياء' },
+                    ...neighborhoods.map(n => ({ value: n.id, label: n.name }))
+                  ]}
+                  placeholder="ابحث عن حي..."
+                  isClearable
+                  isSearchable
+                  isDisabled={!!user?.neighborhood_id}
+                  noOptionsMessage={() => 'لا توجد نتائج'}
+                  styles={selectStyles}
+                  className="text-sm"
+                />
               </div>
 
-              {/* Specialty Filter (Doctors only) */}
+              {/* Specialty Filter (Doctors only) - Searchable */}
               {activeTab === 'doctors' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     الاختصاص
                   </label>
-                  <select
-                    value={selectedSpecialty}
-                    onChange={(e) => setSelectedSpecialty(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">جميع الاختصاصات</option>
-                    {specialties.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.name_ar}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    value={selectedSpecialty ? { value: selectedSpecialty, label: specialties.find(s => s.id === selectedSpecialty)?.name_ar || 'غير محدد' } : null}
+                    onChange={(option) => setSelectedSpecialty(option?.value || '')}
+                    options={[
+                      { value: '', label: 'جميع الاختصاصات' },
+                      ...specialties.map(s => ({ value: s.id, label: s.name_ar }))
+                    ]}
+                    placeholder="ابحث عن اختصاص..."
+                    isClearable
+                    isSearchable
+                    noOptionsMessage={() => 'لا توجد نتائج'}
+                    styles={selectStyles}
+                    className="text-sm"
+                  />
                 </div>
               )}
 
