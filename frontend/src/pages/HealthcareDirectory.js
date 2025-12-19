@@ -290,18 +290,16 @@ const HealthcareDirectory = () => {
         <div className="absolute top-2 left-2 z-10">
           <button
             onClick={() => openTakafulCalendar(doctor, 'doctor')}
-            className="relative bg-red-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
+            className="bg-red-500 text-white pl-3 pr-2 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-red-600 hover:scale-105 transition-all cursor-pointer"
             title="عرض رزنامة التكافل"
           >
-            <div className="relative">
-              <Heart className="w-3.5 h-3.5 fill-white" />
-              {benefitCount > 0 && (
-                <span className="absolute -bottom-3 -right-2 min-w-[18px] h-[18px] bg-white text-red-600 text-[10px] font-bold rounded-full flex items-center justify-center shadow-md border border-red-200">
-                  {benefitCount}
-                </span>
-              )}
-            </div>
+            <Heart className="w-3.5 h-3.5 fill-white" />
             <span className="text-xs font-bold">تكافل</span>
+            {benefitCount > 0 && (
+              <span className="min-w-[20px] h-[20px] bg-white text-red-600 text-[11px] font-bold rounded-full flex items-center justify-center shadow-inner border border-red-300">
+                {benefitCount}
+              </span>
+            )}
           </button>
         </div>
       )}
