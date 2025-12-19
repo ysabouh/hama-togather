@@ -421,11 +421,13 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
         <div className="bg-white rounded-xl shadow-md p-6">
           {/* Header with search and add button */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-            <div className="relative flex-1 max-w-md">
+            <div className="relative flex-1 max-w-lg">
               <Search className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder="ابحث بالاسم أو العنوان..."
+                placeholder={currentTab === 'doctors' 
+                  ? "ابحث بالاسم، الحي، التخصص، الهاتف، الجوال، الواتس..." 
+                  : "ابحث بالاسم، الحي، المالك، الهاتف، الجوال، الواتس..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pr-10"
