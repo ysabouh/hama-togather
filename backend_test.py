@@ -819,6 +819,8 @@ class TakafulBenefitsTester:
         except Exception as e:
             print(f"❌ Doctor login error: {str(e)}")
             return False
+    
+    def get_test_providers_and_families(self):
         """Get existing providers and families for testing"""
         print("\n📋 Getting test providers and families...")
         
