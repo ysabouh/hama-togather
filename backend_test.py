@@ -1371,15 +1371,17 @@ class TakafulBenefitsTester:
         
         test_descriptions = {
             'admin_login': '1️⃣ Admin Login',
-            'get_test_data': '2️⃣ Get Test Providers and Families',
-            'public_get_benefits': '3️⃣ Public GET Benefits',
-            'public_get_stats': '4️⃣ Public GET Stats',
-            'post_requires_auth': '5️⃣ POST Requires Authentication',
-            'post_create_benefit': '6️⃣ POST Create Benefit',
-            'delete_requires_auth': '7️⃣ DELETE Requires Authentication',
-            'delete_benefit': '8️⃣ DELETE Benefit',
-            'invalid_provider_type': '9️⃣ Invalid Provider Type Handling',
-            'admin_dashboard_takaful_all': '🔟 Admin Dashboard Takaful All Endpoint'
+            'doctor_login': '2️⃣ Doctor Login',
+            'get_test_data': '3️⃣ Get Test Providers and Families',
+            'public_get_benefits': '4️⃣ Public GET Benefits',
+            'public_get_stats': '5️⃣ Public GET Stats',
+            'post_requires_auth': '6️⃣ POST Requires Authentication',
+            'post_create_benefit': '7️⃣ POST Create Benefit',
+            'delete_requires_auth': '8️⃣ DELETE Requires Authentication',
+            'delete_benefit': '9️⃣ DELETE Benefit',
+            'time_based_takaful_benefits': '🔟 P0 Task 1: Time-Based Takaful Benefits',
+            'invalid_provider_type': '1️⃣1️⃣ Invalid Provider Type Handling',
+            'admin_dashboard_takaful_all': '1️⃣2️⃣ Admin Dashboard Takaful All Endpoint'
         }
         
         for test_name, success in results.items():
