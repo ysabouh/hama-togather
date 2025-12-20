@@ -587,6 +587,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
                   )}
                   <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">الحي</th>
                   <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">الهاتف</th>
+                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">حساب مرتبط</th>
                   <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">الحالة</th>
                   <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">تكافل</th>
                   <th className="px-4 py-3 text-center text-sm font-medium text-gray-700">الإجراءات</th>
@@ -595,7 +596,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
               <tbody className="divide-y divide-gray-200">
                 {getCurrentData().length === 0 ? (
                   <tr>
-                    <td colSpan={currentTab === 'doctors' ? 8 : 7} className="px-4 py-8 text-center text-gray-500">
+                    <td colSpan={currentTab === 'doctors' ? 9 : 8} className="px-4 py-8 text-center text-gray-500">
                       لا توجد بيانات {searchQuery ? 'مطابقة للبحث' : ''}
                     </td>
                   </tr>
@@ -620,6 +621,16 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-600" dir="ltr">
                         {item.mobile || '-'}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {item.user_id ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                            <User className="w-3 h-3" />
+                            مرتبط
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 text-xs">غير مرتبط</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
