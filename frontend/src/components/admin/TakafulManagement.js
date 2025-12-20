@@ -433,9 +433,20 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
-                        {benefit.family_number || '-'}
-                      </span>
+                      {benefit.family_number ? (
+                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-mono">
+                          {benefit.family_number}
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => openLinkModal(benefit)}
+                          className="flex items-center gap-1 bg-amber-100 text-amber-700 hover:bg-amber-200 px-2 py-1 rounded text-xs font-medium transition-colors"
+                          title="ربط بعائلة"
+                        >
+                          <Link2 className="w-3 h-3" />
+                          ربط بعائلة
+                        </button>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       {benefit.benefit_type === 'free' ? (
@@ -461,13 +472,24 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                       {benefit.notes || '-'}
                     </td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => handleDelete(benefit.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        title="حذف"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        {benefit.family_number && (
+                          <button
+                            onClick={() => openLinkModal(benefit)}
+                            className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                            title="تغيير العائلة"
+                          >
+                            <Link2 className="w-4 h-4" />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleDelete(benefit.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="حذف"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -476,6 +498,135 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
           </table>
         </div>
       </div>
+
+      {/* Link Family Modal */}
+      {showLinkModal && selectedBenefitForLink && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-5 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Link2 className="w-6 h-6" />
+                <h3 className="text-lg font-bold">ربط الاستفادة بعائلة</h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowLinkModal(false);
+                  setSelectedBenefitForLink(null);
+                  setSelectedFamilyForLink(null);
+                }}
+                className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              {/* Benefit Info */}
+              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">كود الاستفادة:</span>
+                  <span className="font-mono font-bold text-blue-700" dir="ltr">
+                    {selectedBenefitForLink.benefit_code || '-'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">مقدم الخدمة:</span>
+                  <span className="font-medium">{selectedBenefitForLink.provider_name}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">الحي:</span>
+                  <span className="font-medium text-emerald-700">
+                    {getNeighborhoodName(getProviderNeighborhoodId(selectedBenefitForLink))}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">نوع الاستفادة:</span>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    selectedBenefitForLink.benefit_type === 'free' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {selectedBenefitForLink.benefit_type === 'free' 
+                      ? `مجاني - ${selectedBenefitForLink.free_amount?.toLocaleString('ar-SY')} ل.س`
+                      : `خصم ${selectedBenefitForLink.discount_percentage}%`
+                    }
+                  </span>
+                </div>
+              </div>
+
+              {/* Family Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  اختر العائلة <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  options={getFamiliesForProvider().map(f => ({
+                    value: f.id,
+                    label: `${f.family_number} - ${f.name || 'بدون اسم'}`,
+                    familyNumber: f.family_number
+                  }))}
+                  value={selectedFamilyForLink}
+                  onChange={setSelectedFamilyForLink}
+                  placeholder="ابحث عن العائلة..."
+                  isClearable
+                  isSearchable
+                  noOptionsMessage={() => 'لا توجد عائلات في هذا الحي'}
+                  className="text-sm"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      borderColor: '#e5e7eb',
+                      '&:hover': { borderColor: '#f59e0b' }
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isSelected ? '#f59e0b' : state.isFocused ? '#fef3c7' : 'white',
+                      color: state.isSelected ? 'white' : '#374151'
+                    })
+                  }}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  يتم عرض العائلات في حي مقدم الخدمة فقط ({getFamiliesForProvider().length} عائلة)
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-end gap-3 p-4 border-t bg-gray-50 rounded-b-2xl">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowLinkModal(false);
+                  setSelectedBenefitForLink(null);
+                  setSelectedFamilyForLink(null);
+                }}
+              >
+                إلغاء
+              </Button>
+              <Button
+                onClick={handleLinkFamily}
+                disabled={!selectedFamilyForLink || linkLoading}
+                className="bg-amber-600 hover:bg-amber-700 text-white"
+              >
+                {linkLoading ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    جاري الربط...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <Check className="w-4 h-4" />
+                    تأكيد الربط
+                  </span>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add Modal */}
       {showAddModal && (
