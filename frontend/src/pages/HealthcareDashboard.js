@@ -1215,13 +1215,23 @@ const HealthcareDashboard = () => {
                               </span>
                             </div>
                             <div className="flex gap-1">
-                              <button
-                                onClick={() => setEditingBenefit({...benefit})}
-                                className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                title="تعديل"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </button>
+                              {benefit.family_id && benefit.family_number && benefit.family_number !== 'غير معروف' ? (
+                                <button
+                                  onClick={() => toast.error('لا يمكن تعديل الاستفادة بعد ربطها بعائلة')}
+                                  className="p-1.5 text-gray-400 cursor-not-allowed rounded-lg"
+                                  title="لا يمكن التعديل - مرتبطة بعائلة"
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => setEditingBenefit({...benefit})}
+                                  className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                  title="تعديل"
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                              )}
                               <button
                                 onClick={() => handleDeleteBenefit(benefit.id)}
                                 className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
