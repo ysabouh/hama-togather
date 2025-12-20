@@ -1079,6 +1079,28 @@ async def get_all_users(current_user: User = Depends(get_current_user)):
             user['email'] = None
     return users
 
+@api_router.get("/users/by-role/{role}")
+async def get_users_by_role(
+    role: str,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """جلب المستخدمين حسب الدور - للأدمن ورؤساء اللجان"""
+    if role not in ["doctor", "pharmacist", "laboratory"]:
+        raise HTTPException(status_code=400, detail="الدور غير صالح")
+    
+    users = await db.users.find(
+        {"role": role, "is_active": True}, 
+        {"_id": 0, "password": 0}
+    ).to_list(1000)
+    
+    for user in users:
+        if isinstance(user.get('created_at'), str):
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+        if user.get('email') == '':
+            user['email'] = None
+    
+    return users
+
 class UserCreateAdmin(BaseModel):
     """إنشاء مستخدم بواسطة المسؤول"""
     full_name: str
