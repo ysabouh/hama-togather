@@ -23,7 +23,8 @@ import {
   XCircle,
   Heart,
   Loader2,
-  Tag
+  Tag,
+  User
 } from 'lucide-react';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
