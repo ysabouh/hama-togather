@@ -837,6 +837,7 @@ class TakafulBenefit(BaseModel):
     benefit_date: str  # تاريخ الاستفادة (YYYY-MM-DD)
     benefit_type: str  # free (مجاني) / discount (خصم)
     discount_percentage: Optional[float] = None  # نسبة الخصم (إذا كان النوع خصم)
+    free_amount: Optional[float] = None  # المبلغ المجاني (إذا كان النوع مجاني)
     time_from: Optional[str] = None  # وقت البداية (HH:MM)
     time_to: Optional[str] = None  # وقت النهاية (HH:MM)
     notes: Optional[str] = None  # ملاحظات إضافية
@@ -851,6 +852,7 @@ class TakafulBenefitCreate(BaseModel):
     benefit_date: str  # YYYY-MM-DD
     benefit_type: str  # free / discount
     discount_percentage: Optional[float] = None
+    free_amount: Optional[float] = None  # المبلغ المجاني
     time_from: Optional[str] = None  # وقت البداية
     time_to: Optional[str] = None  # وقت النهاية
     notes: Optional[str] = None
@@ -865,6 +867,7 @@ class TakafulBenefitResponse(BaseModel):
     benefit_date: str
     benefit_type: str
     discount_percentage: Optional[float] = None
+    free_amount: Optional[float] = None  # المبلغ المجاني
     time_from: Optional[str] = None
     time_to: Optional[str] = None
     notes: Optional[str] = None
