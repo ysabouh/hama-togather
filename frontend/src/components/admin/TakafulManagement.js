@@ -209,6 +209,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
 
   // الحصول على اسم الحي
   const getNeighborhoodName = (neighborhoodId) => {
+    if (!neighborhoodId || !neighborhoods || !Array.isArray(neighborhoods)) return 'غير محدد';
     const neighborhood = neighborhoods.find(n => n.id === neighborhoodId);
     return neighborhood?.name || 'غير محدد';
   };
