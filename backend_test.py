@@ -1087,6 +1087,126 @@ class TakafulBenefitsTester:
             print(f"❌ DELETE benefit error: {str(e)}")
             return False
     
+    def test_time_based_takaful_benefits(self):
+        """Test P0 Task 1: Time-Based Takaful Benefits"""
+        print("\n⏰ Testing P0 Task 1: Time-Based Takaful Benefits...")
+        
+        if not self.admin_token or not self.test_provider_id:
+            print("❌ Missing admin token or provider ID")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}", "Content-Type": "application/json"}
+        
+        try:
+            # Test 1: POST /api/takaful-benefits with time_from and time_to (family_id optional)
+            print("\n📝 Testing POST with time_from and time_to (family_id optional)...")
+            
+            time_benefit_data = {
+                "provider_type": "doctor",
+                "provider_id": self.test_provider_id,
+                "benefit_date": "2025-12-25",
+                "benefit_type": "free",
+                "time_from": "09:00",
+                "time_to": "12:00",
+                "notes": "اختبار استفادة زمنية"
+            }
+            
+            response = self.session.post(
+                f"{BACKEND_URL}/takaful-benefits",
+                json=time_benefit_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                self.time_based_benefit_id = result.get('id')
+                print(f"✅ POST time-based benefit successful (without family_id)")
+                print(f"   Benefit ID: {self.time_based_benefit_id}")
+                print(f"   Time: {time_benefit_data['time_from']} - {time_benefit_data['time_to']}")
+                
+                # Test 2: PUT /api/takaful-benefits/{benefit_id} - Update time_from and time_to
+                print("\n📝 Testing PUT to update time_from and time_to...")
+                
+                update_data = {
+                    "time_from": "10:00",
+                    "time_to": "14:00",
+                    "notes": "تحديث الأوقات - اختبار"
+                }
+                
+                update_response = self.session.put(
+                    f"{BACKEND_URL}/takaful-benefits/{self.time_based_benefit_id}",
+                    json=update_data,
+                    headers=headers
+                )
+                
+                if update_response.status_code == 200:
+                    print("✅ PUT update time-based benefit successful")
+                    print(f"   Updated time: {update_data['time_from']} - {update_data['time_to']}")
+                    
+                    # Test 3: GET /api/takaful-benefits/doctor/{provider_id} to verify
+                    print("\n📋 Testing GET to verify time-based benefit...")
+                    
+                    get_response = self.session.get(f"{BACKEND_URL}/takaful-benefits/doctor/{self.test_provider_id}")
+                    
+                    if get_response.status_code == 200:
+                        benefits = get_response.json()
+                        
+                        # Find our time-based benefit
+                        time_benefit = None
+                        for benefit in benefits:
+                            if benefit.get('id') == self.time_based_benefit_id:
+                                time_benefit = benefit
+                                break
+                        
+                        if time_benefit:
+                            print("✅ GET verified time-based benefit exists")
+                            print(f"   Time from: {time_benefit.get('time_from', 'N/A')}")
+                            print(f"   Time to: {time_benefit.get('time_to', 'N/A')}")
+                            print(f"   Family ID: {time_benefit.get('family_id', 'None (optional)')}")
+                            
+                            # Verify the updated times
+                            if (time_benefit.get('time_from') == "10:00" and 
+                                time_benefit.get('time_to') == "14:00"):
+                                print("✅ Time updates verified successfully")
+                                return True
+                            else:
+                                print("❌ Time updates not reflected correctly")
+                                return False
+                        else:
+                            print("❌ Time-based benefit not found in GET response")
+                            return False
+                    else:
+                        print(f"❌ GET benefits failed: {get_response.status_code}")
+                        return False
+                else:
+                    print(f"❌ PUT update time-based benefit failed: {update_response.status_code}")
+                    print(f"   Response: {update_response.text}")
+                    return False
+            else:
+                print(f"❌ POST time-based benefit failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Time-based takaful benefits test error: {str(e)}")
+            return False
+    
+    def cleanup_time_based_benefit(self):
+        """Clean up the time-based benefit created during testing"""
+        if self.time_based_benefit_id and self.admin_token:
+            try:
+                headers = {"Authorization": f"Bearer {self.admin_token}"}
+                response = self.session.delete(
+                    f"{BACKEND_URL}/takaful-benefits/{self.time_based_benefit_id}",
+                    headers=headers
+                )
+                if response.status_code == 200:
+                    print("✅ Cleaned up time-based test benefit")
+                else:
+                    print(f"⚠️ Could not clean up time-based test benefit: {response.status_code}")
+            except Exception as e:
+                print(f"⚠️ Error cleaning up time-based test benefit: {str(e)}")
+    
     def test_invalid_provider_type(self):
         """Test API endpoints with invalid provider types"""
         print("\n⚠️ Testing Invalid Provider Type Handling...")
