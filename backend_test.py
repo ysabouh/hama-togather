@@ -1302,6 +1302,7 @@ class TakafulBenefitsTester:
         
         results = {
             'admin_login': False,
+            'doctor_login': False,
             'get_test_data': False,
             'public_get_benefits': False,
             'public_get_stats': False,
@@ -1309,6 +1310,7 @@ class TakafulBenefitsTester:
             'post_create_benefit': False,
             'delete_requires_auth': False,
             'delete_benefit': False,
+            'time_based_takaful_benefits': False,
             'invalid_provider_type': False,
             'admin_dashboard_takaful_all': False
         }
