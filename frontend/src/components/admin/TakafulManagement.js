@@ -473,7 +473,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        {benefit.family_number && (
+                        {benefit.family_number && benefit.family_number !== 'غير معروف' && benefit.family_id && (
                           <button
                             onClick={() => openLinkModal(benefit)}
                             className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
