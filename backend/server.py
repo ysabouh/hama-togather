@@ -792,6 +792,7 @@ class Laboratory(BaseModel):
     is_active: bool = True  # نشط/غير نشط
     participates_in_solidarity: bool = False  # مشترك في التكافل الاجتماعي
     neighborhood_id: str  # الحي
+    user_id: Optional[str] = None  # معرف المستخدم المرتبط (من نوع laboratory)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime] = None
     created_by: Optional[str] = None
@@ -808,6 +809,7 @@ class LaboratoryCreate(BaseModel):
     is_active: bool = True
     participates_in_solidarity: bool = False
     neighborhood_id: str
+    user_id: Optional[str] = None  # معرف المستخدم المرتبط
 
 class LaboratoryUpdate(BaseModel):
     name: Optional[str] = None
@@ -821,6 +823,7 @@ class LaboratoryUpdate(BaseModel):
     is_active: Optional[bool] = None
     participates_in_solidarity: Optional[bool] = None
     neighborhood_id: Optional[str] = None
+    user_id: Optional[str] = None  # معرف المستخدم المرتبط
 
 # ============= Takaful Benefits Models =============
 
