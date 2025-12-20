@@ -831,6 +831,7 @@ class TakafulBenefit(BaseModel):
     """سجل استفادة من برنامج التكافل"""
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    benefit_code: str = Field(default_factory=lambda: "")  # كود الاستفادة الفريد
     provider_type: str  # doctor, pharmacy, laboratory
     provider_id: str  # معرف مقدم الخدمة
     family_id: Optional[str] = None  # معرف الأسرة المستفيدة (اختياري)
@@ -860,6 +861,7 @@ class TakafulBenefitCreate(BaseModel):
 class TakafulBenefitResponse(BaseModel):
     """استجابة سجل الاستفادة مع بيانات إضافية"""
     id: str
+    benefit_code: Optional[str] = None  # كود الاستفادة
     provider_type: str
     provider_id: str
     family_id: Optional[str] = None
