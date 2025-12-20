@@ -618,48 +618,48 @@ const HealthcareDashboard = () => {
             </div>
           </div>
 
-          {/* Calendar Section - Red Theme */}
+          {/* Calendar Section - Green Theme */}
           <div className="lg:col-span-2">
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-rose-100/30 overflow-hidden border border-rose-100/50">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-emerald-100/30 overflow-hidden border border-emerald-100/50">
               {/* Calendar Header */}
-              <div className="bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 text-white p-6 relative overflow-hidden">
+              <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white p-5 relative overflow-hidden">
                 <div className="absolute inset-0 bg-white/5"></div>
-                <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
                 
-                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl border border-white/30">
-                      <Calendar className="w-6 h-6" />
+                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-white/15 backdrop-blur-sm p-2.5 rounded-lg border border-white/20">
+                      <Calendar className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold">رزنامة التكافل</h2>
-                      <p className="text-white/70 text-sm mt-0.5">انقر على أي يوم لإضافة استفادة جديدة</p>
+                      <h2 className="text-lg font-bold">رزنامة التكافل</h2>
+                      <p className="text-white/60 text-xs">انقر على أي يوم لإضافة استفادة</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 bg-white/15 backdrop-blur-sm rounded-xl p-2 border border-white/20">
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg p-1.5 border border-white/15">
                     <button
                       onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))}
-                      className="p-2 hover:bg-white/20 rounded-lg transition-all duration-200"
+                      className="p-1.5 hover:bg-white/15 rounded-md transition-all duration-200"
                     >
-                      <ChevronRight className="w-5 h-5" />
+                      <ChevronRight className="w-4 h-4" />
                     </button>
-                    <span className="font-bold px-4 min-w-[140px] text-center">
+                    <span className="font-bold px-3 min-w-[120px] text-center text-sm">
                       {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
                     </span>
                     <button
                       onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))}
-                      className="p-2 hover:bg-white/20 rounded-lg transition-all duration-200"
+                      className="p-1.5 hover:bg-white/15 rounded-md transition-all duration-200"
                     >
-                      <ChevronLeft className="w-5 h-5" />
+                      <ChevronLeft className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
               </div>
 
               {/* Days Header */}
-              <div className="grid grid-cols-7 gap-2 p-4 bg-gradient-to-b from-rose-50/80 to-white border-b border-rose-100">
+              <div className="grid grid-cols-7 gap-2 p-3 bg-gradient-to-b from-emerald-50/80 to-white border-b border-emerald-100">
                 {daysOfWeek.map((day) => (
-                  <div key={day} className="text-center text-sm font-bold text-rose-600 py-3">
+                  <div key={day} className="text-center text-xs font-bold text-emerald-700 py-2">
                     {day}
                   </div>
                 ))}
