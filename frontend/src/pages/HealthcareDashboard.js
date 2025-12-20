@@ -1211,6 +1211,16 @@ const HealthcareDashboard = () => {
                               </span>
                             </div>
                             
+                            {benefit.benefit_type === 'free' && benefit.free_amount > 0 && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Gift className="w-4 h-4 text-emerald-500" />
+                                <span className="text-slate-600">المبلغ المجاني:</span>
+                                <span className="font-bold text-emerald-600">
+                                  {benefit.free_amount?.toLocaleString('ar-SY')} ل.س
+                                </span>
+                              </div>
+                            )}
+                            
                             {benefit.notes && (
                               <div className="flex items-start gap-2 text-sm">
                                 <MessageCircle className="w-4 h-4 text-slate-400 mt-0.5" />
