@@ -833,10 +833,12 @@ class TakafulBenefit(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     provider_type: str  # doctor, pharmacy, laboratory
     provider_id: str  # معرف مقدم الخدمة
-    family_id: str  # معرف الأسرة المستفيدة
+    family_id: Optional[str] = None  # معرف الأسرة المستفيدة (اختياري)
     benefit_date: str  # تاريخ الاستفادة (YYYY-MM-DD)
     benefit_type: str  # free (مجاني) / discount (خصم)
     discount_percentage: Optional[float] = None  # نسبة الخصم (إذا كان النوع خصم)
+    time_from: Optional[str] = None  # وقت البداية (HH:MM)
+    time_to: Optional[str] = None  # وقت النهاية (HH:MM)
     notes: Optional[str] = None  # ملاحظات إضافية
     created_by_user_id: str  # معرف المستخدم الذي أضاف السجل
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -845,10 +847,12 @@ class TakafulBenefitCreate(BaseModel):
     """إنشاء سجل استفادة جديد"""
     provider_type: str  # doctor, pharmacy, laboratory
     provider_id: str
-    family_id: str
+    family_id: Optional[str] = None
     benefit_date: str  # YYYY-MM-DD
     benefit_type: str  # free / discount
     discount_percentage: Optional[float] = None
+    time_from: Optional[str] = None  # وقت البداية
+    time_to: Optional[str] = None  # وقت النهاية
     notes: Optional[str] = None
 
 class TakafulBenefitResponse(BaseModel):
@@ -856,11 +860,13 @@ class TakafulBenefitResponse(BaseModel):
     id: str
     provider_type: str
     provider_id: str
-    family_id: str
+    family_id: Optional[str] = None
     family_number: Optional[str] = None  # رقم الأسرة للعرض
     benefit_date: str
     benefit_type: str
     discount_percentage: Optional[float] = None
+    time_from: Optional[str] = None
+    time_to: Optional[str] = None
     notes: Optional[str] = None
     created_at: datetime
 
