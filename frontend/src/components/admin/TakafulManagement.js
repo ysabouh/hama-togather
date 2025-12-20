@@ -68,11 +68,12 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
 
   const fetchData = async () => {
     try {
-      const [doctorsRes, pharmaciesRes, laboratoriesRes, familiesRes] = await Promise.all([
+      const [doctorsRes, pharmaciesRes, laboratoriesRes, familiesRes, neighborhoodsRes] = await Promise.all([
         axios.get(`${API_URL}/doctors`),
         axios.get(`${API_URL}/pharmacies`),
         axios.get(`${API_URL}/laboratories`),
-        axios.get(`${API_URL}/families`)
+        axios.get(`${API_URL}/families`),
+        axios.get(`${API_URL}/neighborhoods`)
       ]);
       
       // Filter providers that participate in solidarity
@@ -80,6 +81,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       setPharmacies((pharmaciesRes.data || []).filter(p => p.participates_in_solidarity));
       setLaboratories((laboratoriesRes.data || []).filter(l => l.participates_in_solidarity));
       setFamilies(familiesRes.data || []);
+      setNeighborhoods(neighborhoodsRes.data || []);
       setDataLoaded(true);
     } catch (error) {
       console.error('Error fetching data:', error);
