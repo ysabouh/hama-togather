@@ -592,6 +592,41 @@ The test data for doctor "د. اختبار أوقات الدوام" does not mat
 - Doctor (not linked): 0912345000 / doctor123
 - Admin: 0933445566 / admin123
 
+### Current Test Requirements - 2025-12-20
+**Test Date:** 2025-12-20
+**Status:** Needs Testing
+
+#### P0 Task 1: Time-Based Takaful Benefits
+Test the updated benefit creation flow:
+1. **Frontend - Healthcare Provider Dashboard:**
+   - Login as doctor: 0933111222 / doctor123
+   - Navigate to `/healthcare-dashboard`
+   - Click on any future date in the calendar to open Add Benefit modal
+   - Verify modal shows `time_from` and `time_to` fields (NOT family dropdown)
+   - Verify benefit type selection works (مجاني / خصم)
+   - Test creating a new benefit with time range
+   - Verify benefit appears correctly in calendar
+
+2. **Backend - Takaful Benefits API:**
+   - POST `/api/takaful-benefits` - Should accept `time_from` and `time_to` instead of requiring `family_id`
+   - PUT `/api/takaful-benefits/{id}` - Should allow updating `time_from` and `time_to`
+
+3. **Edit/View Benefits:**
+   - Click on a day with existing benefits
+   - Verify details modal shows time range
+   - Test editing a benefit's time range
+   - Test deleting a benefit
+
+#### P0 Task 2: Add User Button (Already Verified Working)
+1. Login as admin: 0933445566 / admin123
+2. Navigate to Admin Dashboard → المستخدمين → قائمة المستخدمين
+3. Verify "إضافة مستخدم جديد" button is visible and clickable
+4. Verify Add User modal opens with all fields
+
+#### Test Credentials:
+- Admin: 0933445566 / admin123
+- Doctor: 0933111222 / doctor123
+
 ### Testing Agent Report - 2025-12-19 (Healthcare Provider Dashboard Testing)
 **Agent:** testing  
 **Message:** Healthcare Provider Dashboard Testing Complete - All Features Working Correctly
