@@ -361,61 +361,86 @@ const HealthcareDashboard = () => {
                       currentDate.getMonth() === new Date().getMonth() && 
                       currentDate.getFullYear() === new Date().getFullYear();
       const isSelected = selectedDate === dateStr;
+      const isPast = isPastDate(day);
       
       // حساب عدد الاستفادات المجانية والخصومات
       const freeCount = dayBenefits.filter(b => b.benefit_type === 'free').length;
       const discountCount = dayBenefits.filter(b => b.benefit_type === 'discount').length;
       const hasBenefits = dayBenefits.length > 0;
 
+      // دالة فتح نموذج الإضافة
+      const handleAddClick = (e) => {
+        e.stopPropagation();
+        if (isPast) return;
+        setSelectedDate(dateStr);
+        setShowAddForm(true);
+      };
+
+      // دالة فتح قائمة الاستفادات
+      const handleBenefitsClick = (e) => {
+        e.stopPropagation();
+        setSelectedDate(dateStr);
+        setSelectedDayBenefits(dayBenefits);
+        setShowBenefitsList(true);
+      };
+
       days.push(
         <div
           key={day}
-          onClick={() => {
-            setSelectedDate(dateStr);
-            setShowAddForm(true);
-          }}
-          className={`relative h-24 md:h-28 p-2 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.03] group ${
-            isSelected
+          className={`relative h-24 md:h-28 p-2 rounded-2xl border-2 transition-all duration-300 ${
+            isPast
+              ? 'border-slate-100 bg-slate-50/50 cursor-not-allowed opacity-60'
+              : isSelected
               ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-teal-50 shadow-lg shadow-emerald-200/50 ring-2 ring-emerald-300'
               : isToday
               ? 'border-emerald-300 bg-gradient-to-br from-emerald-50/50 to-white ring-2 ring-emerald-200/50'
               : hasBenefits
-              ? 'border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white hover:border-emerald-300'
-              : 'border-slate-100 bg-white/80 hover:border-emerald-200 hover:bg-emerald-50/30'
+              ? 'border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white'
+              : 'border-slate-100 bg-white/80'
           }`}
         >
           {/* رقم اليوم */}
           <div className={`text-sm font-bold ${
-            isToday ? 'text-emerald-600' : hasBenefits ? 'text-emerald-500' : 'text-slate-600'
+            isPast ? 'text-slate-400' : isToday ? 'text-emerald-600' : hasBenefits ? 'text-emerald-500' : 'text-slate-600'
           }`}>
             {day}
           </div>
           
-          {/* شارة الاستفادات */}
+          {/* شارة الاستفادات - قابلة للنقر */}
           {hasBenefits && (
-            <div className="absolute top-1 left-1">
-              <div className="relative">
+            <div 
+              className="absolute top-1 left-1 cursor-pointer z-10"
+              onClick={handleBenefitsClick}
+            >
+              <div className="relative group/badge">
                 {/* الدائرة الخضراء مع العدد */}
-                <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg shadow-emerald-300/50 ring-2 ring-white">
+                <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg shadow-emerald-300/50 ring-2 ring-white hover:scale-110 transition-transform">
                   <span className="text-[10px] font-bold">{dayBenefits.length}</span>
                 </div>
                 {/* تأثير النبض */}
                 <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-30"></div>
+                {/* tooltip */}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-slate-800 text-white text-[9px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover/badge:opacity-100 transition-opacity z-20">
+                  انقر لعرض التفاصيل
+                </div>
               </div>
             </div>
           )}
           
-          {/* أيقونات نوع الاستفادة */}
+          {/* أيقونات نوع الاستفادة - قابلة للنقر */}
           {hasBenefits && (
-            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1">
+            <div 
+              className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1 cursor-pointer"
+              onClick={handleBenefitsClick}
+            >
               {freeCount > 0 && (
-                <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-1.5 py-0.5 rounded-md shadow-sm shadow-emerald-200/50">
+                <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-1.5 py-0.5 rounded-md shadow-sm shadow-emerald-200/50 hover:scale-105 transition-transform">
                   <Gift className="w-2.5 h-2.5" />
                   <span className="text-[10px] font-bold">{freeCount}</span>
                 </div>
               )}
               {discountCount > 0 && (
-                <div className="flex items-center gap-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-1.5 py-0.5 rounded-md shadow-sm shadow-amber-200/50">
+                <div className="flex items-center gap-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-1.5 py-0.5 rounded-md shadow-sm shadow-amber-200/50 hover:scale-105 transition-transform">
                   <Percent className="w-2.5 h-2.5" />
                   <span className="text-[10px] font-bold">{discountCount}</span>
                 </div>
@@ -423,12 +448,26 @@ const HealthcareDashboard = () => {
             </div>
           )}
           
-          {/* علامة + عند التحويم */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-emerald-600/90 backdrop-blur-sm text-white w-8 h-8 rounded-lg flex items-center justify-center shadow-lg">
-              <Plus className="w-4 h-4" />
+          {/* زر الإضافة - فقط لليوم وما بعده */}
+          {!isPast && (
+            <div 
+              className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+              onClick={handleAddClick}
+            >
+              <div className="bg-emerald-600/90 backdrop-blur-sm text-white w-8 h-8 rounded-lg flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <Plus className="w-4 h-4" />
+              </div>
             </div>
-          </div>
+          )}
+          
+          {/* علامة قفل للأيام السابقة */}
+          {isPast && !hasBenefits && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-slate-300">
+                <Clock className="w-4 h-4" />
+              </div>
+            </div>
+          )}
         </div>
       );
     }
