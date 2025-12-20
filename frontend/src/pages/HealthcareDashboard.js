@@ -204,6 +204,7 @@ const HealthcareDashboard = () => {
         provider_id: providerData.id,
         benefit_type: newBenefit.benefit_type,
         discount_percentage: newBenefit.benefit_type === 'discount' ? newBenefit.discount_percentage : null,
+        free_amount: newBenefit.benefit_type === 'free' ? newBenefit.free_amount : null,
         benefit_date: selectedDate,
         time_from: newBenefit.time_from,
         time_to: newBenefit.time_to,
@@ -215,7 +216,7 @@ const HealthcareDashboard = () => {
       toast.success('تم إضافة الاستفادة بنجاح');
       setShowAddForm(false);
       setSelectedDate(null);
-      setNewBenefit({ benefit_type: 'free', discount_percentage: 0, time_from: '08:00', time_to: '12:00', notes: '' });
+      setNewBenefit({ benefit_type: 'free', discount_percentage: 0, free_amount: 0, time_from: '08:00', time_to: '12:00', notes: '' });
       fetchBenefits();
       
       const statsRes = await axios.get(
