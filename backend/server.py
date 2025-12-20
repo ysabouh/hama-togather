@@ -1373,7 +1373,7 @@ async def reset_user_password(
 
 # ============= Family Routes =============
 
-@api_router.get("/families", response_model=List[Family])
+@api_router.get("/families")
 async def get_families(current_user: User = Depends(get_admin_committee_or_healthcare_user)):
     """جلب العائلات - مع فلترة حسب الحي لموظفي اللجنة"""
     # مقدمي الرعاية الصحية يحصلون على قائمة مختصرة فقط
