@@ -4125,8 +4125,15 @@ async def create_takaful_benefit(
     if benefit_data.benefit_type not in ['free', 'discount']:
         raise HTTPException(status_code=400, detail="Invalid benefit type")
     
-    if benefit_data.benefit_type == 'discount' and not benefit_data.discount_percentage:
-        raise HTTPException(status_code=400, detail="Discount percentage is required for discount type")
+    # التحقق من نسبة الخصم (إلزامي للخصم)
+    if benefit_data.benefit_type == 'discount':
+        if not benefit_data.discount_percentage or benefit_data.discount_percentage <= 0:
+            raise HTTPException(status_code=400, detail="نسبة الخصم مطلوبة ويجب أن تكون أكبر من صفر")
+    
+    # التحقق من المبلغ المجاني (إلزامي للمجاني)
+    if benefit_data.benefit_type == 'free':
+        if not benefit_data.free_amount or benefit_data.free_amount <= 0:
+            raise HTTPException(status_code=400, detail="المبلغ المجاني مطلوب ويجب أن يكون أكبر من صفر")
     
     # التحقق من وقت البداية والنهاية
     if not benefit_data.time_from or not benefit_data.time_to:
@@ -4144,6 +4151,14 @@ async def create_takaful_benefit(
         if not family:
             raise HTTPException(status_code=404, detail="Family not found")
     
+    # توليد كود الاستفادة الفريد
+    # الصيغة: TKF-YYYYMMDD-XXXX (مثال: TKF-20251220-A1B2)
+    import random
+    import string
+    date_part = benefit_data.benefit_date.replace('-', '')
+    random_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    benefit_code = f"TKF-{date_part}-{random_part}"
+    
     # إنشاء السجل
     benefit = TakafulBenefit(
         provider_type=benefit_data.provider_type,
@@ -4156,14 +4171,15 @@ async def create_takaful_benefit(
         time_from=benefit_data.time_from,
         time_to=benefit_data.time_to,
         notes=benefit_data.notes,
-        created_by_user_id=current_user.id
+        created_by_user_id=current_user.id,
+        benefit_code=benefit_code
     )
     
     doc = benefit.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     await db.takaful_benefits.insert_one(doc)
     
-    return {"message": "Benefit record created successfully", "id": benefit.id}
+    return {"message": "Benefit record created successfully", "id": benefit.id, "benefit_code": benefit_code}
 
 @api_router.delete("/takaful-benefits/{benefit_id}")
 async def delete_takaful_benefit(
