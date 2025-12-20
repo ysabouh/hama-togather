@@ -179,6 +179,69 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
     }
   };
 
+  // فتح نافذة الربط بالعائلة
+  const openLinkModal = (benefit) => {
+    setSelectedBenefitForLink(benefit);
+    setSelectedFamilyForLink(null);
+    setShowLinkModal(true);
+  };
+
+  // الحصول على حي مقدم الخدمة
+  const getProviderNeighborhoodId = (benefit) => {
+    let provider = null;
+    if (benefit.provider_type === 'doctor') {
+      provider = doctors.find(d => d.id === benefit.provider_id);
+    } else if (benefit.provider_type === 'pharmacy') {
+      provider = pharmacies.find(p => p.id === benefit.provider_id);
+    } else if (benefit.provider_type === 'laboratory') {
+      provider = laboratories.find(l => l.id === benefit.provider_id);
+    }
+    return provider?.neighborhood_id || null;
+  };
+
+  // الحصول على العائلات في حي مقدم الخدمة
+  const getFamiliesForProvider = () => {
+    if (!selectedBenefitForLink) return [];
+    const neighborhoodId = getProviderNeighborhoodId(selectedBenefitForLink);
+    if (!neighborhoodId) return families; // إذا لم يكن هناك حي، اعرض كل العائلات
+    return families.filter(f => f.neighborhood_id === neighborhoodId);
+  };
+
+  // الحصول على اسم الحي
+  const getNeighborhoodName = (neighborhoodId) => {
+    const neighborhood = neighborhoods.find(n => n.id === neighborhoodId);
+    return neighborhood?.name || 'غير محدد';
+  };
+
+  // ربط الاستفادة بالعائلة
+  const handleLinkFamily = async () => {
+    if (!selectedBenefitForLink || !selectedFamilyForLink) {
+      toast.error('يرجى اختيار عائلة');
+      return;
+    }
+
+    setLinkLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(
+        `${API_URL}/takaful-benefits/${selectedBenefitForLink.id}`,
+        { family_id: selectedFamilyForLink.value },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      toast.success('تم ربط الاستفادة بالعائلة بنجاح');
+      setShowLinkModal(false);
+      setSelectedBenefitForLink(null);
+      setSelectedFamilyForLink(null);
+      fetchBenefits();
+    } catch (error) {
+      console.error('Error linking family:', error);
+      toast.error('فشل ربط الاستفادة بالعائلة');
+    } finally {
+      setLinkLoading(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       provider_type: 'doctor',
