@@ -91,6 +91,9 @@ const HealthcareDashboard = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showBenefitsList, setShowBenefitsList] = useState(false);
+  const [selectedDayBenefits, setSelectedDayBenefits] = useState([]);
+  const [editingBenefit, setEditingBenefit] = useState(null);
   const [newBenefit, setNewBenefit] = useState({
     family_id: '',
     benefit_type: 'free',
