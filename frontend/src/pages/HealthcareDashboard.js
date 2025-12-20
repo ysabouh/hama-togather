@@ -1186,8 +1186,8 @@ const HealthcareDashboard = () => {
                             <div className="flex items-center gap-2 text-sm">
                               <Clock className="w-4 h-4 text-slate-400" />
                               <span className="text-slate-600">الوقت:</span>
-                              <span className="font-medium text-slate-800" dir="ltr">
-                                {benefit.time_from || '08:00'} - {benefit.time_to || '12:00'}
+                              <span className="font-medium text-slate-800">
+                                {formatTimeRange(benefit.time_from, benefit.time_to)}
                               </span>
                             </div>
                             
