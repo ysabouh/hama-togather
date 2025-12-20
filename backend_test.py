@@ -788,7 +788,37 @@ class TakafulBenefitsTester:
             print(f"❌ Admin login error: {str(e)}")
             return False
     
-    def get_test_providers_and_families(self):
+    def login_doctor(self):
+        """Login as doctor and get authentication token"""
+        print("🔐 Testing Doctor Login for Takaful Benefits...")
+        
+        login_data = {
+            "username": "0933111222",  # Doctor phone from review request
+            "password": "doctor123"    # Doctor password from review request
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/auth/login",
+                data=login_data,
+                headers={"Content-Type": "application/x-www-form-urlencoded"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.doctor_token = data["access_token"]
+                print(f"✅ Doctor login successful")
+                print(f"   Token: {self.doctor_token[:20]}...")
+                print(f"   User: {data['user']['phone']} ({data['user']['role']})")
+                return True
+            else:
+                print(f"❌ Doctor login failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Doctor login error: {str(e)}")
+            return False
         """Get existing providers and families for testing"""
         print("\n📋 Getting test providers and families...")
         
