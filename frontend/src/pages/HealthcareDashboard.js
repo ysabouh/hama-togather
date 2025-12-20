@@ -666,31 +666,31 @@ const HealthcareDashboard = () => {
               </div>
 
               {/* Calendar Grid */}
-              <div className="p-4 bg-gradient-to-b from-white to-rose-50/20">
+              <div className="p-3 bg-gradient-to-b from-white to-emerald-50/20">
                 <div className="grid grid-cols-7 gap-2">
                   {renderCalendar()}
                 </div>
               </div>
 
               {/* Legend */}
-              <div className="flex flex-wrap items-center justify-center gap-6 p-5 border-t border-rose-100 bg-gradient-to-r from-rose-50/50 to-white">
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-7 h-7 bg-gradient-to-br from-rose-500 to-red-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
+              <div className="flex flex-wrap items-center justify-center gap-4 p-4 border-t border-emerald-100 bg-gradient-to-r from-emerald-50/50 to-white">
+                <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className="w-5 h-5 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white text-[9px] font-bold shadow-sm">
                     3
                   </div>
                   <span>عدد الاستفادات</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="flex items-center gap-1 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-2 py-1 rounded-lg shadow-sm">
-                    <Gift className="w-3 h-3" />
-                    <span className="text-xs font-bold">2</span>
+                <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-1.5 py-0.5 rounded-md shadow-sm">
+                    <Gift className="w-2.5 h-2.5" />
+                    <span className="text-[9px] font-bold">2</span>
                   </div>
                   <span>مجانية</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="flex items-center gap-1 bg-gradient-to-r from-rose-500 to-red-500 text-white px-2 py-1 rounded-lg shadow-sm">
-                    <Percent className="w-3 h-3" />
-                    <span className="text-xs font-bold">1</span>
+                <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-1.5 py-0.5 rounded-md shadow-sm">
+                    <Percent className="w-2.5 h-2.5" />
+                    <span className="text-[9px] font-bold">1</span>
                   </div>
                   <span>خصم</span>
                 </div>
