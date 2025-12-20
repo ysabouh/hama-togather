@@ -1374,8 +1374,16 @@ async def reset_user_password(
 # ============= Family Routes =============
 
 @api_router.get("/families", response_model=List[Family])
-async def get_families(current_user: User = Depends(get_admin_or_committee_user)):
+async def get_families(current_user: User = Depends(get_admin_committee_or_healthcare_user)):
     """جلب العائلات - مع فلترة حسب الحي لموظفي اللجنة"""
+    # مقدمي الرعاية الصحية يحصلون على قائمة مختصرة فقط
+    if current_user.role in ["doctor", "pharmacist", "laboratory"]:
+        families = await db.families.find(
+            {"is_active": {"$ne": False}},
+            {"_id": 0, "id": 1, "family_number": 1, "head_name": 1}
+        ).to_list(1000)
+        return families
+    
     query = filter_by_neighborhood(current_user, {})
     families = await db.families.find(query, {"_id": 0}).to_list(1000)
     for family in families:
