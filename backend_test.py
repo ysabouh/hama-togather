@@ -1648,6 +1648,11 @@ def run_takaful_tests():
     tester = TakafulBenefitsTester()
     return tester.run_all_tests()
 
+def run_add_user_tests():
+    """Run Add User tests"""
+    tester = AddUserTester()
+    return tester.run_all_tests()
+
 if __name__ == "__main__":
     # Run healthcare tests
     healthcare_success = main()
@@ -1660,6 +1665,13 @@ if __name__ == "__main__":
     takaful_success = run_takaful_tests()
     
     print("\n" + "=" * 80)
+    print("🔄 SWITCHING TO ADD USER TESTS (P0 Task 2)")
+    print("=" * 80)
+    
+    # Run Add User tests
+    add_user_success = run_add_user_tests()
+    
+    print("\n" + "=" * 80)
     print("🏁 FINAL RESULTS")
     print("=" * 80)
     
@@ -1669,14 +1681,34 @@ if __name__ == "__main__":
         print("❌ Healthcare Management Tests: FAILED")
     
     if takaful_success:
-        print("✅ Takaful Benefits Tests: PASSED")
+        print("✅ Takaful Benefits Tests (including P0 Task 1): PASSED")
     else:
-        print("❌ Takaful Benefits Tests: FAILED")
+        print("❌ Takaful Benefits Tests (including P0 Task 1): FAILED")
     
-    overall_success = healthcare_success and takaful_success
+    if add_user_success:
+        print("✅ Add User Tests (P0 Task 2): PASSED")
+    else:
+        print("❌ Add User Tests (P0 Task 2): FAILED")
+    
+    overall_success = healthcare_success and takaful_success and add_user_success
     if overall_success:
         print("\n🎉 ALL BACKEND TESTS PASSED!")
     else:
         print("\n⚠️ SOME BACKEND TESTS FAILED")
+    
+    # P0 Tasks Summary
+    print("\n" + "=" * 80)
+    print("📋 P0 TASKS SUMMARY")
+    print("=" * 80)
+    
+    if takaful_success:
+        print("✅ P0 Task 1: Time-Based Takaful Benefits - PASSED")
+    else:
+        print("❌ P0 Task 1: Time-Based Takaful Benefits - FAILED")
+    
+    if add_user_success:
+        print("✅ P0 Task 2: Add User API - PASSED")
+    else:
+        print("❌ P0 Task 2: Add User API - FAILED")
     
     exit(0 if overall_success else 1)
