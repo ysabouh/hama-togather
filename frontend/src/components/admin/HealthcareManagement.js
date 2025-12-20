@@ -88,6 +88,7 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
   const [laboratories, setLaboratories] = useState([]);
   const [specialties, setSpecialties] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
+  const [healthcareUsers, setHealthcareUsers] = useState([]); // مستخدمي الرعاية الصحية
   
   // UI states
   const [currentTab, setCurrentTab] = useState(activeTab);
