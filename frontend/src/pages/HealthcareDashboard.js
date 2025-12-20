@@ -449,56 +449,67 @@ const HealthcareDashboard = () => {
               <HeartHandshake className="w-3.5 h-3.5 text-white" />
               <span className="text-white/90 font-medium">برنامج التكافل الصحي المجتمعي</span>
               <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-              <Sparkles className="w-4 h-4 text-yellow-300" />
             </div>
           </div>
           
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
             {/* Welcome Section */}
-            <div className="flex items-center gap-4 text-center md:text-right">
-              <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl border border-white/30 shadow-xl relative">
+            <div className="flex items-center gap-3 text-center md:text-right">
+              <div className="bg-white/15 backdrop-blur-md p-3 rounded-xl border border-white/20 shadow-lg relative">
                 <div className="text-white">
                   {getProviderIcon()}
                 </div>
-                <div className="absolute -bottom-1 -right-1 bg-yellow-400 text-yellow-900 p-1 rounded-md">
-                  <Star className="w-3 h-3 fill-current" />
+                <div className="absolute -bottom-1 -right-1 bg-yellow-400 text-yellow-900 p-0.5 rounded">
+                  <Star className="w-2.5 h-2.5 fill-current" />
                 </div>
               </div>
               <div className="text-white">
-                <h1 className="text-2xl md:text-3xl font-bold">
+                <h1 className="text-xl md:text-2xl font-bold">
                   مرحباً، {providerData.full_name || providerData.name}
                 </h1>
-                <p className="text-white/80 text-sm flex items-center gap-2 justify-center md:justify-start">
-                  <Award className="w-4 h-4" />
+                <p className="text-white/70 text-xs flex items-center gap-1.5 justify-center md:justify-start">
+                  <Award className="w-3.5 h-3.5" />
                   {getProviderTypeLabel()} مشارك في برنامج التكافل
                 </p>
               </div>
             </div>
           
-            {/* Stats Cards - Compact */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <div className="bg-white/15 backdrop-blur-xl rounded-2xl px-5 py-4 text-center border border-white/20 hover:bg-white/25 transition-all duration-300 min-w-[110px]">
-                <div className="bg-white/20 w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <Users className="w-5 h-5 text-white" />
+            {/* Stats Cards - More Compact */}
+            <div className="flex flex-wrap justify-center gap-2">
+              <div className="bg-white/10 backdrop-blur-md rounded-xl px-4 py-2.5 text-center border border-white/15 hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <div className="bg-white/20 w-8 h-8 rounded-lg flex items-center justify-center">
+                    <Users className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold text-white block leading-none">{stats.total}</span>
+                    <span className="text-white/60 text-[10px]">إجمالي</span>
+                  </div>
                 </div>
-                <span className="text-3xl font-bold text-white block">{stats.total}</span>
-                <span className="text-white/70 text-xs">إجمالي الاستفادات</span>
               </div>
               
-              <div className="bg-white/15 backdrop-blur-xl rounded-2xl px-5 py-4 text-center border border-white/20 hover:bg-white/25 transition-all duration-300 min-w-[110px]">
-                <div className="bg-emerald-400/30 w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <Gift className="w-5 h-5 text-emerald-100" />
+              <div className="bg-white/10 backdrop-blur-md rounded-xl px-4 py-2.5 text-center border border-white/15 hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <div className="bg-emerald-400/30 w-8 h-8 rounded-lg flex items-center justify-center">
+                    <Gift className="w-4 h-4 text-emerald-200" />
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold text-white block leading-none">{stats.free}</span>
+                    <span className="text-white/60 text-[10px]">مجانية</span>
+                  </div>
                 </div>
-                <span className="text-3xl font-bold text-white block">{stats.free}</span>
-                <span className="text-white/70 text-xs">مجانية</span>
               </div>
               
-              <div className="bg-white/15 backdrop-blur-xl rounded-2xl px-5 py-4 text-center border border-white/20 hover:bg-white/25 transition-all duration-300 min-w-[110px]">
-                <div className="bg-amber-400/30 w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                  <Percent className="w-5 h-5 text-amber-100" />
+              <div className="bg-white/10 backdrop-blur-md rounded-xl px-4 py-2.5 text-center border border-white/15 hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <div className="bg-amber-400/30 w-8 h-8 rounded-lg flex items-center justify-center">
+                    <Percent className="w-4 h-4 text-amber-200" />
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold text-white block leading-none">{stats.discount}</span>
+                    <span className="text-white/60 text-[10px]">خصومات</span>
+                  </div>
                 </div>
-                <span className="text-3xl font-bold text-white block">{stats.discount}</span>
-                <span className="text-white/70 text-xs">خصومات</span>
               </div>
             </div>
           </div>
@@ -506,8 +517,8 @@ const HealthcareDashboard = () => {
         
         {/* Wave Separator */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 60L60 55C120 50 240 40 360 35C480 30 600 30 720 32.5C840 35 960 40 1080 42.5C1200 45 1320 45 1380 45L1440 45V60H1380C1320 60 1200 60 1080 60C960 60 840 60 720 60C600 60 480 60 360 60C240 60 120 60 60 60H0Z" fill="url(#gradient)"/>
+          <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0 40L60 37C120 34 240 28 360 25C480 22 600 22 720 23.5C840 25 960 28 1080 29.5C1200 31 1320 31 1380 31L1440 31V40H1380C1320 40 1200 40 1080 40C960 40 840 40 720 40C600 40 480 40 360 40C240 40 120 40 60 40H0Z" fill="url(#gradient)"/>
             <defs>
               <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="rgb(248 250 252)" stopOpacity="0.3"/>
