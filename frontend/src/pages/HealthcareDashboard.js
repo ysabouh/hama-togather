@@ -559,27 +559,27 @@ const HealthcareDashboard = () => {
               </div>
               
               {/* Card Body */}
-              <div className="p-6 space-y-5">
+              <div className="p-5 space-y-4">
                 {providerData.address && (
-                  <div className="flex items-start gap-4 group">
-                    <div className="bg-rose-50 p-2.5 rounded-xl group-hover:bg-rose-100 transition-colors">
-                      <MapPin className="w-5 h-5 text-rose-500" />
+                  <div className="flex items-start gap-3 group">
+                    <div className="bg-emerald-50 p-2 rounded-lg group-hover:bg-emerald-100 transition-colors">
+                      <MapPin className="w-4 h-4 text-emerald-600" />
                     </div>
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">العنوان</span>
-                      <span className="text-slate-700">{providerData.address}</span>
+                      <span className="text-[10px] text-slate-400 block">العنوان</span>
+                      <span className="text-slate-700 text-sm">{providerData.address}</span>
                     </div>
                   </div>
                 )}
                 
                 {providerData.mobile && (
-                  <div className="flex items-start gap-4 group">
-                    <div className="bg-rose-50 p-2.5 rounded-xl group-hover:bg-rose-100 transition-colors">
-                      <Phone className="w-5 h-5 text-rose-500" />
+                  <div className="flex items-start gap-3 group">
+                    <div className="bg-emerald-50 p-2 rounded-lg group-hover:bg-emerald-100 transition-colors">
+                      <Phone className="w-4 h-4 text-emerald-600" />
                     </div>
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">رقم الهاتف</span>
-                      <span className="text-slate-700" dir="ltr">{providerData.mobile}</span>
+                      <span className="text-[10px] text-slate-400 block">رقم الهاتف</span>
+                      <span className="text-slate-700 text-sm" dir="ltr">{providerData.mobile}</span>
                     </div>
                   </div>
                 )}
@@ -589,27 +589,27 @@ const HealthcareDashboard = () => {
                     href={`https://wa.me/${providerData.whatsapp.replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-start gap-4 group"
+                    className="flex items-start gap-3 group"
                   >
-                    <div className="bg-green-50 p-2.5 rounded-xl group-hover:bg-green-100 transition-colors">
-                      <MessageCircle className="w-5 h-5 text-green-600" />
+                    <div className="bg-green-50 p-2 rounded-lg group-hover:bg-green-100 transition-colors">
+                      <MessageCircle className="w-4 h-4 text-green-600" />
                     </div>
                     <div>
-                      <span className="text-xs text-slate-400 block mb-0.5">واتساب</span>
-                      <span className="text-green-600 hover:text-green-700" dir="ltr">{providerData.whatsapp}</span>
+                      <span className="text-[10px] text-slate-400 block">واتساب</span>
+                      <span className="text-green-600 hover:text-green-700 text-sm" dir="ltr">{providerData.whatsapp}</span>
                     </div>
                   </a>
                 )}
                 
-                <div className="pt-4 border-t border-rose-100">
+                <div className="pt-3 border-t border-emerald-100">
                   {providerData.is_active ? (
-                    <span className="flex items-center gap-2 text-emerald-600 font-medium text-sm bg-gradient-to-r from-emerald-50 to-green-50 px-4 py-2.5 rounded-xl border border-emerald-100">
-                      <CheckCircle className="w-4 h-4" />
+                    <span className="flex items-center gap-2 text-emerald-600 font-medium text-xs bg-gradient-to-r from-emerald-50 to-green-50 px-3 py-2 rounded-lg border border-emerald-100">
+                      <CheckCircle className="w-3.5 h-3.5" />
                       نشط ومتاح
                     </span>
                   ) : (
-                    <span className="flex items-center gap-2 text-red-600 font-medium text-sm bg-gradient-to-r from-red-50 to-rose-50 px-4 py-2.5 rounded-xl border border-red-100">
-                      <XCircle className="w-4 h-4" />
+                    <span className="flex items-center gap-2 text-red-600 font-medium text-xs bg-gradient-to-r from-red-50 to-rose-50 px-3 py-2 rounded-lg border border-red-100">
+                      <XCircle className="w-3.5 h-3.5" />
                       غير نشط
                     </span>
                   )}
