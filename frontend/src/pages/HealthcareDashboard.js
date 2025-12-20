@@ -186,8 +186,13 @@ const HealthcareDashboard = () => {
   const handleAddBenefit = async (e) => {
     e.preventDefault();
     
-    if (!newBenefit.family_id || !selectedDate) {
-      toast.error('يرجى اختيار الأسرة المستفيدة');
+    if (!selectedDate) {
+      toast.error('يرجى اختيار تاريخ');
+      return;
+    }
+    
+    if (!newBenefit.time_from || !newBenefit.time_to) {
+      toast.error('يرجى تحديد وقت الاستفادة');
       return;
     }
     
@@ -196,10 +201,11 @@ const HealthcareDashboard = () => {
       await axios.post(`${API_URL}/takaful-benefits`, {
         provider_type: providerType,
         provider_id: providerData.id,
-        family_id: newBenefit.family_id,
         benefit_type: newBenefit.benefit_type,
         discount_percentage: newBenefit.benefit_type === 'discount' ? newBenefit.discount_percentage : null,
         benefit_date: selectedDate,
+        time_from: newBenefit.time_from,
+        time_to: newBenefit.time_to,
         notes: newBenefit.notes
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -208,7 +214,7 @@ const HealthcareDashboard = () => {
       toast.success('تم إضافة الاستفادة بنجاح');
       setShowAddForm(false);
       setSelectedDate(null);
-      setNewBenefit({ family_id: '', benefit_type: 'free', discount_percentage: 0, notes: '' });
+      setNewBenefit({ benefit_type: 'free', discount_percentage: 0, time_from: '08:00', time_to: '12:00', notes: '' });
       fetchBenefits();
       
       const statsRes = await axios.get(
