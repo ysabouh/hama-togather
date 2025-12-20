@@ -197,6 +197,18 @@ const HealthcareDashboard = () => {
       return;
     }
     
+    // التحقق من المبلغ المجاني (إلزامي)
+    if (newBenefit.benefit_type === 'free' && (!newBenefit.free_amount || newBenefit.free_amount <= 0)) {
+      toast.error('يرجى تحديد المبلغ المجاني');
+      return;
+    }
+    
+    // التحقق من نسبة الخصم (إلزامي)
+    if (newBenefit.benefit_type === 'discount' && (!newBenefit.discount_percentage || newBenefit.discount_percentage <= 0)) {
+      toast.error('يرجى تحديد نسبة الخصم');
+      return;
+    }
+    
     try {
       const token = localStorage.getItem('token');
       await axios.post(`${API_URL}/takaful-benefits`, {
