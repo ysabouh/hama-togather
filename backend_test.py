@@ -750,9 +750,11 @@ class TakafulBenefitsTester:
     def __init__(self):
         self.session = requests.Session()
         self.admin_token = None
+        self.doctor_token = None
         self.test_provider_id = None
         self.test_family_id = None
         self.test_benefit_id = None
+        self.time_based_benefit_id = None
         
     def login_admin(self):
         """Login as admin and get authentication token"""
