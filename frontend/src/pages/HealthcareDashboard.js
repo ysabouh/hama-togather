@@ -329,7 +329,7 @@ const HealthcareDashboard = () => {
         >
           {/* رقم اليوم */}
           <div className={`text-sm font-bold ${
-            isToday ? 'text-rose-600' : hasBenefits ? 'text-rose-500' : 'text-slate-600'
+            isToday ? 'text-emerald-600' : hasBenefits ? 'text-emerald-500' : 'text-slate-600'
           }`}>
             {day}
           </div>
