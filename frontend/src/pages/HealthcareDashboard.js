@@ -950,6 +950,24 @@ const HealthcareDashboard = () => {
                 </div>
               )}
 
+              {/* Free Amount */}
+              {newBenefit.benefit_type === 'free' && (
+                <div className="animate-in slide-in-from-top-2 duration-300">
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                    المبلغ المجاني (ل.س)
+                  </label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={newBenefit.free_amount}
+                    onChange={(e) => setNewBenefit({ ...newBenefit, free_amount: parseInt(e.target.value) || 0 })}
+                    placeholder="مثال: 50000"
+                    className="bg-white/80 border-emerald-200 rounded-lg h-10 text-center text-lg font-bold focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400"
+                    dir="ltr"
+                  />
+                </div>
+              )}
+
               {/* Notes */}
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-1.5">
