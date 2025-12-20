@@ -1132,6 +1132,18 @@ const HealthcareDashboard = () => {
                             />
                           )}
                           
+                          {editingBenefit.benefit_type === 'free' && (
+                            <Input
+                              type="number"
+                              min="0"
+                              value={editingBenefit.free_amount || 0}
+                              onChange={(e) => setEditingBenefit({ ...editingBenefit, free_amount: parseInt(e.target.value) || 0 })}
+                              placeholder="المبلغ المجاني (ل.س)"
+                              className="h-9 text-center"
+                              dir="ltr"
+                            />
+                          )}
+                          
                           <Input
                             value={editingBenefit.notes || ''}
                             onChange={(e) => setEditingBenefit({ ...editingBenefit, notes: e.target.value })}
