@@ -844,21 +844,33 @@ const HealthcareDashboard = () => {
             </div>
 
             <form onSubmit={handleAddBenefit} className="p-5 space-y-4">
-              {/* Family Selection */}
+              {/* Time Range */}
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">
-                  الأسرة المستفيدة <span className="text-emerald-500">*</span>
+                <label className="block text-sm font-bold text-slate-700 mb-2">
+                  وقت الاستفادة <span className="text-emerald-500">*</span>
                 </label>
-                <Select
-                  options={familyOptions}
-                  value={familyOptions.find(f => f.value === newBenefit.family_id)}
-                  onChange={(option) => setNewBenefit({ ...newBenefit, family_id: option?.value || '' })}
-                  placeholder="ابحث واختر الأسرة..."
-                  isClearable
-                  isSearchable
-                  noOptionsMessage={() => 'لا توجد نتائج'}
-                  styles={selectStyles}
-                />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">من</label>
+                    <Input
+                      type="time"
+                      value={newBenefit.time_from}
+                      onChange={(e) => setNewBenefit({ ...newBenefit, time_from: e.target.value })}
+                      className="bg-white/80 border-slate-200 rounded-lg h-10 text-center"
+                      dir="ltr"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">إلى</label>
+                    <Input
+                      type="time"
+                      value={newBenefit.time_to}
+                      onChange={(e) => setNewBenefit({ ...newBenefit, time_to: e.target.value })}
+                      className="bg-white/80 border-slate-200 rounded-lg h-10 text-center"
+                      dir="ltr"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Benefit Type */}
