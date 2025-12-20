@@ -4123,16 +4123,21 @@ async def create_takaful_benefit(
     if benefit_data.benefit_type == 'discount' and not benefit_data.discount_percentage:
         raise HTTPException(status_code=400, detail="Discount percentage is required for discount type")
     
+    # التحقق من وقت البداية والنهاية
+    if not benefit_data.time_from or not benefit_data.time_to:
+        raise HTTPException(status_code=400, detail="يجب تحديد وقت البداية والنهاية")
+    
     # التحقق من وجود مقدم الخدمة
     collection_name = f"{benefit_data.provider_type}s" if benefit_data.provider_type != 'pharmacy' else 'pharmacies'
     provider = await db[collection_name].find_one({"id": benefit_data.provider_id}, {"_id": 0})
     if not provider:
         raise HTTPException(status_code=404, detail="Provider not found")
     
-    # التحقق من وجود الأسرة
-    family = await db.families.find_one({"id": benefit_data.family_id}, {"_id": 0})
-    if not family:
-        raise HTTPException(status_code=404, detail="Family not found")
+    # التحقق من وجود الأسرة (اختياري الآن)
+    if benefit_data.family_id:
+        family = await db.families.find_one({"id": benefit_data.family_id}, {"_id": 0})
+        if not family:
+            raise HTTPException(status_code=404, detail="Family not found")
     
     # إنشاء السجل
     benefit = TakafulBenefit(
@@ -4142,6 +4147,8 @@ async def create_takaful_benefit(
         benefit_date=benefit_data.benefit_date,
         benefit_type=benefit_data.benefit_type,
         discount_percentage=benefit_data.discount_percentage,
+        time_from=benefit_data.time_from,
+        time_to=benefit_data.time_to,
         notes=benefit_data.notes,
         created_by_user_id=current_user.id
     )
@@ -4186,6 +4193,10 @@ async def update_takaful_benefit(
         update_fields['benefit_type'] = benefit_data['benefit_type']
     if 'discount_percentage' in benefit_data:
         update_fields['discount_percentage'] = benefit_data['discount_percentage']
+    if 'time_from' in benefit_data:
+        update_fields['time_from'] = benefit_data['time_from']
+    if 'time_to' in benefit_data:
+        update_fields['time_to'] = benefit_data['time_to']
     if 'notes' in benefit_data:
         update_fields['notes'] = benefit_data['notes']
     
