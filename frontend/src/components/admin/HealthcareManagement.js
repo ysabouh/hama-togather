@@ -143,6 +143,31 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
     }
   };
 
+  // جلب مستخدمي الرعاية الصحية حسب النوع
+  const fetchHealthcareUsers = async (role) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/users/by-role/${role}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setHealthcareUsers(response.data || []);
+    } catch (error) {
+      console.error('Error fetching healthcare users:', error);
+      setHealthcareUsers([]);
+    }
+  };
+
+  // جلب المستخدمين عند تغيير التبويب
+  useEffect(() => {
+    if (currentTab === 'doctors') {
+      fetchHealthcareUsers('doctor');
+    } else if (currentTab === 'pharmacies') {
+      fetchHealthcareUsers('pharmacist');
+    } else if (currentTab === 'laboratories') {
+      fetchHealthcareUsers('laboratory');
+    }
+  }, [currentTab]);
+
   const getNeighborhoodName = (neighborhoodId) => {
     const neighborhood = neighborhoods.find(n => n.id === neighborhoodId);
     return neighborhood?.name || 'غير محدد';
