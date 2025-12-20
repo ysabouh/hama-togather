@@ -1233,6 +1233,16 @@ const HealthcareDashboard = () => {
                           </div>
                           
                           <div className="space-y-2">
+                            {/* كود الاستفادة */}
+                            {benefit.benefit_code && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <span className="text-slate-600">الكود:</span>
+                                <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-mono text-xs font-bold" dir="ltr">
+                                  {benefit.benefit_code}
+                                </span>
+                              </div>
+                            )}
+                            
                             <div className="flex items-center gap-2 text-sm">
                               <Clock className="w-4 h-4 text-slate-400" />
                               <span className="text-slate-600">الوقت:</span>
@@ -1250,6 +1260,21 @@ const HealthcareDashboard = () => {
                                 </span>
                               </div>
                             )}
+                            
+                            {/* العائلة المستفيدة */}
+                            <div className="flex items-center gap-2 text-sm">
+                              <Users className="w-4 h-4 text-amber-500" />
+                              <span className="text-slate-600">العائلة:</span>
+                              {benefit.family_id && benefit.family_number && benefit.family_number !== 'غير معروف' ? (
+                                <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-bold">
+                                  {benefit.family_number}
+                                </span>
+                              ) : (
+                                <span className="text-slate-400 text-xs italic">
+                                  لم يتم الربط بعد
+                                </span>
+                              )}
+                            </div>
                             
                             {benefit.notes && (
                               <div className="flex items-start gap-2 text-sm">
