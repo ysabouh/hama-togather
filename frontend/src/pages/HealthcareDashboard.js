@@ -951,6 +951,245 @@ const HealthcareDashboard = () => {
         </div>
       )}
 
+      {/* Benefits List Modal - عرض تفاصيل الاستفادات */}
+      {showBenefitsList && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-lg border border-emerald-100 overflow-hidden max-h-[80vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white p-5 relative overflow-hidden flex-shrink-0">
+              <div className="absolute inset-0 bg-white/5"></div>
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+              
+              <div className="relative flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/15 backdrop-blur-sm p-2.5 rounded-lg border border-white/20">
+                    <Calendar className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold">تفاصيل الاستفادات</h3>
+                    <p className="text-white/60 text-xs">
+                      {selectedDate && new Date(selectedDate).toLocaleDateString('ar-SA', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowBenefitsList(false);
+                    setSelectedDate(null);
+                    setEditingBenefit(null);
+                  }}
+                  className="p-1.5 hover:bg-white/15 rounded-lg transition-all duration-200 border border-white/15"
+                >
+                  <XCircle className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Benefits List */}
+            <div className="p-4 overflow-y-auto flex-1">
+              {selectedDayBenefits.length === 0 ? (
+                <div className="text-center py-8 text-slate-500">
+                  <Calendar className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                  <p>لا توجد استفادات في هذا اليوم</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {selectedDayBenefits.map((benefit, index) => (
+                    <div 
+                      key={benefit.id} 
+                      className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                        editingBenefit?.id === benefit.id 
+                          ? 'border-emerald-400 bg-emerald-50' 
+                          : 'border-slate-100 bg-white hover:border-emerald-200'
+                      }`}
+                    >
+                      {editingBenefit?.id === benefit.id ? (
+                        // نموذج التعديل
+                        <form onSubmit={handleUpdateBenefit} className="space-y-3">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-1">الأسرة</label>
+                            <Select
+                              options={familyOptions}
+                              value={familyOptions.find(f => f.value === editingBenefit.family_id)}
+                              onChange={(option) => setEditingBenefit({ ...editingBenefit, family_id: option?.value || '' })}
+                              placeholder="اختر الأسرة..."
+                              styles={selectStyles}
+                              className="text-sm"
+                            />
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setEditingBenefit({ ...editingBenefit, benefit_type: 'free' })}
+                              className={`p-2 rounded-lg border text-xs font-bold transition-all ${
+                                editingBenefit.benefit_type === 'free'
+                                  ? 'border-emerald-400 bg-emerald-50 text-emerald-700'
+                                  : 'border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              <Gift className="w-4 h-4 mx-auto mb-1" />
+                              مجاني
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditingBenefit({ ...editingBenefit, benefit_type: 'discount' })}
+                              className={`p-2 rounded-lg border text-xs font-bold transition-all ${
+                                editingBenefit.benefit_type === 'discount'
+                                  ? 'border-amber-400 bg-amber-50 text-amber-700'
+                                  : 'border-slate-200 text-slate-600'
+                              }`}
+                            >
+                              <Percent className="w-4 h-4 mx-auto mb-1" />
+                              خصم
+                            </button>
+                          </div>
+                          
+                          {editingBenefit.benefit_type === 'discount' && (
+                            <Input
+                              type="number"
+                              min="1"
+                              max="100"
+                              value={editingBenefit.discount_percentage || 0}
+                              onChange={(e) => setEditingBenefit({ ...editingBenefit, discount_percentage: parseInt(e.target.value) || 0 })}
+                              placeholder="نسبة الخصم %"
+                              className="h-9 text-center"
+                              dir="ltr"
+                            />
+                          )}
+                          
+                          <Input
+                            value={editingBenefit.notes || ''}
+                            onChange={(e) => setEditingBenefit({ ...editingBenefit, notes: e.target.value })}
+                            placeholder="ملاحظات..."
+                            className="h-9 text-sm"
+                          />
+                          
+                          <div className="flex gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setEditingBenefit(null)}
+                              className="flex-1"
+                            >
+                              إلغاء
+                            </Button>
+                            <Button
+                              type="submit"
+                              size="sm"
+                              className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                            >
+                              حفظ التعديلات
+                            </Button>
+                          </div>
+                        </form>
+                      ) : (
+                        // عرض البيانات
+                        <div>
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">
+                                #{index + 1}
+                              </span>
+                              <span className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                                benefit.benefit_type === 'free' 
+                                  ? 'bg-emerald-100 text-emerald-700' 
+                                  : 'bg-amber-100 text-amber-700'
+                              }`}>
+                                {benefit.benefit_type === 'free' ? (
+                                  <span className="flex items-center gap-1">
+                                    <Gift className="w-3 h-3" />
+                                    مجاني
+                                  </span>
+                                ) : (
+                                  <span className="flex items-center gap-1">
+                                    <Percent className="w-3 h-3" />
+                                    خصم {benefit.discount_percentage}%
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => setEditingBenefit({...benefit})}
+                                className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                title="تعديل"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteBenefit(benefit.id)}
+                                className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="حذف"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-sm">
+                              <Users className="w-4 h-4 text-slate-400" />
+                              <span className="text-slate-600">الأسرة:</span>
+                              <span className="font-medium text-slate-800">
+                                {getFamilyName(benefit.family_id)}
+                              </span>
+                            </div>
+                            
+                            {benefit.notes && (
+                              <div className="flex items-start gap-2 text-sm">
+                                <MessageCircle className="w-4 h-4 text-slate-400 mt-0.5" />
+                                <span className="text-slate-600">ملاحظات:</span>
+                                <span className="text-slate-700">{benefit.notes}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer Actions */}
+            <div className="p-4 border-t border-emerald-100 bg-emerald-50/50 flex-shrink-0">
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowBenefitsList(false);
+                    setSelectedDate(null);
+                    setEditingBenefit(null);
+                  }}
+                  className="flex-1"
+                >
+                  إغلاق
+                </Button>
+                {!isPastDate(parseInt(selectedDate?.split('-')[2] || 0)) && (
+                  <Button
+                    onClick={() => {
+                      setShowBenefitsList(false);
+                      setShowAddForm(true);
+                    }}
+                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    <Plus className="w-4 h-4 ml-1" />
+                    إضافة استفادة
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
