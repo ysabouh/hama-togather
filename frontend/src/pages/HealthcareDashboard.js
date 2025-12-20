@@ -738,11 +738,11 @@ const HealthcareDashboard = () => {
               </div>
             </div>
 
-            <form onSubmit={handleAddBenefit} className="p-6 space-y-5">
+            <form onSubmit={handleAddBenefit} className="p-5 space-y-4">
               {/* Family Selection */}
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">
-                  الأسرة المستفيدة <span className="text-rose-500">*</span>
+                <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                  الأسرة المستفيدة <span className="text-emerald-500">*</span>
                 </label>
                 <Select
                   options={familyOptions}
@@ -758,40 +758,40 @@ const HealthcareDashboard = () => {
 
               {/* Benefit Type */}
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-3">
+                <label className="block text-sm font-bold text-slate-700 mb-2">
                   نوع الاستفادة
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setNewBenefit({ ...newBenefit, benefit_type: 'free' })}
-                    className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
+                    className={`p-3 rounded-xl border-2 transition-all duration-300 ${
                       newBenefit.benefit_type === 'free'
-                        ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg shadow-emerald-100'
+                        ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-green-50 shadow-md shadow-emerald-100'
                         : 'border-slate-200 hover:border-emerald-200 hover:bg-emerald-50/30'
                     }`}
                   >
-                    <Gift className={`w-6 h-6 mx-auto mb-2 ${
+                    <Gift className={`w-5 h-5 mx-auto mb-1 ${
                       newBenefit.benefit_type === 'free' ? 'text-emerald-500' : 'text-slate-400'
                     }`} />
-                    <span className={`text-sm font-bold ${
+                    <span className={`text-xs font-bold ${
                       newBenefit.benefit_type === 'free' ? 'text-emerald-700' : 'text-slate-600'
                     }`}>مجاني</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setNewBenefit({ ...newBenefit, benefit_type: 'discount' })}
-                    className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
+                    className={`p-3 rounded-xl border-2 transition-all duration-300 ${
                       newBenefit.benefit_type === 'discount'
-                        ? 'border-rose-400 bg-gradient-to-br from-rose-50 to-red-50 shadow-lg shadow-rose-100'
-                        : 'border-slate-200 hover:border-rose-200 hover:bg-rose-50/30'
+                        ? 'border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 shadow-md shadow-amber-100'
+                        : 'border-slate-200 hover:border-amber-200 hover:bg-amber-50/30'
                     }`}
                   >
-                    <Percent className={`w-6 h-6 mx-auto mb-2 ${
-                      newBenefit.benefit_type === 'discount' ? 'text-rose-500' : 'text-slate-400'
+                    <Percent className={`w-5 h-5 mx-auto mb-1 ${
+                      newBenefit.benefit_type === 'discount' ? 'text-amber-500' : 'text-slate-400'
                     }`} />
-                    <span className={`text-sm font-bold ${
-                      newBenefit.benefit_type === 'discount' ? 'text-rose-700' : 'text-slate-600'
+                    <span className={`text-xs font-bold ${
+                      newBenefit.benefit_type === 'discount' ? 'text-amber-700' : 'text-slate-600'
                     }`}>خصم %</span>
                   </button>
                 </div>
@@ -800,7 +800,7 @@ const HealthcareDashboard = () => {
               {/* Discount Percentage */}
               {newBenefit.benefit_type === 'discount' && (
                 <div className="animate-in slide-in-from-top-2 duration-300">
-                  <label className="block text-sm font-bold text-slate-700 mb-2">
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">
                     نسبة الخصم %
                   </label>
                   <Input
@@ -810,7 +810,7 @@ const HealthcareDashboard = () => {
                     value={newBenefit.discount_percentage}
                     onChange={(e) => setNewBenefit({ ...newBenefit, discount_percentage: parseInt(e.target.value) || 0 })}
                     placeholder="مثال: 50"
-                    className="bg-white/80 border-rose-200 rounded-xl h-12 text-center text-lg font-bold focus:ring-2 focus:ring-rose-200 focus:border-rose-400"
+                    className="bg-white/80 border-amber-200 rounded-lg h-10 text-center text-lg font-bold focus:ring-2 focus:ring-amber-200 focus:border-amber-400"
                     dir="ltr"
                   />
                 </div>
@@ -818,19 +818,19 @@ const HealthcareDashboard = () => {
 
               {/* Notes */}
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">
+                <label className="block text-sm font-bold text-slate-700 mb-1.5">
                   ملاحظات (اختياري)
                 </label>
                 <Input
                   value={newBenefit.notes}
                   onChange={(e) => setNewBenefit({ ...newBenefit, notes: e.target.value })}
                   placeholder="أضف ملاحظات إن وجدت..."
-                  className="bg-white/80 border-slate-200 rounded-xl h-12"
+                  className="bg-white/80 border-slate-200 rounded-lg h-10"
                 />
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-2 pt-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -838,15 +838,15 @@ const HealthcareDashboard = () => {
                     setShowAddForm(false);
                     setSelectedDate(null);
                   }}
-                  className="flex-1 h-12 rounded-xl border-2 border-slate-200 hover:bg-slate-50"
+                  className="flex-1 h-10 rounded-lg border-2 border-slate-200 hover:bg-slate-50 text-sm"
                 >
                   إلغاء
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white shadow-lg shadow-rose-200/50"
+                  className="flex-1 h-10 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-200/50 text-sm"
                 >
-                  <Plus className="w-5 h-5 ml-2" />
+                  <Plus className="w-4 h-4 ml-1.5" />
                   إضافة الاستفادة
                 </Button>
               </div>
