@@ -1187,10 +1187,15 @@ const HealthcareDashboard = () => {
                         // عرض البيانات
                         <div>
                           <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">
                                 #{index + 1}
                               </span>
+                              {benefit.benefit_code && (
+                                <span className="bg-blue-100 text-blue-700 text-xs font-mono font-bold px-2 py-1 rounded" dir="ltr">
+                                  {benefit.benefit_code}
+                                </span>
+                              )}
                               <span className={`px-2 py-1 rounded-lg text-xs font-bold ${
                                 benefit.benefit_type === 'free' 
                                   ? 'bg-emerald-100 text-emerald-700' 
