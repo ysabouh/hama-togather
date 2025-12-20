@@ -381,11 +381,11 @@ const HealthcareDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-red-50/30 to-orange-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50/30 to-green-50/20 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-rose-200 border-t-rose-500 mx-auto"></div>
-            <Heart className="w-8 h-8 text-rose-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-emerald-200 border-t-emerald-600 mx-auto"></div>
+            <Heart className="w-8 h-8 text-emerald-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
           </div>
           <p className="mt-6 text-slate-600 font-medium">جاري التحميل...</p>
         </div>
@@ -395,11 +395,11 @@ const HealthcareDashboard = () => {
 
   if (!providerData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-red-50/30 to-orange-50/20">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50/30 to-green-50/20">
         <Navbar />
         <div className="container mx-auto px-4 py-20 text-center">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-rose-100/50 p-12 max-w-lg mx-auto border border-rose-100">
-            <div className="bg-gradient-to-br from-rose-100 to-red-100 p-5 rounded-2xl w-24 h-24 mx-auto mb-6 flex items-center justify-center text-rose-600">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-emerald-100/50 p-12 max-w-lg mx-auto border border-emerald-100">
+            <div className="bg-gradient-to-br from-emerald-100 to-teal-100 p-5 rounded-2xl w-24 h-24 mx-auto mb-6 flex items-center justify-center text-emerald-600">
               {getProviderIcon()}
             </div>
             <h2 className="text-2xl font-bold text-slate-800 mb-4">لا يوجد ملف مرتبط</h2>
@@ -408,7 +408,7 @@ const HealthcareDashboard = () => {
             </p>
             <Button 
               onClick={() => navigate('/')} 
-              className="bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white px-8 py-3 rounded-xl shadow-lg shadow-rose-200/50"
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 py-3 rounded-xl shadow-lg shadow-emerald-200/50"
             >
               العودة للرئيسية
             </Button>
@@ -420,13 +420,13 @@ const HealthcareDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-rose-50/20 to-red-50/10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/20 to-teal-50/10">
       <Navbar />
       
-      {/* Hero Section - Expanded with Red Theme */}
+      {/* Hero Section - Green Theme */}
       <div className="relative overflow-hidden">
-        {/* Background Gradient - Red Theme */}
-        <div className="absolute inset-0 bg-gradient-to-br from-rose-500 via-red-500 to-rose-600"></div>
+        {/* Background Gradient - Green Theme */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900"></div>
         
         {/* Decorative Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -438,16 +438,17 @@ const HealthcareDashboard = () => {
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 -left-20 w-72 h-72 bg-rose-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-10 right-1/4 w-48 h-48 bg-red-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 -left-20 w-72 h-72 bg-emerald-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-10 right-1/4 w-48 h-48 bg-teal-400/20 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="relative container mx-auto px-4 py-8 md:py-12">
+        <div className="relative container mx-auto px-4 py-6 md:py-8">
           {/* Top Badge */}
-          <div className="flex justify-center mb-4">
-            <div className="bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30 flex items-center gap-2 text-sm">
-              <HeartHandshake className="w-4 h-4 text-white" />
+          <div className="flex justify-center mb-3">
+            <div className="bg-white/15 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 flex items-center gap-2 text-xs">
+              <HeartHandshake className="w-3.5 h-3.5 text-white" />
               <span className="text-white/90 font-medium">برنامج التكافل الصحي المجتمعي</span>
+              <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
               <Sparkles className="w-4 h-4 text-yellow-300" />
             </div>
           </div>
