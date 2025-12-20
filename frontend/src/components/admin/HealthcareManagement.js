@@ -178,6 +178,12 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
     return specialty?.name_ar || 'غير محدد';
   };
 
+  // جلب اسم المستخدم المرتبط
+  const getLinkedUserName = (userId) => {
+    const linkedUser = healthcareUsers.find(u => u.id === userId);
+    return linkedUser?.full_name || 'غير مرتبط';
+  };
+
   // Dialog handlers
   const openCreateDialog = (type) => {
     setDialogMode('create');
