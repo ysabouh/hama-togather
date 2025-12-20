@@ -235,6 +235,52 @@ const HealthcareDashboard = () => {
       toast.success('تم حذف الاستفادة بنجاح');
       fetchBenefits();
       
+      // تحديث قائمة الاستفادات المعروضة
+      setSelectedDayBenefits(prev => prev.filter(b => b.id !== benefitId));
+      
+      const statsRes = await axios.get(
+        `${API_URL}/takaful-benefits/stats/${providerType}/${providerData.id}`
+      );
+      setStats({
+        total: statsRes.data.total_benefits || 0,
+        free: statsRes.data.free_benefits || 0,
+        discount: statsRes.data.discount_benefits || 0
+      });
+      
+      // إغلاق النافذة إذا لم يتبق استفادات
+      if (selectedDayBenefits.length <= 1) {
+        setShowBenefitsList(false);
+      }
+    } catch (error) {
+      console.error('Error deleting benefit:', error);
+      toast.error('فشل حذف الاستفادة');
+    }
+  };
+
+  const handleUpdateBenefit = async (e) => {
+    e.preventDefault();
+    if (!editingBenefit) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(`${API_URL}/takaful-benefits/${editingBenefit.id}`, {
+        family_id: editingBenefit.family_id,
+        benefit_type: editingBenefit.benefit_type,
+        discount_percentage: editingBenefit.benefit_type === 'discount' ? editingBenefit.discount_percentage : null,
+        notes: editingBenefit.notes
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      toast.success('تم تحديث الاستفادة بنجاح');
+      setEditingBenefit(null);
+      fetchBenefits();
+      
+      // تحديث قائمة الاستفادات المعروضة
+      setSelectedDayBenefits(prev => 
+        prev.map(b => b.id === editingBenefit.id ? editingBenefit : b)
+      );
+      
       const statsRes = await axios.get(
         `${API_URL}/takaful-benefits/stats/${providerType}/${providerData.id}`
       );
@@ -244,9 +290,17 @@ const HealthcareDashboard = () => {
         discount: statsRes.data.discount_benefits || 0
       });
     } catch (error) {
-      console.error('Error deleting benefit:', error);
-      toast.error('فشل حذف الاستفادة');
+      console.error('Error updating benefit:', error);
+      toast.error('فشل تحديث الاستفادة');
     }
+  };
+
+  // التحقق إذا كان التاريخ في الماضي
+  const isPastDate = (day) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    return checkDate < today;
   };
 
   const getDaysInMonth = (date) => {
