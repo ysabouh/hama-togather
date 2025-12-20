@@ -1412,6 +1412,223 @@ class TakafulBenefitsTester:
             print("\n⚠️ Some Takaful Benefits tests failed - check details above")
             return False
 
+class AddUserTester:
+    def __init__(self):
+        self.session = requests.Session()
+        self.admin_token = None
+        self.test_user_id = None
+        
+    def login_admin(self):
+        """Login as admin and get authentication token"""
+        print("🔐 Testing Admin Login for Add User...")
+        
+        login_data = {
+            "username": "0933445566",  # Admin phone from review request
+            "password": "admin123"     # Admin password from review request
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/auth/login",
+                data=login_data,
+                headers={"Content-Type": "application/x-www-form-urlencoded"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.admin_token = data["access_token"]
+                print(f"✅ Admin login successful for Add User test")
+                print(f"   Token: {self.admin_token[:20]}...")
+                print(f"   User: {data['user']['phone']} ({data['user']['role']})")
+                return True
+            else:
+                print(f"❌ Admin login failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Admin login error: {str(e)}")
+            return False
+    
+    def test_add_user_api(self):
+        """Test P0 Task 2: POST /api/users - Add User"""
+        print("\n👤 Testing P0 Task 2: Add User API...")
+        
+        if not self.admin_token:
+            print("❌ No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}", "Content-Type": "application/json"}
+        
+        # Generate unique phone number for testing
+        import random
+        unique_phone = f"091234{random.randint(1000, 9999)}"
+        
+        user_data = {
+            "full_name": "مستخدم اختبار",
+            "phone": unique_phone,
+            "password": "test123456",
+            "email": f"test{random.randint(1000, 9999)}@example.com",
+            "role": "user",
+            "is_active": True
+        }
+        
+        try:
+            response = self.session.post(
+                f"{BACKEND_URL}/users",
+                json=user_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                self.test_user_id = result.get('user', {}).get('id')
+                print(f"✅ POST /api/users successful")
+                print(f"   User ID: {self.test_user_id}")
+                print(f"   Full Name: {result.get('user', {}).get('full_name', 'N/A')}")
+                print(f"   Phone: {result.get('user', {}).get('phone', 'N/A')}")
+                print(f"   Role: {result.get('user', {}).get('role', 'N/A')}")
+                print(f"   Message: {result.get('message', 'N/A')}")
+                return True
+            else:
+                print(f"❌ POST /api/users failed: {response.status_code}")
+                print(f"   Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Add user test error: {str(e)}")
+            return False
+    
+    def test_add_user_validation(self):
+        """Test Add User API validation"""
+        print("\n🔍 Testing Add User API Validation...")
+        
+        if not self.admin_token:
+            print("❌ No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}", "Content-Type": "application/json"}
+        
+        try:
+            # Test 1: Missing required fields
+            invalid_user_data = {
+                "full_name": "مستخدم ناقص البيانات"
+                # Missing phone and password
+            }
+            
+            response = self.session.post(
+                f"{BACKEND_URL}/users",
+                json=invalid_user_data,
+                headers=headers
+            )
+            
+            if response.status_code == 422:  # Validation error
+                print("✅ Validation correctly rejects missing required fields")
+                
+                # Test 2: Duplicate phone number (using existing admin phone)
+                duplicate_phone_data = {
+                    "full_name": "مستخدم مكرر",
+                    "phone": "0933445566",  # Admin's phone
+                    "password": "test123456",
+                    "role": "user"
+                }
+                
+                duplicate_response = self.session.post(
+                    f"{BACKEND_URL}/users",
+                    json=duplicate_phone_data,
+                    headers=headers
+                )
+                
+                if duplicate_response.status_code == 400:
+                    print("✅ Validation correctly rejects duplicate phone number")
+                    return True
+                else:
+                    print(f"❌ Should reject duplicate phone, got: {duplicate_response.status_code}")
+                    return False
+            else:
+                print(f"❌ Should validate required fields, got: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Add user validation test error: {str(e)}")
+            return False
+    
+    def cleanup_test_user(self):
+        """Clean up the test user created during testing"""
+        if self.test_user_id and self.admin_token:
+            try:
+                # Note: There might not be a DELETE endpoint for users, 
+                # but we can try to deactivate the user instead
+                headers = {"Authorization": f"Bearer {self.admin_token}", "Content-Type": "application/json"}
+                
+                deactivate_data = {"is_active": False}
+                response = self.session.put(
+                    f"{BACKEND_URL}/users/{self.test_user_id}/toggle-status",
+                    json=deactivate_data,
+                    headers=headers
+                )
+                
+                if response.status_code == 200:
+                    print("✅ Deactivated test user")
+                else:
+                    print(f"⚠️ Could not deactivate test user: {response.status_code}")
+            except Exception as e:
+                print(f"⚠️ Error cleaning up test user: {str(e)}")
+    
+    def run_all_tests(self):
+        """Run all Add User tests"""
+        print("=" * 80)
+        print("🚀 Starting Add User API Tests (P0 Task 2)")
+        print("=" * 80)
+        
+        results = {
+            'admin_login': False,
+            'add_user_api': False,
+            'add_user_validation': False
+        }
+        
+        # Test 1: Admin login
+        results['admin_login'] = self.login_admin()
+        
+        # Test 2: Add User API
+        if results['admin_login']:
+            results['add_user_api'] = self.test_add_user_api()
+        
+        # Test 3: Add User validation
+        if results['admin_login']:
+            results['add_user_validation'] = self.test_add_user_validation()
+        
+        # Cleanup
+        self.cleanup_test_user()
+        
+        # Print summary
+        print("\n" + "=" * 80)
+        print("📊 ADD USER TEST RESULTS SUMMARY")
+        print("=" * 80)
+        
+        test_descriptions = {
+            'admin_login': '1️⃣ Admin Login',
+            'add_user_api': '2️⃣ Add User API (POST /api/users)',
+            'add_user_validation': '3️⃣ Add User Validation'
+        }
+        
+        for test_name, success in results.items():
+            status = "✅ PASS" if success else "❌ FAIL"
+            description = test_descriptions.get(test_name, test_name.replace('_', ' ').title())
+            print(f"{description}: {status}")
+        
+        total_tests = len([k for k, v in results.items() if v is not None])
+        passed_tests = sum([1 for v in results.values() if v is True])
+        
+        print(f"\nOverall: {passed_tests}/{total_tests} tests passed")
+        
+        if passed_tests == total_tests:
+            print("\n🎉 All Add User tests passed!")
+            return True
+        else:
+            print("\n⚠️ Some Add User tests failed - check details above")
+            return False
+
 def run_takaful_tests():
     """Run Takaful Benefits tests"""
     tester = TakafulBenefitsTester()
