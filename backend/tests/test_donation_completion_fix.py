@@ -27,7 +27,7 @@ import os
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://together-build-2.preview.emergentagent.com') + '/api'
+BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://takaful-platform.preview.emergentagent.com') + '/api'
 ADMIN_EMAIL = "admin@example.com"
 ADMIN_PASSWORD = "admin"
 

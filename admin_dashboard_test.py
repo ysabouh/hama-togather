@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://together-build-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://takaful-platform.preview.emergentagent.com/api"
 
 # Test credentials from review request
 COMMITTEE_PRESIDENT_PHONE = "0944444444"
