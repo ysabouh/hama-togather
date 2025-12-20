@@ -1325,37 +1325,44 @@ class TakafulBenefitsTester:
         if results['admin_login']:
             results['get_test_data'] = self.get_test_providers_and_families()
         
-        # Test 3: Public GET benefits
+        # Test 4: Public GET benefits
         if results['get_test_data']:
             results['public_get_benefits'] = self.test_public_get_benefits()
         
-        # Test 4: Public GET stats
+        # Test 5: Public GET stats
         if results['get_test_data']:
             results['public_get_stats'] = self.test_public_get_stats()
         
-        # Test 5: POST requires authentication
+        # Test 6: POST requires authentication
         if results['get_test_data']:
             results['post_requires_auth'] = self.test_post_requires_auth()
         
-        # Test 6: POST create benefit
+        # Test 7: POST create benefit
         if results['admin_login'] and results['get_test_data']:
             results['post_create_benefit'] = self.test_post_create_benefit()
         
-        # Test 7: DELETE requires authentication
+        # Test 8: DELETE requires authentication
         if results['post_create_benefit']:
             results['delete_requires_auth'] = self.test_delete_requires_auth()
         
-        # Test 8: DELETE benefit
+        # Test 9: DELETE benefit
         if results['admin_login'] and results['post_create_benefit']:
             results['delete_benefit'] = self.test_delete_benefit()
         
-        # Test 9: Invalid provider type
+        # Test 10: P0 Task 1 - Time-Based Takaful Benefits
+        if results['admin_login'] and results['get_test_data']:
+            results['time_based_takaful_benefits'] = self.test_time_based_takaful_benefits()
+        
+        # Test 11: Invalid provider type
         if results['get_test_data']:
             results['invalid_provider_type'] = self.test_invalid_provider_type()
         
-        # Test 10: Admin Dashboard Takaful All endpoint
+        # Test 12: Admin Dashboard Takaful All endpoint
         if results['admin_login']:
             results['admin_dashboard_takaful_all'] = self.test_admin_dashboard_takaful_all_endpoint()
+        
+        # Cleanup
+        self.cleanup_time_based_benefit()
         
         # Print summary
         print("\n" + "=" * 80)
