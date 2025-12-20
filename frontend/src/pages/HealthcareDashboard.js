@@ -28,7 +28,9 @@ import {
   TrendingUp,
   Award,
   Sparkles,
-  Activity
+  Activity,
+  Star,
+  HeartHandshake
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,9 +42,9 @@ const selectStyles = {
   control: (base, state) => ({
     ...base,
     borderRadius: '1rem',
-    borderColor: state.isFocused ? '#06b6d4' : '#e2e8f0',
-    boxShadow: state.isFocused ? '0 0 0 3px rgba(6, 182, 212, 0.15)' : 'none',
-    '&:hover': { borderColor: '#06b6d4' },
+    borderColor: state.isFocused ? '#ef4444' : '#e2e8f0',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(239, 68, 68, 0.15)' : 'none',
+    '&:hover': { borderColor: '#ef4444' },
     minHeight: '48px',
     direction: 'rtl',
     background: 'rgba(255, 255, 255, 0.8)',
@@ -60,8 +62,7 @@ const selectStyles = {
   }),
   option: (base, state) => ({
     ...base,
-    backgroundColor: state.isSelected ? 'linear-gradient(135deg, #06b6d4, #0891b2)' : state.isFocused ? 'rgba(6, 182, 212, 0.1)' : 'transparent',
-    background: state.isSelected ? 'linear-gradient(135deg, #06b6d4, #0891b2)' : state.isFocused ? 'rgba(6, 182, 212, 0.1)' : 'transparent',
+    backgroundColor: state.isSelected ? '#ef4444' : state.isFocused ? 'rgba(239, 68, 68, 0.1)' : 'transparent',
     color: state.isSelected ? 'white' : '#374151',
     cursor: 'pointer',
     textAlign: 'right',
@@ -282,24 +283,6 @@ const HealthcareDashboard = () => {
     }
   };
 
-  const getProviderGradient = () => {
-    switch (providerType) {
-      case 'doctor': return 'from-cyan-400 via-teal-500 to-emerald-500';
-      case 'pharmacy': return 'from-emerald-400 via-green-500 to-teal-500';
-      case 'laboratory': return 'from-violet-400 via-purple-500 to-indigo-500';
-      default: return 'from-rose-400 via-pink-500 to-red-500';
-    }
-  };
-
-  const getProviderAccent = () => {
-    switch (providerType) {
-      case 'doctor': return 'cyan';
-      case 'pharmacy': return 'emerald';
-      case 'laboratory': return 'violet';
-      default: return 'rose';
-    }
-  };
-
   const familyOptions = families.map(f => ({
     value: f.id,
     label: `${f.family_number || f.family_code || f.id} - ${f.name}`
@@ -311,7 +294,7 @@ const HealthcareDashboard = () => {
     const days = [];
 
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="h-24 md:h-28 rounded-xl"></div>);
+      days.push(<div key={`empty-${i}`} className="h-24 md:h-28 rounded-2xl"></div>);
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -321,6 +304,11 @@ const HealthcareDashboard = () => {
                       currentDate.getMonth() === new Date().getMonth() && 
                       currentDate.getFullYear() === new Date().getFullYear();
       const isSelected = selectedDate === dateStr;
+      
+      // حساب عدد الاستفادات المجانية والخصومات
+      const freeCount = dayBenefits.filter(b => b.benefit_type === 'free').length;
+      const discountCount = dayBenefits.filter(b => b.benefit_type === 'discount').length;
+      const hasBenefits = dayBenefits.length > 0;
 
       days.push(
         <div
@@ -329,48 +317,60 @@ const HealthcareDashboard = () => {
             setSelectedDate(dateStr);
             setShowAddForm(true);
           }}
-          className={`h-24 md:h-28 p-2 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${
+          className={`relative h-24 md:h-28 p-2 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.03] group ${
             isSelected
-              ? 'border-cyan-400 bg-gradient-to-br from-cyan-50 to-teal-50 shadow-lg shadow-cyan-100'
+              ? 'border-rose-400 bg-gradient-to-br from-rose-50 to-red-50 shadow-lg shadow-rose-200/50 ring-2 ring-rose-300'
               : isToday
-              ? 'border-cyan-300 bg-gradient-to-br from-cyan-50/50 to-white ring-2 ring-cyan-200'
-              : dayBenefits.length > 0
-              ? 'border-emerald-200 bg-gradient-to-br from-emerald-50/80 to-white'
-              : 'border-slate-100 bg-white/60 hover:border-slate-200 hover:bg-white'
+              ? 'border-rose-300 bg-gradient-to-br from-rose-50/50 to-white ring-2 ring-rose-200/50'
+              : hasBenefits
+              ? 'border-rose-200 bg-gradient-to-br from-rose-50/60 to-white hover:border-rose-300'
+              : 'border-slate-100 bg-white/80 hover:border-rose-200 hover:bg-rose-50/30'
           }`}
         >
-          <div className={`text-sm font-bold mb-1 ${
-            isToday ? 'text-cyan-600' : 'text-slate-600'
+          {/* رقم اليوم */}
+          <div className={`text-sm font-bold ${
+            isToday ? 'text-rose-600' : hasBenefits ? 'text-rose-500' : 'text-slate-600'
           }`}>
             {day}
           </div>
-          <div className="space-y-1 overflow-y-auto max-h-16">
-            {dayBenefits.map(benefit => (
-              <div
-                key={benefit.id}
-                className={`text-xs px-2 py-1 rounded-lg flex items-center justify-between gap-1 backdrop-blur-sm ${
-                  benefit.benefit_type === 'free'
-                    ? 'bg-gradient-to-r from-emerald-100/90 to-green-100/90 text-emerald-700 border border-emerald-200/50'
-                    : 'bg-gradient-to-r from-blue-100/90 to-cyan-100/90 text-blue-700 border border-blue-200/50'
-                }`}
-              >
-                <span className="flex items-center gap-1 truncate">
-                  {benefit.benefit_type === 'free' 
-                    ? <Gift className="w-3 h-3 flex-shrink-0" /> 
-                    : <span className="font-medium">{benefit.discount_percentage}%</span>
-                  }
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteBenefit(benefit.id);
-                  }}
-                  className="text-red-400 hover:text-red-600 transition-colors"
-                >
-                  <Trash2 className="w-3 h-3" />
-                </button>
+          
+          {/* شارة الاستفادات */}
+          {hasBenefits && (
+            <div className="absolute top-1 left-1">
+              <div className="relative">
+                {/* الدائرة الحمراء مع العدد */}
+                <div className="bg-gradient-to-br from-rose-500 to-red-600 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg shadow-rose-300/50 ring-2 ring-white">
+                  <span className="text-xs font-bold">{dayBenefits.length}</span>
+                </div>
+                {/* تأثير النبض */}
+                <div className="absolute inset-0 bg-rose-400 rounded-full animate-ping opacity-30"></div>
               </div>
-            ))}
+            </div>
+          )}
+          
+          {/* أيقونات نوع الاستفادة */}
+          {hasBenefits && (
+            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1.5">
+              {freeCount > 0 && (
+                <div className="flex items-center gap-1 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-2 py-1 rounded-lg shadow-md shadow-emerald-200/50">
+                  <Gift className="w-3 h-3" />
+                  <span className="text-xs font-bold">{freeCount}</span>
+                </div>
+              )}
+              {discountCount > 0 && (
+                <div className="flex items-center gap-1 bg-gradient-to-r from-rose-500 to-red-500 text-white px-2 py-1 rounded-lg shadow-md shadow-rose-200/50">
+                  <Percent className="w-3 h-3" />
+                  <span className="text-xs font-bold">{discountCount}</span>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* علامة + عند التحويم */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="bg-rose-500/90 backdrop-blur-sm text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
+              <Plus className="w-5 h-5" />
+            </div>
           </div>
         </div>
       );
@@ -381,11 +381,11 @@ const HealthcareDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-teal-50/30 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-red-50/30 to-orange-50/20 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-cyan-200 border-t-cyan-500 mx-auto"></div>
-            <Activity className="w-8 h-8 text-cyan-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-rose-200 border-t-rose-500 mx-auto"></div>
+            <Heart className="w-8 h-8 text-rose-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
           </div>
           <p className="mt-6 text-slate-600 font-medium">جاري التحميل...</p>
         </div>
@@ -395,11 +395,11 @@ const HealthcareDashboard = () => {
 
   if (!providerData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-teal-50/30">
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-red-50/30 to-orange-50/20">
         <Navbar />
         <div className="container mx-auto px-4 py-20 text-center">
-          <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/50 p-12 max-w-lg mx-auto border border-white/50">
-            <div className="bg-gradient-to-br from-cyan-100 to-teal-100 p-5 rounded-2xl w-24 h-24 mx-auto mb-6 flex items-center justify-center text-cyan-600">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-rose-100/50 p-12 max-w-lg mx-auto border border-rose-100">
+            <div className="bg-gradient-to-br from-rose-100 to-red-100 p-5 rounded-2xl w-24 h-24 mx-auto mb-6 flex items-center justify-center text-rose-600">
               {getProviderIcon()}
             </div>
             <h2 className="text-2xl font-bold text-slate-800 mb-4">لا يوجد ملف مرتبط</h2>
@@ -408,7 +408,7 @@ const HealthcareDashboard = () => {
             </p>
             <Button 
               onClick={() => navigate('/')} 
-              className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-8 py-3 rounded-xl shadow-lg shadow-cyan-200/50"
+              className="bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white px-8 py-3 rounded-xl shadow-lg shadow-rose-200/50"
             >
               العودة للرئيسية
             </Button>
@@ -420,83 +420,119 @@ const HealthcareDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-teal-50/20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-rose-50/20 to-red-50/10">
       <Navbar />
       
-      {/* Hero Section - Glassmorphism Design */}
-      <div className={`relative overflow-hidden`}>
-        {/* Background Gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-r ${getProviderGradient()} opacity-90`}></div>
+      {/* Hero Section - Expanded with Red Theme */}
+      <div className="relative overflow-hidden">
+        {/* Background Gradient - Red Theme */}
+        <div className="absolute inset-0 bg-gradient-to-br from-rose-500 via-red-500 to-rose-600"></div>
+        
+        {/* Decorative Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}></div>
+        </div>
         
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-rose-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 right-1/4 w-80 h-80 bg-red-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 right-1/3 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
         </div>
         
-        <div className="relative container mx-auto px-4 py-12 md:py-16">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-            {/* Welcome Section */}
-            <div className="flex items-center gap-5">
-              <div className="bg-white/20 backdrop-blur-md p-5 rounded-2xl border border-white/30 shadow-xl">
+        <div className="relative container mx-auto px-4 py-16 md:py-24">
+          {/* Top Badge */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border border-white/30 flex items-center gap-3">
+              <HeartHandshake className="w-5 h-5 text-white" />
+              <span className="text-white/90 font-medium">برنامج التكافل الصحي المجتمعي</span>
+              <Sparkles className="w-5 h-5 text-yellow-300" />
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-center text-center mb-12">
+            {/* Provider Icon */}
+            <div className="bg-white/20 backdrop-blur-md p-6 rounded-3xl border border-white/30 shadow-2xl mb-6 relative">
+              <div className="text-white">
                 {getProviderIcon()}
               </div>
-              <div className="text-white">
-                <div className="flex items-center gap-2 mb-1">
-                  <Sparkles className="w-5 h-5 text-yellow-300" />
-                  <span className="text-white/80 text-sm font-medium">برنامج التكافل الصحي</span>
-                </div>
-                <h1 className="text-3xl md:text-4xl font-bold mb-1">مرحباً، {providerData.full_name || providerData.name}</h1>
-                <p className="text-white/70 flex items-center gap-2">
-                  <Award className="w-4 h-4" />
-                  {getProviderTypeLabel()}
-                </p>
+              <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 p-1.5 rounded-lg">
+                <Star className="w-4 h-4 fill-current" />
               </div>
             </div>
             
-            {/* Stats Cards */}
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="bg-white/15 backdrop-blur-md rounded-2xl px-6 py-5 text-center border border-white/20 min-w-[130px] hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <div className="bg-white/20 p-2 rounded-lg">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <span className="text-3xl font-bold text-white block">{stats.total}</span>
-                <span className="text-sm text-white/70">إجمالي الاستفادات</span>
+            {/* Welcome Text */}
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+              مرحباً، {providerData.full_name || providerData.name}
+            </h1>
+            <p className="text-white/80 text-lg flex items-center gap-2 justify-center">
+              <Award className="w-5 h-5" />
+              {getProviderTypeLabel()} مشارك في برنامج التكافل
+            </p>
+          </div>
+          
+          {/* Stats Cards - Expanded */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 text-center border border-white/20 hover:bg-white/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
+              <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Users className="w-8 h-8 text-white" />
               </div>
-              <div className="bg-white/15 backdrop-blur-md rounded-2xl px-6 py-5 text-center border border-white/20 min-w-[130px] hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <div className="bg-white/20 p-2 rounded-lg">
-                    <Gift className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <span className="text-3xl font-bold text-white block">{stats.free}</span>
-                <span className="text-sm text-white/70">مجانية</span>
+              <span className="text-5xl font-bold text-white block mb-2">{stats.total}</span>
+              <span className="text-white/70 text-lg">إجمالي الاستفادات</span>
+              <div className="mt-4 h-1 bg-white/20 rounded-full overflow-hidden">
+                <div className="h-full bg-white/50 rounded-full" style={{ width: '100%' }}></div>
               </div>
-              <div className="bg-white/15 backdrop-blur-md rounded-2xl px-6 py-5 text-center border border-white/20 min-w-[130px] hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <div className="bg-white/20 p-2 rounded-lg">
-                    <Percent className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <span className="text-3xl font-bold text-white block">{stats.discount}</span>
-                <span className="text-sm text-white/70">خصومات</span>
+            </div>
+            
+            <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 text-center border border-white/20 hover:bg-white/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
+              <div className="bg-emerald-400/30 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Gift className="w-8 h-8 text-emerald-100" />
+              </div>
+              <span className="text-5xl font-bold text-white block mb-2">{stats.free}</span>
+              <span className="text-white/70 text-lg">معاينة مجانية</span>
+              <div className="mt-4 h-1 bg-white/20 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-400/50 rounded-full" style={{ width: stats.total > 0 ? `${(stats.free / stats.total) * 100}%` : '0%' }}></div>
+              </div>
+            </div>
+            
+            <div className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 text-center border border-white/20 hover:bg-white/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
+              <div className="bg-amber-400/30 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Percent className="w-8 h-8 text-amber-100" />
+              </div>
+              <span className="text-5xl font-bold text-white block mb-2">{stats.discount}</span>
+              <span className="text-white/70 text-lg">خصومات مقدمة</span>
+              <div className="mt-4 h-1 bg-white/20 rounded-full overflow-hidden">
+                <div className="h-full bg-amber-400/50 rounded-full" style={{ width: stats.total > 0 ? `${(stats.discount / stats.total) * 100}%` : '0%' }}></div>
               </div>
             </div>
           </div>
         </div>
+        
+        {/* Wave Separator */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="url(#gradient)"/>
+            <defs>
+              <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgb(248 250 252)" stopOpacity="0.3"/>
+                <stop offset="100%" stopColor="rgb(248 250 252)"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 -mt-6">
+      <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Provider Card - Modern Glass Effect */}
+          {/* Provider Card - Red Theme */}
           <div className="lg:col-span-1">
-            <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden sticky top-4 border border-white/50">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-rose-100/30 overflow-hidden sticky top-4 border border-rose-100/50">
               {/* Card Header */}
-              <div className={`bg-gradient-to-r ${getProviderGradient()} p-6 text-white relative overflow-hidden`}>
+              <div className="bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 p-6 text-white relative overflow-hidden">
                 <div className="absolute inset-0 bg-white/5"></div>
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
                 
@@ -522,8 +558,8 @@ const HealthcareDashboard = () => {
               <div className="p-6 space-y-5">
                 {providerData.address && (
                   <div className="flex items-start gap-4 group">
-                    <div className="bg-slate-100 p-2.5 rounded-xl group-hover:bg-cyan-100 transition-colors">
-                      <MapPin className="w-5 h-5 text-slate-500 group-hover:text-cyan-600" />
+                    <div className="bg-rose-50 p-2.5 rounded-xl group-hover:bg-rose-100 transition-colors">
+                      <MapPin className="w-5 h-5 text-rose-500" />
                     </div>
                     <div>
                       <span className="text-xs text-slate-400 block mb-0.5">العنوان</span>
@@ -534,8 +570,8 @@ const HealthcareDashboard = () => {
                 
                 {providerData.mobile && (
                   <div className="flex items-start gap-4 group">
-                    <div className="bg-slate-100 p-2.5 rounded-xl group-hover:bg-cyan-100 transition-colors">
-                      <Phone className="w-5 h-5 text-slate-500 group-hover:text-cyan-600" />
+                    <div className="bg-rose-50 p-2.5 rounded-xl group-hover:bg-rose-100 transition-colors">
+                      <Phone className="w-5 h-5 text-rose-500" />
                     </div>
                     <div>
                       <span className="text-xs text-slate-400 block mb-0.5">رقم الهاتف</span>
@@ -551,7 +587,7 @@ const HealthcareDashboard = () => {
                     rel="noopener noreferrer"
                     className="flex items-start gap-4 group"
                   >
-                    <div className="bg-green-100 p-2.5 rounded-xl group-hover:bg-green-200 transition-colors">
+                    <div className="bg-green-50 p-2.5 rounded-xl group-hover:bg-green-100 transition-colors">
                       <MessageCircle className="w-5 h-5 text-green-600" />
                     </div>
                     <div>
@@ -561,7 +597,7 @@ const HealthcareDashboard = () => {
                   </a>
                 )}
                 
-                <div className="pt-4 border-t border-slate-100">
+                <div className="pt-4 border-t border-rose-100">
                   {providerData.is_active ? (
                     <span className="flex items-center gap-2 text-emerald-600 font-medium text-sm bg-gradient-to-r from-emerald-50 to-green-50 px-4 py-2.5 rounded-xl border border-emerald-100">
                       <CheckCircle className="w-4 h-4" />
@@ -578,11 +614,11 @@ const HealthcareDashboard = () => {
             </div>
           </div>
 
-          {/* Calendar Section - Modern Design */}
+          {/* Calendar Section - Red Theme */}
           <div className="lg:col-span-2">
-            <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden border border-white/50">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-rose-100/30 overflow-hidden border border-rose-100/50">
               {/* Calendar Header */}
-              <div className={`bg-gradient-to-r ${getProviderGradient()} text-white p-6 relative overflow-hidden`}>
+              <div className="bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 text-white p-6 relative overflow-hidden">
                 <div className="absolute inset-0 bg-white/5"></div>
                 <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
                 
@@ -617,38 +653,42 @@ const HealthcareDashboard = () => {
               </div>
 
               {/* Days Header */}
-              <div className="grid grid-cols-7 gap-2 p-4 bg-gradient-to-b from-slate-50/80 to-white border-b border-slate-100">
+              <div className="grid grid-cols-7 gap-2 p-4 bg-gradient-to-b from-rose-50/80 to-white border-b border-rose-100">
                 {daysOfWeek.map((day) => (
-                  <div key={day} className="text-center text-sm font-bold text-slate-500 py-3">
+                  <div key={day} className="text-center text-sm font-bold text-rose-600 py-3">
                     {day}
                   </div>
                 ))}
               </div>
 
               {/* Calendar Grid */}
-              <div className="p-4 bg-gradient-to-b from-white to-slate-50/30">
+              <div className="p-4 bg-gradient-to-b from-white to-rose-50/20">
                 <div className="grid grid-cols-7 gap-2">
                   {renderCalendar()}
                 </div>
               </div>
 
               {/* Legend */}
-              <div className="flex flex-wrap items-center justify-center gap-6 p-5 border-t border-slate-100 bg-gradient-to-r from-slate-50/50 to-white">
+              <div className="flex flex-wrap items-center justify-center gap-6 p-5 border-t border-rose-100 bg-gradient-to-r from-rose-50/50 to-white">
                 <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-5 h-5 bg-gradient-to-r from-emerald-100 to-green-100 rounded-lg border border-emerald-200 flex items-center justify-center">
-                    <Gift className="w-3 h-3 text-emerald-600" />
+                  <div className="w-7 h-7 bg-gradient-to-br from-rose-500 to-red-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
+                    3
                   </div>
-                  <span>معاينة مجانية</span>
+                  <span>عدد الاستفادات</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-5 h-5 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-lg border border-blue-200 flex items-center justify-center">
-                    <Percent className="w-3 h-3 text-blue-600" />
+                  <div className="flex items-center gap-1 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-2 py-1 rounded-lg shadow-sm">
+                    <Gift className="w-3 h-3" />
+                    <span className="text-xs font-bold">2</span>
+                  </div>
+                  <span>مجانية</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-600">
+                  <div className="flex items-center gap-1 bg-gradient-to-r from-rose-500 to-red-500 text-white px-2 py-1 rounded-lg shadow-sm">
+                    <Percent className="w-3 h-3" />
+                    <span className="text-xs font-bold">1</span>
                   </div>
                   <span>خصم</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <div className="w-5 h-5 bg-cyan-50 rounded-lg ring-2 ring-cyan-300"></div>
-                  <span>اليوم</span>
                 </div>
               </div>
             </div>
@@ -656,12 +696,12 @@ const HealthcareDashboard = () => {
         </div>
       </div>
 
-      {/* Add Benefit Modal - Modern Glass Effect */}
+      {/* Add Benefit Modal - Red Theme */}
       {showAddForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md border border-white/50 overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md border border-rose-100 overflow-hidden">
             {/* Modal Header */}
-            <div className={`bg-gradient-to-r ${getProviderGradient()} text-white p-6 relative overflow-hidden`}>
+            <div className="bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 text-white p-6 relative overflow-hidden">
               <div className="absolute inset-0 bg-white/5"></div>
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
               
@@ -739,15 +779,15 @@ const HealthcareDashboard = () => {
                     onClick={() => setNewBenefit({ ...newBenefit, benefit_type: 'discount' })}
                     className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
                       newBenefit.benefit_type === 'discount'
-                        ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-cyan-50 shadow-lg shadow-blue-100'
-                        : 'border-slate-200 hover:border-blue-200 hover:bg-blue-50/30'
+                        ? 'border-rose-400 bg-gradient-to-br from-rose-50 to-red-50 shadow-lg shadow-rose-100'
+                        : 'border-slate-200 hover:border-rose-200 hover:bg-rose-50/30'
                     }`}
                   >
                     <Percent className={`w-6 h-6 mx-auto mb-2 ${
-                      newBenefit.benefit_type === 'discount' ? 'text-blue-500' : 'text-slate-400'
+                      newBenefit.benefit_type === 'discount' ? 'text-rose-500' : 'text-slate-400'
                     }`} />
                     <span className={`text-sm font-bold ${
-                      newBenefit.benefit_type === 'discount' ? 'text-blue-700' : 'text-slate-600'
+                      newBenefit.benefit_type === 'discount' ? 'text-rose-700' : 'text-slate-600'
                     }`}>خصم %</span>
                   </button>
                 </div>
@@ -766,7 +806,7 @@ const HealthcareDashboard = () => {
                     value={newBenefit.discount_percentage}
                     onChange={(e) => setNewBenefit({ ...newBenefit, discount_percentage: parseInt(e.target.value) || 0 })}
                     placeholder="مثال: 50"
-                    className="bg-white/80 border-slate-200 rounded-xl h-12 text-center text-lg font-bold focus:ring-2 focus:ring-blue-200"
+                    className="bg-white/80 border-rose-200 rounded-xl h-12 text-center text-lg font-bold focus:ring-2 focus:ring-rose-200 focus:border-rose-400"
                     dir="ltr"
                   />
                 </div>
@@ -800,7 +840,7 @@ const HealthcareDashboard = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className={`flex-1 h-12 rounded-xl bg-gradient-to-r ${getProviderGradient()} hover:opacity-90 text-white shadow-lg`}
+                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white shadow-lg shadow-rose-200/50"
                 >
                   <Plus className="w-5 h-5 ml-2" />
                   إضافة الاستفادة
