@@ -350,17 +350,17 @@ const HealthcareDashboard = () => {
           
           {/* أيقونات نوع الاستفادة */}
           {hasBenefits && (
-            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1.5">
+            <div className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1">
               {freeCount > 0 && (
-                <div className="flex items-center gap-1 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-2 py-1 rounded-lg shadow-md shadow-emerald-200/50">
-                  <Gift className="w-3 h-3" />
-                  <span className="text-xs font-bold">{freeCount}</span>
+                <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-1.5 py-0.5 rounded-md shadow-sm shadow-emerald-200/50">
+                  <Gift className="w-2.5 h-2.5" />
+                  <span className="text-[10px] font-bold">{freeCount}</span>
                 </div>
               )}
               {discountCount > 0 && (
-                <div className="flex items-center gap-1 bg-gradient-to-r from-rose-500 to-red-500 text-white px-2 py-1 rounded-lg shadow-md shadow-rose-200/50">
-                  <Percent className="w-3 h-3" />
-                  <span className="text-xs font-bold">{discountCount}</span>
+                <div className="flex items-center gap-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-1.5 py-0.5 rounded-md shadow-sm shadow-amber-200/50">
+                  <Percent className="w-2.5 h-2.5" />
+                  <span className="text-[10px] font-bold">{discountCount}</span>
                 </div>
               )}
             </div>
@@ -368,8 +368,8 @@ const HealthcareDashboard = () => {
           
           {/* علامة + عند التحويم */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-rose-500/90 backdrop-blur-sm text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
-              <Plus className="w-5 h-5" />
+            <div className="bg-emerald-600/90 backdrop-blur-sm text-white w-8 h-8 rounded-lg flex items-center justify-center shadow-lg">
+              <Plus className="w-4 h-4" />
             </div>
           </div>
         </div>
