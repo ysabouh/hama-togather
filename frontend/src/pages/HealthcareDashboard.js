@@ -319,12 +319,12 @@ const HealthcareDashboard = () => {
           }}
           className={`relative h-24 md:h-28 p-2 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.03] group ${
             isSelected
-              ? 'border-rose-400 bg-gradient-to-br from-rose-50 to-red-50 shadow-lg shadow-rose-200/50 ring-2 ring-rose-300'
+              ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-teal-50 shadow-lg shadow-emerald-200/50 ring-2 ring-emerald-300'
               : isToday
-              ? 'border-rose-300 bg-gradient-to-br from-rose-50/50 to-white ring-2 ring-rose-200/50'
+              ? 'border-emerald-300 bg-gradient-to-br from-emerald-50/50 to-white ring-2 ring-emerald-200/50'
               : hasBenefits
-              ? 'border-rose-200 bg-gradient-to-br from-rose-50/60 to-white hover:border-rose-300'
-              : 'border-slate-100 bg-white/80 hover:border-rose-200 hover:bg-rose-50/30'
+              ? 'border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white hover:border-emerald-300'
+              : 'border-slate-100 bg-white/80 hover:border-emerald-200 hover:bg-emerald-50/30'
           }`}
         >
           {/* رقم اليوم */}
