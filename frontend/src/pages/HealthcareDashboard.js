@@ -272,9 +272,10 @@ const HealthcareDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(`${API_URL}/takaful-benefits/${editingBenefit.id}`, {
-        family_id: editingBenefit.family_id,
         benefit_type: editingBenefit.benefit_type,
         discount_percentage: editingBenefit.benefit_type === 'discount' ? editingBenefit.discount_percentage : null,
+        time_from: editingBenefit.time_from,
+        time_to: editingBenefit.time_to,
         notes: editingBenefit.notes
       }, {
         headers: { Authorization: `Bearer ${token}` }
