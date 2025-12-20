@@ -4149,9 +4149,9 @@ async def create_takaful_benefit(
 @api_router.delete("/takaful-benefits/{benefit_id}")
 async def delete_takaful_benefit(
     benefit_id: str,
-    current_user: User = Depends(get_admin_or_committee_user)
+    current_user: User = Depends(get_admin_committee_or_healthcare_user)
 ):
-    """حذف سجل استفادة - متاح للمشرف وأعضاء اللجنة"""
+    """حذف سجل استفادة - متاح للمشرف وأعضاء اللجنة ومقدمي الرعاية الصحية"""
     
     existing_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
     if not existing_benefit:
@@ -4159,6 +4159,39 @@ async def delete_takaful_benefit(
     
     await db.takaful_benefits.delete_one({"id": benefit_id})
     return {"message": "Benefit record deleted successfully"}
+
+@api_router.put("/takaful-benefits/{benefit_id}")
+async def update_takaful_benefit(
+    benefit_id: str,
+    benefit_data: dict = Body(...),
+    current_user: User = Depends(get_admin_committee_or_healthcare_user)
+):
+    """تحديث سجل استفادة - متاح للمشرف وأعضاء اللجنة ومقدمي الرعاية الصحية"""
+    
+    existing_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
+    if not existing_benefit:
+        raise HTTPException(status_code=404, detail="Benefit record not found")
+    
+    # تحديث الحقول المسموح بها فقط
+    update_fields = {}
+    if 'family_id' in benefit_data:
+        update_fields['family_id'] = benefit_data['family_id']
+    if 'benefit_type' in benefit_data:
+        update_fields['benefit_type'] = benefit_data['benefit_type']
+    if 'discount_percentage' in benefit_data:
+        update_fields['discount_percentage'] = benefit_data['discount_percentage']
+    if 'notes' in benefit_data:
+        update_fields['notes'] = benefit_data['notes']
+    
+    update_fields['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.takaful_benefits.update_one(
+        {"id": benefit_id},
+        {"$set": update_fields}
+    )
+    
+    updated_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
+    return updated_benefit
 
 @api_router.get("/takaful-benefits/stats/{provider_type}/{provider_id}")
 async def get_provider_takaful_stats(
