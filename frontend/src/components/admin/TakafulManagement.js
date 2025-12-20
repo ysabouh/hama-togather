@@ -14,7 +14,9 @@ import {
   Stethoscope,
   Building2,
   FlaskConical,
-  X
+  X,
+  Link2,
+  Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,12 +27,17 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [benefits, setBenefits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [selectedBenefitForLink, setSelectedBenefitForLink] = useState(null);
+  const [selectedFamilyForLink, setSelectedFamilyForLink] = useState(null);
+  const [linkLoading, setLinkLoading] = useState(false);
   
   // Data for dropdowns
   const [doctors, setDoctors] = useState([]);
   const [pharmacies, setPharmacies] = useState([]);
   const [laboratories, setLaboratories] = useState([]);
   const [families, setFamilies] = useState([]);
+  const [neighborhoods, setNeighborhoods] = useState([]);
   
   // Form data
   const [formData, setFormData] = useState({
