@@ -433,7 +433,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      {benefit.family_number ? (
+                      {benefit.family_number && benefit.family_number !== 'غير معروف' && benefit.family_id ? (
                         <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-mono">
                           {benefit.family_number}
                         </span>
