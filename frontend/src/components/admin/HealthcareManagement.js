@@ -815,6 +815,34 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
               />
             </div>
 
+            {/* حساب المستخدم المرتبط */}
+            <div className="md:col-span-2">
+              <Label className="flex items-center gap-2">
+                حساب المستخدم المرتبط (اختياري)
+                <span className="text-xs text-gray-500">
+                  - لتمكين الدخول إلى لوحة تحكم الرعاية الصحية
+                </span>
+              </Label>
+              <Select
+                options={healthcareUsers.map(u => ({ 
+                  value: u.id, 
+                  label: `${u.full_name} (${u.phone || 'بدون هاتف'})`
+                }))}
+                value={formData.user_id ? { 
+                  value: formData.user_id, 
+                  label: getLinkedUserName(formData.user_id) 
+                } : null}
+                onChange={(option) => setFormData({ ...formData, user_id: option?.value || '' })}
+                placeholder={`ابحث واختر مستخدم من نوع ${currentTab === 'doctors' ? 'طبيب' : currentTab === 'pharmacies' ? 'صيدلاني' : 'مخبري'}...`}
+                isClearable
+                isSearchable
+                noOptionsMessage={() => `لا يوجد مستخدمين من نوع ${currentTab === 'doctors' ? 'طبيب' : currentTab === 'pharmacies' ? 'صيدلاني' : 'مخبري'}`}
+                styles={customSelectStyles}
+                className="react-select-container"
+                classNamePrefix="react-select"
+              />
+            </div>
+
             {/* Status checkboxes */}
             <div className="md:col-span-2 flex flex-wrap gap-6 pt-4 border-t">
               <label className="flex items-center gap-2 cursor-pointer">
