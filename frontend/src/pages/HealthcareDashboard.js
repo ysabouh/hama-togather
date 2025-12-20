@@ -331,6 +331,22 @@ const HealthcareDashboard = () => {
     return family?.name || family?.family_number || 'أسرة';
   };
 
+  // تحويل الوقت إلى صيغة 12 ساعة مع صباحاً/مساءً
+  const formatTime12Hour = (time24) => {
+    if (!time24) return '';
+    const [hours, minutes] = time24.split(':').map(Number);
+    const period = hours >= 12 ? 'م' : 'ص';
+    const hours12 = hours % 12 || 12;
+    return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
+  };
+
+  // عرض نطاق الوقت بصيغة 12 ساعة
+  const formatTimeRange = (timeFrom, timeTo) => {
+    const from = formatTime12Hour(timeFrom || '08:00');
+    const to = formatTime12Hour(timeTo || '12:00');
+    return `${from} - ${to}`;
+  };
+
   const getProviderIcon = () => {
     switch (providerType) {
       case 'doctor': return <Stethoscope className="w-8 h-8" />;
