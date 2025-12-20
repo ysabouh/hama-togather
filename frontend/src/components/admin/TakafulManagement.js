@@ -307,6 +307,8 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">#</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">الكود</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">التاريخ</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">مقدم الخدمة</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">النوع</th>
@@ -319,21 +321,33 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="px-4 py-8 text-center">
+                  <td colSpan="9" className="px-4 py-8 text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
                     <p className="mt-2 text-gray-500">جاري التحميل...</p>
                   </td>
                 </tr>
               ) : benefits.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan="9" className="px-4 py-8 text-center text-gray-500">
                     <Calendar className="w-12 h-12 mx-auto mb-2 text-gray-300" />
                     <p>لا توجد سجلات استفادة في هذه الفترة</p>
                   </td>
                 </tr>
               ) : (
-                benefits.map((benefit) => (
+                benefits.map((benefit, index) => (
                   <tr key={benefit.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 text-sm text-gray-500 font-medium">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-3">
+                      {benefit.benefit_code ? (
+                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-mono" dir="ltr">
+                          {benefit.benefit_code}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-xs">-</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-sm text-gray-900">
                       {new Date(benefit.benefit_date).toLocaleDateString('ar-SA')}
                     </td>
@@ -348,15 +362,22 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                     </td>
                     <td className="px-4 py-3">
                       <span className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
-                        {benefit.family_number}
+                        {benefit.family_number || '-'}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       {benefit.benefit_type === 'free' ? (
-                        <span className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                          <Gift className="w-3 h-3" />
-                          مجاني
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <span className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium w-fit">
+                            <Gift className="w-3 h-3" />
+                            مجاني
+                          </span>
+                          {benefit.free_amount > 0 && (
+                            <span className="text-green-700 text-xs font-bold">
+                              {benefit.free_amount?.toLocaleString('ar-SY')} ل.س
+                            </span>
+                          )}
+                        </div>
                       ) : (
                         <span className="flex items-center gap-1 bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
                           <Percent className="w-3 h-3" />
