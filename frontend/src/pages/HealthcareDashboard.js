@@ -338,12 +338,12 @@ const HealthcareDashboard = () => {
           {hasBenefits && (
             <div className="absolute top-1 left-1">
               <div className="relative">
-                {/* الدائرة الحمراء مع العدد */}
-                <div className="bg-gradient-to-br from-rose-500 to-red-600 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg shadow-rose-300/50 ring-2 ring-white">
-                  <span className="text-xs font-bold">{dayBenefits.length}</span>
+                {/* الدائرة الخضراء مع العدد */}
+                <div className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg shadow-emerald-300/50 ring-2 ring-white">
+                  <span className="text-[10px] font-bold">{dayBenefits.length}</span>
                 </div>
                 {/* تأثير النبض */}
-                <div className="absolute inset-0 bg-rose-400 rounded-full animate-ping opacity-30"></div>
+                <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-30"></div>
               </div>
             </div>
           )}
