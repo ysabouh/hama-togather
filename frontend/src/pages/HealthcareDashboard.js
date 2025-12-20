@@ -96,9 +96,10 @@ const HealthcareDashboard = () => {
   const [selectedDayBenefits, setSelectedDayBenefits] = useState([]);
   const [editingBenefit, setEditingBenefit] = useState(null);
   const [newBenefit, setNewBenefit] = useState({
-    family_id: '',
     benefit_type: 'free',
     discount_percentage: 0,
+    time_from: '08:00',
+    time_to: '12:00',
     notes: ''
   });
   const [stats, setStats] = useState({ total: 0, free: 0, discount: 0 });
