@@ -1032,16 +1032,28 @@ const HealthcareDashboard = () => {
                       {editingBenefit?.id === benefit.id ? (
                         // نموذج التعديل
                         <form onSubmit={handleUpdateBenefit} className="space-y-3">
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-1">الأسرة</label>
-                            <Select
-                              options={familyOptions}
-                              value={familyOptions.find(f => f.value === editingBenefit.family_id)}
-                              onChange={(option) => setEditingBenefit({ ...editingBenefit, family_id: option?.value || '' })}
-                              placeholder="اختر الأسرة..."
-                              styles={selectStyles}
-                              className="text-sm"
-                            />
+                          {/* Time Range */}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-xs text-slate-500 mb-1">من</label>
+                              <Input
+                                type="time"
+                                value={editingBenefit.time_from || '08:00'}
+                                onChange={(e) => setEditingBenefit({ ...editingBenefit, time_from: e.target.value })}
+                                className="h-9 text-center"
+                                dir="ltr"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-slate-500 mb-1">إلى</label>
+                              <Input
+                                type="time"
+                                value={editingBenefit.time_to || '12:00'}
+                                onChange={(e) => setEditingBenefit({ ...editingBenefit, time_to: e.target.value })}
+                                className="h-9 text-center"
+                                dir="ltr"
+                              />
+                            </div>
                           </div>
                           
                           <div className="grid grid-cols-2 gap-2">
