@@ -4150,6 +4150,7 @@ async def create_takaful_benefit(
         benefit_date=benefit_data.benefit_date,
         benefit_type=benefit_data.benefit_type,
         discount_percentage=benefit_data.discount_percentage,
+        free_amount=benefit_data.free_amount,
         time_from=benefit_data.time_from,
         time_to=benefit_data.time_to,
         notes=benefit_data.notes,
