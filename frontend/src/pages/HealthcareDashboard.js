@@ -532,28 +532,28 @@ const HealthcareDashboard = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Provider Card - Red Theme */}
+          {/* Provider Card - Green Theme */}
           <div className="lg:col-span-1">
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-rose-100/30 overflow-hidden sticky top-4 border border-rose-100/50">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-emerald-100/30 overflow-hidden sticky top-4 border border-emerald-100/50">
               {/* Card Header */}
-              <div className="bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 p-6 text-white relative overflow-hidden">
+              <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 p-5 text-white relative overflow-hidden">
                 <div className="absolute inset-0 bg-white/5"></div>
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
                 
-                <div className="relative flex items-center gap-4">
-                  <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
+                <div className="relative flex items-center gap-3">
+                  <div className="bg-white/15 backdrop-blur-sm p-3 rounded-xl border border-white/20">
                     {getProviderIcon()}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold">{providerData.full_name || providerData.name}</h3>
-                    <p className="text-white/80 text-sm">{getProviderTypeLabel()}</p>
+                    <h3 className="text-lg font-bold">{providerData.full_name || providerData.name}</h3>
+                    <p className="text-white/70 text-sm">{getProviderTypeLabel()}</p>
                   </div>
                 </div>
                 
                 {providerData.participates_in_solidarity && (
-                  <div className="relative mt-5 flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-xl w-fit border border-white/30">
-                    <Heart className="w-4 h-4 fill-white" />
-                    <span className="text-sm font-medium">مشارك في التكافل</span>
+                  <div className="relative mt-4 flex items-center gap-2 bg-white/15 backdrop-blur-sm px-3 py-2 rounded-lg w-fit border border-white/20 text-sm">
+                    <Heart className="w-3.5 h-3.5 fill-white" />
+                    <span className="font-medium">مشارك في التكافل</span>
                   </div>
                 )}
               </div>
