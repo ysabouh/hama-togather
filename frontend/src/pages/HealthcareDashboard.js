@@ -700,23 +700,23 @@ const HealthcareDashboard = () => {
         </div>
       </div>
 
-      {/* Add Benefit Modal - Red Theme */}
+      {/* Add Benefit Modal - Green Theme */}
       {showAddForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-md">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md border border-rose-100 overflow-hidden">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-md border border-emerald-100 overflow-hidden">
             {/* Modal Header */}
-            <div className="bg-gradient-to-br from-rose-500 via-red-500 to-rose-600 text-white p-6 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white p-5 relative overflow-hidden">
               <div className="absolute inset-0 bg-white/5"></div>
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
               
               <div className="relative flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl border border-white/30">
-                    <Plus className="w-6 h-6" />
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/15 backdrop-blur-sm p-2.5 rounded-lg border border-white/20">
+                    <Plus className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold">إضافة استفادة جديدة</h3>
-                    <p className="text-white/70 text-sm">
+                    <h3 className="font-bold">إضافة استفادة جديدة</h3>
+                    <p className="text-white/60 text-xs">
                       {selectedDate && new Date(selectedDate).toLocaleDateString('ar-SA', { 
                         weekday: 'long', 
                         year: 'numeric', 
@@ -731,9 +731,9 @@ const HealthcareDashboard = () => {
                     setShowAddForm(false);
                     setSelectedDate(null);
                   }}
-                  className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/20"
+                  className="p-1.5 hover:bg-white/15 rounded-lg transition-all duration-200 border border-white/15"
                 >
-                  <XCircle className="w-5 h-5" />
+                  <XCircle className="w-4 h-4" />
                 </button>
               </div>
             </div>
