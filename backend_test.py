@@ -1318,7 +1318,10 @@ class TakafulBenefitsTester:
         # Test 1: Admin login
         results['admin_login'] = self.login_admin()
         
-        # Test 2: Get test data
+        # Test 2: Doctor login
+        results['doctor_login'] = self.login_doctor()
+        
+        # Test 3: Get test data
         if results['admin_login']:
             results['get_test_data'] = self.get_test_providers_and_families()
         
