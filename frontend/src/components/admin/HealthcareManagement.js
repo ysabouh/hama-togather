@@ -203,7 +203,8 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
         whatsapp: '',
         working_hours: {},
         is_active: true,
-        participates_in_solidarity: false
+        participates_in_solidarity: false,
+        user_id: ''  // المستخدم المرتبط
       });
     } else {
       setFormData({
@@ -217,7 +218,8 @@ const HealthcareManagement = ({ activeTab = 'doctors' }) => {
         whatsapp: '',
         working_hours: {},
         is_active: true,
-        participates_in_solidarity: false
+        participates_in_solidarity: false,
+        user_id: ''  // المستخدم المرتبط
       });
     }
     setShowDialog(true);
