@@ -797,21 +797,21 @@ const HealthcareDashboard = () => {
               <div className="flex flex-wrap items-center justify-center gap-4 p-4 border-t border-emerald-100 bg-gradient-to-r from-emerald-50/50 to-white">
                 <div className="flex items-center gap-1.5 text-xs text-slate-600">
                   <div className="w-5 h-5 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white text-[9px] font-bold shadow-sm">
-                    3
+                    {stats.total}
                   </div>
                   <span>عدد الاستفادات</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-slate-600">
                   <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-1.5 py-0.5 rounded-md shadow-sm">
                     <Gift className="w-2.5 h-2.5" />
-                    <span className="text-[9px] font-bold">2</span>
+                    <span className="text-[9px] font-bold">{stats.free}</span>
                   </div>
                   <span>مجانية</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-slate-600">
                   <div className="flex items-center gap-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-1.5 py-0.5 rounded-md shadow-sm">
                     <Percent className="w-2.5 h-2.5" />
-                    <span className="text-[9px] font-bold">1</span>
+                    <span className="text-[9px] font-bold">{stats.discount}</span>
                   </div>
                   <span>خصم</span>
                 </div>
