@@ -4359,7 +4359,7 @@ async def update_takaful_benefit_status(
     updated_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
     return updated_benefit
 
-@api_router.get("/takaful-benefits/{benefit_id}/coupon")
+@api_router.get("/takaful-benefits/coupon/{benefit_id}")
 async def get_benefit_coupon_data(
     benefit_id: str,
     current_user: User = Depends(get_admin_or_committee_user)
