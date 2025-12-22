@@ -472,6 +472,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
               <tr>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">#</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">الكود</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">الحالة</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">التاريخ</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">مقدم الخدمة</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">النوع</th>
@@ -484,20 +485,23 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan="9" className="px-4 py-8 text-center">
+                  <td colSpan="10" className="px-4 py-8 text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
                     <p className="mt-2 text-gray-500">جاري التحميل...</p>
                   </td>
                 </tr>
               ) : benefits.length === 0 ? (
                 <tr>
-                  <td colSpan="9" className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
                     <Calendar className="w-12 h-12 mx-auto mb-2 text-gray-300" />
                     <p>لا توجد سجلات استفادة في هذه الفترة</p>
                   </td>
                 </tr>
               ) : (
-                benefits.map((benefit, index) => (
+                benefits.map((benefit, index) => {
+                  const statusInfo = getStatusInfo(benefit.status);
+                  const StatusIcon = statusInfo.icon;
+                  return (
                   <tr key={benefit.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-sm text-gray-500 font-medium">
                       {index + 1}
@@ -510,6 +514,24 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                       ) : (
                         <span className="text-gray-400 text-xs">-</span>
                       )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col gap-1">
+                        <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium w-fit ${statusInfo.color}`}>
+                          <StatusIcon className="w-3 h-3" />
+                          {statusInfo.label}
+                        </span>
+                        {benefit.status === 'cancelled' && benefit.cancel_reason && (
+                          <span className="text-xs text-red-600">
+                            {getCancelReasonLabel(benefit.cancel_reason)}
+                          </span>
+                        )}
+                        {benefit.status === 'closed' && benefit.status_note && (
+                          <span className="text-xs text-green-600 truncate max-w-[100px]" title={benefit.status_note}>
+                            {benefit.status_note}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-900">
                       {new Date(benefit.benefit_date).toLocaleDateString('ar-SA')}
