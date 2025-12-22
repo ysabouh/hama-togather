@@ -225,10 +225,16 @@ const HealthcareDashboard = () => {
       return;
     }
     
-    // التحقق من نسبة الخصم (إلزامي)
-    if (newBenefit.benefit_type === 'discount' && (!newBenefit.discount_percentage || newBenefit.discount_percentage <= 0)) {
-      toast.error('يرجى تحديد نسبة الخصم');
-      return;
+    // التحقق من نسبة الخصم والمبلغ (إلزامي)
+    if (newBenefit.benefit_type === 'discount') {
+      if (!newBenefit.discount_percentage || newBenefit.discount_percentage <= 0) {
+        toast.error('يرجى تحديد نسبة الخصم');
+        return;
+      }
+      if (!newBenefit.original_amount || newBenefit.original_amount <= 0) {
+        toast.error('يرجى تحديد المبلغ الأصلي');
+        return;
+      }
     }
     
     try {
@@ -238,6 +244,8 @@ const HealthcareDashboard = () => {
         provider_id: providerData.id,
         benefit_type: newBenefit.benefit_type,
         discount_percentage: newBenefit.benefit_type === 'discount' ? newBenefit.discount_percentage : null,
+        original_amount: newBenefit.benefit_type === 'discount' ? newBenefit.original_amount : null,
+        final_amount: newBenefit.benefit_type === 'discount' ? newBenefit.final_amount : null,
         free_amount: newBenefit.benefit_type === 'free' ? newBenefit.free_amount : null,
         benefit_date: selectedDate,
         time_from: newBenefit.time_from,
@@ -250,7 +258,7 @@ const HealthcareDashboard = () => {
       toast.success('تم إضافة الاستفادة بنجاح');
       setShowAddForm(false);
       setSelectedDate(null);
-      setNewBenefit({ benefit_type: 'free', discount_percentage: 0, free_amount: 0, time_from: '08:00', time_to: '12:00', notes: '' });
+      setNewBenefit({ benefit_type: 'free', discount_percentage: 0, original_amount: 0, final_amount: 0, free_amount: 0, time_from: '08:00', time_to: '12:00', notes: '' });
       fetchBenefits();
       
       const statsRes = await axios.get(
