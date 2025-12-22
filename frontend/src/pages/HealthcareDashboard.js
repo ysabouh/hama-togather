@@ -1440,6 +1440,17 @@ const HealthcareDashboard = () => {
                               </div>
                             )}
                             
+                            {/* نسبة الخصم - تظهر أسفل الكود */}
+                            {benefit.benefit_type === 'discount' && benefit.discount_percentage > 0 && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Percent className="w-4 h-4 text-amber-500" />
+                                <span className="text-slate-600">نسبة الخصم:</span>
+                                <span className="font-bold text-amber-600">
+                                  {benefit.discount_percentage}%
+                                </span>
+                              </div>
+                            )}
+                            
                             <div className="flex items-center gap-2 text-sm">
                               <Clock className="w-4 h-4 text-slate-400" />
                               <span className="text-slate-600">الوقت:</span>
@@ -1473,6 +1484,26 @@ const HealthcareDashboard = () => {
                               )}
                             </div>
                             
+                            {/* سبب الإلغاء */}
+                            {benefit.status === 'cancelled' && benefit.cancel_reason && (
+                              <div className="flex items-start gap-2 text-sm bg-red-50 p-2 rounded-lg">
+                                <XCircle className="w-4 h-4 text-red-500 mt-0.5" />
+                                <span className="text-red-600">سبب الإلغاء:</span>
+                                <span className="text-red-700 font-medium">
+                                  {CANCEL_REASONS.find(r => r.value === benefit.cancel_reason)?.label || benefit.cancel_reason}
+                                </span>
+                              </div>
+                            )}
+                            
+                            {/* ملاحظة الإغلاق */}
+                            {benefit.status === 'closed' && benefit.status_note && (
+                              <div className="flex items-start gap-2 text-sm bg-green-50 p-2 rounded-lg">
+                                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                                <span className="text-green-600">ملاحظة الإغلاق:</span>
+                                <span className="text-green-700">{benefit.status_note}</span>
+                              </div>
+                            )}
+                            
                             {benefit.notes && (
                               <div className="flex items-start gap-2 text-sm">
                                 <MessageCircle className="w-4 h-4 text-slate-400 mt-0.5" />
@@ -1480,6 +1511,30 @@ const HealthcareDashboard = () => {
                                 <span className="text-slate-700">{benefit.notes}</span>
                               </div>
                             )}
+                            
+                            {/* تواريخ الإنشاء والتعديل */}
+                            <div className="mt-3 pt-3 border-t border-slate-100 space-y-1">
+                              {benefit.created_at && (
+                                <div className="flex items-center gap-2 text-xs text-slate-500">
+                                  <Calendar className="w-3 h-3" />
+                                  <span>تاريخ الإنشاء:</span>
+                                  <span dir="ltr">{new Date(benefit.created_at).toLocaleString('ar-SA')}</span>
+                                  {benefit.created_by_user_name && (
+                                    <span className="text-slate-400">({benefit.created_by_user_name})</span>
+                                  )}
+                                </div>
+                              )}
+                              {benefit.updated_at && (
+                                <div className="flex items-center gap-2 text-xs text-slate-500">
+                                  <Edit className="w-3 h-3" />
+                                  <span>آخر تعديل:</span>
+                                  <span dir="ltr">{new Date(benefit.updated_at).toLocaleString('ar-SA')}</span>
+                                  {benefit.updated_by_user_name && (
+                                    <span className="text-slate-400">({benefit.updated_by_user_name})</span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )}
