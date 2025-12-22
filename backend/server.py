@@ -906,7 +906,7 @@ class TakafulBenefitStatusUpdate(BaseModel):
 # ============= Cancel Reasons Models =============
 class CancelReason(BaseModel):
     """سبب إلغاء"""
-    id: str = Field(default_factory=lambda: str(uuid4()))
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str  # اسم السبب
     description: Optional[str] = None  # وصف اختياري
     is_active: bool = True  # نشط أم متوقف
