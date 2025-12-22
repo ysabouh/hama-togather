@@ -432,7 +432,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
     setPrintLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/takaful-benefits/${benefitId}/coupon`, {
+      const response = await axios.get(`${API_URL}/takaful-benefits/coupon/${benefitId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setPrintData(response.data);
