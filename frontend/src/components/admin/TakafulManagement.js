@@ -1271,6 +1271,235 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
           </div>
         </div>
       )}
+
+      {/* Benefit Details Modal */}
+      {showDetailsModal && selectedBenefitForDetails && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-5 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Eye className="w-6 h-6" />
+                <h3 className="text-lg font-bold">تفاصيل الاستفادة</h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setSelectedBenefitForDetails(null);
+                }}
+                className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4 max-h-[calc(90vh-140px)] overflow-y-auto">
+              {/* Benefit Code & Status */}
+              <div className="flex items-center justify-between gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">كود الاستفادة</p>
+                  <p className="font-mono font-bold text-blue-700 text-lg" dir="ltr">
+                    {selectedBenefitForDetails.benefit_code || '-'}
+                  </p>
+                </div>
+                <div>
+                  {(() => {
+                    const statusInfo = getStatusInfo(selectedBenefitForDetails.status);
+                    const StatusIcon = statusInfo.icon;
+                    return (
+                      <span className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium ${statusInfo.color}`}>
+                        <StatusIcon className="w-4 h-4" />
+                        {statusInfo.label}
+                      </span>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Benefit Type */}
+              <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                <p className="text-xs text-gray-500 mb-2">نوع الاستفادة</p>
+                {selectedBenefitForDetails.benefit_type === 'free' ? (
+                  <div className="flex items-center gap-3">
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <Gift className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-green-700">مجاني</p>
+                      {selectedBenefitForDetails.free_amount > 0 && (
+                        <p className="text-green-600 text-sm">
+                          المبلغ: {selectedBenefitForDetails.free_amount?.toLocaleString('ar-SY')} ل.س
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Percent className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-blue-700">خصم</p>
+                      <p className="text-blue-600 text-sm">
+                        نسبة الخصم: {selectedBenefitForDetails.discount_percentage}%
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Provider & Family Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                  <p className="text-xs text-gray-500 mb-2">مقدم الخدمة</p>
+                  <div className="flex items-center gap-2">
+                    {getProviderTypeIcon(selectedBenefitForDetails.provider_type)}
+                    <div>
+                      <p className="font-medium text-gray-900">{selectedBenefitForDetails.provider_name}</p>
+                      <p className="text-xs text-gray-500">{getProviderTypeLabel(selectedBenefitForDetails.provider_type)}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                  <p className="text-xs text-gray-500 mb-2">العائلة</p>
+                  {selectedBenefitForDetails.family_id && selectedBenefitForDetails.family_number && selectedBenefitForDetails.family_number !== 'غير معروف' ? (
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-green-600" />
+                      <span className="font-mono font-bold text-green-700">
+                        {selectedBenefitForDetails.family_number}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-amber-600 text-sm flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      غير مرتبطة
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Date & Time */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                  <p className="text-xs text-gray-500 mb-2">تاريخ الاستفادة</p>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-gray-500" />
+                    <p className="font-medium text-gray-900">
+                      {new Date(selectedBenefitForDetails.benefit_date).toLocaleDateString('ar-SA', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                </div>
+                
+                {(selectedBenefitForDetails.time_from || selectedBenefitForDetails.time_to) && (
+                  <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-2">الوقت</p>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-gray-500" />
+                      <p className="font-medium text-gray-900" dir="ltr">
+                        {selectedBenefitForDetails.time_from || '--:--'} - {selectedBenefitForDetails.time_to || '--:--'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Notes */}
+              {selectedBenefitForDetails.notes && (
+                <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                  <p className="text-xs text-gray-500 mb-2">ملاحظات</p>
+                  <p className="text-gray-700">{selectedBenefitForDetails.notes}</p>
+                </div>
+              )}
+
+              {/* Cancellation Reason */}
+              {selectedBenefitForDetails.status === 'cancelled' && selectedBenefitForDetails.cancel_reason && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-xs text-red-600 mb-2">سبب الإلغاء</p>
+                  <p className="font-medium text-red-700">{getCancelReasonLabel(selectedBenefitForDetails.cancel_reason)}</p>
+                </div>
+              )}
+
+              {/* Closure Notes */}
+              {selectedBenefitForDetails.status === 'closed' && selectedBenefitForDetails.status_note && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                  <p className="text-xs text-green-600 mb-2">ملاحظة الإغلاق</p>
+                  <p className="font-medium text-green-700">{selectedBenefitForDetails.status_note}</p>
+                </div>
+              )}
+
+              {/* Creation & Update Info */}
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
+                <p className="text-xs text-gray-500 font-medium border-b border-gray-200 pb-2">معلومات السجل</p>
+                
+                {selectedBenefitForDetails.created_at && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">تاريخ الإنشاء:</span>
+                    <span className="text-gray-700">
+                      {new Date(selectedBenefitForDetails.created_at).toLocaleDateString('ar-SA', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                )}
+                
+                {selectedBenefitForDetails.created_by_user_name && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">أنشئ بواسطة:</span>
+                    <span className="text-gray-700 font-medium">{selectedBenefitForDetails.created_by_user_name}</span>
+                  </div>
+                )}
+                
+                {selectedBenefitForDetails.updated_at && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">آخر تعديل:</span>
+                    <span className="text-gray-700">
+                      {new Date(selectedBenefitForDetails.updated_at).toLocaleDateString('ar-SA', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                )}
+                
+                {selectedBenefitForDetails.updated_by_user_name && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">عدّل بواسطة:</span>
+                    <span className="text-gray-700 font-medium">{selectedBenefitForDetails.updated_by_user_name}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-end gap-3 p-4 border-t bg-gray-50 rounded-b-2xl">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowDetailsModal(false);
+                  setSelectedBenefitForDetails(null);
+                }}
+              >
+                إغلاق
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
