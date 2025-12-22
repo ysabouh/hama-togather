@@ -2035,6 +2035,10 @@ const AdminDashboard = () => {
                       <Heart className="w-4 h-4 ml-2" />
                       سجلات التكافل
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveHealthcareTab('cancel-reasons')} className="cursor-pointer">
+                      <XCircle className="w-4 h-4 ml-2" />
+                      أسباب الإلغاء
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 
