@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { 
   XCircle, Plus, Edit2, Power, X, Check, Clock, User,
   AlertCircle, Search, ChevronRight, ChevronLeft
