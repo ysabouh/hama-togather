@@ -728,6 +728,12 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                       {benefit.provider_name}
                     </td>
                     <td className="px-4 py-3">
+                      <span className="flex items-center gap-1 text-sm bg-purple-50 text-purple-700 px-2 py-1 rounded">
+                        <MapPin className="w-3 h-3" />
+                        {benefit.neighborhood_name || 'غير محدد'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
                       <span className="flex items-center gap-1 text-sm text-gray-600">
                         {getProviderTypeIcon(benefit.provider_type)}
                         {getProviderTypeLabel(benefit.provider_type)}
