@@ -1517,12 +1517,29 @@ const HealthcareDashboard = () => {
                             
                             {/* نسبة الخصم - تظهر أسفل الكود */}
                             {benefit.benefit_type === 'discount' && benefit.discount_percentage > 0 && (
-                              <div className="flex items-center gap-2 text-sm">
-                                <Percent className="w-4 h-4 text-amber-500" />
-                                <span className="text-slate-600">نسبة الخصم:</span>
-                                <span className="font-bold text-amber-600">
-                                  {benefit.discount_percentage}%
-                                </span>
+                              <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 space-y-1">
+                                {benefit.original_amount > 0 && (
+                                  <div className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-600">المبلغ الأصلي:</span>
+                                    <span className="font-bold text-slate-700">
+                                      {benefit.original_amount?.toLocaleString('ar-SY')} ل.س
+                                    </span>
+                                  </div>
+                                )}
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-slate-600">نسبة الخصم:</span>
+                                  <span className="font-bold text-amber-600">
+                                    {benefit.discount_percentage}%
+                                  </span>
+                                </div>
+                                {benefit.final_amount > 0 && (
+                                  <div className="flex items-center justify-between text-sm border-t border-amber-200 pt-1">
+                                    <span className="text-slate-600">المبلغ النهائي:</span>
+                                    <span className="font-bold text-green-600">
+                                      {benefit.final_amount?.toLocaleString('ar-SY')} ل.س
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             )}
                             
