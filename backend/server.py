@@ -4124,6 +4124,109 @@ async def delete_laboratory(
 
 # ============= Takaful Benefits Routes =============
 
+@api_router.get("/takaful-benefits/coupon/{benefit_id}")
+async def get_benefit_coupon_data(
+    benefit_id: str,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """الحصول على بيانات كوبون الاستفادة للطباعة"""
+    
+    benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
+    if not benefit:
+        raise HTTPException(status_code=404, detail="سجل الاستفادة غير موجود")
+    
+    # التحقق من وجود ربط بعائلة
+    if not benefit.get('family_id'):
+        raise HTTPException(status_code=400, detail="لا يمكن طباعة كوبون لاستفادة غير مرتبطة بعائلة")
+    
+    # جلب بيانات العائلة
+    family = await db.families.find_one({"id": benefit['family_id']}, {"_id": 0})
+    family_data = {
+        "family_number": family.get('family_number') or family.get('family_code') if family else 'غير معروف',
+        "head_name": family.get('head_name') if family else 'غير معروف',
+        "members_count": family.get('members_count', 0) if family else 0,
+        "address": family.get('address') if family else '',
+        "phone": family.get('phone') if family else ''
+    }
+    
+    # جلب بيانات مقدم الخدمة
+    provider_data = {}
+    provider_type = benefit.get('provider_type')
+    provider_id = benefit.get('provider_id')
+    
+    if provider_type == 'doctor':
+        doctor = await db.doctors.find_one({"id": provider_id}, {"_id": 0})
+        if doctor:
+            # جلب اسم التخصص
+            specialty_name = 'غير محدد'
+            if doctor.get('specialty_id'):
+                specialty = await db.medical_specialties.find_one({"id": doctor['specialty_id']}, {"_id": 0})
+                if specialty:
+                    specialty_name = specialty.get('name_ar', 'غير محدد')
+            
+            # جلب اسم الحي
+            neighborhood_name = 'غير محدد'
+            if doctor.get('neighborhood_id'):
+                neighborhood = await db.neighborhoods.find_one({"id": doctor['neighborhood_id']}, {"_id": 0})
+                if neighborhood:
+                    neighborhood_name = neighborhood.get('name', 'غير محدد')
+            
+            provider_data = {
+                "type": "doctor",
+                "type_label": "طبيب",
+                "name": doctor.get('full_name', 'غير معروف'),
+                "clinic_name": doctor.get('clinic_name', ''),
+                "specialty": specialty_name,
+                "phone": doctor.get('phone', ''),
+                "address": doctor.get('address', ''),
+                "neighborhood": neighborhood_name,
+                "working_hours": doctor.get('working_hours', '')
+            }
+    elif provider_type == 'pharmacy':
+        pharmacy = await db.pharmacies.find_one({"id": provider_id}, {"_id": 0})
+        if pharmacy:
+            neighborhood_name = 'غير محدد'
+            if pharmacy.get('neighborhood_id'):
+                neighborhood = await db.neighborhoods.find_one({"id": pharmacy['neighborhood_id']}, {"_id": 0})
+                if neighborhood:
+                    neighborhood_name = neighborhood.get('name', 'غير محدد')
+            
+            provider_data = {
+                "type": "pharmacy",
+                "type_label": "صيدلية",
+                "name": pharmacy.get('name', 'غير معروف'),
+                "owner_name": pharmacy.get('owner_name', ''),
+                "phone": pharmacy.get('phone', ''),
+                "address": pharmacy.get('address', ''),
+                "neighborhood": neighborhood_name,
+                "working_hours": pharmacy.get('working_hours', '')
+            }
+    elif provider_type == 'laboratory':
+        lab = await db.laboratories.find_one({"id": provider_id}, {"_id": 0})
+        if lab:
+            neighborhood_name = 'غير محدد'
+            if lab.get('neighborhood_id'):
+                neighborhood = await db.neighborhoods.find_one({"id": lab['neighborhood_id']}, {"_id": 0})
+                if neighborhood:
+                    neighborhood_name = neighborhood.get('name', 'غير محدد')
+            
+            provider_data = {
+                "type": "laboratory",
+                "type_label": "مخبر",
+                "name": lab.get('name', 'غير معروف'),
+                "owner_name": lab.get('owner_name', ''),
+                "phone": lab.get('phone', ''),
+                "address": lab.get('address', ''),
+                "neighborhood": neighborhood_name,
+                "working_hours": lab.get('working_hours', '')
+            }
+    
+    return {
+        "benefit": benefit,
+        "family": family_data,
+        "provider": provider_data
+    }
+
 @api_router.get("/takaful-benefits/{provider_type}/{provider_id}")
 async def get_provider_takaful_benefits(
     provider_type: str,
