@@ -427,6 +427,201 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
     });
   };
 
+  // جلب بيانات الكوبون للطباعة
+  const fetchPrintData = async (benefitId) => {
+    setPrintLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/takaful-benefits/${benefitId}/coupon`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setPrintData(response.data);
+      setShowPrintModal(true);
+    } catch (error) {
+      console.error('Error fetching print data:', error);
+      toast.error(error.response?.data?.detail || 'فشل تحميل بيانات الكوبون');
+    } finally {
+      setPrintLoading(false);
+    }
+  };
+
+  // دالة الطباعة
+  const handlePrint = () => {
+    const printContent = printRef.current;
+    if (!printContent) return;
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html dir="rtl" lang="ar">
+      <head>
+        <meta charset="UTF-8">
+        <title>كوبون استفادة - ${printData?.benefit?.benefit_code || ''}</title>
+        <style>
+          @page { 
+            size: landscape; 
+            margin: 10mm;
+          }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+          }
+          body {
+            direction: rtl;
+            background: white;
+            padding: 20px;
+          }
+          .coupon {
+            border: 3px solid #dc2626;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+          }
+          .header {
+            text-align: center;
+            border-bottom: 2px dashed #dc2626;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+          }
+          .logo-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 4px;
+          }
+          .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+          }
+          .code-box {
+            background: #dc2626;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 12px;
+            letter-spacing: 2px;
+          }
+          .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+          }
+          .section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+          }
+          .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #fee2e2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dotted #e5e7eb;
+          }
+          .info-row:last-child {
+            border-bottom: none;
+          }
+          .info-label {
+            color: #6b7280;
+            font-size: 13px;
+          }
+          .info-value {
+            color: #111827;
+            font-weight: 600;
+            font-size: 13px;
+          }
+          .benefit-box {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            grid-column: span 2;
+          }
+          .benefit-type {
+            font-size: 16px;
+            color: #166534;
+            margin-bottom: 8px;
+          }
+          .benefit-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #15803d;
+          }
+          .benefit-details {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 8px;
+          }
+          .footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 2px dashed #dc2626;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+          }
+          .signature-box {
+            text-align: center;
+            padding: 20px;
+          }
+          .signature-line {
+            border-bottom: 2px solid #374151;
+            width: 200px;
+            margin: 0 auto 8px;
+            height: 60px;
+          }
+          .signature-label {
+            color: #6b7280;
+            font-size: 12px;
+          }
+          .notes {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 11px;
+            color: #92400e;
+            margin-top: 16px;
+            text-align: center;
+          }
+          @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          }
+        </style>
+      </head>
+      <body>
+        ${printContent.innerHTML}
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 250);
+  };
+
   const resetForm = () => {
     setFormData({
       provider_type: 'doctor',
