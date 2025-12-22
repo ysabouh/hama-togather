@@ -90,6 +90,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
 
   useEffect(() => {
     fetchData();
+    fetchCancelReasons();
   }, []);
 
   useEffect(() => {
@@ -97,6 +98,18 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       fetchBenefits();
     }
   }, [filterProviderType, filterMonth, filterYear, dataLoaded]);
+
+  const fetchCancelReasons = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/cancel-reasons?active_only=true`);
+      setCancelReasons((response.data || []).map(r => ({
+        value: r.id,
+        label: r.name
+      })));
+    } catch (error) {
+      console.error('Error fetching cancel reasons:', error);
+    }
+  };
 
   const fetchData = async () => {
     try {
