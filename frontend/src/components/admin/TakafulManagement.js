@@ -756,10 +756,22 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                           )}
                         </div>
                       ) : (
-                        <span className="flex items-center gap-1 bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                          <Percent className="w-3 h-3" />
-                          خصم {benefit.discount_percentage}%
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <span className="flex items-center gap-1 bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium w-fit">
+                            <Percent className="w-3 h-3" />
+                            خصم {benefit.discount_percentage}%
+                          </span>
+                          {benefit.original_amount > 0 && (
+                            <span className="text-gray-500 text-xs line-through">
+                              {benefit.original_amount?.toLocaleString('ar-SY')} ل.س
+                            </span>
+                          )}
+                          {benefit.final_amount > 0 && (
+                            <span className="text-green-600 text-xs font-bold">
+                              {benefit.final_amount?.toLocaleString('ar-SY')} ل.س
+                            </span>
+                          )}
+                        </div>
                       )}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500 max-w-xs truncate">
