@@ -149,7 +149,25 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
         }
       );
       
-      setBenefits(response.data || []);
+      const benefitsData = response.data || [];
+      setBenefits(benefitsData);
+      
+      // حساب الإحصائيات
+      const stats = {
+        open: 0,
+        inprogress: 0,
+        closed: 0,
+        cancelled: 0,
+        total: benefitsData.length
+      };
+      benefitsData.forEach(b => {
+        const status = b.status || 'open';
+        if (stats.hasOwnProperty(status)) {
+          stats[status]++;
+        }
+      });
+      setStatusStats(stats);
+      setCurrentPage(1); // إعادة تعيين الصفحة عند تحميل بيانات جديدة
     } catch (error) {
       console.error('Error fetching benefits:', error);
       if (error.response?.status === 401) {
