@@ -666,7 +666,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                 <tr>
                   <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
                     <Search className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                    <p>لا توجد نتائج تطابق البحث "{searchQuery}"</p>
+                    <p>لا توجد نتائج تطابق البحث &ldquo;{searchQuery}&rdquo;</p>
                     <button
                       onClick={() => setSearchQuery('')}
                       className="text-red-600 hover:text-red-700 text-sm mt-2 underline"
