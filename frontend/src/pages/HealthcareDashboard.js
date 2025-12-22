@@ -106,6 +106,24 @@ const HealthcareDashboard = () => {
     notes: ''
   });
   const [stats, setStats] = useState({ total: 0, free: 0, discount: 0 });
+  
+  // State للتعامل مع تغيير الحالة
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [selectedBenefitForStatus, setSelectedBenefitForStatus] = useState(null);
+  const [statusAction, setStatusAction] = useState(null); // 'close' or 'cancel'
+  const [statusNote, setStatusNote] = useState('');
+  const [cancelReason, setCancelReason] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(false);
+  
+  // أسباب الإلغاء
+  const CANCEL_REASONS = [
+    { value: 'family_not_eligible', label: 'الأسرة غير مؤهلة' },
+    { value: 'duplicate_benefit', label: 'استفادة مكررة' },
+    { value: 'provider_unavailable', label: 'مقدم الخدمة غير متاح' },
+    { value: 'family_declined', label: 'الأسرة رفضت الاستفادة' },
+    { value: 'expired', label: 'انتهت صلاحية الاستفادة' },
+    { value: 'other', label: 'سبب آخر' }
+  ];
 
   const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
   const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
