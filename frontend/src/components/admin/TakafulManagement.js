@@ -32,16 +32,6 @@ import { Input } from '@/components/ui/input';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-// أسباب الإلغاء
-const CANCEL_REASONS = [
-  { value: 'family_not_eligible', label: 'الأسرة غير مؤهلة' },
-  { value: 'duplicate_benefit', label: 'استفادة مكررة' },
-  { value: 'provider_unavailable', label: 'مقدم الخدمة غير متاح' },
-  { value: 'family_declined', label: 'الأسرة رفضت الاستفادة' },
-  { value: 'expired', label: 'انتهت صلاحية الاستفادة' },
-  { value: 'other', label: 'سبب آخر' }
-];
-
 const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [benefits, setBenefits] = useState([]);
   const [loading, setLoading] = useState(false);
