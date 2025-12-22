@@ -457,155 +457,52 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       <head>
         <meta charset="UTF-8">
         <title>كوبون استفادة - ${printData?.benefit?.benefit_code || ''}</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <style>
           @page { 
-            size: landscape; 
+            size: A4 landscape; 
             margin: 10mm;
           }
+          @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
           * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
           }
           body {
             direction: rtl;
-            background: white;
+            background: #f3f4f6;
             padding: 20px;
           }
           .coupon {
             border: 3px solid #dc2626;
             border-radius: 16px;
             padding: 24px;
-            max-width: 900px;
+            max-width: 100%;
             margin: 0 auto;
             background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
           }
-          .header {
-            text-align: center;
-            border-bottom: 2px dashed #dc2626;
-            padding-bottom: 16px;
-            margin-bottom: 20px;
-          }
-          .logo-text {
-            font-size: 28px;
-            font-weight: bold;
-            color: #dc2626;
-            margin-bottom: 4px;
-          }
-          .subtitle {
-            color: #6b7280;
-            font-size: 14px;
-          }
-          .code-box {
-            background: #dc2626;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 8px;
-            display: inline-block;
-            font-family: monospace;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 12px;
-            letter-spacing: 2px;
-          }
-          .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-          }
-          .section {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 16px;
-          }
-          .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #dc2626;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #fee2e2;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          }
-          .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px dotted #e5e7eb;
-          }
-          .info-row:last-child {
-            border-bottom: none;
-          }
-          .info-label {
-            color: #6b7280;
-            font-size: 13px;
-          }
-          .info-value {
-            color: #111827;
-            font-weight: 600;
-            font-size: 13px;
-          }
-          .benefit-box {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-            border: 2px solid #22c55e;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            grid-column: span 2;
-          }
-          .benefit-type {
-            font-size: 16px;
-            color: #166534;
-            margin-bottom: 8px;
-          }
-          .benefit-amount {
-            font-size: 32px;
-            font-weight: bold;
-            color: #15803d;
-          }
-          .benefit-details {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 8px;
-          }
-          .footer {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 2px dashed #dc2626;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-          }
-          .signature-box {
-            text-align: center;
-            padding: 20px;
-          }
-          .signature-line {
-            border-bottom: 2px solid #374151;
-            width: 200px;
-            margin: 0 auto 8px;
-            height: 60px;
-          }
-          .signature-label {
-            color: #6b7280;
-            font-size: 12px;
-          }
-          .notes {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 11px;
-            color: #92400e;
-            margin-top: 16px;
-            text-align: center;
-          }
+          .grid-cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          .col-span-2 { grid-column: span 2; }
           @media print {
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { 
+              -webkit-print-color-adjust: exact !important; 
+              print-color-adjust: exact !important;
+              background: white !important;
+              padding: 0;
+            }
+            .coupon {
+              border: 3px solid #dc2626 !important;
+              background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%) !important;
+            }
+            .bg-red-600 { background-color: #dc2626 !important; }
+            .bg-green-50, .bg-gradient-to-r { background: linear-gradient(to right, #f0fdf4, #ecfdf5) !important; }
+            .border-green-500 { border-color: #22c55e !important; }
+            .text-red-600 { color: #dc2626 !important; }
+            .text-green-700 { color: #15803d !important; }
+            .text-green-800 { color: #166534 !important; }
+            .text-white { color: white !important; }
           }
         </style>
       </head>
@@ -619,7 +516,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
     setTimeout(() => {
       printWindow.print();
       printWindow.close();
-    }, 250);
+    }, 500);
   };
 
   const resetForm = () => {
