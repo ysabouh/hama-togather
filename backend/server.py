@@ -4670,6 +4670,31 @@ async def startup_db():
             await db.medical_specialties.insert_one(doc)
         logger.info(f"Created {len(default_specialties)} default medical specialties")
     
+    # Create default cancel reasons if they don't exist
+    default_cancel_reasons = [
+        {'name': 'عدم الحاجة', 'description': 'لم يعد المستفيد بحاجة للخدمة'},
+        {'name': 'عدم الالتزام بالموعد', 'description': 'لم يلتزم المستفيد بالموعد المحدد'},
+        {'name': 'تغيير الظروف', 'description': 'تغيرت ظروف المستفيد'},
+        {'name': 'خطأ في الإدخال', 'description': 'تم إدخال البيانات بشكل خاطئ'},
+        {'name': 'طلب المستفيد', 'description': 'طلب المستفيد إلغاء الاستفادة'},
+        {'name': 'انتهاء الصلاحية', 'description': 'انتهت صلاحية الاستفادة'},
+        {'name': 'سبب آخر', 'description': 'أسباب أخرى غير مذكورة'}
+    ]
+    
+    existing_cancel_reasons_count = await db.cancel_reasons.count_documents({})
+    if existing_cancel_reasons_count == 0:
+        for reason_data in default_cancel_reasons:
+            reason = CancelReason(
+                name=reason_data['name'],
+                description=reason_data['description'],
+                created_by_user_id='system',
+                created_by_user_name='النظام'
+            )
+            doc = reason.model_dump()
+            doc['created_at'] = doc['created_at'].isoformat()
+            await db.cancel_reasons.insert_one(doc)
+        logger.info(f"Created {len(default_cancel_reasons)} default cancel reasons")
+    
     # Ensure default admin user exists
     admin_exists = await db.users.find_one({"email": "admin@example.com"})
     if not admin_exists:
