@@ -599,13 +599,16 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                   </td>
                 </tr>
               ) : (
-                benefits.map((benefit, index) => {
+                benefits
+                  .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                  .map((benefit, index) => {
                   const statusInfo = getStatusInfo(benefit.status);
                   const StatusIcon = statusInfo.icon;
+                  const actualIndex = (currentPage - 1) * itemsPerPage + index;
                   return (
                   <tr key={benefit.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-sm text-gray-500 font-medium">
-                      {index + 1}
+                      {actualIndex + 1}
                     </td>
                     <td className="px-4 py-3">
                       {benefit.benefit_code ? (
