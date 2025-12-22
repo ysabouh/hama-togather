@@ -318,6 +318,8 @@ const HealthcareDashboard = () => {
       await axios.put(`${API_URL}/takaful-benefits/${editingBenefit.id}`, {
         benefit_type: editingBenefit.benefit_type,
         discount_percentage: editingBenefit.benefit_type === 'discount' ? editingBenefit.discount_percentage : null,
+        original_amount: editingBenefit.benefit_type === 'discount' ? editingBenefit.original_amount : null,
+        final_amount: editingBenefit.benefit_type === 'discount' ? editingBenefit.final_amount : null,
         free_amount: editingBenefit.benefit_type === 'free' ? editingBenefit.free_amount : null,
         time_from: editingBenefit.time_from,
         time_to: editingBenefit.time_to,
