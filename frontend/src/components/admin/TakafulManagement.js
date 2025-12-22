@@ -528,8 +528,41 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             className="flex items-center gap-2"
           >
             <Search className="w-4 h-4" />
-            بحث
+            تحديث
           </Button>
+        </div>
+        
+        {/* Search Box */}
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="relative">
+            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1); // إعادة تعيين الصفحة عند البحث
+              }}
+              placeholder="ابحث بالكود، مقدم الخدمة، رقم الأسرة، الحالة، الملاحظات، سبب الإلغاء..."
+              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setCurrentPage(1);
+                }}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          {searchQuery && (
+            <p className="text-xs text-gray-500 mt-2">
+              تم العثور على <span className="font-bold text-red-600">{getFilteredBenefits().length}</span> نتيجة من أصل {benefits.length} سجل
+            </p>
+          )}
         </div>
       </div>
 
