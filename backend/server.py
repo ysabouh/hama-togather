@@ -4266,9 +4266,9 @@ async def update_takaful_benefit(
 async def update_takaful_benefit_status(
     benefit_id: str,
     status_data: TakafulBenefitStatusUpdate,
-    current_user: User = Depends(get_admin_or_committee_user)
+    current_user: User = Depends(get_admin_committee_or_healthcare_user)
 ):
-    """تحديث حالة سجل الاستفادة - متاح للمشرف وأعضاء اللجنة فقط"""
+    """تحديث حالة سجل الاستفادة - متاح للمشرف وأعضاء اللجنة ومقدمي الرعاية الصحية"""
     
     existing_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
     if not existing_benefit:
