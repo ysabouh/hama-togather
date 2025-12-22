@@ -903,6 +903,44 @@ class TakafulBenefitStatusUpdate(BaseModel):
     status_note: Optional[str] = None  # ملاحظة (للإغلاق)
     cancel_reason: Optional[str] = None  # سبب الإلغاء
 
+# ============= Cancel Reasons Models =============
+class CancelReason(BaseModel):
+    """سبب إلغاء"""
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    name: str  # اسم السبب
+    description: Optional[str] = None  # وصف اختياري
+    is_active: bool = True  # نشط أم متوقف
+    created_by_user_id: str
+    created_by_user_name: Optional[str] = None
+    updated_by_user_id: Optional[str] = None
+    updated_by_user_name: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[str] = None
+
+class CancelReasonCreate(BaseModel):
+    """إنشاء سبب إلغاء جديد"""
+    name: str
+    description: Optional[str] = None
+
+class CancelReasonUpdate(BaseModel):
+    """تحديث سبب إلغاء"""
+    name: Optional[str] = None
+    description: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class CancelReasonResponse(BaseModel):
+    """استجابة سبب الإلغاء"""
+    id: str
+    name: str
+    description: Optional[str] = None
+    is_active: bool
+    created_by_user_id: str
+    created_by_user_name: Optional[str] = None
+    updated_by_user_id: Optional[str] = None
+    updated_by_user_name: Optional[str] = None
+    created_at: datetime
+    updated_at: Optional[str] = None
+
 # ============= Helper Functions =============
 
 def verify_password(plain_password, hashed_password):
