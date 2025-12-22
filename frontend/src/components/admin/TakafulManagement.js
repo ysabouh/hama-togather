@@ -1490,21 +1490,32 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                 </div>
                 
                 <div className="p-4 bg-white border border-gray-200 rounded-xl">
-                  <p className="text-xs text-gray-500 mb-2">العائلة</p>
-                  {selectedBenefitForDetails.family_id && selectedBenefitForDetails.family_number && selectedBenefitForDetails.family_number !== 'غير معروف' ? (
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-green-600" />
-                      <span className="font-mono font-bold text-green-700">
-                        {selectedBenefitForDetails.family_number}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className="text-amber-600 text-sm flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      غير مرتبطة
+                  <p className="text-xs text-gray-500 mb-2">الحي</p>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-purple-600" />
+                    <span className="font-medium text-purple-700">
+                      {selectedBenefitForDetails.neighborhood_name || 'غير محدد'}
                     </span>
-                  )}
+                  </div>
                 </div>
+              </div>
+
+              {/* Family Info */}
+              <div className="p-4 bg-white border border-gray-200 rounded-xl">
+                <p className="text-xs text-gray-500 mb-2">العائلة</p>
+                {selectedBenefitForDetails.family_id && selectedBenefitForDetails.family_number && selectedBenefitForDetails.family_number !== 'غير معروف' ? (
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-green-600" />
+                    <span className="font-mono font-bold text-green-700">
+                      {selectedBenefitForDetails.family_number}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-amber-600 text-sm flex items-center gap-1">
+                    <AlertCircle className="w-4 h-4" />
+                    غير مرتبطة
+                  </span>
+                )}
               </div>
 
               {/* Date & Time */}
