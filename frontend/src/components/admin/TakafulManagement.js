@@ -20,7 +20,12 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  Edit
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -43,6 +48,8 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedBenefitForDetails, setSelectedBenefitForDetails] = useState(null);
   const [selectedBenefitForLink, setSelectedBenefitForLink] = useState(null);
   const [selectedFamilyForLink, setSelectedFamilyForLink] = useState(null);
   const [selectedBenefitForStatus, setSelectedBenefitForStatus] = useState(null);
@@ -51,6 +58,19 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [cancelReason, setCancelReason] = useState(null);
   const [linkLoading, setLinkLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
+  
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  
+  // Statistics
+  const [statusStats, setStatusStats] = useState({
+    open: 0,
+    inprogress: 0,
+    closed: 0,
+    cancelled: 0,
+    total: 0
+  });
   
   // Data for dropdowns
   const [doctors, setDoctors] = useState([]);
