@@ -1863,6 +1863,193 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
           </div>
         </div>
       )}
+
+      {/* Print Coupon Modal */}
+      {showPrintModal && printData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Printer className="w-6 h-6" />
+                <h3 className="text-lg font-bold">طباعة كوبون الاستفادة</h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={handlePrint}
+                  className="bg-white text-purple-700 hover:bg-purple-50"
+                >
+                  <Printer className="w-4 h-4 ml-2" />
+                  طباعة
+                </Button>
+                <button
+                  onClick={() => {
+                    setShowPrintModal(false);
+                    setPrintData(null);
+                  }}
+                  className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Coupon Preview */}
+            <div className="p-6 overflow-y-auto max-h-[calc(95vh-120px)] bg-gray-100">
+              <div ref={printRef}>
+                <div className="coupon bg-gradient-to-br from-red-50 to-white border-3 border-red-600 rounded-2xl p-6 max-w-4xl mx-auto" style={{border: '3px solid #dc2626'}}>
+                  {/* Header */}
+                  <div className="text-center border-b-2 border-dashed border-red-600 pb-4 mb-5">
+                    <div className="text-3xl font-bold text-red-600 mb-1">معاً نَبني</div>
+                    <div className="text-gray-500 text-sm">منصة التكافل المجتمعي - حماة</div>
+                    <div className="bg-red-600 text-white px-5 py-2 rounded-lg inline-block mt-3 font-mono text-lg font-bold tracking-widest">
+                      {printData.benefit?.benefit_code || 'N/A'}
+                    </div>
+                  </div>
+
+                  {/* Content Grid */}
+                  <div className="grid grid-cols-2 gap-5">
+                    {/* Provider Info */}
+                    <div className="bg-white border border-gray-200 rounded-xl p-4">
+                      <div className="text-sm font-bold text-red-600 mb-3 pb-2 border-b border-red-100 flex items-center gap-2">
+                        {printData.provider?.type === 'doctor' && <Stethoscope className="w-4 h-4" />}
+                        {printData.provider?.type === 'pharmacy' && <Building2 className="w-4 h-4" />}
+                        {printData.provider?.type === 'laboratory' && <FlaskConical className="w-4 h-4" />}
+                        بيانات مقدم الخدمة
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">النوع:</span>
+                          <span className="font-semibold text-sm">{printData.provider?.type_label}</span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">الاسم:</span>
+                          <span className="font-semibold text-sm">{printData.provider?.name}</span>
+                        </div>
+                        {printData.provider?.clinic_name && (
+                          <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                            <span className="text-gray-500 text-sm">العيادة:</span>
+                            <span className="font-semibold text-sm">{printData.provider?.clinic_name}</span>
+                          </div>
+                        )}
+                        {printData.provider?.specialty && (
+                          <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                            <span className="text-gray-500 text-sm">التخصص:</span>
+                            <span className="font-semibold text-sm">{printData.provider?.specialty}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">الهاتف:</span>
+                          <span className="font-semibold text-sm" dir="ltr">{printData.provider?.phone || '-'}</span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">الحي:</span>
+                          <span className="font-semibold text-sm">{printData.provider?.neighborhood}</span>
+                        </div>
+                        <div className="flex justify-between py-1">
+                          <span className="text-gray-500 text-sm">العنوان:</span>
+                          <span className="font-semibold text-sm">{printData.provider?.address || '-'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Family Info */}
+                    <div className="bg-white border border-gray-200 rounded-xl p-4">
+                      <div className="text-sm font-bold text-red-600 mb-3 pb-2 border-b border-red-100 flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        بيانات الأسرة المستفيدة
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">رقم الأسرة:</span>
+                          <span className="font-bold text-green-700 font-mono">{printData.family?.family_number}</span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">رب الأسرة:</span>
+                          <span className="font-semibold text-sm">{printData.family?.head_name || '-'}</span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">عدد الأفراد:</span>
+                          <span className="font-semibold text-sm">{printData.family?.members_count || '-'}</span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-sm">الهاتف:</span>
+                          <span className="font-semibold text-sm" dir="ltr">{printData.family?.phone || '-'}</span>
+                        </div>
+                        <div className="flex justify-between py-1">
+                          <span className="text-gray-500 text-sm">العنوان:</span>
+                          <span className="font-semibold text-sm">{printData.family?.address || '-'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Benefit Details - Full Width */}
+                    <div className="col-span-2 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-xl p-5 text-center">
+                      <div className="text-base text-green-800 mb-2">
+                        {printData.benefit?.benefit_type === 'free' ? '🎁 استفادة مجانية' : '💰 استفادة خصم'}
+                      </div>
+                      <div className="text-4xl font-bold text-green-700">
+                        {printData.benefit?.benefit_type === 'free' 
+                          ? `${printData.benefit?.free_amount?.toLocaleString('ar-SY') || 0} ل.س`
+                          : `خصم ${printData.benefit?.discount_percentage}%`
+                        }
+                      </div>
+                      {printData.benefit?.benefit_type === 'discount' && printData.benefit?.original_amount > 0 && (
+                        <div className="text-sm text-gray-600 mt-2">
+                          المبلغ الأصلي: <span className="line-through">{printData.benefit?.original_amount?.toLocaleString('ar-SY')} ل.س</span>
+                          {' → '}
+                          المبلغ النهائي: <span className="font-bold text-green-600">{printData.benefit?.final_amount?.toLocaleString('ar-SY')} ل.س</span>
+                        </div>
+                      )}
+                      <div className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-4">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(printData.benefit?.benefit_date).toLocaleDateString('ar-SA', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </span>
+                        {(printData.benefit?.time_from || printData.benefit?.time_to) && (
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            <span dir="ltr">{printData.benefit?.time_from || '--:--'} - {printData.benefit?.time_to || '--:--'}</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Signatures */}
+                  <div className="mt-6 pt-5 border-t-2 border-dashed border-red-600 grid grid-cols-2 gap-10">
+                    <div className="text-center p-4">
+                      <div className="border-b-2 border-gray-400 w-48 mx-auto h-16 mb-2"></div>
+                      <div className="text-gray-500 text-sm">توقيع وختم مقدم الخدمة</div>
+                    </div>
+                    <div className="text-center p-4">
+                      <div className="border-b-2 border-gray-400 w-48 mx-auto h-16 mb-2"></div>
+                      <div className="text-gray-500 text-sm">توقيع المستفيد</div>
+                    </div>
+                  </div>
+
+                  {/* Notes */}
+                  {printData.benefit?.notes && (
+                    <div className="mt-4 bg-amber-50 border border-amber-400 rounded-lg p-3 text-center text-amber-800 text-sm">
+                      <strong>ملاحظات:</strong> {printData.benefit?.notes}
+                    </div>
+                  )}
+
+                  {/* Bottom Note */}
+                  <div className="mt-4 text-center text-xs text-gray-400">
+                    تم إنشاء هذا الكوبون بتاريخ {new Date().toLocaleDateString('ar-SA')} - منصة معاً نَبني للتكافل المجتمعي
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
