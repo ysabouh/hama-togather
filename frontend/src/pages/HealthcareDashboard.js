@@ -1305,8 +1305,20 @@ const HealthcareDashboard = () => {
                                   </span>
                                 )}
                               </span>
+                              {/* شارة الحالة */}
+                              {(() => {
+                                const statusInfo = getStatusInfo(benefit.status);
+                                const StatusIcon = statusInfo.icon;
+                                return (
+                                  <span className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${statusInfo.color}`}>
+                                    <StatusIcon className="w-3 h-3" />
+                                    {statusInfo.label}
+                                  </span>
+                                );
+                              })()}
                             </div>
                             <div className="flex gap-1">
+                              {/* أزرار التعديل والحذف */}
                               {benefit.family_id && benefit.family_number && benefit.family_number !== 'غير معروف' ? (
                                 <>
                                   <button
@@ -1323,6 +1335,26 @@ const HealthcareDashboard = () => {
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
+                                  {/* زر الإغلاق - يظهر فقط للحالات inprogress */}
+                                  {benefit.status === 'inprogress' && (
+                                    <button
+                                      onClick={() => openStatusModal(benefit, 'close')}
+                                      className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                      title="إغلاق الاستفادة"
+                                    >
+                                      <CheckCircle className="w-4 h-4" />
+                                    </button>
+                                  )}
+                                  {/* زر الإلغاء - يظهر للحالات open و inprogress */}
+                                  {(benefit.status === 'open' || benefit.status === 'inprogress') && (
+                                    <button
+                                      onClick={() => openStatusModal(benefit, 'cancel')}
+                                      className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                      title="إلغاء الاستفادة"
+                                    >
+                                      <XCircle className="w-4 h-4" />
+                                    </button>
+                                  )}
                                 </>
                               ) : (
                                 <>
