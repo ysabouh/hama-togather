@@ -1571,7 +1571,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
               {selectedBenefitForDetails.status === 'cancelled' && selectedBenefitForDetails.cancel_reason && (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
                   <p className="text-xs text-red-600 mb-2">سبب الإلغاء</p>
-                  <p className="font-medium text-red-700">{getCancelReasonLabel(selectedBenefitForDetails.cancel_reason)}</p>
+                  <p className="font-medium text-red-700">{getCancelReasonLabel(selectedBenefitForDetails)}</p>
                 </div>
               )}
 
