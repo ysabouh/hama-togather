@@ -401,6 +401,8 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       // البحث في الحالة (بالعربية)
       const statusInfo = getStatusInfo(benefit.status);
       if (statusInfo.label.includes(query)) return true;
+      // البحث في الحي
+      if (benefit.neighborhood_name?.toLowerCase().includes(query)) return true;
       
       return false;
     });
