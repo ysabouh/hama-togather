@@ -2009,7 +2009,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                   )}
 
                   {/* Bottom Note */}
-                  <div className="mt-4 text-center text-xs text-gray-400">
+                  <div className="mt-2 text-center text-xs text-gray-400">
                     تم إنشاء هذا الكوبون بتاريخ {new Date().toLocaleDateString('ar-SA')} - منصة معاً نَبني للتكافل المجتمعي
                   </div>
                 </div>
