@@ -662,8 +662,21 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                     <p>لا توجد سجلات استفادة في هذه الفترة</p>
                   </td>
                 </tr>
+              ) : getFilteredBenefits().length === 0 ? (
+                <tr>
+                  <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
+                    <Search className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                    <p>لا توجد نتائج تطابق البحث "{searchQuery}"</p>
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="text-red-600 hover:text-red-700 text-sm mt-2 underline"
+                    >
+                      مسح البحث
+                    </button>
+                  </td>
+                </tr>
               ) : (
-                benefits
+                getFilteredBenefits()
                   .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
                   .map((benefit, index) => {
                   const statusInfo = getStatusInfo(benefit.status);
