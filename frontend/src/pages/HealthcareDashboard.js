@@ -339,6 +339,78 @@ const HealthcareDashboard = () => {
     }
   };
 
+  // فتح نافذة تغيير الحالة
+  const openStatusModal = (benefit, action) => {
+    setSelectedBenefitForStatus(benefit);
+    setStatusAction(action);
+    setStatusNote('');
+    setCancelReason(null);
+    setShowStatusModal(true);
+  };
+
+  // تغيير حالة الاستفادة
+  const handleStatusChange = async () => {
+    if (!selectedBenefitForStatus) return;
+
+    if (statusAction === 'cancel' && !cancelReason) {
+      toast.error('يرجى اختيار سبب الإلغاء');
+      return;
+    }
+
+    setStatusLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const data = {
+        status: statusAction === 'close' ? 'closed' : 'cancelled',
+        status_note: statusAction === 'close' ? statusNote : null,
+        cancel_reason: statusAction === 'cancel' ? cancelReason?.value : null
+      };
+
+      await axios.put(
+        `${API_URL}/takaful-benefits/${selectedBenefitForStatus.id}/status`,
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      toast.success(statusAction === 'close' ? 'تم إغلاق الاستفادة بنجاح' : 'تم إلغاء الاستفادة');
+      setShowStatusModal(false);
+      setSelectedBenefitForStatus(null);
+      setStatusAction(null);
+      setStatusNote('');
+      setCancelReason(null);
+      fetchBenefits();
+      
+      // تحديث قائمة الاستفادات المعروضة
+      setSelectedDayBenefits(prev => 
+        prev.map(b => b.id === selectedBenefitForStatus.id 
+          ? { ...b, status: statusAction === 'close' ? 'closed' : 'cancelled' } 
+          : b
+        )
+      );
+    } catch (error) {
+      console.error('Error changing status:', error);
+      toast.error('فشل تغيير الحالة');
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  // الحصول على لون وأيقونة الحالة
+  const getStatusInfo = (status) => {
+    switch (status) {
+      case 'open':
+        return { label: 'مفتوح', color: 'bg-blue-100 text-blue-700', icon: Clock };
+      case 'inprogress':
+        return { label: 'قيد التنفيذ', color: 'bg-amber-100 text-amber-700', icon: AlertCircle };
+      case 'closed':
+        return { label: 'مغلق', color: 'bg-green-100 text-green-700', icon: CheckCircle };
+      case 'cancelled':
+        return { label: 'ملغي', color: 'bg-red-100 text-red-700', icon: XCircle };
+      default:
+        return { label: 'مفتوح', color: 'bg-blue-100 text-blue-700', icon: Clock };
+    }
+  };
+
   // التحقق إذا كان التاريخ في الماضي
   const isPastDate = (day) => {
     const today = new Date();
