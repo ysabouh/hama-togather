@@ -46,6 +46,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [statusAction, setStatusAction] = useState(null); // 'close' or 'cancel'
   const [statusNote, setStatusNote] = useState('');
   const [cancelReason, setCancelReason] = useState(null);
+  const [cancelReasons, setCancelReasons] = useState([]); // أسباب الإلغاء من قاعدة البيانات
   const [linkLoading, setLinkLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
   
