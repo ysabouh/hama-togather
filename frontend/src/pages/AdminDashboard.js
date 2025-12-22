@@ -4172,6 +4172,11 @@ const AdminDashboard = () => {
               <TakafulManagement userRole="admin" />
             </TabsContent>
 
+            {/* Cancel Reasons Tab */}
+            <TabsContent value="cancel-reasons">
+              <CancelReasonsManagement />
+            </TabsContent>
+
             {/* Health Cases Tab */}
             <TabsContent value="health">
               <div className="bg-white rounded-xl shadow-lg p-6">
