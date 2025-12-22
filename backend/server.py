@@ -4343,6 +4343,13 @@ async def update_takaful_benefit_status(
         if not status_data.cancel_reason:
             raise HTTPException(status_code=400, detail="يجب تحديد سبب الإلغاء")
         update_fields['cancel_reason'] = status_data.cancel_reason
+        
+        # جلب اسم سبب الإلغاء لحفظه
+        cancel_reason_doc = await db.cancel_reasons.find_one({"id": status_data.cancel_reason}, {"_id": 0})
+        if cancel_reason_doc:
+            update_fields['cancel_reason_name'] = cancel_reason_doc.get('name', status_data.cancel_reason)
+        else:
+            update_fields['cancel_reason_name'] = status_data.cancel_reason
     
     await db.takaful_benefits.update_one(
         {"id": benefit_id},
