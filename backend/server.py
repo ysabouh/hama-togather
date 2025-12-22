@@ -846,7 +846,11 @@ class TakafulBenefit(BaseModel):
     status_note: Optional[str] = None  # ملاحظة عند الإغلاق
     cancel_reason: Optional[str] = None  # سبب الإلغاء
     created_by_user_id: str  # معرف المستخدم الذي أضاف السجل
+    created_by_user_name: Optional[str] = None  # اسم المستخدم الذي أضاف السجل
+    updated_by_user_id: Optional[str] = None  # معرف المستخدم الذي عدل السجل
+    updated_by_user_name: Optional[str] = None  # اسم المستخدم الذي عدل السجل
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[str] = None  # تاريخ آخر تعديل
 
 class TakafulBenefitCreate(BaseModel):
     """إنشاء سجل استفادة جديد"""
@@ -867,6 +871,7 @@ class TakafulBenefitResponse(BaseModel):
     benefit_code: Optional[str] = None  # كود الاستفادة
     provider_type: str
     provider_id: str
+    provider_name: Optional[str] = None  # اسم مقدم الخدمة
     family_id: Optional[str] = None
     family_number: Optional[str] = None  # رقم الأسرة للعرض
     benefit_date: str
@@ -879,7 +884,12 @@ class TakafulBenefitResponse(BaseModel):
     status: Optional[str] = "open"  # الحالة
     status_note: Optional[str] = None  # ملاحظة الإغلاق
     cancel_reason: Optional[str] = None  # سبب الإلغاء
+    created_by_user_id: Optional[str] = None
+    created_by_user_name: Optional[str] = None  # اسم المستخدم الذي أضاف
+    updated_by_user_id: Optional[str] = None
+    updated_by_user_name: Optional[str] = None  # اسم المستخدم الذي عدل
     created_at: datetime
+    updated_at: Optional[str] = None  # تاريخ التعديل
 
 class TakafulBenefitStatusUpdate(BaseModel):
     """تحديث حالة الاستفادة"""
