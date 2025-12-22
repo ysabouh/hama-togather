@@ -1018,6 +1018,18 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                           <Eye className="w-4 h-4" />
                         </button>
                         
+                        {/* زر طباعة الكوبون - يظهر فقط للسجلات المرتبطة بعائلة */}
+                        {benefit.family_id && benefit.family_number && benefit.family_number !== 'غير معروف' && (
+                          <button
+                            onClick={() => fetchPrintData(benefit.id)}
+                            className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                            title="طباعة كوبون"
+                            disabled={printLoading}
+                          >
+                            <Printer className="w-4 h-4" />
+                          </button>
+                        )}
+                        
                         {/* زر الربط بعائلة */}
                         {benefit.family_number && benefit.family_number !== 'غير معروف' && benefit.family_id && benefit.status !== 'closed' && benefit.status !== 'cancelled' && (
                           <button
