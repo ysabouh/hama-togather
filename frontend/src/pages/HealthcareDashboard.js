@@ -1469,6 +1469,142 @@ const HealthcareDashboard = () => {
         </div>
       )}
 
+      {/* Status Change Modal */}
+      {showStatusModal && selectedBenefitForStatus && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            {/* Modal Header */}
+            <div className={`${statusAction === 'close' ? 'bg-gradient-to-r from-green-500 to-green-600' : 'bg-gradient-to-r from-red-500 to-red-600'} text-white p-5 rounded-t-2xl flex items-center justify-between`}>
+              <div className="flex items-center gap-3">
+                {statusAction === 'close' ? <CheckCircle className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
+                <h3 className="text-lg font-bold">
+                  {statusAction === 'close' ? 'إغلاق الاستفادة' : 'إلغاء الاستفادة'}
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowStatusModal(false);
+                  setSelectedBenefitForStatus(null);
+                  setStatusAction(null);
+                }}
+                className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              {/* Benefit Info */}
+              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">كود الاستفادة:</span>
+                  <span className="font-mono font-bold text-blue-700" dir="ltr">
+                    {selectedBenefitForStatus.benefit_code || '-'}
+                  </span>
+                </div>
+                {selectedBenefitForStatus.family_number && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">العائلة:</span>
+                    <span className="font-medium">{selectedBenefitForStatus.family_number}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">نوع الاستفادة:</span>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    selectedBenefitForStatus.benefit_type === 'free' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {selectedBenefitForStatus.benefit_type === 'free' 
+                      ? `مجاني - ${selectedBenefitForStatus.free_amount?.toLocaleString('ar-SY')} ل.س`
+                      : `خصم ${selectedBenefitForStatus.discount_percentage}%`
+                    }
+                  </span>
+                </div>
+              </div>
+
+              {/* Close: Status Note */}
+              {statusAction === 'close' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ملاحظة الإغلاق (اختياري)
+                  </label>
+                  <input
+                    type="text"
+                    value={statusNote}
+                    onChange={(e) => setStatusNote(e.target.value)}
+                    placeholder="أدخل ملاحظة..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
+              )}
+
+              {/* Cancel: Reason Selection */}
+              {statusAction === 'cancel' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    سبب الإلغاء <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    options={CANCEL_REASONS}
+                    value={cancelReason}
+                    onChange={setCancelReason}
+                    placeholder="اختر سبب الإلغاء..."
+                    isClearable
+                    className="text-sm"
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        borderColor: '#e5e7eb',
+                        '&:hover': { borderColor: '#ef4444' }
+                      }),
+                      option: (base, state) => ({
+                        ...base,
+                        backgroundColor: state.isSelected ? '#ef4444' : state.isFocused ? '#fee2e2' : 'white',
+                        color: state.isSelected ? 'white' : '#374151'
+                      })
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-end gap-3 p-4 border-t bg-gray-50 rounded-b-2xl">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowStatusModal(false);
+                  setSelectedBenefitForStatus(null);
+                  setStatusAction(null);
+                }}
+              >
+                إلغاء
+              </Button>
+              <Button
+                onClick={handleStatusChange}
+                disabled={statusLoading || (statusAction === 'cancel' && !cancelReason)}
+                className={statusAction === 'close' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}
+              >
+                {statusLoading ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    جاري المعالجة...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    {statusAction === 'close' ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                    {statusAction === 'close' ? 'تأكيد الإغلاق' : 'تأكيد الإلغاء'}
+                  </span>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
