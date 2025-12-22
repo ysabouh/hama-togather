@@ -586,7 +586,8 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        {benefit.family_number && benefit.family_number !== 'غير معروف' && benefit.family_id && (
+                        {/* زر الربط بعائلة */}
+                        {benefit.family_number && benefit.family_number !== 'غير معروف' && benefit.family_id && benefit.status !== 'closed' && benefit.status !== 'cancelled' && (
                           <button
                             onClick={() => openLinkModal(benefit)}
                             className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
@@ -595,22 +596,174 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                             <Link2 className="w-4 h-4" />
                           </button>
                         )}
-                        <button
-                          onClick={() => handleDelete(benefit.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="حذف"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        
+                        {/* زر الإغلاق - يظهر فقط للحالات inprogress */}
+                        {benefit.status === 'inprogress' && (
+                          <button
+                            onClick={() => openStatusModal(benefit, 'close')}
+                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                            title="إغلاق الاستفادة"
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                          </button>
+                        )}
+                        
+                        {/* زر الإلغاء - يظهر للحالات open و inprogress */}
+                        {(benefit.status === 'open' || benefit.status === 'inprogress') && (
+                          <button
+                            onClick={() => openStatusModal(benefit, 'cancel')}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="إلغاء الاستفادة"
+                          >
+                            <XCircle className="w-4 h-4" />
+                          </button>
+                        )}
+                        
+                        {/* زر الحذف - فقط للحالات المفتوحة غير المرتبطة */}
+                        {benefit.status === 'open' && !benefit.family_id && (
+                          <button
+                            onClick={() => handleDelete(benefit.id)}
+                            className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                            title="حذف"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
-                ))
+                );})
               )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Status Change Modal */}
+      {showStatusModal && selectedBenefitForStatus && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            {/* Modal Header */}
+            <div className={`${statusAction === 'close' ? 'bg-gradient-to-r from-green-500 to-green-600' : 'bg-gradient-to-r from-red-500 to-red-600'} text-white p-5 rounded-t-2xl flex items-center justify-between`}>
+              <div className="flex items-center gap-3">
+                {statusAction === 'close' ? <CheckCircle className="w-6 h-6" /> : <XCircle className="w-6 h-6" />}
+                <h3 className="text-lg font-bold">
+                  {statusAction === 'close' ? 'إغلاق الاستفادة' : 'إلغاء الاستفادة'}
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowStatusModal(false);
+                  setSelectedBenefitForStatus(null);
+                  setStatusAction(null);
+                }}
+                className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              {/* Benefit Info */}
+              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">كود الاستفادة:</span>
+                  <span className="font-mono font-bold text-blue-700" dir="ltr">
+                    {selectedBenefitForStatus.benefit_code || '-'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">مقدم الخدمة:</span>
+                  <span className="font-medium">{selectedBenefitForStatus.provider_name}</span>
+                </div>
+                {selectedBenefitForStatus.family_number && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">العائلة:</span>
+                    <span className="font-medium">{selectedBenefitForStatus.family_number}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Close: Status Note */}
+              {statusAction === 'close' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ملاحظة الإغلاق (اختياري)
+                  </label>
+                  <Input
+                    value={statusNote}
+                    onChange={(e) => setStatusNote(e.target.value)}
+                    placeholder="أدخل ملاحظة..."
+                    className="w-full"
+                  />
+                </div>
+              )}
+
+              {/* Cancel: Reason Selection */}
+              {statusAction === 'cancel' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    سبب الإلغاء <span className="text-red-500">*</span>
+                  </label>
+                  <Select
+                    options={CANCEL_REASONS}
+                    value={cancelReason}
+                    onChange={setCancelReason}
+                    placeholder="اختر سبب الإلغاء..."
+                    isClearable
+                    className="text-sm"
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        borderColor: '#e5e7eb',
+                        '&:hover': { borderColor: '#ef4444' }
+                      }),
+                      option: (base, state) => ({
+                        ...base,
+                        backgroundColor: state.isSelected ? '#ef4444' : state.isFocused ? '#fee2e2' : 'white',
+                        color: state.isSelected ? 'white' : '#374151'
+                      })
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-end gap-3 p-4 border-t bg-gray-50 rounded-b-2xl">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowStatusModal(false);
+                  setSelectedBenefitForStatus(null);
+                  setStatusAction(null);
+                }}
+              >
+                إلغاء
+              </Button>
+              <Button
+                onClick={handleStatusChange}
+                disabled={statusLoading || (statusAction === 'cancel' && !cancelReason)}
+                className={statusAction === 'close' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}
+              >
+                {statusLoading ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    جاري المعالجة...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    {statusAction === 'close' ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                    {statusAction === 'close' ? 'تأكيد الإغلاق' : 'تأكيد الإلغاء'}
+                  </span>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Link Family Modal */}
       {showLinkModal && selectedBenefitForLink && (
