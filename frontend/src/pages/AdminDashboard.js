@@ -22,6 +22,7 @@ import DonationsManagement from '../components/admin/DonationsManagement';
 import UsersManagement from '../components/admin/UsersManagement';
 import HeroContentManagement from '../components/admin/HeroContentManagement';
 import TakafulManagement from '../components/admin/TakafulManagement';
+import CancelReasonsManagement from '../components/admin/CancelReasonsManagement';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
