@@ -1751,7 +1751,7 @@ const HealthcareDashboard = () => {
                     سبب الإلغاء <span className="text-red-500">*</span>
                   </label>
                   <Select
-                    options={CANCEL_REASONS}
+                    options={cancelReasons}
                     value={cancelReason}
                     onChange={setCancelReason}
                     placeholder="اختر سبب الإلغاء..."
