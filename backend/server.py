@@ -4249,6 +4249,10 @@ async def update_takaful_benefit(
         update_fields['benefit_type'] = benefit_data['benefit_type']
     if 'discount_percentage' in benefit_data:
         update_fields['discount_percentage'] = benefit_data['discount_percentage']
+    if 'original_amount' in benefit_data:
+        update_fields['original_amount'] = benefit_data['original_amount']
+    if 'final_amount' in benefit_data:
+        update_fields['final_amount'] = benefit_data['final_amount']
     if 'free_amount' in benefit_data:
         update_fields['free_amount'] = benefit_data['free_amount']
     if 'time_from' in benefit_data:
