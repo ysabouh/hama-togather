@@ -1809,22 +1809,6 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                 </div>
               )}
 
-              {/* Cancellation Reason */}
-              {selectedBenefitForDetails.status === 'cancelled' && selectedBenefitForDetails.cancel_reason && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-                  <p className="text-xs text-red-600 mb-2">سبب الإلغاء</p>
-                  <p className="font-medium text-red-700">{getCancelReasonLabel(selectedBenefitForDetails)}</p>
-                </div>
-              )}
-
-              {/* Closure Notes */}
-              {selectedBenefitForDetails.status === 'closed' && selectedBenefitForDetails.status_note && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
-                  <p className="text-xs text-green-600 mb-2">ملاحظة الإغلاق</p>
-                  <p className="font-medium text-green-700">{selectedBenefitForDetails.status_note}</p>
-                </div>
-              )}
-
               {/* Creation & Update Info */}
               <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
                 <p className="text-xs text-gray-500 font-medium border-b border-gray-200 pb-2">معلومات السجل</p>
