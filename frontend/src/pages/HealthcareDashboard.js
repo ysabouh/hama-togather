@@ -1318,62 +1318,114 @@ const HealthcareDashboard = () => {
                               })()}
                             </div>
                             <div className="flex gap-1">
-                              {/* أزرار التعديل والحذف */}
-                              {benefit.family_id && benefit.family_number && benefit.family_number !== 'غير معروف' ? (
-                                <>
-                                  <button
-                                    onClick={() => toast.error('لا يمكن تعديل الاستفادة بعد ربطها بعائلة')}
-                                    className="p-1.5 text-gray-400 cursor-not-allowed rounded-lg"
-                                    title="لا يمكن التعديل - مرتبطة بعائلة"
-                                  >
-                                    <Edit className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    onClick={() => toast.error('لا يمكن حذف الاستفادة بعد ربطها بعائلة')}
-                                    className="p-1.5 text-gray-400 cursor-not-allowed rounded-lg"
-                                    title="لا يمكن الحذف - مرتبطة بعائلة"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
-                                  {/* زر الإغلاق - يظهر فقط للحالات inprogress */}
-                                  {benefit.status === 'inprogress' && (
-                                    <button
-                                      onClick={() => openStatusModal(benefit, 'close')}
-                                      className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                      title="إغلاق الاستفادة"
-                                    >
-                                      <CheckCircle className="w-4 h-4" />
-                                    </button>
-                                  )}
-                                  {/* زر الإلغاء - يظهر للحالات open و inprogress */}
-                                  {(benefit.status === 'open' || benefit.status === 'inprogress') && (
-                                    <button
-                                      onClick={() => openStatusModal(benefit, 'cancel')}
-                                      className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                      title="إلغاء الاستفادة"
-                                    >
-                                      <XCircle className="w-4 h-4" />
-                                    </button>
-                                  )}
-                                </>
-                              ) : (
-                                <>
-                                  <button
-                                    onClick={() => setEditingBenefit({...benefit})}
-                                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                    title="تعديل"
-                                  >
-                                    <Edit className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteBenefit(benefit.id)}
-                                    className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                    title="حذف"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
-                                </>
-                              )}
+                              {/* منطق الأزرار بناءً على التاريخ والحالة والربط */}
+                              {(() => {
+                                const benefitDate = new Date(benefit.benefit_date);
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+                                benefitDate.setHours(0, 0, 0, 0);
+                                const isPast = benefitDate < today;
+                                const isLinked = benefit.family_id && benefit.family_number && benefit.family_number !== 'غير معروف';
+                                const isOpen = benefit.status === 'open' || !benefit.status;
+                                const isInProgress = benefit.status === 'inprogress';
+                                const isClosed = benefit.status === 'closed';
+                                const isCancelled = benefit.status === 'cancelled';
+
+                                // إذا كانت مغلقة أو ملغاة، لا نظهر أي أزرار
+                                if (isClosed || isCancelled) {
+                                  return null;
+                                }
+
+                                return (
+                                  <>
+                                    {/* خارج التاريخ (مضى عليها الوقت) */}
+                                    {isPast ? (
+                                      <>
+                                        {/* غير مربوطة: زر الإلغاء فقط */}
+                                        {!isLinked && (
+                                          <button
+                                            onClick={() => openStatusModal(benefit, 'cancel')}
+                                            className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            title="إلغاء الاستفادة"
+                                          >
+                                            <XCircle className="w-4 h-4" />
+                                          </button>
+                                        )}
+                                        {/* مربوطة: زر الإغلاق + زر الإلغاء */}
+                                        {isLinked && (
+                                          <>
+                                            <button
+                                              onClick={() => openStatusModal(benefit, 'close')}
+                                              className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                              title="إغلاق الاستفادة"
+                                            >
+                                              <CheckCircle className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                              onClick={() => openStatusModal(benefit, 'cancel')}
+                                              className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                              title="إلغاء الاستفادة"
+                                            >
+                                              <XCircle className="w-4 h-4" />
+                                            </button>
+                                          </>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <>
+                                        {/* ضمن التاريخ (اليوم أو المستقبل) */}
+                                        {/* غير مربوطة: زر التعديل + زر الإلغاء + زر الحذف (إذا مفتوح) */}
+                                        {!isLinked && (
+                                          <>
+                                            <button
+                                              onClick={() => setEditingBenefit({...benefit})}
+                                              className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                              title="تعديل"
+                                            >
+                                              <Edit className="w-4 h-4" />
+                                            </button>
+                                            {isOpen && (
+                                              <button
+                                                onClick={() => handleDeleteBenefit(benefit.id)}
+                                                className="p-1.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                                                title="حذف"
+                                              >
+                                                <Trash2 className="w-4 h-4" />
+                                              </button>
+                                            )}
+                                            <button
+                                              onClick={() => openStatusModal(benefit, 'cancel')}
+                                              className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                              title="إلغاء الاستفادة"
+                                            >
+                                              <XCircle className="w-4 h-4" />
+                                            </button>
+                                          </>
+                                        )}
+                                        {/* مربوطة: زر الإغلاق + زر الإلغاء */}
+                                        {isLinked && (
+                                          <>
+                                            <button
+                                              onClick={() => openStatusModal(benefit, 'close')}
+                                              className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                              title="إغلاق الاستفادة"
+                                            >
+                                              <CheckCircle className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                              onClick={() => openStatusModal(benefit, 'cancel')}
+                                              className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                              title="إلغاء الاستفادة"
+                                            >
+                                              <XCircle className="w-4 h-4" />
+                                            </button>
+                                          </>
+                                        )}
+                                      </>
+                                    )}
+                                  </>
+                                );
+                              })()}
                             </div>
                           </div>
                           
