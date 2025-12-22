@@ -4223,6 +4223,9 @@ async def update_takaful_benefit(
     update_fields = {}
     if 'family_id' in benefit_data:
         update_fields['family_id'] = benefit_data['family_id']
+        # تغيير الحالة تلقائياً إلى inprogress عند الربط بعائلة
+        if benefit_data['family_id']:
+            update_fields['status'] = 'inprogress'
     if 'benefit_type' in benefit_data:
         update_fields['benefit_type'] = benefit_data['benefit_type']
     if 'discount_percentage' in benefit_data:
@@ -4237,6 +4240,44 @@ async def update_takaful_benefit(
         update_fields['notes'] = benefit_data['notes']
     
     update_fields['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.takaful_benefits.update_one(
+        {"id": benefit_id},
+        {"$set": update_fields}
+    )
+    
+    updated_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
+    return updated_benefit
+
+@api_router.put("/takaful-benefits/{benefit_id}/status")
+async def update_takaful_benefit_status(
+    benefit_id: str,
+    status_data: TakafulBenefitStatusUpdate,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """تحديث حالة سجل الاستفادة - متاح للمشرف وأعضاء اللجنة فقط"""
+    
+    existing_benefit = await db.takaful_benefits.find_one({"id": benefit_id}, {"_id": 0})
+    if not existing_benefit:
+        raise HTTPException(status_code=404, detail="Benefit record not found")
+    
+    if status_data.status not in ['open', 'inprogress', 'closed', 'cancelled']:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    update_fields = {
+        'status': status_data.status,
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    # إضافة ملاحظة الإغلاق
+    if status_data.status == 'closed' and status_data.status_note:
+        update_fields['status_note'] = status_data.status_note
+    
+    # إضافة سبب الإلغاء
+    if status_data.status == 'cancelled':
+        if not status_data.cancel_reason:
+            raise HTTPException(status_code=400, detail="يجب تحديد سبب الإلغاء")
+        update_fields['cancel_reason'] = status_data.cancel_reason
     
     await db.takaful_benefits.update_one(
         {"id": benefit_id},
