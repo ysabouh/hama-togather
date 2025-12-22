@@ -372,6 +372,36 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
     return found ? found.label : reason;
   };
 
+  // فلترة السجلات حسب البحث
+  const getFilteredBenefits = () => {
+    if (!searchQuery.trim()) return benefits;
+    
+    const query = searchQuery.trim().toLowerCase();
+    return benefits.filter(benefit => {
+      // البحث في الكود
+      if (benefit.benefit_code?.toLowerCase().includes(query)) return true;
+      // البحث في اسم مقدم الخدمة
+      if (benefit.provider_name?.toLowerCase().includes(query)) return true;
+      // البحث في رقم الأسرة
+      if (benefit.family_number?.toLowerCase().includes(query)) return true;
+      // البحث في الملاحظات
+      if (benefit.notes?.toLowerCase().includes(query)) return true;
+      // البحث في ملاحظة الإغلاق
+      if (benefit.status_note?.toLowerCase().includes(query)) return true;
+      // البحث في سبب الإلغاء (القيمة والتسمية)
+      if (benefit.cancel_reason) {
+        if (benefit.cancel_reason.toLowerCase().includes(query)) return true;
+        const cancelLabel = getCancelReasonLabel(benefit.cancel_reason);
+        if (cancelLabel.toLowerCase().includes(query)) return true;
+      }
+      // البحث في الحالة (بالعربية)
+      const statusInfo = getStatusInfo(benefit.status);
+      if (statusInfo.label.includes(query)) return true;
+      
+      return false;
+    });
+  };
+
   const resetForm = () => {
     setFormData({
       provider_type: 'doctor',
