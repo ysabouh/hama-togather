@@ -1415,15 +1415,36 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3">
-                    <div className="bg-blue-100 p-2 rounded-lg">
-                      <Percent className="w-5 h-5 text-blue-600" />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-amber-100 p-2 rounded-lg">
+                        <Percent className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <p className="font-bold text-amber-700">خصم</p>
                     </div>
-                    <div>
-                      <p className="font-bold text-blue-700">خصم</p>
-                      <p className="text-blue-600 text-sm">
-                        نسبة الخصم: {selectedBenefitForDetails.discount_percentage}%
-                      </p>
+                    <div className="bg-amber-50 rounded-lg p-3 space-y-2 text-sm">
+                      {selectedBenefitForDetails.original_amount > 0 && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-gray-600">المبلغ الأصلي:</span>
+                          <span className="font-bold text-gray-700">
+                            {selectedBenefitForDetails.original_amount?.toLocaleString('ar-SY')} ل.س
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600">نسبة الخصم:</span>
+                        <span className="font-bold text-amber-600">
+                          {selectedBenefitForDetails.discount_percentage}%
+                        </span>
+                      </div>
+                      {selectedBenefitForDetails.final_amount > 0 && (
+                        <div className="flex items-center justify-between border-t border-amber-200 pt-2">
+                          <span className="text-gray-600">المبلغ النهائي:</span>
+                          <span className="font-bold text-green-600">
+                            {selectedBenefitForDetails.final_amount?.toLocaleString('ar-SY')} ل.س
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
