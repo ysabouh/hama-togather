@@ -1049,20 +1049,56 @@ const HealthcareDashboard = () => {
 
               {/* Discount Percentage */}
               {newBenefit.benefit_type === 'discount' && (
-                <div className="animate-in slide-in-from-top-2 duration-300">
-                  <label className="block text-sm font-bold text-slate-700 mb-1.5">
-                    نسبة الخصم %
-                  </label>
-                  <Input
-                    type="number"
-                    min="1"
-                    max="100"
-                    value={newBenefit.discount_percentage}
-                    onChange={(e) => setNewBenefit({ ...newBenefit, discount_percentage: parseInt(e.target.value) || 0 })}
-                    placeholder="مثال: 50"
-                    className="bg-white/80 border-amber-200 rounded-lg h-10 text-center text-lg font-bold focus:ring-2 focus:ring-amber-200 focus:border-amber-400"
-                    dir="ltr"
-                  />
+                <div className="animate-in slide-in-from-top-2 duration-300 space-y-3">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                      المبلغ الأصلي (ل.س) <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={newBenefit.original_amount}
+                      onChange={(e) => {
+                        const amount = parseInt(e.target.value) || 0;
+                        const discount = newBenefit.discount_percentage || 0;
+                        const final = Math.round(amount - (amount * discount / 100));
+                        setNewBenefit({ ...newBenefit, original_amount: amount, final_amount: final });
+                      }}
+                      placeholder="مثال: 100000"
+                      className="bg-white/80 border-amber-200 rounded-lg h-10 text-center text-lg font-bold focus:ring-2 focus:ring-amber-200 focus:border-amber-400"
+                      dir="ltr"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                      نسبة الخصم % <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={newBenefit.discount_percentage}
+                      onChange={(e) => {
+                        const discount = parseInt(e.target.value) || 0;
+                        const amount = newBenefit.original_amount || 0;
+                        const final = Math.round(amount - (amount * discount / 100));
+                        setNewBenefit({ ...newBenefit, discount_percentage: discount, final_amount: final });
+                      }}
+                      placeholder="مثال: 50"
+                      className="bg-white/80 border-amber-200 rounded-lg h-10 text-center text-lg font-bold focus:ring-2 focus:ring-amber-200 focus:border-amber-400"
+                      dir="ltr"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                      المبلغ النهائي بعد الخصم (ل.س)
+                    </label>
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg h-10 flex items-center justify-center">
+                      <span className="text-lg font-bold text-green-700" dir="ltr">
+                        {newBenefit.final_amount?.toLocaleString('ar-SY') || 0} ل.س
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
 
