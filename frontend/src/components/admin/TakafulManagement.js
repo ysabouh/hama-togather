@@ -372,9 +372,18 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   };
 
   // الحصول على تسمية سبب الإلغاء
-  const getCancelReasonLabel = (reason) => {
-    const found = cancelReasons.find(r => r.value === reason);
-    return found ? found.label : reason;
+  const getCancelReasonLabel = (benefit) => {
+    // أولاً نتحقق إذا كان اسم السبب محفوظاً مباشرة
+    if (benefit.cancel_reason_name) {
+      return benefit.cancel_reason_name;
+    }
+    // ثانياً نبحث في قائمة الأسباب
+    const found = cancelReasons.find(r => r.value === benefit.cancel_reason);
+    if (found) {
+      return found.label;
+    }
+    // أخيراً نعيد قيمة السبب كما هي (قد تكون اسماً قديماً)
+    return benefit.cancel_reason || 'غير محدد';
   };
 
   // فلترة السجلات حسب البحث
