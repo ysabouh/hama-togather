@@ -1627,25 +1627,53 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             {/* Modal Body */}
             <div className="p-6 space-y-4 max-h-[calc(90vh-140px)] overflow-y-auto">
               {/* Benefit Code & Status */}
-              <div className="flex items-center justify-between gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">كود الاستفادة</p>
-                  <p className="font-mono font-bold text-blue-700 text-lg" dir="ltr">
-                    {selectedBenefitForDetails.benefit_code || '-'}
-                  </p>
+              <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">كود الاستفادة</p>
+                    <p className="font-mono font-bold text-blue-700 text-lg" dir="ltr">
+                      {selectedBenefitForDetails.benefit_code || '-'}
+                    </p>
+                  </div>
+                  <div>
+                    {(() => {
+                      const statusInfo = getStatusInfo(selectedBenefitForDetails.status);
+                      const StatusIcon = statusInfo.icon;
+                      return (
+                        <span className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium ${statusInfo.color}`}>
+                          <StatusIcon className="w-4 h-4" />
+                          {statusInfo.label}
+                        </span>
+                      );
+                    })()}
+                  </div>
                 </div>
-                <div>
-                  {(() => {
-                    const statusInfo = getStatusInfo(selectedBenefitForDetails.status);
-                    const StatusIcon = statusInfo.icon;
-                    return (
-                      <span className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium ${statusInfo.color}`}>
-                        <StatusIcon className="w-4 h-4" />
-                        {statusInfo.label}
-                      </span>
-                    );
-                  })()}
-                </div>
+                
+                {/* سبب الإلغاء */}
+                {selectedBenefitForDetails.status === 'cancelled' && (selectedBenefitForDetails.cancel_reason || selectedBenefitForDetails.cancel_reason_name) && (
+                  <div className="mt-3 pt-3 border-t border-red-200 bg-red-50 rounded-lg p-3">
+                    <div className="flex items-start gap-2">
+                      <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-red-600 font-medium mb-1">سبب الإلغاء:</p>
+                        <p className="text-sm text-red-700">{getCancelReasonLabel(selectedBenefitForDetails)}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {/* ملاحظة الإغلاق */}
+                {selectedBenefitForDetails.status === 'closed' && selectedBenefitForDetails.status_note && (
+                  <div className="mt-3 pt-3 border-t border-green-200 bg-green-50 rounded-lg p-3">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-green-600 font-medium mb-1">ملاحظة الإغلاق:</p>
+                        <p className="text-sm text-green-700">{selectedBenefitForDetails.status_note}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Benefit Type */}
