@@ -405,9 +405,11 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       // البحث في سبب الإلغاء (القيمة والتسمية)
       if (benefit.cancel_reason) {
         if (benefit.cancel_reason.toLowerCase().includes(query)) return true;
-        const cancelLabel = getCancelReasonLabel(benefit.cancel_reason);
+        const cancelLabel = getCancelReasonLabel(benefit);
         if (cancelLabel.toLowerCase().includes(query)) return true;
       }
+      // البحث في اسم سبب الإلغاء المحفوظ
+      if (benefit.cancel_reason_name?.toLowerCase().includes(query)) return true;
       // البحث في الحالة (بالعربية)
       const statusInfo = getStatusInfo(benefit.status);
       if (statusInfo.label.includes(query)) return true;
