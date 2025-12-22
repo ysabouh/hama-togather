@@ -4194,6 +4194,7 @@ async def create_takaful_benefit(
         time_to=benefit_data.time_to,
         notes=benefit_data.notes,
         created_by_user_id=current_user.id,
+        created_by_user_name=current_user.full_name,
         benefit_code=benefit_code
     )
     
