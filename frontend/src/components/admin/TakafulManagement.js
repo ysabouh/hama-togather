@@ -372,7 +372,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
 
   // الحصول على تسمية سبب الإلغاء
   const getCancelReasonLabel = (reason) => {
-    const found = CANCEL_REASONS.find(r => r.value === reason);
+    const found = cancelReasons.find(r => r.value === reason);
     return found ? found.label : reason;
   };
 
