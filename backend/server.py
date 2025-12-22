@@ -842,6 +842,9 @@ class TakafulBenefit(BaseModel):
     time_from: Optional[str] = None  # وقت البداية (HH:MM)
     time_to: Optional[str] = None  # وقت النهاية (HH:MM)
     notes: Optional[str] = None  # ملاحظات إضافية
+    status: str = "open"  # open, inprogress, closed, cancelled
+    status_note: Optional[str] = None  # ملاحظة عند الإغلاق
+    cancel_reason: Optional[str] = None  # سبب الإلغاء
     created_by_user_id: str  # معرف المستخدم الذي أضاف السجل
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -873,7 +876,16 @@ class TakafulBenefitResponse(BaseModel):
     time_from: Optional[str] = None
     time_to: Optional[str] = None
     notes: Optional[str] = None
+    status: Optional[str] = "open"  # الحالة
+    status_note: Optional[str] = None  # ملاحظة الإغلاق
+    cancel_reason: Optional[str] = None  # سبب الإلغاء
     created_at: datetime
+
+class TakafulBenefitStatusUpdate(BaseModel):
+    """تحديث حالة الاستفادة"""
+    status: str  # open, inprogress, closed, cancelled
+    status_note: Optional[str] = None  # ملاحظة (للإغلاق)
+    cancel_reason: Optional[str] = None  # سبب الإلغاء
 
 # ============= Helper Functions =============
 
