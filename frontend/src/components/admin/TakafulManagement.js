@@ -459,8 +459,8 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
         <title>كوبون استفادة - ${printData?.benefit?.benefit_code || ''}</title>
         <style>
           @page { 
-            size: A4 landscape; 
-            margin: 15mm;
+            size: A4 portrait; 
+            margin: 10mm;
           }
           @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
           * {
@@ -473,61 +473,63 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             direction: rtl;
             background: white;
             padding: 0;
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+          }
+          .print-container {
+            width: 100%;
+            max-width: 190mm;
+            margin: 0 auto;
           }
           /* Main coupon container */
           .coupon {
-            border: 3px solid #dc2626 !important;
-            border-radius: 16px;
-            padding: 24px;
-            max-width: 100%;
-            margin: 0 auto;
+            border: 2px solid #dc2626 !important;
+            border-radius: 12px;
+            padding: 16px;
             background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%) !important;
+            max-width: 100%;
           }
           /* Grid layout */
           .grid { display: grid; }
           .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
           .col-span-2 { grid-column: span 2; }
-          .gap-5 { gap: 1.25rem; }
-          .gap-10 { gap: 2.5rem; }
+          .gap-3 { gap: 0.75rem; }
+          .gap-6 { gap: 1.5rem; }
           /* Flexbox */
           .flex { display: flex; }
           .items-center { align-items: center; }
           .justify-between { justify-content: space-between; }
           .justify-center { justify-content: center; }
           .gap-1 { gap: 0.25rem; }
-          .gap-2 { gap: 0.5rem; }
-          .gap-4 { gap: 1rem; }
+          .gap-3 { gap: 0.75rem; }
           /* Spacing */
+          .p-2 { padding: 0.5rem; }
           .p-3 { padding: 0.75rem; }
           .p-4 { padding: 1rem; }
-          .p-5 { padding: 1.25rem; }
-          .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-          .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-          .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+          .py-0\\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+          .py-1\\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+          .px-4 { padding-left: 1rem; padding-right: 1rem; }
+          .mt-1 { margin-top: 0.25rem; }
           .mt-2 { margin-top: 0.5rem; }
           .mt-3 { margin-top: 0.75rem; }
-          .mt-4 { margin-top: 1rem; }
-          .mt-6 { margin-top: 1.5rem; }
           .mb-1 { margin-bottom: 0.25rem; }
           .mb-2 { margin-bottom: 0.5rem; }
           .mb-3 { margin-bottom: 0.75rem; }
-          .pb-2 { padding-bottom: 0.5rem; }
-          .pb-4 { padding-bottom: 1rem; }
-          .pt-5 { padding-top: 1.25rem; }
+          .pb-1 { padding-bottom: 0.25rem; }
+          .pb-3 { padding-bottom: 0.75rem; }
+          .pt-3 { padding-top: 0.75rem; }
           /* Text */
           .text-center { text-align: center; }
-          .text-xs { font-size: 0.75rem; }
-          .text-sm { font-size: 0.875rem; }
-          .text-base { font-size: 1rem; }
-          .text-lg { font-size: 1.125rem; }
-          .text-3xl { font-size: 1.875rem; }
-          .text-4xl { font-size: 2.25rem; }
+          .text-xs { font-size: 10px; line-height: 1.4; }
+          .text-sm { font-size: 12px; line-height: 1.5; }
+          .text-2xl { font-size: 20px; line-height: 1.3; }
           .font-bold { font-weight: 700; }
           .font-semibold { font-weight: 600; }
           .font-mono { font-family: ui-monospace, monospace; }
-          .tracking-widest { letter-spacing: 0.1em; }
+          .tracking-wider { letter-spacing: 0.05em; }
           .line-through { text-decoration: line-through; }
-          /* Colors - with !important for print */
+          /* Colors */
           .text-red-600 { color: #dc2626 !important; }
           .text-green-600 { color: #16a34a !important; }
           .text-green-700 { color: #15803d !important; }
@@ -541,43 +543,56 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
           .bg-white { background-color: white !important; }
           .bg-amber-50 { background-color: #fffbeb !important; }
           .bg-gradient-to-r { background: linear-gradient(to right, #f0fdf4, #ecfdf5) !important; }
+          .from-green-50 { background: linear-gradient(to right, #f0fdf4, #ecfdf5) !important; }
           /* Borders */
-          .border { border-width: 1px; }
-          .border-2 { border-width: 2px; }
-          .border-t-2 { border-top-width: 2px; }
-          .border-b { border-bottom-width: 1px; }
-          .border-b-2 { border-bottom-width: 2px; }
+          .border { border-width: 1px; border-style: solid; }
+          .border-2 { border-width: 2px; border-style: solid; }
+          .border-t-2 { border-top-width: 2px; border-top-style: solid; }
+          .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+          .border-b-2 { border-bottom-width: 2px; border-bottom-style: solid; }
           .border-dashed { border-style: dashed; }
           .border-dotted { border-style: dotted; }
-          .border-solid { border-style: solid; }
           .border-gray-200 { border-color: #e5e7eb !important; }
           .border-gray-400 { border-color: #9ca3af !important; }
           .border-red-100 { border-color: #fee2e2 !important; }
           .border-red-600 { border-color: #dc2626 !important; }
           .border-green-500 { border-color: #22c55e !important; }
           .border-amber-400 { border-color: #fbbf24 !important; }
-          .rounded-lg { border-radius: 0.5rem; }
-          .rounded-xl { border-radius: 0.75rem; }
-          .rounded-2xl { border-radius: 1rem; }
+          .rounded { border-radius: 4px; }
+          .rounded-lg { border-radius: 8px; }
+          .rounded-xl { border-radius: 12px; }
           /* Width/Height */
-          .w-4 { width: 1rem; }
-          .h-4 { height: 1rem; }
-          .w-48 { width: 12rem; }
-          .h-16 { height: 4rem; }
+          .w-3 { width: 12px; }
+          .h-3 { height: 12px; }
+          .w-36 { width: 144px; }
+          .h-10 { height: 40px; }
           .mx-auto { margin-left: auto; margin-right: auto; }
-          /* SVG icons - hide since they won't render properly */
-          svg { display: inline-block; vertical-align: middle; width: 1rem; height: 1rem; }
+          /* Space */
+          .space-y-1 > * + * { margin-top: 0.25rem; }
+          /* SVG icons */
+          svg { display: inline-block; vertical-align: middle; width: 12px; height: 12px; }
           /* Print specific */
           @media print {
-            body { 
+            html, body { 
+              width: 210mm;
+              height: 297mm;
               -webkit-print-color-adjust: exact !important; 
               print-color-adjust: exact !important;
+            }
+            .print-container {
+              width: 190mm;
+              margin: 0 auto;
+            }
+            .coupon {
+              page-break-inside: avoid;
             }
           }
         </style>
       </head>
       <body>
-        ${printContent.innerHTML}
+        <div class="print-container">
+          ${printContent.innerHTML}
+        </div>
       </body>
       </html>
     `);
