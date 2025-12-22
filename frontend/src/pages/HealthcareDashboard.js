@@ -115,20 +115,24 @@ const HealthcareDashboard = () => {
   const [statusAction, setStatusAction] = useState(null); // 'close' or 'cancel'
   const [statusNote, setStatusNote] = useState('');
   const [cancelReason, setCancelReason] = useState(null);
+  const [cancelReasons, setCancelReasons] = useState([]); // أسباب الإلغاء من قاعدة البيانات
   const [statusLoading, setStatusLoading] = useState(false);
-  
-  // أسباب الإلغاء
-  const CANCEL_REASONS = [
-    { value: 'family_not_eligible', label: 'الأسرة غير مؤهلة' },
-    { value: 'duplicate_benefit', label: 'استفادة مكررة' },
-    { value: 'provider_unavailable', label: 'مقدم الخدمة غير متاح' },
-    { value: 'family_declined', label: 'الأسرة رفضت الاستفادة' },
-    { value: 'expired', label: 'انتهت صلاحية الاستفادة' },
-    { value: 'other', label: 'سبب آخر' }
-  ];
 
   const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
   const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+  // جلب أسباب الإلغاء من قاعدة البيانات
+  const fetchCancelReasons = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/cancel-reasons?active_only=true`);
+      setCancelReasons((response.data || []).map(r => ({
+        value: r.id,
+        label: r.name
+      })));
+    } catch (error) {
+      console.error('Error fetching cancel reasons:', error);
+    }
+  };
 
   useEffect(() => {
     if (!user || !['doctor', 'pharmacist', 'laboratory'].includes(user.role)) {
@@ -136,6 +140,7 @@ const HealthcareDashboard = () => {
       return;
     }
     fetchData();
+    fetchCancelReasons();
   }, [user, navigate]);
 
   useEffect(() => {
