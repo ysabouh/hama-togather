@@ -1873,91 +1873,83 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             </div>
 
             {/* Coupon Preview */}
-            <div className="p-6 overflow-y-auto max-h-[calc(95vh-120px)] bg-gray-100">
-              <div ref={printRef}>
-                <div className="coupon bg-gradient-to-br from-red-50 to-white border-3 border-red-600 rounded-2xl p-6 max-w-4xl mx-auto" style={{border: '3px solid #dc2626'}}>
+            <div className="p-4 overflow-y-auto max-h-[calc(95vh-120px)] bg-gray-100">
+              <div ref={printRef} className="print-container">
+                <div className="coupon bg-gradient-to-br from-red-50 to-white rounded-xl p-4 mx-auto" style={{border: '2px solid #dc2626', maxWidth: '720px'}}>
                   {/* Header */}
-                  <div className="text-center border-b-2 border-dashed border-red-600 pb-4 mb-5">
-                    <div className="text-3xl font-bold text-red-600 mb-1">معاً نَبني</div>
-                    <div className="text-gray-500 text-sm">منصة التكافل المجتمعي - حماة</div>
-                    <div className="bg-red-600 text-white px-5 py-2 rounded-lg inline-block mt-3 font-mono text-lg font-bold tracking-widest">
+                  <div className="text-center border-b-2 border-dashed border-red-600 pb-3 mb-3">
+                    <div className="text-2xl font-bold text-red-600 mb-1">معاً نَبني</div>
+                    <div className="text-gray-500 text-xs">منصة التكافل المجتمعي - حماة</div>
+                    <div className="bg-red-600 text-white px-4 py-1.5 rounded-lg inline-block mt-2 font-mono text-sm font-bold tracking-wider">
                       {printData.benefit?.benefit_code || 'N/A'}
                     </div>
                   </div>
 
                   {/* Content Grid */}
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="grid grid-cols-2 gap-3">
                     {/* Provider Info */}
-                    <div className="bg-white border border-gray-200 rounded-xl p-4">
-                      <div className="text-sm font-bold text-red-600 mb-3 pb-2 border-b border-red-100 flex items-center gap-2">
-                        {printData.provider?.type === 'doctor' && <Stethoscope className="w-4 h-4" />}
-                        {printData.provider?.type === 'pharmacy' && <Building2 className="w-4 h-4" />}
-                        {printData.provider?.type === 'laboratory' && <FlaskConical className="w-4 h-4" />}
+                    <div className="bg-white border border-gray-200 rounded-lg p-3">
+                      <div className="text-xs font-bold text-red-600 mb-2 pb-1 border-b border-red-100 flex items-center gap-1">
+                        {printData.provider?.type === 'doctor' && <Stethoscope className="w-3 h-3" />}
+                        {printData.provider?.type === 'pharmacy' && <Building2 className="w-3 h-3" />}
+                        {printData.provider?.type === 'laboratory' && <FlaskConical className="w-3 h-3" />}
                         بيانات مقدم الخدمة
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">النوع:</span>
-                          <span className="font-semibold text-sm">{printData.provider?.type_label}</span>
+                      <div className="space-y-1">
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">النوع:</span>
+                          <span className="font-semibold text-xs">{printData.provider?.type_label}</span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">الاسم:</span>
-                          <span className="font-semibold text-sm">{printData.provider?.name}</span>
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">الاسم:</span>
+                          <span className="font-semibold text-xs">{printData.provider?.name}</span>
                         </div>
-                        {printData.provider?.clinic_name && (
-                          <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                            <span className="text-gray-500 text-sm">العيادة:</span>
-                            <span className="font-semibold text-sm">{printData.provider?.clinic_name}</span>
-                          </div>
-                        )}
                         {printData.provider?.specialty && (
-                          <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                            <span className="text-gray-500 text-sm">التخصص:</span>
-                            <span className="font-semibold text-sm">{printData.provider?.specialty}</span>
+                          <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                            <span className="text-gray-500 text-xs">التخصص:</span>
+                            <span className="font-semibold text-xs">{printData.provider?.specialty}</span>
                           </div>
                         )}
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">الهاتف:</span>
-                          <span className="font-semibold text-sm" dir="ltr">{printData.provider?.phone || '-'}</span>
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">الهاتف:</span>
+                          <span className="font-semibold text-xs" dir="ltr">{printData.provider?.phone || '-'}</span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">الحي:</span>
-                          <span className="font-semibold text-sm">{printData.provider?.neighborhood}</span>
-                        </div>
-                        <div className="flex justify-between py-1">
-                          <span className="text-gray-500 text-sm">العنوان:</span>
-                          <span className="font-semibold text-sm">{printData.provider?.address || '-'}</span>
+                        <div className="flex justify-between py-0.5">
+                          <span className="text-gray-500 text-xs">الحي:</span>
+                          <span className="font-semibold text-xs">{printData.provider?.neighborhood}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Family Info */}
-                    <div className="bg-white border border-gray-200 rounded-xl p-4">
-                      <div className="text-sm font-bold text-red-600 mb-3 pb-2 border-b border-red-100 flex items-center gap-2">
-                        <Users className="w-4 h-4" />
+                    <div className="bg-white border border-gray-200 rounded-lg p-3">
+                      <div className="text-xs font-bold text-red-600 mb-2 pb-1 border-b border-red-100 flex items-center gap-1">
+                        <Users className="w-3 h-3" />
                         بيانات الأسرة المستفيدة
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">رقم الأسرة:</span>
-                          <span className="font-bold text-green-700 font-mono">{printData.family?.family_number}</span>
+                      <div className="space-y-1">
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">رقم الأسرة:</span>
+                          <span className="font-bold text-green-700 font-mono text-xs">{printData.family?.family_number}</span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">رب الأسرة:</span>
-                          <span className="font-semibold text-sm">{printData.family?.head_name || '-'}</span>
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">رب الأسرة:</span>
+                          <span className="font-semibold text-xs">{printData.family?.head_name || '-'}</span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">عدد الأفراد:</span>
-                          <span className="font-semibold text-sm">{printData.family?.members_count || '-'}</span>
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">عدد الأفراد:</span>
+                          <span className="font-semibold text-xs">{printData.family?.members_count || '-'}</span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-dotted border-gray-200">
-                          <span className="text-gray-500 text-sm">الهاتف:</span>
-                          <span className="font-semibold text-sm" dir="ltr">{printData.family?.phone || '-'}</span>
+                        <div className="flex justify-between py-0.5 border-b border-dotted border-gray-200">
+                          <span className="text-gray-500 text-xs">الهاتف:</span>
+                          <span className="font-semibold text-xs" dir="ltr">{printData.family?.phone || '-'}</span>
                         </div>
-                        <div className="flex justify-between py-1">
-                          <span className="text-gray-500 text-sm">العنوان:</span>
-                          <span className="font-semibold text-sm">{printData.family?.address || '-'}</span>
+                        <div className="flex justify-between py-0.5">
+                          <span className="text-gray-500 text-xs">العنوان:</span>
+                          <span className="font-semibold text-xs">{printData.family?.address || '-'}</span>
                         </div>
+                      </div>
+                    </div>
                       </div>
                     </div>
 
