@@ -502,6 +502,69 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
         </div>
       </div>
 
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-gray-500 font-medium">إجمالي السجلات</p>
+              <p className="text-2xl font-bold text-gray-700 mt-1">{statusStats.total}</p>
+            </div>
+            <div className="bg-gray-200 p-2 rounded-lg">
+              <Heart className="w-5 h-5 text-gray-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-blue-600 font-medium">مفتوح</p>
+              <p className="text-2xl font-bold text-blue-700 mt-1">{statusStats.open}</p>
+            </div>
+            <div className="bg-blue-200 p-2 rounded-lg">
+              <Clock className="w-5 h-5 text-blue-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4 border border-amber-200 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-amber-600 font-medium">قيد التنفيذ</p>
+              <p className="text-2xl font-bold text-amber-700 mt-1">{statusStats.inprogress}</p>
+            </div>
+            <div className="bg-amber-200 p-2 rounded-lg">
+              <AlertCircle className="w-5 h-5 text-amber-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-green-600 font-medium">مغلق</p>
+              <p className="text-2xl font-bold text-green-700 mt-1">{statusStats.closed}</p>
+            </div>
+            <div className="bg-green-200 p-2 rounded-lg">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 border border-red-200 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-red-600 font-medium">ملغي</p>
+              <p className="text-2xl font-bold text-red-700 mt-1">{statusStats.cancelled}</p>
+            </div>
+            <div className="bg-red-200 p-2 rounded-lg">
+              <XCircle className="w-5 h-5 text-red-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Benefits List */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="overflow-x-auto">
