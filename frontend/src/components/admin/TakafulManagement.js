@@ -550,7 +550,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1); // إعادة تعيين الصفحة عند البحث
               }}
-              placeholder="ابحث بالكود، مقدم الخدمة، رقم الأسرة، الحالة، الملاحظات، سبب الإلغاء..."
+              placeholder="ابحث بالكود، مقدم الخدمة، الحي، رقم الأسرة، الحالة، الملاحظات، سبب الإلغاء..."
               className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
             />
             {searchQuery && (
