@@ -753,6 +753,77 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination */}
+        {!loading && benefits.length > 0 && (
+          <div className="bg-gray-50 px-4 py-3 border-t flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <span>عرض</span>
+              <span className="font-bold text-gray-800">
+                {Math.min((currentPage - 1) * itemsPerPage + 1, benefits.length)}
+              </span>
+              <span>إلى</span>
+              <span className="font-bold text-gray-800">
+                {Math.min(currentPage * itemsPerPage, benefits.length)}
+              </span>
+              <span>من</span>
+              <span className="font-bold text-gray-800">{benefits.length}</span>
+              <span>سجل</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1"
+              >
+                <ChevronRight className="w-4 h-4" />
+                السابق
+              </Button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.ceil(benefits.length / itemsPerPage) }, (_, i) => i + 1)
+                  .filter(page => {
+                    const totalPages = Math.ceil(benefits.length / itemsPerPage);
+                    if (totalPages <= 5) return true;
+                    if (page === 1 || page === totalPages) return true;
+                    if (Math.abs(page - currentPage) <= 1) return true;
+                    return false;
+                  })
+                  .map((page, idx, arr) => (
+                    <React.Fragment key={page}>
+                      {idx > 0 && arr[idx - 1] !== page - 1 && (
+                        <span className="text-gray-400 px-1">...</span>
+                      )}
+                      <button
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                          currentPage === page
+                            ? 'bg-red-600 text-white'
+                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    </React.Fragment>
+                  ))}
+              </div>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(Math.ceil(benefits.length / itemsPerPage), p + 1))}
+                disabled={currentPage >= Math.ceil(benefits.length / itemsPerPage)}
+                className="flex items-center gap-1"
+              >
+                التالي
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Status Change Modal */}
