@@ -1587,7 +1587,7 @@ const HealthcareDashboard = () => {
                                 <XCircle className="w-4 h-4 text-red-500 mt-0.5" />
                                 <span className="text-red-600">سبب الإلغاء:</span>
                                 <span className="text-red-700 font-medium">
-                                  {cancelReasons.find(r => r.value === benefit.cancel_reason)?.label || benefit.cancel_reason}
+                                  {benefit.cancel_reason_name || cancelReasons.find(r => r.value === benefit.cancel_reason)?.label || benefit.cancel_reason}
                                 </span>
                               </div>
                             )}
