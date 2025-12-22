@@ -690,6 +690,18 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
+                        {/* زر عرض التفاصيل */}
+                        <button
+                          onClick={() => {
+                            setSelectedBenefitForDetails(benefit);
+                            setShowDetailsModal(true);
+                          }}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="عرض التفاصيل"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        
                         {/* زر الربط بعائلة */}
                         {benefit.family_number && benefit.family_number !== 'غير معروف' && benefit.family_id && benefit.status !== 'closed' && benefit.status !== 'cancelled' && (
                           <button
