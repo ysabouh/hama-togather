@@ -1271,16 +1271,43 @@ const HealthcareDashboard = () => {
                           </div>
                           
                           {editingBenefit.benefit_type === 'discount' && (
-                            <Input
-                              type="number"
-                              min="1"
-                              max="100"
-                              value={editingBenefit.discount_percentage || 0}
-                              onChange={(e) => setEditingBenefit({ ...editingBenefit, discount_percentage: parseInt(e.target.value) || 0 })}
-                              placeholder="نسبة الخصم %"
-                              className="h-9 text-center"
-                              dir="ltr"
-                            />
+                            <div className="space-y-2">
+                              <Input
+                                type="number"
+                                min="0"
+                                value={editingBenefit.original_amount || 0}
+                                onChange={(e) => {
+                                  const amount = parseInt(e.target.value) || 0;
+                                  const discount = editingBenefit.discount_percentage || 0;
+                                  const final = Math.round(amount - (amount * discount / 100));
+                                  setEditingBenefit({ ...editingBenefit, original_amount: amount, final_amount: final });
+                                }}
+                                placeholder="المبلغ الأصلي (ل.س)"
+                                className="h-9 text-center"
+                                dir="ltr"
+                              />
+                              <Input
+                                type="number"
+                                min="1"
+                                max="100"
+                                value={editingBenefit.discount_percentage || 0}
+                                onChange={(e) => {
+                                  const discount = parseInt(e.target.value) || 0;
+                                  const amount = editingBenefit.original_amount || 0;
+                                  const final = Math.round(amount - (amount * discount / 100));
+                                  setEditingBenefit({ ...editingBenefit, discount_percentage: discount, final_amount: final });
+                                }}
+                                placeholder="نسبة الخصم %"
+                                className="h-9 text-center"
+                                dir="ltr"
+                              />
+                              <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                                <span className="text-xs text-green-600">المبلغ النهائي:</span>
+                                <span className="text-sm font-bold text-green-700 mr-1">
+                                  {(editingBenefit.final_amount || 0).toLocaleString('ar-SY')} ل.س
+                                </span>
+                              </div>
+                            </div>
                           )}
                           
                           {editingBenefit.benefit_type === 'free' && (
