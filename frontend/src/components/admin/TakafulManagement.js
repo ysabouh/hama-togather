@@ -721,7 +721,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                         </span>
                         {benefit.status === 'cancelled' && benefit.cancel_reason && (
                           <span className="text-xs text-red-600">
-                            {getCancelReasonLabel(benefit.cancel_reason)}
+                            {getCancelReasonLabel(benefit)}
                           </span>
                         )}
                         {benefit.status === 'closed' && benefit.status_note && (
