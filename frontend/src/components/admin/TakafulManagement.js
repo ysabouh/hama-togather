@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import Select from 'react-select';
@@ -26,7 +26,10 @@ import {
   ChevronRight,
   MessageCircle,
   Edit,
-  MapPin
+  MapPin,
+  Printer,
+  Phone,
+  Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,6 +41,10 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [printData, setPrintData] = useState(null);
+  const [printLoading, setPrintLoading] = useState(false);
+  const printRef = useRef(null);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedBenefitForDetails, setSelectedBenefitForDetails] = useState(null);
