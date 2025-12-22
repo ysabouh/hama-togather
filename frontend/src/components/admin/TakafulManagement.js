@@ -1950,30 +1950,28 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                         </div>
                       </div>
                     </div>
-                      </div>
-                    </div>
 
                     {/* Benefit Details - Full Width */}
-                    <div className="col-span-2 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-xl p-5 text-center">
-                      <div className="text-base text-green-800 mb-2">
+                    <div className="col-span-2 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-lg p-3 text-center">
+                      <div className="text-sm text-green-800 mb-1">
                         {printData.benefit?.benefit_type === 'free' ? '🎁 استفادة مجانية' : '💰 استفادة خصم'}
                       </div>
-                      <div className="text-4xl font-bold text-green-700">
+                      <div className="text-2xl font-bold text-green-700">
                         {printData.benefit?.benefit_type === 'free' 
                           ? `${printData.benefit?.free_amount?.toLocaleString('ar-SY') || 0} ل.س`
                           : `خصم ${printData.benefit?.discount_percentage}%`
                         }
                       </div>
                       {printData.benefit?.benefit_type === 'discount' && printData.benefit?.original_amount > 0 && (
-                        <div className="text-sm text-gray-600 mt-2">
+                        <div className="text-xs text-gray-600 mt-1">
                           المبلغ الأصلي: <span className="line-through">{printData.benefit?.original_amount?.toLocaleString('ar-SY')} ل.س</span>
                           {' → '}
                           المبلغ النهائي: <span className="font-bold text-green-600">{printData.benefit?.final_amount?.toLocaleString('ar-SY')} ل.س</span>
                         </div>
                       )}
-                      <div className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-4">
+                      <div className="text-xs text-gray-500 mt-2 flex items-center justify-center gap-3">
                         <span className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
+                          <Calendar className="w-3 h-3" />
                           {new Date(printData.benefit?.benefit_date).toLocaleDateString('ar-SA', {
                             weekday: 'long',
                             year: 'numeric',
@@ -1983,7 +1981,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                         </span>
                         {(printData.benefit?.time_from || printData.benefit?.time_to) && (
                           <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
+                            <Clock className="w-3 h-3" />
                             <span dir="ltr">{printData.benefit?.time_from || '--:--'} - {printData.benefit?.time_to || '--:--'}</span>
                           </span>
                         )}
@@ -1992,20 +1990,20 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                   </div>
 
                   {/* Footer - Signatures */}
-                  <div className="mt-6 pt-5 border-t-2 border-dashed border-red-600 grid grid-cols-2 gap-10">
-                    <div className="text-center p-4">
-                      <div className="border-b-2 border-gray-400 w-48 mx-auto h-16 mb-2"></div>
-                      <div className="text-gray-500 text-sm">توقيع وختم مقدم الخدمة</div>
+                  <div className="mt-3 pt-3 border-t-2 border-dashed border-red-600 grid grid-cols-2 gap-6">
+                    <div className="text-center p-2">
+                      <div className="border-b-2 border-gray-400 w-36 mx-auto h-10 mb-1"></div>
+                      <div className="text-gray-500 text-xs">توقيع وختم مقدم الخدمة</div>
                     </div>
-                    <div className="text-center p-4">
-                      <div className="border-b-2 border-gray-400 w-48 mx-auto h-16 mb-2"></div>
-                      <div className="text-gray-500 text-sm">توقيع المستفيد</div>
+                    <div className="text-center p-2">
+                      <div className="border-b-2 border-gray-400 w-36 mx-auto h-10 mb-1"></div>
+                      <div className="text-gray-500 text-xs">توقيع المستفيد</div>
                     </div>
                   </div>
 
                   {/* Notes */}
                   {printData.benefit?.notes && (
-                    <div className="mt-4 bg-amber-50 border border-amber-400 rounded-lg p-3 text-center text-amber-800 text-sm">
+                    <div className="mt-2 bg-amber-50 border border-amber-400 rounded p-2 text-center text-amber-800 text-xs">
                       <strong>ملاحظات:</strong> {printData.benefit?.notes}
                     </div>
                   )}
