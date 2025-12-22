@@ -832,20 +832,23 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
         </div>
         
         {/* Pagination */}
-        {!loading && benefits.length > 0 && (
+        {!loading && getFilteredBenefits().length > 0 && (
           <div className="bg-gray-50 px-4 py-3 border-t flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span>عرض</span>
               <span className="font-bold text-gray-800">
-                {Math.min((currentPage - 1) * itemsPerPage + 1, benefits.length)}
+                {Math.min((currentPage - 1) * itemsPerPage + 1, getFilteredBenefits().length)}
               </span>
               <span>إلى</span>
               <span className="font-bold text-gray-800">
-                {Math.min(currentPage * itemsPerPage, benefits.length)}
+                {Math.min(currentPage * itemsPerPage, getFilteredBenefits().length)}
               </span>
               <span>من</span>
-              <span className="font-bold text-gray-800">{benefits.length}</span>
+              <span className="font-bold text-gray-800">{getFilteredBenefits().length}</span>
               <span>سجل</span>
+              {searchQuery && (
+                <span className="text-gray-400">(مصفّى)</span>
+              )}
             </div>
             
             <div className="flex items-center gap-2">
@@ -861,9 +864,9 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
               </Button>
               
               <div className="flex items-center gap-1">
-                {Array.from({ length: Math.ceil(benefits.length / itemsPerPage) }, (_, i) => i + 1)
+                {Array.from({ length: Math.ceil(getFilteredBenefits().length / itemsPerPage) }, (_, i) => i + 1)
                   .filter(page => {
-                    const totalPages = Math.ceil(benefits.length / itemsPerPage);
+                    const totalPages = Math.ceil(getFilteredBenefits().length / itemsPerPage);
                     if (totalPages <= 5) return true;
                     if (page === 1 || page === totalPages) return true;
                     if (Math.abs(page - currentPage) <= 1) return true;
@@ -891,8 +894,8 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(p => Math.min(Math.ceil(benefits.length / itemsPerPage), p + 1))}
-                disabled={currentPage >= Math.ceil(benefits.length / itemsPerPage)}
+                onClick={() => setCurrentPage(p => Math.min(Math.ceil(getFilteredBenefits().length / itemsPerPage), p + 1))}
+                disabled={currentPage >= Math.ceil(getFilteredBenefits().length / itemsPerPage)}
                 className="flex items-center gap-1"
               >
                 التالي
