@@ -4455,6 +4455,115 @@ async def get_all_takaful_benefits(
     
     return result
 
+# ============= Cancel Reasons Routes =============
+
+@api_router.get("/cancel-reasons")
+async def get_cancel_reasons(
+    active_only: bool = False
+):
+    """الحصول على جميع أسباب الإلغاء"""
+    query = {}
+    if active_only:
+        query["is_active"] = True
+    
+    reasons = await db.cancel_reasons.find(query, {"_id": 0}).to_list(1000)
+    
+    # ترتيب حسب تاريخ الإنشاء تنازلياً
+    reasons.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    
+    return reasons
+
+@api_router.post("/cancel-reasons")
+async def create_cancel_reason(
+    reason_data: CancelReasonCreate,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """إنشاء سبب إلغاء جديد"""
+    
+    # التحقق من عدم وجود سبب بنفس الاسم
+    existing = await db.cancel_reasons.find_one({"name": reason_data.name})
+    if existing:
+        raise HTTPException(status_code=400, detail="يوجد سبب إلغاء بهذا الاسم مسبقاً")
+    
+    reason = CancelReason(
+        name=reason_data.name,
+        description=reason_data.description,
+        created_by_user_id=current_user.id,
+        created_by_user_name=current_user.full_name
+    )
+    
+    doc = reason.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.cancel_reasons.insert_one(doc)
+    
+    return {"message": "تم إنشاء سبب الإلغاء بنجاح", "id": reason.id}
+
+@api_router.put("/cancel-reasons/{reason_id}")
+async def update_cancel_reason(
+    reason_id: str,
+    reason_data: CancelReasonUpdate,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """تحديث سبب إلغاء"""
+    
+    existing = await db.cancel_reasons.find_one({"id": reason_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="سبب الإلغاء غير موجود")
+    
+    update_fields = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_by_user_id": current_user.id,
+        "updated_by_user_name": current_user.full_name
+    }
+    
+    if reason_data.name is not None:
+        # التحقق من عدم وجود سبب آخر بنفس الاسم
+        other = await db.cancel_reasons.find_one({"name": reason_data.name, "id": {"$ne": reason_id}})
+        if other:
+            raise HTTPException(status_code=400, detail="يوجد سبب إلغاء آخر بهذا الاسم")
+        update_fields["name"] = reason_data.name
+    
+    if reason_data.description is not None:
+        update_fields["description"] = reason_data.description
+    
+    if reason_data.is_active is not None:
+        update_fields["is_active"] = reason_data.is_active
+    
+    await db.cancel_reasons.update_one(
+        {"id": reason_id},
+        {"$set": update_fields}
+    )
+    
+    updated = await db.cancel_reasons.find_one({"id": reason_id}, {"_id": 0})
+    return updated
+
+@api_router.patch("/cancel-reasons/{reason_id}/toggle-status")
+async def toggle_cancel_reason_status(
+    reason_id: str,
+    current_user: User = Depends(get_admin_or_committee_user)
+):
+    """تفعيل/إيقاف سبب إلغاء"""
+    
+    existing = await db.cancel_reasons.find_one({"id": reason_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="سبب الإلغاء غير موجود")
+    
+    new_status = not existing.get('is_active', True)
+    
+    await db.cancel_reasons.update_one(
+        {"id": reason_id},
+        {"$set": {
+            "is_active": new_status,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+            "updated_by_user_id": current_user.id,
+            "updated_by_user_name": current_user.full_name
+        }}
+    )
+    
+    status_text = "تفعيل" if new_status else "إيقاف"
+    return {"message": f"تم {status_text} سبب الإلغاء بنجاح", "is_active": new_status}
+
 # ============= End Healthcare Routes =============
 
 # Include router (must be after all route definitions)
