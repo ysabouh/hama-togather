@@ -100,6 +100,8 @@ const HealthcareDashboard = () => {
   const [newBenefit, setNewBenefit] = useState({
     benefit_type: 'free',
     discount_percentage: 0,
+    original_amount: 0,
+    final_amount: 0,
     free_amount: 0,
     time_from: '08:00',
     time_to: '12:00',
