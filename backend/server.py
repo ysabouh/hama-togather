@@ -4430,17 +4430,33 @@ async def get_all_takaful_benefits(
     pharmacy_ids = [b['provider_id'] for b in benefits if b['provider_type'] == 'pharmacy']
     lab_ids = [b['provider_id'] for b in benefits if b['provider_type'] == 'laboratory']
     
-    doctors = await db.doctors.find({"id": {"$in": doctor_ids}}, {"_id": 0, "id": 1, "full_name": 1}).to_list(1000)
-    pharmacies = await db.pharmacies.find({"id": {"$in": pharmacy_ids}}, {"_id": 0, "id": 1, "name": 1}).to_list(1000)
-    labs = await db.laboratories.find({"id": {"$in": lab_ids}}, {"_id": 0, "id": 1, "name": 1}).to_list(1000)
+    doctors = await db.doctors.find({"id": {"$in": doctor_ids}}, {"_id": 0, "id": 1, "full_name": 1, "neighborhood_id": 1}).to_list(1000)
+    pharmacies = await db.pharmacies.find({"id": {"$in": pharmacy_ids}}, {"_id": 0, "id": 1, "name": 1, "neighborhood_id": 1}).to_list(1000)
+    labs = await db.laboratories.find({"id": {"$in": lab_ids}}, {"_id": 0, "id": 1, "name": 1, "neighborhood_id": 1}).to_list(1000)
+    
+    # جلب بيانات الأحياء
+    all_neighborhood_ids = list(set(
+        [d.get('neighborhood_id') for d in doctors if d.get('neighborhood_id')] +
+        [p.get('neighborhood_id') for p in pharmacies if p.get('neighborhood_id')] +
+        [l.get('neighborhood_id') for l in labs if l.get('neighborhood_id')]
+    ))
+    neighborhoods = await db.neighborhoods.find(
+        {"id": {"$in": all_neighborhood_ids}},
+        {"_id": 0, "id": 1, "name": 1}
+    ).to_list(1000)
+    neighborhoods_map = {n['id']: n.get('name', 'غير معروف') for n in neighborhoods}
     
     providers_map = {}
+    provider_neighborhoods = {}  # لربط مقدم الخدمة بالحي
     for d in doctors:
         providers_map[d['id']] = d.get('full_name', 'غير معروف')
+        provider_neighborhoods[d['id']] = neighborhoods_map.get(d.get('neighborhood_id'), 'غير محدد')
     for p in pharmacies:
         providers_map[p['id']] = p.get('name', 'غير معروف')
+        provider_neighborhoods[p['id']] = neighborhoods_map.get(p.get('neighborhood_id'), 'غير محدد')
     for l in labs:
         providers_map[l['id']] = l.get('name', 'غير معروف')
+        provider_neighborhoods[l['id']] = neighborhoods_map.get(l.get('neighborhood_id'), 'غير محدد')
     
     # إضافة البيانات لكل سجل
     result = []
@@ -4448,6 +4464,7 @@ async def get_all_takaful_benefits(
         family = families_map.get(benefit['family_id'], {})
         benefit['family_number'] = family.get('family_number') or family.get('family_code') or 'غير معروف'
         benefit['provider_name'] = providers_map.get(benefit['provider_id'], 'غير معروف')
+        benefit['neighborhood_name'] = provider_neighborhoods.get(benefit['provider_id'], 'غير محدد')
         result.append(benefit)
     
     # ترتيب حسب التاريخ تنازلياً
