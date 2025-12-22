@@ -4251,6 +4251,8 @@ async def update_takaful_benefit(
         update_fields['notes'] = benefit_data['notes']
     
     update_fields['updated_at'] = datetime.now(timezone.utc).isoformat()
+    update_fields['updated_by_user_id'] = current_user.id
+    update_fields['updated_by_user_name'] = current_user.full_name
     
     await db.takaful_benefits.update_one(
         {"id": benefit_id},
@@ -4277,7 +4279,9 @@ async def update_takaful_benefit_status(
     
     update_fields = {
         'status': status_data.status,
-        'updated_at': datetime.now(timezone.utc).isoformat()
+        'updated_at': datetime.now(timezone.utc).isoformat(),
+        'updated_by_user_id': current_user.id,
+        'updated_by_user_name': current_user.full_name
     }
     
     # إضافة ملاحظة الإغلاق
