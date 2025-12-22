@@ -646,6 +646,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">الحالة</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">التاريخ</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">مقدم الخدمة</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">الحي</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">النوع</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">رقم الأسرة</th>
                 <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">نوع الاستفادة</th>
@@ -656,21 +657,21 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan="10" className="px-4 py-8 text-center">
+                  <td colSpan="11" className="px-4 py-8 text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
                     <p className="mt-2 text-gray-500">جاري التحميل...</p>
                   </td>
                 </tr>
               ) : benefits.length === 0 ? (
                 <tr>
-                  <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan="11" className="px-4 py-8 text-center text-gray-500">
                     <Calendar className="w-12 h-12 mx-auto mb-2 text-gray-300" />
                     <p>لا توجد سجلات استفادة في هذه الفترة</p>
                   </td>
                 </tr>
               ) : getFilteredBenefits().length === 0 ? (
                 <tr>
-                  <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan="11" className="px-4 py-8 text-center text-gray-500">
                     <Search className="w-12 h-12 mx-auto mb-2 text-gray-300" />
                     <p>لا توجد نتائج تطابق البحث &ldquo;{searchQuery}&rdquo;</p>
                     <button
