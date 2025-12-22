@@ -457,11 +457,10 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
       <head>
         <meta charset="UTF-8">
         <title>كوبون استفادة - ${printData?.benefit?.benefit_code || ''}</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <style>
           @page { 
             size: A4 landscape; 
-            margin: 10mm;
+            margin: 15mm;
           }
           @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
           * {
@@ -472,37 +471,108 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
           }
           body {
             direction: rtl;
-            background: #f3f4f6;
-            padding: 20px;
+            background: white;
+            padding: 0;
           }
+          /* Main coupon container */
           .coupon {
-            border: 3px solid #dc2626;
+            border: 3px solid #dc2626 !important;
             border-radius: 16px;
             padding: 24px;
             max-width: 100%;
             margin: 0 auto;
-            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%) !important;
           }
-          .grid-cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          /* Grid layout */
+          .grid { display: grid; }
+          .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
           .col-span-2 { grid-column: span 2; }
+          .gap-5 { gap: 1.25rem; }
+          .gap-10 { gap: 2.5rem; }
+          /* Flexbox */
+          .flex { display: flex; }
+          .items-center { align-items: center; }
+          .justify-between { justify-content: space-between; }
+          .justify-center { justify-content: center; }
+          .gap-1 { gap: 0.25rem; }
+          .gap-2 { gap: 0.5rem; }
+          .gap-4 { gap: 1rem; }
+          /* Spacing */
+          .p-3 { padding: 0.75rem; }
+          .p-4 { padding: 1rem; }
+          .p-5 { padding: 1.25rem; }
+          .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+          .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+          .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+          .mt-2 { margin-top: 0.5rem; }
+          .mt-3 { margin-top: 0.75rem; }
+          .mt-4 { margin-top: 1rem; }
+          .mt-6 { margin-top: 1.5rem; }
+          .mb-1 { margin-bottom: 0.25rem; }
+          .mb-2 { margin-bottom: 0.5rem; }
+          .mb-3 { margin-bottom: 0.75rem; }
+          .pb-2 { padding-bottom: 0.5rem; }
+          .pb-4 { padding-bottom: 1rem; }
+          .pt-5 { padding-top: 1.25rem; }
+          /* Text */
+          .text-center { text-align: center; }
+          .text-xs { font-size: 0.75rem; }
+          .text-sm { font-size: 0.875rem; }
+          .text-base { font-size: 1rem; }
+          .text-lg { font-size: 1.125rem; }
+          .text-3xl { font-size: 1.875rem; }
+          .text-4xl { font-size: 2.25rem; }
+          .font-bold { font-weight: 700; }
+          .font-semibold { font-weight: 600; }
+          .font-mono { font-family: ui-monospace, monospace; }
+          .tracking-widest { letter-spacing: 0.1em; }
+          .line-through { text-decoration: line-through; }
+          /* Colors - with !important for print */
+          .text-red-600 { color: #dc2626 !important; }
+          .text-green-600 { color: #16a34a !important; }
+          .text-green-700 { color: #15803d !important; }
+          .text-green-800 { color: #166534 !important; }
+          .text-gray-400 { color: #9ca3af !important; }
+          .text-gray-500 { color: #6b7280 !important; }
+          .text-gray-600 { color: #4b5563 !important; }
+          .text-amber-800 { color: #92400e !important; }
+          .text-white { color: white !important; }
+          .bg-red-600 { background-color: #dc2626 !important; }
+          .bg-white { background-color: white !important; }
+          .bg-amber-50 { background-color: #fffbeb !important; }
+          .bg-gradient-to-r { background: linear-gradient(to right, #f0fdf4, #ecfdf5) !important; }
+          /* Borders */
+          .border { border-width: 1px; }
+          .border-2 { border-width: 2px; }
+          .border-t-2 { border-top-width: 2px; }
+          .border-b { border-bottom-width: 1px; }
+          .border-b-2 { border-bottom-width: 2px; }
+          .border-dashed { border-style: dashed; }
+          .border-dotted { border-style: dotted; }
+          .border-solid { border-style: solid; }
+          .border-gray-200 { border-color: #e5e7eb !important; }
+          .border-gray-400 { border-color: #9ca3af !important; }
+          .border-red-100 { border-color: #fee2e2 !important; }
+          .border-red-600 { border-color: #dc2626 !important; }
+          .border-green-500 { border-color: #22c55e !important; }
+          .border-amber-400 { border-color: #fbbf24 !important; }
+          .rounded-lg { border-radius: 0.5rem; }
+          .rounded-xl { border-radius: 0.75rem; }
+          .rounded-2xl { border-radius: 1rem; }
+          /* Width/Height */
+          .w-4 { width: 1rem; }
+          .h-4 { height: 1rem; }
+          .w-48 { width: 12rem; }
+          .h-16 { height: 4rem; }
+          .mx-auto { margin-left: auto; margin-right: auto; }
+          /* SVG icons - hide since they won't render properly */
+          svg { display: inline-block; vertical-align: middle; width: 1rem; height: 1rem; }
+          /* Print specific */
           @media print {
             body { 
               -webkit-print-color-adjust: exact !important; 
               print-color-adjust: exact !important;
-              background: white !important;
-              padding: 0;
             }
-            .coupon {
-              border: 3px solid #dc2626 !important;
-              background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%) !important;
-            }
-            .bg-red-600 { background-color: #dc2626 !important; }
-            .bg-green-50, .bg-gradient-to-r { background: linear-gradient(to right, #f0fdf4, #ecfdf5) !important; }
-            .border-green-500 { border-color: #22c55e !important; }
-            .text-red-600 { color: #dc2626 !important; }
-            .text-green-700 { color: #15803d !important; }
-            .text-green-800 { color: #166534 !important; }
-            .text-white { color: white !important; }
           }
         </style>
       </head>
@@ -515,8 +585,7 @@ const TakafulManagement = ({ userRole, userNeighborhoodId }) => {
     printWindow.focus();
     setTimeout(() => {
       printWindow.print();
-      printWindow.close();
-    }, 500);
+    }, 300);
   };
 
   const resetForm = () => {
